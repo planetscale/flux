@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIRE_API_KEY,
@@ -9,16 +10,28 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIRE_APP_ID,
 };
 
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
 const initFirebase = () => {
-  if (!firebase.app.length) {
+  if (!firebase.apps.length) {
     try {
       firebase.initializeApp(firebaseConfig);
     } catch (e) {
       console.error('Error initializing Firebase: ', e);
     }
   }
-
-  return firebase;
 };
 
-export { initFirebase };
+const loginWithFirebase = () => {
+  return firebase
+    .auth()
+    .signInWithPopup(googleProvider)
+    .then(res => {
+      console.log('login res: ', res);
+    })
+    .catch(e => {
+      console.error(e);
+    });
+};
+
+export { initFirebase, loginWithFirebase };

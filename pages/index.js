@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import { initFirebase } from 'utils/fireConfig';
 import { useEffect } from 'react';
+import { initFirebase, loginWithFirebase } from 'utils/fireConfig';
 
 export default function Home() {
   useEffect(() => {
-    const firebase = initFirebase();
+    initFirebase();
   }, []);
 
   return (
@@ -15,7 +15,16 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}></main>
+      <main className={styles.main}>
+        <button
+          type="button"
+          onClick={() => {
+            loginWithFirebase();
+          }}
+        >
+          login
+        </button>
+      </main>
     </div>
   );
 }
