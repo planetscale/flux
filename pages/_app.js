@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import '../styles/globals.css';
+import { Global, css } from '@emotion/react';
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   useEffect(() => {
     fetch('/api/hello')
       .then(res => res.json())
@@ -9,7 +9,22 @@ function MyApp({ Component, pageProps }) {
         console.log(res);
       });
   }, []);
-  return <Component {...pageProps} />;
+
+  return (
+    <>
+      <Global
+        styles={css`
+          html,
+          body {
+            font-family: Inconsolata;
+            margin: unset;
+          }
+          font-family: Inconsolata;
+        `}
+      />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
-export default MyApp;
+export default App;
