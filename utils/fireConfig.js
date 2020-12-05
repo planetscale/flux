@@ -28,6 +28,7 @@ const loginWithFirebase = () => {
     .signInWithPopup(googleProvider)
     .then(res => {
       console.log('login res: ', res);
+      console.log(firebase.auth().currentUser);
     })
     .catch(e => {
       console.error(e);
