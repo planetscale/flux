@@ -1,17 +1,38 @@
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import Image from 'next/image';
 import styled from '@emotion/styled';
-import Navbar from 'components/NavBar';
-import PostList from 'components/PostList';
-import TopBar from 'components/TopBar';
+import { useAuthActions, useAuthContext } from 'state/auth';
 
-const MainWrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-const CenterWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    border: none;
+    background-color: unset;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
 `;
+
+export default function Login() {
+  const router = useRouter();
+  const { userLogin } = useAuthActions();
+  const authContext = useAuthContext();
+
+  useEffect(() => {
+    if (authContext.isAuthed) {
+      router.push('/');
+    }
+  }, [authContext]);
 
 export default function Login() {
   const handleLogin = () => {
@@ -21,18 +42,17 @@ export default function Login() {
   };
 
   return (
-    <MainWrapper>
-      <Navbar />
-      <CenterWrapper>
-        <TopBar />
-        <PostList />
-      </CenterWrapper>
-    </MainWrapper>
+    <Wrapper>
+      <Image src="/login.svg" alt="login picture" layout="fill" />
+      <button onClick={handleLogin} type="button">
+        <Image
+          src="/google_login.svg"
+          alt="login button"
+          width={54}
+          height={54}
+        />
+      </button>
+    </Wrapper>
   );
 }
 
-// {
-//   /* <button type="button" onClick={handleLogin}>
-//         login
-//       </button> */
-// }

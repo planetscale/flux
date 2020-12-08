@@ -24,9 +24,15 @@ export default function Home({ href, ...props }) {
       </Head>
 
       <main>
-        <button type="button" onClick={handleLogin}>
-          login
-        </button>
+        {authContext.isAuthed && (
+          <MainWrapper>
+            <Navbar />
+            <CenterWrapper>
+              <TopBar />
+              <PostList />
+            </CenterWrapper>
+          </MainWrapper>
+        )}
       </main>
     </div>
   );
