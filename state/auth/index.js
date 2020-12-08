@@ -1,29 +1,78 @@
-import { createStore, createHook } from 'react-sweet-state';
-import { loginWithFirebase } from 'utils/fireConfig';
+import React, { useContext } from 'react';
+import { useImmer } from 'use-immer';
+import firebase from 'firebase/app';
+import { loginWithFirebase, logoutWithFirebase } from 'utils/fireConfig';
 
-const Store = React.createContext({
+const defaultContext = {
   isAuthed: false,
-});
+  user: null,
+};
+const AuthContext = React.createContext();
+AuthContext.displayName = 'Auth Context';
 
-const Store = createStore({
-  initialState: {
-    isAuthed: false,
-  },
+const AuthContextProvider = ({ children }) => {
+  const [state, setState] = useImmer({ ...defaultContext });
 
-  actions: {
-    userLogin: () => () => {
-      loginWithFirebase().then(res => {
-        setState({
-          isAuthed: true,
+  return (
+    <AuthContext.Provider value={[state, setState]}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const useAuthContext = () => {
+  const [state] = useContext(AuthContext);
+  return state;
+};
+
+const useAuthActions = () => {
+  const [state, updateState] = useContext(AuthContext);
+
+  const userLogin = async () => {
+    try {
+      const res = await loginWithFirebase();
+      updateState(draft => {
+        draft.isAuthed = true;
+        draft.user = res.user;
+      });
+    } catch (e) {
+      updateState(draft => {
+        draft.error = e;
+      });
+    }
+  };
+
+  const userLogout = async () => {
+    try {
+      logoutWithFirebase().then(() => {
+        updateState(draft => {
+          draft.isAuthed = false;
+          draft.user = null;
         });
       });
-    },
-  },
+    } catch (e) {
+      updateState(draft => {
+        draft.error = e;
+      });
+    }
+  };
 
-  // optional, mostly used for easy debugging
-  name: 'auth',
-});
+  const rehydrateUser = async user => {
+    if (user) {
+      try {
+        updateState(draft => {
+          draft.isAuthed = true;
+          draft.user = user;
+        });
+      } catch (e) {
+        updateState(draft => {
+          draft.error = e;
+        });
+      }
+    }
+  };
 
-const useAuthStore = createHook(Store);
+  return { userLogin, userLogout, rehydrateUser };
+};
 
-export { Store };
+export { AuthContextProvider, useAuthContext, useAuthActions };

@@ -1,38 +1,25 @@
-import styled from '@emotion/styled';
-import Navbar from 'components/NavBar';
-import PostList from 'components/PostList';
-import TopBar from 'components/TopBar';
-
-const MainWrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-const CenterWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useAuthActions, useAuthContext } from 'state/auth';
 
 export default function Login() {
-  const handleLogin = () => {
-    if (actions.userLogin) {
-      actions.userLogin;
+  const router = useRouter();
+  const { userLogin } = useAuthActions();
+  const authContext = useAuthContext();
+
+  useEffect(() => {
+    if (authContext.isAuthed) {
+      router.push('/');
     }
+  }, [authContext]);
+
+  const handleLogin = () => {
+    userLogin();
   };
 
   return (
-    <MainWrapper>
-      <Navbar />
-      <CenterWrapper>
-        <TopBar />
-        <PostList />
-      </CenterWrapper>
-    </MainWrapper>
+    <button type="button" onClick={handleLogin}>
+      login
+    </button>
   );
 }
-
-// {
-//   /* <button type="button" onClick={handleLogin}>
-//         login
-//       </button> */
-// }
