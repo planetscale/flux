@@ -5,36 +5,39 @@ export  const  typeDefs  =  gql`
         id: ID!
         name: String!
         creation_time: String!
+        users: [User]!
     }
     
-    type  Member {
+    type  User {
         id: ID!
+        email: String!
         username: String!
         display_name: String!
-        org: String!
+        org: Org!
         creation_time: String!
         admin: Boolean!
+        posts: [Post]
     }
     
     type Lens {
         id: ID!
         name: String!
         description: String
-        organization: String!
+        organization: Org!
     }
     
     type Post {
         id: ID!
-        member: String!
-        lens: String!
+        author: User!
+        lens: Lens!
         creation_time: String!
         description: String
         content: String!
     
     type Reply {
         id: ID!
-        post_id: ID!
-        member: String!
+        post: Post!
+        author: User!
         creation_time: String!
         content: String!
     }
