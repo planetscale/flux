@@ -27,6 +27,12 @@ export default function Home({ href, ...props }) {
     setFireAuthObserver(null, rehydrateUser);
   }, []);
 
+  const handleLogin = e => {
+    e.preventDefault();
+    console.log(router.pathname);
+    router.push('/login');
+  };
+
   return (
     <div>
       <Head>
