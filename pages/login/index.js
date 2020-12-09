@@ -3,8 +3,6 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
-import UserSettings from 'components/UserSettings';
-import PostUpload from 'components/PostUpload';
 
 const Wrapper = styled.div`
   display: flex;
@@ -50,7 +48,7 @@ export default function Login() {
   return (
     <Wrapper>
       <img src="/icon.svg" alt="parallax logo" />
-      {/* <Image src="/login.svg" alt="login picture" layout="fill" />
+      <Image src="/login.svg" alt="login picture" layout="fill" />
       <button onClick={handleLogin} type="button">
         <Image
           src="/google_login.svg"
@@ -58,9 +56,7 @@ export default function Login() {
           width={54}
           height={54}
         />
-      </button> */}
-      {/* <UserSettings /> */}
-      <PostUpload />
+      </button>
     </Wrapper>
   );
 }
