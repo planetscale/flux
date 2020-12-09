@@ -6,6 +6,7 @@ import TopBar from 'components/TopBar';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import { useEffect } from 'react';
 import { setFireAuthObserver } from 'utils/fireConfig';
+import { addApolloState, initializeApollo } from '../apollo/client';
 
 const MainWrapper = styled.div`
   display: flex;
@@ -45,4 +46,16 @@ export default function Home({ href, ...props }) {
       </main>
     </div>
   );
+}
+
+// TODO: Fill out boilerplate.
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  // Add query here?
+
+  return addApolloState(apolloClient, {
+    props: {},
+    revalidate: 1,
+  });
 }

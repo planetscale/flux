@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
+export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
+
 let apolloClient;
 
 function createIsomorphLink() {
@@ -29,18 +31,35 @@ export function initializeApollo(initialState = null) {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
-  // get hydrated here
+  // gets hydrated here.
   if (initialState) {
-    _apolloClient.cache.restore(initialState);
+    // Get existing cache, loaded during client side data fetching.
+    const existingCache = _apolloClient.extract();
+
+    // Merge the existing cache into data passed from getStaticProps/getServerSideProps.
+    const data = merge(initialState, existingCache);
+
+    // Restore the cache with the merged data.
+    _apolloClient.cache.restore(data);
   }
-  // For SSG and SSR always create a new Apollo Client
+  // For SSG and SSR always create a new Apollo Client.
   if (typeof window === 'undefined') return _apolloClient;
-  // Create the Apollo Client once in the client
+  // Create the Apollo Client once in the client.
   if (!apolloClient) apolloClient = _apolloClient;
 
   return _apolloClient;
 }
 
-export function useApollo(initialState) {
-  return useMemo(() => initializeApollo(initialState), [initialState]);
+export function addApolloState(client, pageProps) {
+  if (pageProps?.props) {
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
+  }
+
+  return pageProps;
+}
+
+// TODO: Use this in pages/_app.js
+export function useApollo(pageProps) {
+  const state = pageProps[APOLLO_STATE_PROP_NAME];
+  return useMemo(() => initializeApollo(state), [state]);
 }
