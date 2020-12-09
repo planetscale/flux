@@ -5,7 +5,6 @@ import PostList from 'components/PostList';
 import TopBar from 'components/TopBar';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { setFireAuthObserver } from 'utils/fireConfig';
 
 const MainWrapper = styled.div`
@@ -20,18 +19,11 @@ const CenterWrapper = styled.div`
 
 export default function Home({ href, ...props }) {
   const authContext = useAuthContext();
-  const router = useRouter();
   const { rehydrateUser } = useAuthActions();
 
   useEffect(() => {
     setFireAuthObserver(null, rehydrateUser);
   }, []);
-
-  const handleLogin = e => {
-    e.preventDefault();
-    console.log(router.pathname);
-    router.push('/login');
-  };
 
   return (
     <div>
@@ -41,13 +33,15 @@ export default function Home({ href, ...props }) {
       </Head>
 
       <main>
-        <MainWrapper>
-          <Navbar />
-          <CenterWrapper>
-            <TopBar />
-            <PostList />
-          </CenterWrapper>
-        </MainWrapper>
+        {authContext.isAuthed && (
+          <MainWrapper>
+            <Navbar />
+            <CenterWrapper>
+              <TopBar />
+              <PostList />
+            </CenterWrapper>
+          </MainWrapper>
+        )}
       </main>
     </div>
   );
