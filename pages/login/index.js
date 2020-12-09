@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import UserSettings from 'components/UserSettings';
+import PostUpload from 'components/PostUpload';
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,7 +59,8 @@ export default function Login() {
           height={54}
         />
       </button> */}
-      <UserSettings />
+      {/* <UserSettings /> */}
+      <PostUpload />
     </Wrapper>
   );
 }
