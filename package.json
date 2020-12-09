@@ -15,7 +15,7 @@
     "firebase": "^8.1.1",
     "graphql-tools": "^4.0.8",
     "immer": "^8.0.0",
-    "moment": "^2.29.1",
+    "luxon": "^1.25.0",
     "next": "10.0.3",
     "react": "17.0.1",
     "react-context-devtool": "^2.0.0",

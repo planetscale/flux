@@ -1,8 +1,8 @@
 import executeQuery from "./db";
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 export async function createOrg({ orgName }) {
-    const creationTime = moment().format( 'YYYY-MM-DD HH:mm:ss');
+    const creationTime = DateTime.local().toString();
 
     try {
         return await executeQuery({
