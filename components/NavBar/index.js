@@ -60,7 +60,7 @@ export default function Navbar({
 }) {
   return (
     <Wrapper>
-      <img src="/icon.svg" alt="next" />
+      <img src="/icon.svg" alt="parallax logo" />
       <div>
         {titles.map(title => (
           <div key={title}>{title}</div>

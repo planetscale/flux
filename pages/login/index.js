@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
+import CreateOrg from 'components/CreateOrg';
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,7 +13,14 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  button {
+  > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 20px 0 0 25px;
+  }
+
+  > button {
     border: none;
     background-color: unset;
     cursor: pointer;
@@ -40,6 +48,7 @@ export default function Login() {
 
   return (
     <Wrapper>
+      <img src="/icon.svg" alt="parallax logo" />
       <Image src="/login.svg" alt="login picture" layout="fill" />
       <button onClick={handleLogin} type="button">
         <Image
