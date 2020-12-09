@@ -1,5 +1,5 @@
-import {useMemo} from 'react'
-import {ApolloClient, InMemoryCache} from '@apollo/client'
+import { useMemo } from 'react'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 let apolloClient
 
