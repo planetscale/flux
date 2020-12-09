@@ -8,7 +8,7 @@ module.exports = {
   tabWidth: 2,
   // With prettier upgrade to v2, wrapping arrow params in parens is default value.  Disable for now, considering turning on later.
   arrowParens: 'avoid',
-  trailingComma: "es5",
+  trailingComma: 'es5',
   semi: true,
-  printWidth: 80
+  printWidth: 80,
 };
