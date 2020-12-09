@@ -12,27 +12,38 @@ const firebaseConfig = {
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-const initFirebase = () => {
-  if (!firebase.apps.length) {
-    try {
-      firebase.initializeApp(firebaseConfig);
-    } catch (e) {
-      console.error('Error initializing Firebase: ', e);
-    }
+if (!firebase.apps.length) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+  } catch (e) {
+    console.error('Error initializing Firebase: ', e);
   }
-};
+}
 
 const loginWithFirebase = () => {
   return firebase
     .auth()
-    .signInWithPopup(googleProvider)
-    .then(res => {
-      console.log('login res: ', res);
-      console.log(firebase.auth().currentUser);
+    .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+      return firebase.auth().signInWithPopup(googleProvider);
     })
     .catch(e => {
       console.error(e);
     });
 };
 
-export { initFirebase, loginWithFirebase };
+const logoutWithFirebase = () => {
+  return firebase.auth().signOut();
+};
+
+const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (!user) {
+      noUserCallback?.();
+    } else {
+      hasUserCallback?.(user);
+    }
+  });
+};
+
+export { loginWithFirebase, logoutWithFirebase, setFireAuthObserver };

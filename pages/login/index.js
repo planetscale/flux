@@ -34,11 +34,8 @@ export default function Login() {
     }
   }, [authContext]);
 
-export default function Login() {
   const handleLogin = () => {
-    if (actions.userLogin) {
-      actions.userLogin;
-    }
+    userLogin();
   };
 
   return (
@@ -55,4 +52,3 @@ export default function Login() {
     </Wrapper>
   );
 }
-

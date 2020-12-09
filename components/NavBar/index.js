@@ -50,7 +50,7 @@ const Wrapper = styled.div`
 `;
 
 export default function Navbar({
-  titles = ['all', 'home'],
+  titles = ['All', 'Home'],
   categories = {
     Planetscale: {
       subs: ['Marketing', 'Industry', 'Engineering'],
@@ -63,7 +63,7 @@ export default function Navbar({
       <img src="/icon.svg" alt="next" />
       <div>
         {titles.map(title => (
-          <div key={title}>{title.toUpperCase()}</div>
+          <div key={title}>{title}</div>
         ))}
       </div>
       <div>
