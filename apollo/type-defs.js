@@ -1,6 +1,6 @@
-import  {  gql  }  from  "apollo-server-micro";
+import { gql } from 'apollo-server-micro';
 
-export  const  typeDefs  =  gql`
+export const typeDefs = gql`
     type Org {
         id: ID!
         name: String!
@@ -41,4 +41,4 @@ export  const  typeDefs  =  gql`
         creation_time: String!
         content: String!
     }
-    `
+    `;
