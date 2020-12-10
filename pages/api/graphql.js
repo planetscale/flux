@@ -1,11 +1,11 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { schema } from '../../apollo/schema';
+import { schema } from '../../graphql/schema';
+import { createContext } from '../../graphql/context';
 
 const apolloServer = new ApolloServer({
+  context: createContext,
   schema,
-  context(ctx) {
-    return ctx;
-  },
+  tracing: process.env.NODE_ENV === 'development',
 });
 
 export const config = {
@@ -14,4 +14,6 @@ export const config = {
   },
 };
 
-export default apolloServer.createHandler({ path: '/api/graphql' });
+export default apolloServer.createHandler({
+  path: '/api/graphql',
+});
