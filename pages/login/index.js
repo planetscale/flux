@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
-import CreateOrg from 'components/CreateOrg';
 
 const Wrapper = styled.div`
   display: flex;

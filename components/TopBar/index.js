@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import UserIcon from './UserIcon';
+import UserIcon from '../UserIcon';
 import Logout from './Logout';
 
 const Wrapper = styled.div`
