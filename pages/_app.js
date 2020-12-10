@@ -34,6 +34,9 @@ function App({ Component, pageProps }) {
           body {
             font-family: Inconsolata;
             margin: unset;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
           }
           font-family: Inconsolata;
         `}
