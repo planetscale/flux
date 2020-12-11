@@ -24,7 +24,9 @@
     "react": "17.0.1",
     "react-context-devtool": "^2.0.0",
     "react-dom": "17.0.1",
+    "react-is": "^16.13.1",
     "serverless-mysql": "^1.5.4",
+    "urql": "^1.11.4",
     "use-immer": "^0.4.2"
   },
   "devDependencies": {
