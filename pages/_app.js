@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import { setFireAuthObserver } from 'utils/fireConfig';
+import NextApp from 'next/app';
+import { withUrqlClient } from 'next-urql';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -13,6 +15,9 @@ const initContextDevTools = () => {
     debugContextDevtool(container, {});
   }
 };
+
+// the URL to /api/graphql
+const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
 function App({ Component, pageProps }) {
   const router = useRouter();
@@ -45,4 +50,12 @@ function App({ Component, pageProps }) {
   );
 }
 
-export default App;
+App.getInitialProps = async ctx => {
+  const appProps = await NextApp.getInitialProps(ctx);
+  return { ...appProps };
+};
+
+export default withUrqlClient((_ssrExchange, _ctx) => ({
+  url: GRAPHQL_ENDPOINT,
+  fetch,
+}))(App);

@@ -92,7 +92,12 @@ const Query = queryType({
     t.crud.post();
     t.crud.posts();
     t.crud.lens();
-    t.crud.lenses();
+    t.list.field('lenses', {
+      type: 'Lens',
+      resolve(_parent, _args, ctx) {
+        return ctx.prisma.lens.findMany({});
+      },
+    });
     t.crud.replies();
     t.crud.tags();
   },
