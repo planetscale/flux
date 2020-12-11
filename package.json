@@ -8,7 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.4",
     "@emotion/react": "^11.1.1",
     "@emotion/styled": "^11.0.0",
     "@nexus/schema": "^0.19.2",
@@ -20,11 +19,14 @@
     "immer": "^8.0.0",
     "luxon": "^1.25.0",
     "next": "10.0.3",
+    "next-urql": "^2.1.1",
     "nexus-plugin-prisma": "^0.26.0",
     "react": "17.0.1",
     "react-context-devtool": "^2.0.0",
     "react-dom": "17.0.1",
+    "react-is": "^16.13.1",
     "serverless-mysql": "^1.5.4",
+    "urql": "^1.11.4",
     "use-immer": "^0.4.2"
   },
   "devDependencies": {

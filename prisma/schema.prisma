@@ -9,7 +9,7 @@ generator client {
 
 model Org {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   createdAt String
   users     User[]
 }

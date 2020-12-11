@@ -2,10 +2,6 @@
 ### Do not make changes to this file directly
 
 
-type BatchPayload {
-  count: Int!
-}
-
 input BoolFieldUpdateOperationsInput {
   set: Boolean
 }
@@ -54,6 +50,21 @@ input IntFilter {
   notIn: [Int!]
 }
 
+type Lens {
+  description: String!
+  id: Int!
+  name: String!
+  org: Org!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+}
+
+input LensCreateInput {
+  description: String!
+  name: String!
+  org: OrgCreateOneWithoutLensInput!
+  posts: PostCreateManyWithoutLensInput
+}
+
 input LensCreateManyWithoutOrgInput {
   connect: [LensWhereUniqueInput!]
   connectOrCreate: [LensCreateOrConnectWithoutorgInput!]
@@ -88,12 +99,6 @@ input LensCreateWithoutPostsInput {
   org: OrgCreateOneWithoutLensInput!
 }
 
-input LensListRelationFilter {
-  every: LensWhereInput
-  none: LensWhereInput
-  some: LensWhereInput
-}
-
 input LensScalarWhereInput {
   AND: [LensScalarWhereInput!]
   description: StringFilter
@@ -102,6 +107,13 @@ input LensScalarWhereInput {
   NOT: [LensScalarWhereInput!]
   OR: [LensScalarWhereInput!]
   orgId: IntFilter
+}
+
+input LensUpdateInput {
+  description: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  org: OrgUpdateOneRequiredWithoutLensInput
+  posts: PostUpdateManyWithoutLensInput
 }
 
 input LensUpdateManyMutationInput {
@@ -163,28 +175,27 @@ input LensUpsertWithWhereUniqueWithoutOrgInput {
   where: LensWhereUniqueInput!
 }
 
-input LensWhereInput {
-  AND: [LensWhereInput!]
-  description: StringFilter
-  id: IntFilter
-  name: StringFilter
-  NOT: [LensWhereInput!]
-  OR: [LensWhereInput!]
-  org: OrgWhereInput
-  orgId: IntFilter
-  posts: PostListRelationFilter
-}
-
 input LensWhereUniqueInput {
   id: Int
   name: String
 }
 
 type Mutation {
+  createOneLens(data: LensCreateInput!): Lens!
+  createOneOrg(data: OrgCreateInput!): Org!
+  createOnePost(data: PostCreateInput!): Post!
+  createOneReply(data: ReplyCreateInput!): Reply!
+  createOneTag(data: TagCreateInput!): Tag!
   createOneUser(data: UserCreateInput!): User!
-  deleteManyUser(where: UserWhereInput): BatchPayload!
+  deleteOneLens(where: LensWhereUniqueInput!): Lens
+  deleteOneOrg(where: OrgWhereUniqueInput!): Org
+  deleteOnePost(where: PostWhereUniqueInput!): Post
+  deleteOneReply(where: ReplyWhereUniqueInput!): Reply
   deleteOneUser(where: UserWhereUniqueInput!): User
-  updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateOneLens(data: LensUpdateInput!, where: LensWhereUniqueInput!): Lens
+  updateOneOrg(data: OrgUpdateInput!, where: OrgWhereUniqueInput!): Org
+  updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateOneReply(data: ReplyUpdateInput!, where: ReplyWhereUniqueInput!): Reply
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
 }
 
@@ -243,6 +254,13 @@ type Org {
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
 }
 
+input OrgCreateInput {
+  createdAt: String!
+  Lens: LensCreateManyWithoutOrgInput
+  name: String!
+  users: UserCreateManyWithoutOrgInput
+}
+
 input OrgCreateOneWithoutLensInput {
   connect: OrgWhereUniqueInput
   connectOrCreate: OrgCreateOrConnectWithoutLensInput
@@ -275,6 +293,13 @@ input OrgCreateWithoutUsersInput {
   createdAt: String!
   Lens: LensCreateManyWithoutOrgInput
   name: String!
+}
+
+input OrgUpdateInput {
+  createdAt: StringFieldUpdateOperationsInput
+  Lens: LensUpdateManyWithoutOrgInput
+  name: StringFieldUpdateOperationsInput
+  users: UserUpdateManyWithoutOrgInput
 }
 
 input OrgUpdateOneRequiredWithoutLensInput {
@@ -315,19 +340,33 @@ input OrgUpsertWithoutUsersInput {
   update: OrgUpdateWithoutUsersInput!
 }
 
-input OrgWhereInput {
-  AND: [OrgWhereInput!]
-  createdAt: StringFilter
-  id: IntFilter
-  Lens: LensListRelationFilter
-  name: StringFilter
-  NOT: [OrgWhereInput!]
-  OR: [OrgWhereInput!]
-  users: UserListRelationFilter
-}
-
 input OrgWhereUniqueInput {
   id: Int
+}
+
+type Post {
+  author: User!
+  content: String!
+  createdAt: DateTime!
+  id: Int!
+  lens: Lens!
+  name: String!
+  published: Boolean!
+  replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
+  summary: String!
+  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
+}
+
+input PostCreateInput {
+  author: UserCreateOneWithoutPostsInput!
+  content: String!
+  createdAt: DateTime
+  lens: LensCreateOneWithoutPostsInput!
+  name: String!
+  published: Boolean
+  replies: ReplyCreateManyWithoutPostInput
+  summary: String!
+  tags: TagCreateManyWithoutPostsInput
 }
 
 input PostCreateManyWithoutAuthorInput {
@@ -340,6 +379,12 @@ input PostCreateManyWithoutLensInput {
   connect: [PostWhereUniqueInput!]
   connectOrCreate: [PostCreateOrConnectWithoutlensInput!]
   create: [PostCreateWithoutLensInput!]
+}
+
+input PostCreateManyWithoutTagsInput {
+  connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithouttagsInput!]
+  create: [PostCreateWithoutTagsInput!]
 }
 
 input PostCreateOneWithoutRepliesInput {
@@ -360,6 +405,11 @@ input PostCreateOrConnectWithoutlensInput {
 
 input PostCreateOrConnectWithoutrepliesInput {
   create: PostCreateWithoutRepliesInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateOrConnectWithouttagsInput {
+  create: PostCreateWithoutTagsInput!
   where: PostWhereUniqueInput!
 }
 
@@ -396,10 +446,15 @@ input PostCreateWithoutRepliesInput {
   tags: TagCreateManyWithoutPostsInput
 }
 
-input PostListRelationFilter {
-  every: PostWhereInput
-  none: PostWhereInput
-  some: PostWhereInput
+input PostCreateWithoutTagsInput {
+  author: UserCreateOneWithoutPostsInput!
+  content: String!
+  createdAt: DateTime
+  lens: LensCreateOneWithoutPostsInput!
+  name: String!
+  published: Boolean
+  replies: ReplyCreateManyWithoutPostInput
+  summary: String!
 }
 
 input PostScalarWhereInput {
@@ -414,6 +469,18 @@ input PostScalarWhereInput {
   OR: [PostScalarWhereInput!]
   published: BoolFilter
   summary: StringFilter
+}
+
+input PostUpdateInput {
+  author: UserUpdateOneRequiredWithoutPostsInput
+  content: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  lens: LensUpdateOneRequiredWithoutPostsInput
+  name: StringFieldUpdateOperationsInput
+  published: BoolFieldUpdateOperationsInput
+  replies: ReplyUpdateManyWithoutPostInput
+  summary: StringFieldUpdateOperationsInput
+  tags: TagUpdateManyWithoutPostsInput
 }
 
 input PostUpdateManyMutationInput {
@@ -528,26 +595,15 @@ input PostUpsertWithWhereUniqueWithoutLensInput {
   where: PostWhereUniqueInput!
 }
 
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  author: UserWhereInput
-  authorId: IntFilter
-  content: StringFilter
-  createdAt: DateTimeFilter
-  id: IntFilter
-  lens: LensWhereInput
-  lensId: IntFilter
-  name: StringFilter
-  NOT: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  published: BoolFilter
-  replies: ReplyListRelationFilter
-  summary: StringFilter
-  tags: TagListRelationFilter
-}
-
 input PostWhereUniqueInput {
   id: Int
+}
+
+type Profile {
+  avatar: String!
+  bio: String!
+  id: Int!
+  user: User!
 }
 
 input ProfileCreateOneWithoutUserInput {
@@ -586,25 +642,35 @@ input ProfileUpsertWithoutUserInput {
   update: ProfileUpdateWithoutUserInput!
 }
 
-input ProfileWhereInput {
-  AND: [ProfileWhereInput!]
-  avatar: StringFilter
-  bio: StringFilter
-  id: IntFilter
-  NOT: [ProfileWhereInput!]
-  OR: [ProfileWhereInput!]
-  user: UserWhereInput
-  userId: IntFilter
-}
-
 input ProfileWhereUniqueInput {
   id: Int
 }
 
 type Query {
+  lens(after: LensWhereUniqueInput, before: LensWhereUniqueInput, first: Int, last: Int): [Lens!]!
+  lenses: [Lens]
   org(where: OrgWhereUniqueInput!): Org
   orgs(after: OrgWhereUniqueInput, before: OrgWhereUniqueInput, first: Int, last: Int): [Org!]!
+  post(where: PostWhereUniqueInput!): Post
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+  replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
+  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
   user(where: UserWhereUniqueInput!): User
+}
+
+type Reply {
+  author: User!
+  content: String!
+  createdAt: DateTime!
+  id: Int!
+  post: Post!
+}
+
+input ReplyCreateInput {
+  author: UserCreateOneWithoutReplyInput!
+  content: String!
+  createdAt: DateTime
+  post: PostCreateOneWithoutRepliesInput!
 }
 
 input ReplyCreateManyWithoutAuthorInput {
@@ -641,12 +707,6 @@ input ReplyCreateWithoutPostInput {
   createdAt: DateTime
 }
 
-input ReplyListRelationFilter {
-  every: ReplyWhereInput
-  none: ReplyWhereInput
-  some: ReplyWhereInput
-}
-
 input ReplyScalarWhereInput {
   AND: [ReplyScalarWhereInput!]
   authorId: IntFilter
@@ -656,6 +716,13 @@ input ReplyScalarWhereInput {
   NOT: [ReplyScalarWhereInput!]
   OR: [ReplyScalarWhereInput!]
   postId: IntFilter
+}
+
+input ReplyUpdateInput {
+  author: UserUpdateOneRequiredWithoutReplyInput
+  content: StringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
 input ReplyUpdateManyMutationInput {
@@ -733,19 +800,6 @@ input ReplyUpsertWithWhereUniqueWithoutPostInput {
   where: ReplyWhereUniqueInput!
 }
 
-input ReplyWhereInput {
-  AND: [ReplyWhereInput!]
-  author: UserWhereInput
-  authorId: IntFilter
-  content: StringFilter
-  createdAt: DateTimeFilter
-  id: IntFilter
-  NOT: [ReplyWhereInput!]
-  OR: [ReplyWhereInput!]
-  post: PostWhereInput
-  postId: IntFilter
-}
-
 input ReplyWhereUniqueInput {
   id: Int
 }
@@ -773,6 +827,17 @@ input StringFilter {
   startsWith: String
 }
 
+type Tag {
+  id: Int!
+  name: String!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+}
+
+input TagCreateInput {
+  name: String!
+  posts: PostCreateManyWithoutTagsInput
+}
+
 input TagCreateManyWithoutPostsInput {
   connect: [TagWhereUniqueInput!]
   connectOrCreate: [TagCreateOrConnectWithoutpostsInput!]
@@ -786,12 +851,6 @@ input TagCreateOrConnectWithoutpostsInput {
 
 input TagCreateWithoutPostsInput {
   name: String!
-}
-
-input TagListRelationFilter {
-  every: TagWhereInput
-  none: TagWhereInput
-  some: TagWhereInput
 }
 
 input TagScalarWhereInput {
@@ -839,15 +898,6 @@ input TagUpsertWithWhereUniqueWithoutPostsInput {
   where: TagWhereUniqueInput!
 }
 
-input TagWhereInput {
-  AND: [TagWhereInput!]
-  id: IntFilter
-  name: StringFilter
-  NOT: [TagWhereInput!]
-  OR: [TagWhereInput!]
-  posts: PostListRelationFilter
-}
-
 input TagWhereUniqueInput {
   id: Int
 }
@@ -858,7 +908,8 @@ type User {
   email: String!
   id: Int!
   org: Org!
-  orgId: Int!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+  profile: Profile
   role: Role!
   username: String!
 }
@@ -939,12 +990,6 @@ input UserCreateWithoutReplyInput {
   profile: ProfileCreateOneWithoutUserInput
   role: Role
   username: String!
-}
-
-input UserListRelationFilter {
-  every: UserWhereInput
-  none: UserWhereInput
-  some: UserWhereInput
 }
 
 input UserScalarWhereInput {
@@ -1066,23 +1111,6 @@ input UserUpsertWithWhereUniqueWithoutOrgInput {
   create: UserCreateWithoutOrgInput!
   update: UserUpdateWithoutOrgInput!
   where: UserWhereUniqueInput!
-}
-
-input UserWhereInput {
-  AND: [UserWhereInput!]
-  createdAt: StringFilter
-  displayName: StringFilter
-  email: StringFilter
-  id: IntFilter
-  NOT: [UserWhereInput!]
-  OR: [UserWhereInput!]
-  org: OrgWhereInput
-  orgId: IntFilter
-  posts: PostListRelationFilter
-  profile: ProfileWhereInput
-  Reply: ReplyListRelationFilter
-  role: EnumRoleFilter
-  username: StringFilter
 }
 
 input UserWhereUniqueInput {
