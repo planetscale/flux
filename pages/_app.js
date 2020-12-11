@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Global, css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
