@@ -38,15 +38,13 @@ const Comment = styled.div`
 `;
 
 const UserIconWrapper = styled.div`
-  width: 62px;
-  height: 62px;
   padding: 12px;
   background-color: #ffffff;
   position: relative;
   float: left;
   overflow-y: hidden;
   margin: 0 -86px 0 0; // user icon offsets
-  transform: translate(-104px, -20px);
+  transform: translate(-104px, -18px);
 `;
 
 const Reply = styled.div`
@@ -75,14 +73,24 @@ export default function PostPage() {
       <BodyWrapper>
         <Post>
           <UserIconWrapper>
-            <UserIcon />
+            <UserIcon
+              src="/user_profile_icon.png"
+              width="62px"
+              height="62px"
+              alt="user avatar"
+            />
           </UserIconWrapper>
           <AuthorNamePlate />
           <Content>{post}</Content>
         </Post>
         <Comment>
           <UserIconWrapper>
-            <UserIcon />
+            <UserIcon
+              src="/user_profile_icon.png"
+              width="62px"
+              height="62px"
+              alt="user avatar"
+            />
           </UserIconWrapper>
           <CommenterNamePlate />
           <Content>{comment}</Content>
@@ -91,7 +99,12 @@ export default function PostPage() {
       </BodyWrapper>
       <Reply>
         <UserIconWrapper>
-          <UserIcon />
+          <UserIcon
+            src="/user_profile_icon.png"
+            width="62px"
+            height="62px"
+            alt="user avatar"
+          />
         </UserIconWrapper>
         <textarea></textarea>
         <button type="submit">Reply.</button>
