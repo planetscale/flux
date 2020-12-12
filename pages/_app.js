@@ -32,8 +32,12 @@ function App({ Component, pageProps }) {
   };
 
   const updateToken = async user => {
-    const jwt = await user.getIdToken();
-    setToken(jwt);
+    try {
+      const jwt = await user.getIdToken();
+      setToken(jwt);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
