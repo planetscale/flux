@@ -40,6 +40,17 @@ function App({ Component, pageProps }) {
     }
   };
 
+  const createUrqlClient = () => {
+    return createClient({
+      url: GRAPHQL_ENDPOINT,
+      fetchOptions: () => {
+        return {
+          headers: { authorization: token ? `Bearer ${token}` : '' },
+        };
+      },
+    });
+  };
+
   return (
     <>
       <Global
@@ -55,16 +66,7 @@ function App({ Component, pageProps }) {
         `}
       />
       <AuthContextProvider>
-        <Provider
-          value={createClient({
-            url: GRAPHQL_ENDPOINT,
-            fetchOptions: () => {
-              return {
-                headers: { authorization: token ? `Bearer ${token}` : '' },
-              };
-            },
-          })}
-        >
+        <Provider value={createUrqlClient()}>
           <Component {...pageProps} />
         </Provider>
       </AuthContextProvider>
