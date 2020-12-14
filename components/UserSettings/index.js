@@ -45,8 +45,28 @@ const RadioGroup = styled.div`
   display: flex;
   flex-direction: column;
 
-  label:not(:last-of-type) {
-    margin: 0 0 16px 0;
+  label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:not(:last-of-type) {
+      margin: 0 0 16px 0;
+    }
+
+    input {
+      margin: unset;
+      margin: 0 8px 0 0;
+
+      &:checked::before {
+        background: #000000;
+        content: '';
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        display: block;
+      }
+    }
   }
 `;
 
