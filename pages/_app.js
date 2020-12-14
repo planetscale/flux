@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Global, css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import { setFireAuthObserver } from 'utils/fireConfig';
-import NextApp from 'next/app';
-import { withUrqlClient } from 'next-urql';
+import { createClient, Provider } from 'urql';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -21,14 +20,35 @@ const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
 function App({ Component, pageProps }) {
   const router = useRouter();
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     initContextDevTools();
-    setFireAuthObserver(directToLogin);
+    setFireAuthObserver(directToLogin, updateToken);
   }, []);
 
   const directToLogin = () => {
     router.push('/login');
+  };
+
+  const updateToken = async user => {
+    try {
+      const jwt = await user.getIdToken();
+      setToken(jwt);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const createUrqlClient = () => {
+    return createClient({
+      url: GRAPHQL_ENDPOINT,
+      fetchOptions: () => {
+        return {
+          headers: { authorization: token ? `Bearer ${token}` : '' },
+        };
+      },
+    });
   };
 
   return (
@@ -43,22 +63,15 @@ function App({ Component, pageProps }) {
             height: 100vh;
             overflow: hidden;
           }
-          font-family: Inconsolata;
         `}
       />
       <AuthContextProvider>
-        <Component {...pageProps} />
+        <Provider value={createUrqlClient()}>
+          <Component {...pageProps} />
+        </Provider>
       </AuthContextProvider>
     </>
   );
 }
 
-App.getInitialProps = async ctx => {
-  const appProps = await NextApp.getInitialProps(ctx);
-  return { ...appProps };
-};
-
-export default withUrqlClient((_ssrExchange, _ctx) => ({
-  url: GRAPHQL_ENDPOINT,
-  fetch,
-}))(App);
+export default App;
