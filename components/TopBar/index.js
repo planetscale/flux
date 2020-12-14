@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
+import Modal from '@material-ui/core/Modal';
 import { ButtonBase } from 'components/Button';
-import Image from 'next/image';
 import UserIcon from '../UserIcon';
 import Logout from './Logout';
+import UserSettings from 'components/UserSettings';
+import { useState } from 'react';
+import PostUpload from 'components/PostUpload';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -42,10 +45,31 @@ const ActionsWrapper = styled.div`
   }
 `;
 
+const StyledModal = styled(Modal)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UPLOAD_MARKDOWN = 'upload markdown';
+const USER_SETTINGS = 'user settings';
+
 export default function TopBar({
   org = 'PlanetScale',
   subOrg = 'Engineering',
 }) {
+  const [isOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
+  const handleModalOpen = content => {
+    setModalOpen(true);
+    setModalContent(content);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
   return (
     <Wrapper>
       <div>
@@ -53,16 +77,47 @@ export default function TopBar({
         <span>{subOrg}</span>
       </div>
       <ActionsWrapper>
-        <ButtonBase type="button">
+        <StyledModal
+          open={isOpen}
+          onClose={handleModalClose}
+          aria-labelledby={modalContent}
+          aria-describedby={modalContent}
+        >
+          <>
+            {modalContent === UPLOAD_MARKDOWN && <PostUpload />}
+
+            {modalContent === USER_SETTINGS && (
+              <UserSettings
+                profileImg="/user_profile_icon.png"
+                displayName="Abhi Vaidyanatha"
+                userHandle="abhi"
+              />
+            )}
+          </>
+        </StyledModal>
+
+        <ButtonBase
+          type="button"
+          onClick={() => {
+            handleModalOpen(UPLOAD_MARKDOWN);
+          }}
+        >
           <img src="/upload.svg" alt="upload post" width="26px" height="26px" />
         </ButtonBase>
 
-        <UserIcon
-          src="/user_profile_icon.png"
-          width="60px"
-          height="60px"
-          alt="user avatar"
-        />
+        <ButtonBase
+          type="button"
+          onClick={() => {
+            handleModalOpen(USER_SETTINGS);
+          }}
+        >
+          <UserIcon
+            src="/user_profile_icon.png"
+            width="60px"
+            height="60px"
+            alt="user avatar"
+          />
+        </ButtonBase>
       </ActionsWrapper>
 
       {/* <Logout /> */}
