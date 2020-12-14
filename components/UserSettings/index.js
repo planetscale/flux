@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
+import { useState } from 'react';
 
 const Wrapper = styled.div`
   width: 360px;
@@ -16,7 +17,7 @@ const UserInfo = styled.div`
   align-items: center;
   padding: 24px 0;
 
-  > div:not(:first-of-type) {
+  > div {
     margin: 12px 0 0 0;
   }
 
@@ -31,20 +32,42 @@ const SettingsUserIcon = styled(UserIcon)`
 `;
 
 const NotificationPreference = styled.div`
-  padding: 21px;
+  padding: 21px 21px 48px;
   font-weight: 500;
 
-  > div {
+  > div:first-of-type {
     text-decoration: underline;
+    margin: 0 0 20px 0;
   }
 `;
 
+const RadioGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  label:not(:last-of-type) {
+    margin: 0 0 16px 0;
+  }
+`;
+
+const RADIO_OPTIONS = {
+  ALWAYS: 'Always',
+  MENTIONS: 'Mentions',
+  NEVER: 'Never',
+};
+
 export default function UserSettings({
   profileImg,
-  displayName = 'Abhi Vaidyanatha',
-  userHandle = 'abhi',
+  displayName,
+  userHandle,
   ...props
 }) {
+  const [value, setValue] = useState(RADIO_OPTIONS.ALWAYS);
+
+  const handleChange = event => {
+    setValue(event.target.value);
+  };
+
   return (
     <Wrapper>
       <UserInfo>
@@ -54,11 +77,21 @@ export default function UserSettings({
       </UserInfo>
       <NotificationPreference>
         <div>Email Notifications</div>
-        <ul>
-          <li>Always</li>
-          <li>Mentions</li>
-          <li>Never</li>
-        </ul>
+        <RadioGroup>
+          {Object.values(RADIO_OPTIONS).map(option => (
+            <label htmlFor={option} key={option}>
+              <input
+                type="radio"
+                id={option}
+                name="option"
+                value={option}
+                checked={value === option}
+                onChange={handleChange}
+              />
+              {option}
+            </label>
+          ))}
+        </RadioGroup>
       </NotificationPreference>
     </Wrapper>
   );

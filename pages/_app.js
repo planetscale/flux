@@ -43,7 +43,6 @@ function App({ Component, pageProps }) {
             height: 100vh;
             overflow: hidden;
           }
-          font-family: Inconsolata;
         `}
       />
       <AuthContextProvider>
