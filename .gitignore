@@ -34,4 +34,4 @@ yarn-error.log*
 .vercel
 
 # dev firebase admin key
-fire-admin-config-key.json
+# firebase-sdk-key.json

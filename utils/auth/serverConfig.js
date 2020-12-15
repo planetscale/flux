@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import adminKey from 'fire-admin-config-key.json';
+import adminKey from 'firebase-sdk-key.json';
 
 if (!admin.apps.length) {
   try {
