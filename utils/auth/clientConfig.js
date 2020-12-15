@@ -20,7 +20,7 @@ if (!firebase.apps.length) {
   }
 }
 
-const loginWithFirebase = () => {
+const loginWithFirebase = async () => {
   return firebase
     .auth()
     .setPersistence(firebase.auth.Auth.Persistence.LOCAL)

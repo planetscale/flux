@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useImmer } from 'use-immer';
-import firebase from 'firebase/app';
-import { loginWithFirebase, logoutWithFirebase } from 'utils/fireConfig';
+import { loginWithFirebase, logoutWithFirebase } from 'utils/auth/clientConfig';
 
 const defaultContext = {
   isAuthed: false,

@@ -3,7 +3,7 @@ import { Global, css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
-import { setFireAuthObserver } from 'utils/fireConfig';
+import { setFireAuthObserver } from 'utils/auth/clientConfig';
 import { createClient, Provider } from 'urql';
 
 const initContextDevTools = () => {
