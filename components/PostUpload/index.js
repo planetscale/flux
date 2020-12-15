@@ -49,6 +49,7 @@ const Body = styled.div`
     }
   }
 `;
+
 export default function PostUpload() {
   return (
     <Wrapper>

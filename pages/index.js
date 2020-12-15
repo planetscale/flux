@@ -5,7 +5,7 @@ import PostList from 'components/PostList';
 import TopBar from 'components/TopBar';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import { useEffect } from 'react';
-import { setFireAuthObserver } from 'utils/fireConfig';
+import { setFireAuthObserver } from 'utils/auth/clientConfig';
 import PostPage from './post';
 
 const MainWrapper = styled.div`
