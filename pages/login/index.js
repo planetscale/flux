@@ -36,10 +36,7 @@ const Wrapper = styled.div`
 const userOrgQuery = gql`
   query($email: String!) {
     user(where: { email: $email }) {
-      email
-      displayName
       org {
-        id
         name
       }
     }
@@ -76,7 +73,7 @@ export default function Login() {
   }, [authContext]);
 
   useEffect(() => {
-    if (state.user) {
+    if (authContext.isAuthed && state?.user?.org) {
       router.push('/');
     }
   }, [state]);
@@ -102,7 +99,7 @@ export default function Login() {
           />
         </button>
       )}
-      {authContext.isAuthed && !state?.user && (
+      {authContext.isAuthed && !state?.user?.org && (
         <CreateOrg name={authContext?.user?.displayName} />
       )}
     </Wrapper>
