@@ -86,7 +86,7 @@ export default function CreateOrg({ name }) {
     debouncedOrgNameCheck(state.orgName);
   }, [state.orgName]);
 
-  function checkOrgExistence(orgName) {
+  const checkOrgExistence = orgName => {
     getOrg(client, { name: orgName })
       .then(res => {
         setState(draft => {
@@ -96,7 +96,7 @@ export default function CreateOrg({ name }) {
       .catch(e => {
         console.error(e);
       });
-  }
+  };
 
   const handleOrgNameChange = e => {
     setState(draft => {
