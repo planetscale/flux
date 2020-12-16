@@ -39,6 +39,12 @@ const Button = styled.button`
   :focus {
     outline: unset;
   }
+
+  :disabled {
+    cursor: unset;
+    color: #e0e0e0;
+    border: 2px solid #e0e0e0;
+  }
 `;
 
 const orgQuery = gql`
@@ -83,6 +89,7 @@ export default function CreateOrg({ name, email }) {
   const client = useClient();
   const [state, setState] = useImmer({
     orgName: '',
+    userName: '',
     name: name ? name : '',
     isOrgExisted: false,
   });
@@ -126,11 +133,17 @@ export default function CreateOrg({ name, email }) {
     });
   };
 
+  const handleUserNameChange = e => {
+    setState(draft => {
+      draft.userName = e.target.value;
+    });
+  };
+
   const handleNextClick = e => {
     e.preventDefault();
     createUserWithOrg({
       email,
-      userName: '',
+      userName: state.userName,
       displayName: state.name,
       createdAt: `${Date.now()}`,
       orgName: state.orgName,
@@ -145,6 +158,13 @@ export default function CreateOrg({ name, email }) {
         </InputWrapper>
         <InputWrapper>
           <Input
+            label="Your Username"
+            value={state.userName}
+            onChange={handleUserNameChange}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <Input
             label="Your Name"
             value={state.name}
             onChange={handleNameChange}
@@ -153,8 +173,12 @@ export default function CreateOrg({ name, email }) {
         <ButtonWrapper>
           <Button
             type="submit"
-            onClick={handleNextClick}
-            disabled={state.isOrgExisted}
+            onClick={
+              state.orgName && state.name && state.userName
+                ? handleNextClick
+                : null
+            }
+            disabled={!(state.orgName && state.name && state.userName)}
           >
             Next
           </Button>
