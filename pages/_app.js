@@ -33,6 +33,7 @@ function App({ Component, pageProps }) {
     setFireAuthObserver(directToLogin, updateToken);
   }, []);
 
+  // TODO: move to an Auth Guard, also need to check if user has an org for home
   const directToLogin = () => {
     router.push('/login');
   };
