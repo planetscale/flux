@@ -4,7 +4,13 @@ import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
-import { createClient, Provider } from 'urql';
+import {
+  createClient,
+  Provider,
+  dedupExchange,
+  fetchExchange,
+  cacheExchange,
+} from 'urql';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -48,6 +54,7 @@ function App({ Component, pageProps }) {
           headers: { authorization: token ? `Bearer ${token}` : '' },
         };
       },
+      exchanges: [dedupExchange, cacheExchange, fetchExchange],
     });
   };
 

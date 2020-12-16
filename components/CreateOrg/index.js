@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
 import Input from 'components/Input';
+import gql from 'graphql-tag';
+import { useClient } from 'urql';
+import { useImmer } from 'use-immer';
+import debounce from 'lodash/debounce';
+import { useCallback, useEffect } from 'react';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -36,18 +41,90 @@ const Button = styled.button`
   }
 `;
 
-export default function CreateOrg() {
+const orgQuery = gql`
+  query($name: String!) {
+    org(where: { name: $name }) {
+      name
+    }
+  }
+`;
+
+const getOrg = async (urqlClinet, { name }) => {
+  return urqlClinet
+    .query(orgQuery, {
+      name,
+    })
+    .toPromise();
+};
+
+export default function CreateOrg({ name }) {
+  const client = useClient();
+  const [state, setState] = useImmer({
+    orgName: '',
+    name: name ? name : '',
+    isOrgExisted: false,
+  });
+  const debouncedOrgNameCheck = useCallback(
+    debounce(checkOrgExistence, 300, {
+      leading: true,
+      trailing: true,
+    }),
+    []
+  );
+
+  useEffect(() => {
+    debouncedOrgNameCheck(state.orgName);
+  }, [state.orgName]);
+
+  function checkOrgExistence(orgName) {
+    getOrg(client, { name: orgName })
+      .then(res => {
+        setState(draft => {
+          draft.isOrgExisted = !!res?.data?.org;
+        });
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  }
+
+  const handleOrgNameChange = e => {
+    setState(draft => {
+      draft.orgName = e.target.value;
+    });
+  };
+
+  const handleNameChange = e => {
+    setState(draft => {
+      draft.name = e.target.value;
+    });
+  };
+
+  const handleNextClick = e => {
+    e.preventDefault();
+  };
+
   return (
     <Wrapper>
       <div>
         <InputWrapper>
-          <Input label="Organization Name" />
+          <Input label="Organization Name" onChange={handleOrgNameChange} />
         </InputWrapper>
         <InputWrapper>
-          <Input label="Your Name" />
+          <Input
+            label="Your Name"
+            value={state.name}
+            onChange={handleNameChange}
+          />
         </InputWrapper>
         <ButtonWrapper>
-          <Button type="submit">Next</Button>
+          <Button
+            type="submit"
+            onClick={handleNextClick}
+            disabled={state.isOrgExisted}
+          >
+            Next
+          </Button>
         </ButtonWrapper>
       </div>
     </Wrapper>

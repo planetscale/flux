@@ -19,8 +19,10 @@
     "firebase-admin": "^9.4.2",
     "graphql-middleware": "^4.0.2",
     "graphql-shield": "^7.4.3",
+    "graphql-tag": "^2.11.0",
     "graphql-tools": "^4.0.8",
     "immer": "^8.0.0",
+    "lodash": "^4.17.20",
     "luxon": "^1.25.0",
     "next": "10.0.3",
     "next-urql": "^2.1.1",
@@ -29,7 +31,6 @@
     "react-context-devtool": "^2.0.0",
     "react-dom": "17.0.1",
     "react-is": "^16.13.1",
-    "serverless-mysql": "^1.5.4",
     "urql": "^1.11.4",
     "use-immer": "^0.4.2"
   },
