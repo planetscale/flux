@@ -49,11 +49,24 @@ const orgQuery = gql`
   }
 `;
 
-const createOrgMutation = gql`
-  mutation($name: String!, $createdAt: String!) {
-    createOneOrg(name: $name, createdAt: $createAt) {
-      name
-      createdAt
+const createUserWithOrgMutation = gql`
+  mutation(
+    $email: String!
+    $userName: String!
+    $displayName: String!
+    $createdAt: String!
+    $orgName: String!
+  ) {
+    createOneUser(
+      data: {
+        email: $email
+        username: $userName
+        displayName: $displayName
+        createdAt: $createdAt
+        org: { create: { name: $orgName, createdAt: $createdAt } }
+      }
+    ) {
+      email
     }
   }
 `;
@@ -66,7 +79,7 @@ const getOrg = async (urqlClinet, { name }) => {
     .toPromise();
 };
 
-export default function CreateOrg({ name }) {
+export default function CreateOrg({ name, email }) {
   const client = useClient();
   const [state, setState] = useImmer({
     orgName: '',
@@ -80,13 +93,16 @@ export default function CreateOrg({ name }) {
     }),
     []
   );
-  const [createOrgResult, createOrg] = useMutation(createOrgMutation);
+  const [createOrgResult, createUserWithOrg] = useMutation(
+    createUserWithOrgMutation
+  );
 
   useEffect(() => {
     debouncedOrgNameCheck(state.orgName);
   }, [state.orgName]);
 
-  const checkOrgExistence = orgName => {
+  // lodash debounce need normal func to work, it doesn't work with arrow func
+  function checkOrgExistence(orgName) {
     getOrg(client, { name: orgName })
       .then(res => {
         setState(draft => {
@@ -96,7 +112,7 @@ export default function CreateOrg({ name }) {
       .catch(e => {
         console.error(e);
       });
-  };
+  }
 
   const handleOrgNameChange = e => {
     setState(draft => {
@@ -112,6 +128,13 @@ export default function CreateOrg({ name }) {
 
   const handleNextClick = e => {
     e.preventDefault();
+    createUserWithOrg({
+      email,
+      userName: '',
+      displayName: state.name,
+      createdAt: `${Date.now()}`,
+      orgName: state.orgName,
+    });
   };
 
   return (

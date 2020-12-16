@@ -5,13 +5,7 @@ import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import { UserContextProvider } from 'state/user';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
-import {
-  createClient,
-  Provider,
-  dedupExchange,
-  fetchExchange,
-  cacheExchange,
-} from 'urql';
+import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
 import { AuthGuard } from 'components/AuthGuard';
 
 const initContextDevTools = () => {
@@ -57,7 +51,8 @@ function App({ Component, pageProps }) {
           headers: { authorization: token ? `Bearer ${token}` : '' },
         };
       },
-      exchanges: [dedupExchange, cacheExchange, fetchExchange],
+      // TODO: add dedupExchange to this array and check cache before fire api request
+      exchanges: [cacheExchange, fetchExchange],
     });
   };
 

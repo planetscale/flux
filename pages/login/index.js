@@ -58,7 +58,10 @@ export default function Login() {
         </button>
       )}
       {authContext.isAuthed && !userContext?.user?.org && (
-        <CreateOrg name={authContext?.user?.displayName} />
+        <CreateOrg
+          name={authContext?.user?.displayName}
+          email={authContext?.user?.email}
+        />
       )}
     </Wrapper>
   );
