@@ -5,6 +5,8 @@ import { userOrgQuery } from './queries';
 
 const defaultContext = {
   user: null,
+  loading: false,
+  loaded: false,
 };
 const UserContext = React.createContext();
 UserContext.displayName = 'User Context';
@@ -28,7 +30,10 @@ const useUserActions = () => {
   const [state, updateState] = useContext(UserContext);
   const client = useClient();
 
-  const getUserOrgs = async ({ email }) => {
+  const getUserOrg = async ({ email }) => {
+    updateState(draft => {
+      draft.loading = true;
+    });
     try {
       const result = await client
         .query(userOrgQuery, {
@@ -38,13 +43,18 @@ const useUserActions = () => {
 
       updateState(draft => {
         draft.user = result?.data?.user;
+        draft.loading = false;
+        draft.loaded = true;
       });
     } catch (e) {
+      updateState(draft => {
+        draft.loading = false;
+      });
       console.error(e);
     }
   };
 
-  return { getUserOrgs };
+  return { getUserOrg };
 };
 
 export { UserContextProvider, useUserContext, useUserActions };

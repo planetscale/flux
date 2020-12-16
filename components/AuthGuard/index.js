@@ -5,26 +5,25 @@ import { useUserActions, useUserContext } from 'state/user';
 
 export function AuthGuard({ children }) {
   const router = useRouter();
-  const authContext = useAuthContext();
-  const userContext = useUserContext();
-  const { getUserOrgs } = useUserActions();
+  const { isAuthed, user: authUser } = useAuthContext();
+  const { user, loaded } = useUserContext();
+  const { getUserOrg } = useUserActions();
 
   useEffect(async () => {
-    if (authContext.isAuthed) {
-      getUserOrgs({
-        email: authContext?.user?.email,
+    if (isAuthed) {
+      getUserOrg({
+        email: authUser?.email,
       });
     }
-  }, [authContext]);
+  }, [isAuthed, authUser]);
 
   useEffect(() => {
-    console.log(userContext, authContext);
-    if (authContext.isAuthed && userContext?.user?.org) {
+    if (isAuthed && user) {
       router.push('/');
-    } else {
+    } else if (!isAuthed || (isAuthed && loaded && !user)) {
       router.push('/login');
     }
-  }, [userContext, authContext]);
+  }, [isAuthed, user, loaded]);
 
   return <>{children}</>;
 }

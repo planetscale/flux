@@ -57,12 +57,14 @@ export default function Login() {
           />
         </button>
       )}
-      {authContext.isAuthed && !userContext?.user?.org && (
-        <CreateOrg
-          name={authContext?.user?.displayName}
-          email={authContext?.user?.email}
-        />
-      )}
+      {authContext.isAuthed &&
+        !userContext.loading &&
+        !userContext.user?.org && (
+          <CreateOrg
+            name={authContext?.user?.displayName}
+            email={authContext?.user?.email}
+          />
+        )}
     </Wrapper>
   );
 }

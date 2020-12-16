@@ -20,16 +20,33 @@ const initContextDevTools = () => {
 // the URL to /api/graphql
 const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
+const createUrqlClient = token => {
+  return createClient({
+    url: GRAPHQL_ENDPOINT,
+    fetchOptions: () => {
+      return {
+        headers: { authorization: token ? `Bearer ${token}` : '' },
+      };
+    },
+    // TODO: add dedupExchange to this array and check cache before fire api request
+    exchanges: [cacheExchange, fetchExchange],
+  });
+};
+
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [token, setToken] = useState(null);
+  const [urqlClient, setUrqlClient] = useState(createUrqlClient(token));
 
   useEffect(() => {
     initContextDevTools();
     setFireAuthObserver(directToLogin, updateToken);
   }, []);
 
-  // TODO: move to an Auth Guard, also need to check if user has an org for home
+  useEffect(() => {
+    setUrqlClient(createUrqlClient(token));
+  }, [token]);
+
   const directToLogin = () => {
     router.push('/login');
   };
@@ -41,19 +58,6 @@ function App({ Component, pageProps }) {
     } catch (e) {
       console.error(e);
     }
-  };
-
-  const createUrqlClient = () => {
-    return createClient({
-      url: GRAPHQL_ENDPOINT,
-      fetchOptions: () => {
-        return {
-          headers: { authorization: token ? `Bearer ${token}` : '' },
-        };
-      },
-      // TODO: add dedupExchange to this array and check cache before fire api request
-      exchanges: [cacheExchange, fetchExchange],
-    });
   };
 
   return (
@@ -71,7 +75,7 @@ function App({ Component, pageProps }) {
         `}
       />
       <AuthContextProvider>
-        <Provider value={createUrqlClient()}>
+        <Provider value={urqlClient}>
           <UserContextProvider>
             <AuthGuard>
               <Component {...pageProps} />
