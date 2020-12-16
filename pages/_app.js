@@ -3,6 +3,7 @@ import { Global, css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
+import { UserContextProvider } from 'state/user';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
 import {
   createClient,
@@ -11,6 +12,7 @@ import {
   fetchExchange,
   cacheExchange,
 } from 'urql';
+import { AuthGuard } from 'components/AuthGuard';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -75,7 +77,11 @@ function App({ Component, pageProps }) {
       />
       <AuthContextProvider>
         <Provider value={createUrqlClient()}>
-          <Component {...pageProps} />
+          <UserContextProvider>
+            <AuthGuard>
+              <Component {...pageProps} />
+            </AuthGuard>
+          </UserContextProvider>
         </Provider>
       </AuthContextProvider>
     </>

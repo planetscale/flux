@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Input from 'components/Input';
 import gql from 'graphql-tag';
-import { useClient } from 'urql';
+import { useClient, useMutation } from 'urql';
 import { useImmer } from 'use-immer';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
@@ -49,6 +49,15 @@ const orgQuery = gql`
   }
 `;
 
+const createOrgMutation = gql`
+  mutation($name: String!, $createdAt: String!) {
+    createOneOrg(name: $name, createdAt: $createAt) {
+      name
+      createdAt
+    }
+  }
+`;
+
 const getOrg = async (urqlClinet, { name }) => {
   return urqlClinet
     .query(orgQuery, {
@@ -71,6 +80,7 @@ export default function CreateOrg({ name }) {
     }),
     []
   );
+  const [createOrgResult, createOrg] = useMutation(createOrgMutation);
 
   useEffect(() => {
     debouncedOrgNameCheck(state.orgName);

@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
-import { useClient } from 'urql';
-import gql from 'graphql-tag';
+
 import CreateOrg from 'components/CreateOrg';
+import { useUserContext } from 'state/user';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,50 +31,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const userOrgQuery = gql`
-  query($email: String!) {
-    user(where: { email: $email }) {
-      org {
-        name
-      }
-    }
-  }
-`;
-
-const getUserOrgs = async (urqlClinet, { email }) => {
-  return urqlClinet
-    .query(userOrgQuery, {
-      email,
-    })
-    .toPromise();
-};
-
 export default function Login() {
-  const router = useRouter();
-  const client = useClient();
   const { userLogin } = useAuthActions();
   const authContext = useAuthContext();
-  const [state, setState] = useState(null);
-
-  useEffect(() => {
-    if (authContext.isAuthed) {
-      getUserOrgs(client, { email: authContext?.user?.email })
-        .then(res => {
-          setState({
-            user: res.data?.user,
-          });
-        })
-        .catch(e => {
-          console.error(e);
-        });
-    }
-  }, [authContext]);
-
-  useEffect(() => {
-    if (authContext.isAuthed && state?.user?.org) {
-      router.push('/');
-    }
-  }, [state]);
+  const userContext = useUserContext();
 
   const handleLogin = () => {
     userLogin();
@@ -99,7 +57,7 @@ export default function Login() {
           />
         </button>
       )}
-      {authContext.isAuthed && !state?.user?.org && (
+      {authContext.isAuthed && !userContext?.user?.org && (
         <CreateOrg name={authContext?.user?.displayName} />
       )}
     </Wrapper>
