@@ -7,6 +7,7 @@ const defaultContext = {
   user: null,
   loading: false,
   loaded: false,
+  error: null,
 };
 const UserContext = React.createContext();
 UserContext.displayName = 'User Context';
@@ -45,10 +46,12 @@ const useUserActions = () => {
         draft.user = result?.data?.user;
         draft.loading = false;
         draft.loaded = true;
+        draft.error = result?.error ? result.error : null;
       });
     } catch (e) {
       updateState(draft => {
         draft.loading = false;
+        draft.errors = e;
       });
       console.error(e);
     }

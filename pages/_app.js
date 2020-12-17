@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Global, css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import { UserContextProvider } from 'state/user';
@@ -20,36 +19,13 @@ const initContextDevTools = () => {
 // the URL to /api/graphql
 const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
-const createUrqlClient = token => {
-  return createClient({
-    url: GRAPHQL_ENDPOINT,
-    fetchOptions: () => {
-      return {
-        headers: { authorization: token ? `Bearer ${token}` : '' },
-      };
-    },
-    // TODO: add dedupExchange to this array and check cache before fire api request
-    exchanges: [cacheExchange, fetchExchange],
-  });
-};
-
 function App({ Component, pageProps }) {
-  const router = useRouter();
   const [token, setToken] = useState(null);
-  const [urqlClient, setUrqlClient] = useState(createUrqlClient(token));
 
   useEffect(() => {
     initContextDevTools();
-    setFireAuthObserver(directToLogin, updateToken);
+    setFireAuthObserver(null, updateToken);
   }, []);
-
-  useEffect(() => {
-    setUrqlClient(createUrqlClient(token));
-  }, [token]);
-
-  const directToLogin = () => {
-    router.push('/login');
-  };
 
   const updateToken = async user => {
     try {
@@ -58,6 +34,19 @@ function App({ Component, pageProps }) {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const createUrqlClient = token => {
+    return createClient({
+      url: GRAPHQL_ENDPOINT,
+      fetchOptions: () => {
+        return {
+          headers: { authorization: token ? `Bearer ${token}` : '' },
+        };
+      },
+      // TODO: add dedupExchange to this array and check cache before fire api request
+      exchanges: [cacheExchange, fetchExchange],
+    });
   };
 
   return (
@@ -75,9 +64,9 @@ function App({ Component, pageProps }) {
         `}
       />
       <AuthContextProvider>
-        <Provider value={urqlClient}>
+        <Provider value={createUrqlClient(token)}>
           <UserContextProvider>
-            <AuthGuard>
+            <AuthGuard token={token}>
               <Component {...pageProps} />
             </AuthGuard>
           </UserContextProvider>

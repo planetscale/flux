@@ -3,19 +3,19 @@ import { useEffect } from 'react';
 import { useAuthContext } from 'state/auth';
 import { useUserActions, useUserContext } from 'state/user';
 
-export function AuthGuard({ children }) {
+export function AuthGuard({ token, children }) {
   const router = useRouter();
   const { isAuthed, user: authUser } = useAuthContext();
   const { user, loaded } = useUserContext();
   const { getUserOrg } = useUserActions();
 
   useEffect(async () => {
-    if (isAuthed) {
+    if (isAuthed && token) {
       getUserOrg({
         email: authUser?.email,
       });
     }
-  }, [isAuthed, authUser]);
+  }, [isAuthed, token]);
 
   useEffect(() => {
     if (isAuthed && user) {
