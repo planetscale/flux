@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ButtonBase } from 'components/Button';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -16,36 +17,42 @@ const Wrapper = styled.div`
     border-bottom: 1px solid #000000;
     padding: 24px;
 
-    > div {
+    > ${ButtonBase} {
+      font: unset;
+      font-family: inherit;
+      display: block;
       font-weight: 500;
       font-size: 20px;
       line-height: 21px;
       color: #000000;
     }
 
-    > div:not(:last-of-type) {
+    > ${ButtonBase}:not(:last-of-type) {
       margin: 0 0 16px 0;
     }
   }
+`;
 
-  > div:nth-of-type(2) {
-    height: 100%;
-    padding: 24px;
+const LowerContainer = styled.div`
+  height: 100%;
+  padding: 24px;
 
-    > div {
+  > div {
+    margin: 0 0 44px 0;
+
+    ${ButtonBase}:first-of-type {
       font-size: 18px;
       line-height: 19px;
-      margin: 0 0 44px 0;
       color: #000000;
+    }
 
-      div {
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 17px;
-        text-decoration-line: underline;
-        margin: 20px 0 0 20px;
-        color: #000000;
-      }
+    ${ButtonBase}:not(:first-of-type) {
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 17px;
+      text-decoration-line: underline;
+      margin: 20px 0 0 20px;
+      color: #000000;
     }
   }
 `;
@@ -64,21 +71,25 @@ export default function Navbar({
       <img src="/icon.svg" alt="parallax logo" />
       <div>
         {titles.map(title => (
-          <div key={title}>{title}</div>
+          <ButtonBase key={title}>
+            <div>{title}</div>
+          </ButtonBase>
         ))}
       </div>
-      <div>
+      <LowerContainer>
         {Object.entries(categories).map(([k, v]) => {
           return (
             <div key={k}>
-              {k}
+              <ButtonBase>{k}</ButtonBase>
               {v.subs.map(sub => (
-                <div key={sub}>{sub}</div>
+                <ButtonBase>
+                  <div key={sub}>{sub}</div>
+                </ButtonBase>
               ))}
             </div>
           );
         })}
-      </div>
+      </LowerContainer>
     </Wrapper>
   );
 }
