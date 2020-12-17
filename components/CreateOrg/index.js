@@ -77,8 +77,8 @@ const createUserWithOrgMutation = gql`
   }
 `;
 
-const getOrg = async (urqlClinet, { name }) => {
-  return urqlClinet
+const getOrg = async (urqlClient, { name }) => {
+  return urqlClient
     .query(orgQuery, {
       name,
     })
