@@ -342,6 +342,7 @@ input OrgUpsertWithoutUsersInput {
 
 input OrgWhereUniqueInput {
   id: Int
+  name: String
 }
 
 type Post {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Global, css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
+import { UserContextProvider } from 'state/user';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
-import { createClient, Provider } from 'urql';
+import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
+import { AuthGuard } from 'components/AuthGuard';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -19,17 +20,12 @@ const initContextDevTools = () => {
 const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
 function App({ Component, pageProps }) {
-  const router = useRouter();
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     initContextDevTools();
-    setFireAuthObserver(directToLogin, updateToken);
+    setFireAuthObserver(null, updateToken);
   }, []);
-
-  const directToLogin = () => {
-    router.push('/login');
-  };
 
   const updateToken = async user => {
     try {
@@ -40,7 +36,7 @@ function App({ Component, pageProps }) {
     }
   };
 
-  const createUrqlClient = () => {
+  const createUrqlClient = token => {
     return createClient({
       url: GRAPHQL_ENDPOINT,
       fetchOptions: () => {
@@ -48,6 +44,8 @@ function App({ Component, pageProps }) {
           headers: { authorization: token ? `Bearer ${token}` : '' },
         };
       },
+      // TODO: add dedupExchange to this array and check cache before fire api request
+      exchanges: [cacheExchange, fetchExchange],
     });
   };
 
@@ -66,8 +64,12 @@ function App({ Component, pageProps }) {
         `}
       />
       <AuthContextProvider>
-        <Provider value={createUrqlClient()}>
-          <Component {...pageProps} />
+        <Provider value={createUrqlClient(token)}>
+          <UserContextProvider>
+            <AuthGuard token={token}>
+              <Component {...pageProps} />
+            </AuthGuard>
+          </UserContextProvider>
         </Provider>
       </AuthContextProvider>
     </>

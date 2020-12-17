@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
+
+import CreateOrg from 'components/CreateOrg';
+import { useUserContext } from 'state/user';
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,15 +32,9 @@ const Wrapper = styled.div`
 `;
 
 export default function Login() {
-  const router = useRouter();
   const { userLogin } = useAuthActions();
   const authContext = useAuthContext();
-
-  useEffect(() => {
-    if (authContext.isAuthed) {
-      router.push('/');
-    }
-  }, [authContext]);
+  const userContext = useUserContext();
 
   const handleLogin = () => {
     userLogin();
@@ -48,15 +43,28 @@ export default function Login() {
   return (
     <Wrapper>
       <img src="/icon.svg" alt="parallax logo" />
-      <Image src="/login.svg" alt="login picture" layout="fill" />
-      <button onClick={handleLogin} type="button">
-        <Image
-          src="/google_login.svg"
-          alt="login button"
-          width={54}
-          height={54}
-        />
-      </button>
+      {!authContext.isAuthed && (
+        <Image src="/login.svg" alt="login picture" layout="fill" />
+      )}
+
+      {!authContext.isAuthed && (
+        <button onClick={handleLogin} type="button">
+          <Image
+            src="/google_login.svg"
+            alt="login button"
+            width={54}
+            height={54}
+          />
+        </button>
+      )}
+      {authContext.isAuthed &&
+        !userContext.loading &&
+        !userContext.user?.org && (
+          <CreateOrg
+            name={authContext?.user?.displayName}
+            email={authContext?.user?.email}
+          />
+        )}
     </Wrapper>
   );
 }

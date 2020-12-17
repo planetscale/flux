@@ -32,7 +32,7 @@ const useAuthActions = () => {
       const res = await loginWithFirebase();
       updateState(draft => {
         draft.isAuthed = true;
-        draft.user = res.user;
+        draft.user = res?.user;
       });
     } catch (e) {
       updateState(draft => {
@@ -56,7 +56,7 @@ const useAuthActions = () => {
     }
   };
 
-  const rehydrateUser = async user => {
+  const rehydrateUser = user => {
     if (user) {
       try {
         updateState(draft => {

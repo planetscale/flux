@@ -120,7 +120,7 @@ export default function TopBar({
         </ButtonBase>
       </ActionsWrapper>
 
-      {/* <Logout /> */}
+      <Logout />
     </Wrapper>
   );
 }
