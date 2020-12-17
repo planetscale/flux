@@ -10,10 +10,10 @@ export function parseMarkdown({ md }) {
     return console.error('Title metadata not found in post.');
   }
   if (!parsedMeta.hasOwnProperty('summary')) {
-    return console.error('Title metadata not found in post.');
+    return console.error('Summary metadata not found in post.');
   }
   if (!parsedMeta.hasOwnProperty('tags')) {
-    return console.error('Title metadata not found in post.');
+    return console.error('Tags metadata not found in post.');
   }
 
   return {
