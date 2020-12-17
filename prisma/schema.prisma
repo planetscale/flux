@@ -59,6 +59,16 @@ model Post {
   content    String
 }
 
+model PostUpload {
+  id        Int         @id @default(autoincrement())
+  content   String
+  summary   String
+  title     String
+  tags      String
+  post      Post        @relation(fields: [postId], references: [id])
+  postId    Int
+}
+
 model Reply {
   id         Int         @id @default(autoincrement())
   createdAt  DateTime    @default(now())

@@ -1,6 +1,17 @@
-import { objectType, queryType, mutationType, makeSchema } from '@nexus/schema';
+import {
+  objectType,
+  queryType,
+  mutationType,
+  makeSchema,
+  arg,
+  asNexusMethod,
+} from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
+import { GraphQLUpload } from 'graphql-upload';
+import { notValidError } from '../utils/upload/errors';
+import { readStream } from '../utils/upload/stream';
+import { parseMarkdown } from '../utils/markdown/parser';
 
 const Org = objectType({
   name: 'Org',
@@ -103,6 +114,8 @@ const Query = queryType({
   },
 });
 
+export const Upload = asNexusMethod(GraphQLUpload, 'upload');
+
 const Mutation = mutationType({
   definition(t) {
     t.crud.createOneUser();
@@ -121,6 +134,28 @@ const Mutation = mutationType({
     t.crud.updateOneReply();
     t.crud.deleteOneReply();
     t.crud.createOneTag();
+    t.field('uploadPost', {
+      type: 'Post',
+      args: {
+        file: arg({ type: 'Upload' }),
+      },
+      resolve: async (root, args, ctx) => {
+        const { stream, filename, mimetype, encoding } = await args.file;
+        if (!filename) {
+          throw notValidError('Invalid file name.');
+        }
+        const ext = filename.split('.').pop();
+        if (ext !== 'md') {
+          throw notValidError('Invalid file type, must be Markdown.');
+        }
+        const buf = await readStream(stream);
+        const data = await parseMarkdown(buf.data);
+
+        return ctx.prisma.post.create({
+          // TODO: Return post fields here.
+        });
+      },
+    });
   },
 });
 
