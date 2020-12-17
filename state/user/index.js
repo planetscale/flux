@@ -31,7 +31,7 @@ const useUserActions = () => {
   const [state, updateState] = useContext(UserContext);
   const client = useClient();
 
-  const getUserOrg = async ({ email }) => {
+  const getUser = async ({ email }) => {
     updateState(draft => {
       draft.loading = true;
     });
@@ -57,7 +57,7 @@ const useUserActions = () => {
     }
   };
 
-  return { getUserOrg };
+  return { getUser };
 };
 
 export { UserContextProvider, useUserContext, useUserActions };

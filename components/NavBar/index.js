@@ -59,12 +59,13 @@ const LowerContainer = styled.div`
 
 export default function Navbar({
   titles = ['All', 'Home'],
-  categories = {
-    Planetscale: {
-      subs: ['Marketing', 'Industry', 'Engineering'],
+  orgs = [
+    {
+      name: 'Planetscale',
+      lenses: ['Marketing', 'Industry', 'Engineering'],
     },
-    'PS Culture': { subs: ['Events', 'New Members', 'Misc'] },
-  },
+    { name: 'PS Culture', lenses: ['Events', 'New Members', 'Misc'] },
+  ],
 }) {
   return (
     <Wrapper>
@@ -77,13 +78,13 @@ export default function Navbar({
         ))}
       </div>
       <LowerContainer>
-        {Object.entries(categories).map(([k, v]) => {
+        {orgs?.map(org => {
           return (
-            <div key={k}>
-              <ButtonBase>{k}</ButtonBase>
-              {v.subs.map(sub => (
-                <ButtonBase>
-                  <div key={sub}>{sub}</div>
+            <div key={org.name}>
+              <ButtonBase>{org.name}</ButtonBase>
+              {org.lenses.map(lens => (
+                <ButtonBase key={lens}>
+                  <div>{lens}</div>
                 </ButtonBase>
               ))}
             </div>

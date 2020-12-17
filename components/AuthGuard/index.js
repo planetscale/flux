@@ -7,11 +7,11 @@ export function AuthGuard({ token, children }) {
   const router = useRouter();
   const { isAuthed, user: authUser } = useAuthContext();
   const { user, loaded } = useUserContext();
-  const { getUserOrg } = useUserActions();
+  const { getUser } = useUserActions();
 
   useEffect(async () => {
     if (isAuthed && token) {
-      getUserOrg({
+      getUser({
         email: authUser?.email,
       });
     }

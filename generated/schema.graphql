@@ -250,6 +250,7 @@ input NestedStringFilter {
 type Org {
   createdAt: String!
   id: Int!
+  lenses: [Lens]
   name: String!
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
 }

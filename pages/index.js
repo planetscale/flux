@@ -6,7 +6,8 @@ import TopBar from 'components/TopBar';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import { useEffect } from 'react';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
-import PostPage from './post';
+import { useQuery } from 'urql';
+import { useUserContext } from 'state/user';
 
 const MainWrapper = styled.div`
   display: flex;
@@ -19,9 +20,47 @@ const CenterWrapper = styled.div`
   height: 100vh;
 `;
 
+const sideNavDataQuery = `
+  query {
+    orgs {
+      name
+      lenses {
+        name
+      }
+    }
+  }
+`;
+
+// TODO: only get current org's data
+const postListQuery = `
+  query {
+    orgs {
+      lenses {
+        posts {
+          name
+          author {
+            displayName
+          }
+          createdAt
+          replies {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 export default function Home({ href, ...props }) {
   const authContext = useAuthContext();
   const { rehydrateUser } = useAuthActions();
+  const { user } = useUserContext();
+  const [sideNavResult, runSideNavDataQuery] = useQuery({
+    query: sideNavDataQuery,
+  });
+  const [postListResult, runPostListQuery] = useQuery({
+    query: postListQuery,
+  });
 
   useEffect(() => {
     setFireAuthObserver(null, rehydrateUser);
@@ -37,11 +76,16 @@ export default function Home({ href, ...props }) {
       <main>
         {authContext.isAuthed && (
           <MainWrapper>
-            <Navbar />
+            <Navbar orgs={sideNavResult.data?.orgs} />
             <CenterWrapper>
-              <TopBar />
-              {/* <PostList /> */}
-              <PostPage />
+              <TopBar
+                org={user?.org.name}
+                subOrg="Engineering"
+                profileImg={user?.profile?.avatar ?? '/user_profile_icon.png'}
+                userDisplayName={user?.displayName}
+                userHandle={user?.username}
+              />
+              <PostList posts={postListResult.data?.orgs?.lenses?.posts} />
             </CenterWrapper>
           </MainWrapper>
         )}

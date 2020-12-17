@@ -50,39 +50,51 @@ const Stars = styled.div`
 export default function PostList({
   posts = [
     {
-      title: 'PSDB Dark Mode',
-      author: 'Shawn Wang',
-      time: '3 hours ago',
-      numComment: 3,
-      numStar: 4,
+      name: 'User research on cloud spend',
+      author: {
+        displayName: 'Abhi Vaidyanatha',
+      },
+      createdAt: '3 hours ago',
+      replies: [
+        {
+          id: 1,
+        },
+      ],
     },
     {
-      title: 'User research on cloud spend',
-      author: 'Abhi Vaidyanatha',
-      time: '4 hours ago',
-      numComment: 6,
-      numStar: 2,
+      name: 'User research on cloud spend',
+      author: {
+        displayName: 'Abhi Vaidyanatha',
+      },
+      createdAt: '4 hours ago',
+      replies: [
+        {
+          id: 1,
+        },
+      ],
     },
   ],
 }) {
   return (
     <Wrapper>
       {posts.map(post => {
-        const { title, author, time, numComment, numStar } = post;
+        const { name, author, createdAt, replies, stars } = post;
         return (
-          <Post key={post.title}>
+          <Post key={createdAt}>
             <PostInfo>
-              <div>{title}</div>
+              <div>{name}</div>
               <div>
-                <div>{author}</div>
-                <div>{time}</div>
+                <div>{author?.displayName}</div>
+                <div>{createdAt}</div>
                 <div>|</div>
-                <div>{`${numComment} Comments`}</div>
+                <div>{`${replies?.length} Comments`}</div>
               </div>
             </PostInfo>
-            <Stars>
-              {numStar} <img src="star.svg" alt="next" />
-            </Stars>
+            {stars && (
+              <Stars>
+                {stars?.length} <img src="star.svg" alt="next" />
+              </Stars>
+            )}
           </Post>
         );
       })}
