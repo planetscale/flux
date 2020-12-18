@@ -10,8 +10,8 @@ const Wrapper = styled.div`
 `;
 
 export default function CommenterNamePlate({
-  displayName = 'Abhi Vaidyanatha',
-  userHandle = 'abhi',
+  displayName,
+  userHandle,
   ...props
 }) {
   return (

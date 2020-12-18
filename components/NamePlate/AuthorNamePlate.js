@@ -37,11 +37,11 @@ const Stars = styled.div`
 `;
 
 export default function AuthorNamePlate({
-  displayName = 'Shawn Wang',
-  userHandle = 'shawnxkwang',
-  time = '2 hours',
-  numComments = '3',
-  numStar = '4',
+  displayName,
+  userHandle,
+  time,
+  numComments,
+  numStars,
   onStarClick = () => {},
   ...props
 }) {
@@ -52,9 +52,9 @@ export default function AuthorNamePlate({
           <span>{displayName} </span>
           <span>{userHandle}</span>
         </div>
-        {numStar && (
+        {numStars && (
           <Stars onClick={onStarClick}>
-            {numStar} <img src="/star.svg" alt="star" />
+            {numStars} <img src="/star.svg" alt="star" />
           </Stars>
         )}
       </div>
