@@ -12,9 +12,6 @@ export function parseMarkdown({ md }) {
   if (!parsedMeta.hasOwnProperty('summary')) {
     return console.error('Summary metadata not found in post.');
   }
-  if (!parsedMeta.hasOwnProperty('tags')) {
-    return console.error('Tags metadata not found in post.');
-  }
 
   return {
     content: html,
