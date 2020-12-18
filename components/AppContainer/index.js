@@ -5,11 +5,13 @@ import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
 import AuthGuard from 'components/AuthGuard';
 import { useAuthActions } from 'state/auth';
 import AppContentWrapper from './AppContentWrapper';
+import { useRouter } from 'next/router';
 
 // the URL to /api/graphql
 const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
 
 function AppContainer({ children }) {
+  const router = useRouter();
   const [token, setToken] = useState(null);
   const { rehydrateUser } = useAuthActions();
 
@@ -45,10 +47,19 @@ function AppContainer({ children }) {
     });
   };
 
+  const isLoginPage = () => {
+    return router.pathname === '/login';
+  };
+
   return (
     <Provider value={createUrqlClient(token)}>
       <UserContextProvider>
         <AuthGuard token={token}>
+          {isLoginPage() ? (
+            <>{children}</>
+          ) : (
+            <AppContentWrapper>{children}</AppContentWrapper>
+          )}
           <AppContentWrapper>{children}</AppContentWrapper>
         </AuthGuard>
       </UserContextProvider>
