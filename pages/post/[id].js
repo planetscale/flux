@@ -13,7 +13,7 @@ import {
   UserIconWrapper,
   Reply,
 } from 'pageUtils/post/styles';
-import { postDataQuery } from 'pageUtils/post/styles';
+import { postDataQuery } from 'pageUtils/post/queries';
 
 export default function PostPage() {
   const router = useRouter();
