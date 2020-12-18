@@ -12,8 +12,8 @@ import {
   Comment,
   UserIconWrapper,
   Reply,
-} from './post.styles';
-import { postDataQuery } from './post.queries';
+} from 'pageUtils/post/styles';
+import { postDataQuery } from 'pageUtils/post/styles';
 
 export default function PostPage() {
   const router = useRouter();
@@ -29,8 +29,6 @@ export default function PostPage() {
       router.push('/');
     }
   }, [postDataQuery]);
-
-  console.log('postpage');
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {

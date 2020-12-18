@@ -25,7 +25,6 @@ const postListQuery = gql`
 `;
 
 export default function Home({ href, ...props }) {
-  console.log('index page');
 
   const [postListResult, runPostListQuery] = useQuery({
     query: postListQuery,

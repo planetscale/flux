@@ -29,7 +29,6 @@ const sideNavDataQuery = gql`
 `;
 
 export default function AppContentWrapper({ children }) {
-  console.log('Content Wrapper');
   const authContext = useAuthContext();
   const { user } = useUserContext();
   const [sideNavResult, runSideNavDataQuery] = useQuery({

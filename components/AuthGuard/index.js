@@ -18,7 +18,6 @@ export default function AuthGuard({ token, children }) {
   }, [isAuthed, token]);
 
   useEffect(() => {
-    console.log(isAuthed, loaded, user);
     if (isAuthed && user) {
       router.push('/');
     } else if (!isAuthed || (isAuthed && loaded && !user)) {

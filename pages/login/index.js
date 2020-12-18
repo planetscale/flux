@@ -32,7 +32,6 @@ const Wrapper = styled.div`
 `;
 
 export default function Login() {
-  console.log('login page');
   const { userLogin } = useAuthActions();
   const authContext = useAuthContext();
   const userContext = useUserContext();

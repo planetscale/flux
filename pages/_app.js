@@ -14,7 +14,6 @@ const initContextDevTools = () => {
 };
 
 function App({ Component, pageProps }) {
-  console.log('_app component');
   useEffect(() => {
     initContextDevTools();
   }, []);

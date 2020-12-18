@@ -15,7 +15,6 @@ function AppContainer({ children }) {
   const [token, setToken] = useState(null);
   const { rehydrateUser } = useAuthActions();
 
-  console.log('app container');
   useEffect(() => {
     setFireAuthObserver(null, onAuthUserSuccess);
   }, []);
