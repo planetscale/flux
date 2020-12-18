@@ -2,40 +2,28 @@
 ### Do not make changes to this file directly
 
 
-input BoolFieldUpdateOperationsInput {
-  set: Boolean
-}
-
-input BoolFilter {
+input BoolNullableFilter {
   equals: Boolean
-  not: NestedBoolFilter
+  not: NestedBoolNullableFilter
 }
 
 scalar DateTime
 
-input DateTimeFieldUpdateOperationsInput {
-  set: DateTime
-}
-
-input DateTimeFilter {
+input DateTimeNullableFilter {
   equals: DateTime
   gt: DateTime
   gte: DateTime
   in: [DateTime!]
   lt: DateTime
   lte: DateTime
-  not: NestedDateTimeFilter
+  not: NestedDateTimeNullableFilter
   notIn: [DateTime!]
 }
 
-input EnumRoleFieldUpdateOperationsInput {
-  set: Role
-}
-
-input EnumRoleFilter {
+input EnumRoleNullableFilter {
   equals: Role
   in: [Role!]
-  not: NestedEnumRoleFilter
+  not: NestedEnumRoleNullableFilter
   notIn: [Role!]
 }
 
@@ -183,15 +171,27 @@ input LensWhereUniqueInput {
 type Mutation {
   createOneLens(data: LensCreateInput!): Lens!
   createOneOrg(data: OrgCreateInput!): Org!
-  createOnePost(data: PostCreateInput!): Post!
   createOneReply(data: ReplyCreateInput!): Reply!
-  createOneTag(data: TagCreateInput!): Tag!
+  createOneStar(data: StarCreateInput!): Star!
   createOneUser(data: UserCreateInput!): User!
   deleteOneLens(where: LensWhereUniqueInput!): Lens
   deleteOneOrg(where: OrgWhereUniqueInput!): Org
   deleteOnePost(where: PostWhereUniqueInput!): Post
   deleteOneReply(where: ReplyWhereUniqueInput!): Reply
+  deleteOneStar(where: StarWhereUniqueInput!): Star
   deleteOneUser(where: UserWhereUniqueInput!): User
+  postUpload(
+    file: Upload
+
+    """lens the user is posting in"""
+    lensId: Int
+
+    """org the user is posting in"""
+    orgId: Int
+
+    """id of the user"""
+    userId: Int
+  ): Post
   updateOneLens(data: LensUpdateInput!, where: LensWhereUniqueInput!): Lens
   updateOneOrg(data: OrgUpdateInput!, where: OrgWhereUniqueInput!): Org
   updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
@@ -199,26 +199,26 @@ type Mutation {
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
 }
 
-input NestedBoolFilter {
+input NestedBoolNullableFilter {
   equals: Boolean
-  not: NestedBoolFilter
+  not: NestedBoolNullableFilter
 }
 
-input NestedDateTimeFilter {
+input NestedDateTimeNullableFilter {
   equals: DateTime
   gt: DateTime
   gte: DateTime
   in: [DateTime!]
   lt: DateTime
   lte: DateTime
-  not: NestedDateTimeFilter
+  not: NestedDateTimeNullableFilter
   notIn: [DateTime!]
 }
 
-input NestedEnumRoleFilter {
+input NestedEnumRoleNullableFilter {
   equals: Role
   in: [Role!]
-  not: NestedEnumRoleFilter
+  not: NestedEnumRoleNullableFilter
   notIn: [Role!]
 }
 
@@ -247,8 +247,38 @@ input NestedStringFilter {
   startsWith: String
 }
 
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NullableBoolFieldUpdateOperationsInput {
+  set: Boolean
+}
+
+input NullableDateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input NullableEnumRoleFieldUpdateOperationsInput {
+  set: Role
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
 type Org {
-  createdAt: String!
+  createdAt: DateTime
   id: Int!
   lenses: [Lens]
   name: String!
@@ -256,7 +286,7 @@ type Org {
 }
 
 input OrgCreateInput {
-  createdAt: String!
+  createdAt: DateTime
   Lens: LensCreateManyWithoutOrgInput
   name: String!
   users: UserCreateManyWithoutOrgInput
@@ -285,19 +315,19 @@ input OrgCreateOrConnectWithoutusersInput {
 }
 
 input OrgCreateWithoutLensInput {
-  createdAt: String!
+  createdAt: DateTime
   name: String!
   users: UserCreateManyWithoutOrgInput
 }
 
 input OrgCreateWithoutUsersInput {
-  createdAt: String!
+  createdAt: DateTime
   Lens: LensCreateManyWithoutOrgInput
   name: String!
 }
 
 input OrgUpdateInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   Lens: LensUpdateManyWithoutOrgInput
   name: StringFieldUpdateOperationsInput
   users: UserUpdateManyWithoutOrgInput
@@ -320,13 +350,13 @@ input OrgUpdateOneRequiredWithoutUsersInput {
 }
 
 input OrgUpdateWithoutLensInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   users: UserUpdateManyWithoutOrgInput
 }
 
 input OrgUpdateWithoutUsersInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   Lens: LensUpdateManyWithoutOrgInput
   name: StringFieldUpdateOperationsInput
 }
@@ -349,26 +379,15 @@ input OrgWhereUniqueInput {
 type Post {
   author: User!
   content: String!
-  createdAt: DateTime!
+  createdAt: DateTime
   id: Int!
   lens: Lens!
-  name: String!
-  published: Boolean!
-  replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
-  summary: String!
-  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
-}
-
-input PostCreateInput {
-  author: UserCreateOneWithoutPostsInput!
-  content: String!
-  createdAt: DateTime
-  lens: LensCreateOneWithoutPostsInput!
-  name: String!
   published: Boolean
-  replies: ReplyCreateManyWithoutPostInput
+  replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
+  stars(after: StarWhereUniqueInput, before: StarWhereUniqueInput, first: Int, last: Int): [Star!]!
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tags: String
+  title: String!
 }
 
 input PostCreateManyWithoutAuthorInput {
@@ -383,16 +402,16 @@ input PostCreateManyWithoutLensInput {
   create: [PostCreateWithoutLensInput!]
 }
 
-input PostCreateManyWithoutTagsInput {
-  connect: [PostWhereUniqueInput!]
-  connectOrCreate: [PostCreateOrConnectWithouttagsInput!]
-  create: [PostCreateWithoutTagsInput!]
-}
-
 input PostCreateOneWithoutRepliesInput {
   connect: PostWhereUniqueInput
   connectOrCreate: PostCreateOrConnectWithoutrepliesInput
   create: PostCreateWithoutRepliesInput
+}
+
+input PostCreateOneWithoutStarsInput {
+  connect: PostWhereUniqueInput
+  connectOrCreate: PostCreateOrConnectWithoutstarsInput
+  create: PostCreateWithoutStarsInput
 }
 
 input PostCreateOrConnectWithoutauthorInput {
@@ -410,8 +429,8 @@ input PostCreateOrConnectWithoutrepliesInput {
   where: PostWhereUniqueInput!
 }
 
-input PostCreateOrConnectWithouttagsInput {
-  create: PostCreateWithoutTagsInput!
+input PostCreateOrConnectWithoutstarsInput {
+  create: PostCreateWithoutStarsInput!
   where: PostWhereUniqueInput!
 }
 
@@ -419,22 +438,24 @@ input PostCreateWithoutAuthorInput {
   content: String!
   createdAt: DateTime
   lens: LensCreateOneWithoutPostsInput!
-  name: String!
   published: Boolean
   replies: ReplyCreateManyWithoutPostInput
+  stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tags: String
+  title: String!
 }
 
 input PostCreateWithoutLensInput {
   author: UserCreateOneWithoutPostsInput!
   content: String!
   createdAt: DateTime
-  name: String!
   published: Boolean
   replies: ReplyCreateManyWithoutPostInput
+  stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tags: String
+  title: String!
 }
 
 input PostCreateWithoutRepliesInput {
@@ -442,55 +463,60 @@ input PostCreateWithoutRepliesInput {
   content: String!
   createdAt: DateTime
   lens: LensCreateOneWithoutPostsInput!
-  name: String!
   published: Boolean
+  stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tags: String
+  title: String!
 }
 
-input PostCreateWithoutTagsInput {
+input PostCreateWithoutStarsInput {
   author: UserCreateOneWithoutPostsInput!
   content: String!
   createdAt: DateTime
   lens: LensCreateOneWithoutPostsInput!
-  name: String!
   published: Boolean
   replies: ReplyCreateManyWithoutPostInput
   summary: String!
+  tags: String
+  title: String!
 }
 
 input PostScalarWhereInput {
   AND: [PostScalarWhereInput!]
   authorId: IntFilter
   content: StringFilter
-  createdAt: DateTimeFilter
+  createdAt: DateTimeNullableFilter
   id: IntFilter
   lensId: IntFilter
-  name: StringFilter
   NOT: [PostScalarWhereInput!]
   OR: [PostScalarWhereInput!]
-  published: BoolFilter
+  published: BoolNullableFilter
   summary: StringFilter
+  tags: StringNullableFilter
+  title: StringFilter
 }
 
 input PostUpdateInput {
   author: UserUpdateOneRequiredWithoutPostsInput
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   lens: LensUpdateOneRequiredWithoutPostsInput
-  name: StringFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
+  published: NullableBoolFieldUpdateOperationsInput
   replies: ReplyUpdateManyWithoutPostInput
+  stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateManyMutationInput {
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  published: NullableBoolFieldUpdateOperationsInput
   summary: StringFieldUpdateOperationsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateManyWithoutAuthorInput {
@@ -537,37 +563,60 @@ input PostUpdateOneRequiredWithoutRepliesInput {
   upsert: PostUpsertWithoutRepliesInput
 }
 
+input PostUpdateOneRequiredWithoutStarsInput {
+  connect: PostWhereUniqueInput
+  connectOrCreate: PostCreateOrConnectWithoutstarsInput
+  create: PostCreateWithoutStarsInput
+  update: PostUpdateWithoutStarsInput
+  upsert: PostUpsertWithoutStarsInput
+}
+
 input PostUpdateWithoutAuthorInput {
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   lens: LensUpdateOneRequiredWithoutPostsInput
-  name: StringFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
+  published: NullableBoolFieldUpdateOperationsInput
   replies: ReplyUpdateManyWithoutPostInput
+  stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateWithoutLensInput {
   author: UserUpdateOneRequiredWithoutPostsInput
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  published: NullableBoolFieldUpdateOperationsInput
   replies: ReplyUpdateManyWithoutPostInput
+  stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateWithoutRepliesInput {
   author: UserUpdateOneRequiredWithoutPostsInput
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   lens: LensUpdateOneRequiredWithoutPostsInput
-  name: StringFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
+  published: NullableBoolFieldUpdateOperationsInput
+  stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input PostUpdateWithoutStarsInput {
+  author: UserUpdateOneRequiredWithoutPostsInput
+  content: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  lens: LensUpdateOneRequiredWithoutPostsInput
+  published: NullableBoolFieldUpdateOperationsInput
+  replies: ReplyUpdateManyWithoutPostInput
+  summary: StringFieldUpdateOperationsInput
+  tags: NullableStringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -583,6 +632,11 @@ input PostUpdateWithWhereUniqueWithoutLensInput {
 input PostUpsertWithoutRepliesInput {
   create: PostCreateWithoutRepliesInput!
   update: PostUpdateWithoutRepliesInput!
+}
+
+input PostUpsertWithoutStarsInput {
+  create: PostCreateWithoutStarsInput!
+  update: PostUpdateWithoutStarsInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutAuthorInput {
@@ -656,14 +710,13 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
-  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
   user(where: UserWhereUniqueInput!): User
 }
 
 type Reply {
   author: User!
   content: String!
-  createdAt: DateTime!
+  createdAt: DateTime
   id: Int!
   post: Post!
 }
@@ -713,7 +766,7 @@ input ReplyScalarWhereInput {
   AND: [ReplyScalarWhereInput!]
   authorId: IntFilter
   content: StringFilter
-  createdAt: DateTimeFilter
+  createdAt: DateTimeNullableFilter
   id: IntFilter
   NOT: [ReplyScalarWhereInput!]
   OR: [ReplyScalarWhereInput!]
@@ -723,13 +776,13 @@ input ReplyScalarWhereInput {
 input ReplyUpdateInput {
   author: UserUpdateOneRequiredWithoutReplyInput
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
 input ReplyUpdateManyMutationInput {
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
 input ReplyUpdateManyWithoutAuthorInput {
@@ -770,14 +823,14 @@ input ReplyUpdateManyWithWhereWithoutPostInput {
 
 input ReplyUpdateWithoutAuthorInput {
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
 input ReplyUpdateWithoutPostInput {
   author: UserUpdateOneRequiredWithoutReplyInput
   content: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
 input ReplyUpdateWithWhereUniqueWithoutAuthorInput {
@@ -811,6 +864,136 @@ enum Role {
   USER
 }
 
+type Star {
+  id: Int!
+  post: Post!
+  user: User!
+}
+
+input StarCreateInput {
+  post: PostCreateOneWithoutStarsInput!
+  shining: Boolean
+  user: UserCreateOneWithoutStarInput!
+}
+
+input StarCreateManyWithoutPostInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutpostInput!]
+  create: [StarCreateWithoutPostInput!]
+}
+
+input StarCreateManyWithoutUserInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutuserInput!]
+  create: [StarCreateWithoutUserInput!]
+}
+
+input StarCreateOrConnectWithoutpostInput {
+  create: StarCreateWithoutPostInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarCreateOrConnectWithoutuserInput {
+  create: StarCreateWithoutUserInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarCreateWithoutPostInput {
+  shining: Boolean
+  user: UserCreateOneWithoutStarInput!
+}
+
+input StarCreateWithoutUserInput {
+  post: PostCreateOneWithoutStarsInput!
+  shining: Boolean
+}
+
+input StarScalarWhereInput {
+  AND: [StarScalarWhereInput!]
+  id: IntFilter
+  NOT: [StarScalarWhereInput!]
+  OR: [StarScalarWhereInput!]
+  postId: IntFilter
+  shining: BoolNullableFilter
+  userId: IntFilter
+}
+
+input StarUpdateManyMutationInput {
+  shining: NullableBoolFieldUpdateOperationsInput
+}
+
+input StarUpdateManyWithoutPostInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutpostInput!]
+  create: [StarCreateWithoutPostInput!]
+  delete: [StarWhereUniqueInput!]
+  deleteMany: [StarScalarWhereInput!]
+  disconnect: [StarWhereUniqueInput!]
+  set: [StarWhereUniqueInput!]
+  update: [StarUpdateWithWhereUniqueWithoutPostInput!]
+  updateMany: [StarUpdateManyWithWhereWithoutPostInput!]
+  upsert: [StarUpsertWithWhereUniqueWithoutPostInput!]
+}
+
+input StarUpdateManyWithoutUserInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutuserInput!]
+  create: [StarCreateWithoutUserInput!]
+  delete: [StarWhereUniqueInput!]
+  deleteMany: [StarScalarWhereInput!]
+  disconnect: [StarWhereUniqueInput!]
+  set: [StarWhereUniqueInput!]
+  update: [StarUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [StarUpdateManyWithWhereWithoutUserInput!]
+  upsert: [StarUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input StarUpdateManyWithWhereWithoutPostInput {
+  data: StarUpdateManyMutationInput!
+  where: StarScalarWhereInput!
+}
+
+input StarUpdateManyWithWhereWithoutUserInput {
+  data: StarUpdateManyMutationInput!
+  where: StarScalarWhereInput!
+}
+
+input StarUpdateWithoutPostInput {
+  shining: NullableBoolFieldUpdateOperationsInput
+  user: UserUpdateOneRequiredWithoutStarInput
+}
+
+input StarUpdateWithoutUserInput {
+  post: PostUpdateOneRequiredWithoutStarsInput
+  shining: NullableBoolFieldUpdateOperationsInput
+}
+
+input StarUpdateWithWhereUniqueWithoutPostInput {
+  data: StarUpdateWithoutPostInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarUpdateWithWhereUniqueWithoutUserInput {
+  data: StarUpdateWithoutUserInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarUpsertWithWhereUniqueWithoutPostInput {
+  create: StarCreateWithoutPostInput!
+  update: StarUpdateWithoutPostInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarUpsertWithWhereUniqueWithoutUserInput {
+  create: StarCreateWithoutUserInput!
+  update: StarUpdateWithoutUserInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarWhereUniqueInput {
+  id: Int
+}
+
 input StringFieldUpdateOperationsInput {
   set: String
 }
@@ -829,95 +1012,37 @@ input StringFilter {
   startsWith: String
 }
 
-type Tag {
-  id: Int!
-  name: String!
-  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
 }
 
-input TagCreateInput {
-  name: String!
-  posts: PostCreateManyWithoutTagsInput
-}
-
-input TagCreateManyWithoutPostsInput {
-  connect: [TagWhereUniqueInput!]
-  connectOrCreate: [TagCreateOrConnectWithoutpostsInput!]
-  create: [TagCreateWithoutPostsInput!]
-}
-
-input TagCreateOrConnectWithoutpostsInput {
-  create: TagCreateWithoutPostsInput!
-  where: TagWhereUniqueInput!
-}
-
-input TagCreateWithoutPostsInput {
-  name: String!
-}
-
-input TagScalarWhereInput {
-  AND: [TagScalarWhereInput!]
-  id: IntFilter
-  name: StringFilter
-  NOT: [TagScalarWhereInput!]
-  OR: [TagScalarWhereInput!]
-}
-
-input TagUpdateManyMutationInput {
-  name: StringFieldUpdateOperationsInput
-}
-
-input TagUpdateManyWithoutPostsInput {
-  connect: [TagWhereUniqueInput!]
-  connectOrCreate: [TagCreateOrConnectWithoutpostsInput!]
-  create: [TagCreateWithoutPostsInput!]
-  delete: [TagWhereUniqueInput!]
-  deleteMany: [TagScalarWhereInput!]
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  update: [TagUpdateWithWhereUniqueWithoutPostsInput!]
-  updateMany: [TagUpdateManyWithWhereWithoutPostsInput!]
-  upsert: [TagUpsertWithWhereUniqueWithoutPostsInput!]
-}
-
-input TagUpdateManyWithWhereWithoutPostsInput {
-  data: TagUpdateManyMutationInput!
-  where: TagScalarWhereInput!
-}
-
-input TagUpdateWithoutPostsInput {
-  name: StringFieldUpdateOperationsInput
-}
-
-input TagUpdateWithWhereUniqueWithoutPostsInput {
-  data: TagUpdateWithoutPostsInput!
-  where: TagWhereUniqueInput!
-}
-
-input TagUpsertWithWhereUniqueWithoutPostsInput {
-  create: TagCreateWithoutPostsInput!
-  update: TagUpdateWithoutPostsInput!
-  where: TagWhereUniqueInput!
-}
-
-input TagWhereUniqueInput {
-  id: Int
-}
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
-  createdAt: String!
+  createdAt: DateTime
   displayName: String!
   email: String!
   id: Int!
   org: Org!
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
   profile: Profile
-  role: Role!
+  role: Role
   username: String!
 }
 
 input UserCreateInput {
-  createdAt: String!
+  createdAt: DateTime
   displayName: String!
   email: String!
   org: OrgCreateOneWithoutUsersInput!
@@ -925,6 +1050,7 @@ input UserCreateInput {
   profile: ProfileCreateOneWithoutUserInput
   Reply: ReplyCreateManyWithoutAuthorInput
   role: Role
+  Star: StarCreateManyWithoutUserInput
   username: String!
 }
 
@@ -946,6 +1072,12 @@ input UserCreateOneWithoutReplyInput {
   create: UserCreateWithoutReplyInput
 }
 
+input UserCreateOneWithoutStarInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutStarInput
+  create: UserCreateWithoutStarInput
+}
+
 input UserCreateOrConnectWithoutorgInput {
   create: UserCreateWithoutOrgInput!
   where: UserWhereUniqueInput!
@@ -961,69 +1093,90 @@ input UserCreateOrConnectWithoutReplyInput {
   where: UserWhereUniqueInput!
 }
 
+input UserCreateOrConnectWithoutStarInput {
+  create: UserCreateWithoutStarInput!
+  where: UserWhereUniqueInput!
+}
+
 input UserCreateWithoutOrgInput {
-  createdAt: String!
+  createdAt: DateTime
   displayName: String!
   email: String!
   posts: PostCreateManyWithoutAuthorInput
   profile: ProfileCreateOneWithoutUserInput
   Reply: ReplyCreateManyWithoutAuthorInput
   role: Role
+  Star: StarCreateManyWithoutUserInput
   username: String!
 }
 
 input UserCreateWithoutPostsInput {
-  createdAt: String!
+  createdAt: DateTime
   displayName: String!
   email: String!
   org: OrgCreateOneWithoutUsersInput!
   profile: ProfileCreateOneWithoutUserInput
   Reply: ReplyCreateManyWithoutAuthorInput
   role: Role
+  Star: StarCreateManyWithoutUserInput
   username: String!
 }
 
 input UserCreateWithoutReplyInput {
-  createdAt: String!
+  createdAt: DateTime
   displayName: String!
   email: String!
   org: OrgCreateOneWithoutUsersInput!
   posts: PostCreateManyWithoutAuthorInput
   profile: ProfileCreateOneWithoutUserInput
+  role: Role
+  Star: StarCreateManyWithoutUserInput
+  username: String!
+}
+
+input UserCreateWithoutStarInput {
+  createdAt: DateTime
+  displayName: String!
+  email: String!
+  org: OrgCreateOneWithoutUsersInput!
+  posts: PostCreateManyWithoutAuthorInput
+  profile: ProfileCreateOneWithoutUserInput
+  Reply: ReplyCreateManyWithoutAuthorInput
   role: Role
   username: String!
 }
 
 input UserScalarWhereInput {
   AND: [UserScalarWhereInput!]
-  createdAt: StringFilter
+  createdAt: DateTimeNullableFilter
   displayName: StringFilter
   email: StringFilter
   id: IntFilter
   NOT: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   orgId: IntFilter
-  role: EnumRoleFilter
+  role: EnumRoleNullableFilter
   username: StringFilter
 }
 
 input UserUpdateInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   displayName: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   org: OrgUpdateOneRequiredWithoutUsersInput
   posts: PostUpdateManyWithoutAuthorInput
   profile: ProfileUpdateOneWithoutUserInput
   Reply: ReplyUpdateManyWithoutAuthorInput
-  role: EnumRoleFieldUpdateOperationsInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
+  Star: StarUpdateManyWithoutUserInput
   username: StringFieldUpdateOperationsInput
 }
 
 input UserUpdateManyMutationInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   displayName: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
-  role: EnumRoleFieldUpdateOperationsInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
   username: StringFieldUpdateOperationsInput
 }
 
@@ -1061,36 +1214,59 @@ input UserUpdateOneRequiredWithoutReplyInput {
   upsert: UserUpsertWithoutReplyInput
 }
 
+input UserUpdateOneRequiredWithoutStarInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutStarInput
+  create: UserCreateWithoutStarInput
+  update: UserUpdateWithoutStarInput
+  upsert: UserUpsertWithoutStarInput
+}
+
 input UserUpdateWithoutOrgInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   displayName: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   posts: PostUpdateManyWithoutAuthorInput
   profile: ProfileUpdateOneWithoutUserInput
   Reply: ReplyUpdateManyWithoutAuthorInput
-  role: EnumRoleFieldUpdateOperationsInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
+  Star: StarUpdateManyWithoutUserInput
   username: StringFieldUpdateOperationsInput
 }
 
 input UserUpdateWithoutPostsInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   displayName: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   org: OrgUpdateOneRequiredWithoutUsersInput
   profile: ProfileUpdateOneWithoutUserInput
   Reply: ReplyUpdateManyWithoutAuthorInput
-  role: EnumRoleFieldUpdateOperationsInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
+  Star: StarUpdateManyWithoutUserInput
   username: StringFieldUpdateOperationsInput
 }
 
 input UserUpdateWithoutReplyInput {
-  createdAt: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
   displayName: StringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   org: OrgUpdateOneRequiredWithoutUsersInput
   posts: PostUpdateManyWithoutAuthorInput
   profile: ProfileUpdateOneWithoutUserInput
-  role: EnumRoleFieldUpdateOperationsInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
+  Star: StarUpdateManyWithoutUserInput
+  username: StringFieldUpdateOperationsInput
+}
+
+input UserUpdateWithoutStarInput {
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  displayName: StringFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  org: OrgUpdateOneRequiredWithoutUsersInput
+  posts: PostUpdateManyWithoutAuthorInput
+  profile: ProfileUpdateOneWithoutUserInput
+  Reply: ReplyUpdateManyWithoutAuthorInput
+  role: NullableEnumRoleFieldUpdateOperationsInput
   username: StringFieldUpdateOperationsInput
 }
 
@@ -1107,6 +1283,11 @@ input UserUpsertWithoutPostsInput {
 input UserUpsertWithoutReplyInput {
   create: UserCreateWithoutReplyInput!
   update: UserUpdateWithoutReplyInput!
+}
+
+input UserUpsertWithoutStarInput {
+  create: UserCreateWithoutStarInput!
+  update: UserUpdateWithoutStarInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutOrgInput {
