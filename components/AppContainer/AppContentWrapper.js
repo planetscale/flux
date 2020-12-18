@@ -44,7 +44,7 @@ export default function AppContentWrapper({ children }) {
             <TopBar
               org={user?.org.name}
               subOrg="Engineering"
-              profileImg={user?.profile?.avatar ?? '/user_profile_icon.png'}
+              profileImg={user?.profile?.avatar ?? '/user_profile_icon.svg'}
               userDisplayName={user?.displayName}
               userHandle={user?.username}
             />
