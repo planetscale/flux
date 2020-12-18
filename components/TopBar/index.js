@@ -55,8 +55,11 @@ const UPLOAD_MARKDOWN = 'upload markdown';
 const USER_SETTINGS = 'user settings';
 
 export default function TopBar({
-  org = 'PlanetScale',
-  subOrg = 'Engineering',
+  org,
+  subOrg,
+  profileImg,
+  userDisplayName,
+  userHandle,
 }) {
   const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -88,9 +91,9 @@ export default function TopBar({
 
             {modalContent === USER_SETTINGS && (
               <UserSettings
-                profileImg="/user_profile_icon.png"
-                displayName="Abhi Vaidyanatha"
-                userHandle="abhi"
+                profileImg={profileImg}
+                displayName={userDisplayName}
+                userHandle={userHandle}
               />
             )}
           </>
@@ -112,7 +115,7 @@ export default function TopBar({
           }}
         >
           <UserIcon
-            src="/user_profile_icon.png"
+            src={profileImg}
             width="60px"
             height="60px"
             alt="user avatar"

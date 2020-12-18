@@ -91,7 +91,7 @@ export default function UserSettings({
   return (
     <Wrapper>
       <UserInfo>
-        <SettingsUserIcon img={profileImg} />
+        <SettingsUserIcon src={profileImg} alt={`${displayName}'s avatar`} />
         <div>{displayName}</div>
         <div>@{userHandle}</div>
       </UserInfo>

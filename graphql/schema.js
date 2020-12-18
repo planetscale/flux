@@ -9,6 +9,12 @@ const Org = objectType({
     t.model.name();
     t.model.createdAt();
     t.model.users();
+    t.list.field('lenses', {
+      type: 'Lens',
+      resolve(_parent, _args, ctx) {
+        return ctx.prisma.lens.findMany({});
+      },
+    });
   },
 });
 
