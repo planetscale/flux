@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Navbar from 'components/NavBar';
 import TopBar from 'components/TopBar';
 import { useAuthContext } from 'state/auth';
-import { useQuery } from 'urql';
+import { useMutation, useQuery } from 'urql';
 import { useUserContext } from 'state/user';
 import gql from 'graphql-tag';
 
@@ -20,10 +20,26 @@ const CenterWrapper = styled.div`
 const sideNavDataQuery = gql`
   query {
     orgs {
+      id
       name
       lenses {
+        id
         name
       }
+    }
+  }
+`;
+
+const createLensMutation = gql`
+  mutation($lensName: String!, $desc: String!, $orgId: Int!) {
+    createOneLens(
+      data: {
+        name: $lensName
+        description: $desc
+        org: { connect: { id: $orgId } }
+      }
+    ) {
+      name
     }
   }
 `;
@@ -34,12 +50,32 @@ export default function AppContentWrapper({ children }) {
   const [sideNavResult, runSideNavDataQuery] = useQuery({
     query: sideNavDataQuery,
   });
+  const [createLenResult, createLens] = useMutation(createLensMutation);
+
+  const handleLensCreate = async (orgId, lensName) => {
+    try {
+      const result = await createLens({
+        lensName,
+        desc: '',
+        orgId,
+      });
+
+      if (result && !result.error) {
+        runSideNavDataQuery();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <main>
       {authContext.isAuthed && (
         <MainWrapper>
-          <Navbar orgs={sideNavResult.data?.orgs} />
+          <Navbar
+            orgs={sideNavResult.data?.orgs}
+            handleLensCreate={handleLensCreate}
+          />
           <CenterWrapper>
             <TopBar
               org={user?.org.name}

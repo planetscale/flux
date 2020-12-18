@@ -53,36 +53,7 @@ const Stars = styled.div`
   }
 `;
 
-export default function PostList({
-  posts = [
-    {
-      id: 1,
-      name: 'User research on cloud spend',
-      author: {
-        displayName: 'Abhi Vaidyanatha',
-      },
-      createdAt: '3 hours ago',
-      replies: [
-        {
-          id: 1,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'User research on cloud spend',
-      author: {
-        displayName: 'Abhi Vaidyanatha',
-      },
-      createdAt: '4 hours ago',
-      replies: [
-        {
-          id: 1,
-        },
-      ],
-    },
-  ],
-}) {
+export default function PostList({ posts = [] }) {
   const router = useRouter();
 
   const handlePostClick = postId => {

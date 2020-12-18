@@ -54,6 +54,7 @@ export default function PostPage() {
             userHandle={author?.username}
             time={createdAt}
             numComments={replies?.length}
+            numStars={0}
           />
           <Content>{content}</Content>
         </Post>
