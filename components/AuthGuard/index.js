@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAuthContext } from 'state/auth';
 import { useUserActions, useUserContext } from 'state/user';
 
-export function AuthGuard({ token, children }) {
+export default function AuthGuard({ token, children }) {
   const router = useRouter();
   const { isAuthed, user: authUser } = useAuthContext();
   const { user, loaded } = useUserContext();
@@ -18,6 +18,7 @@ export function AuthGuard({ token, children }) {
   }, [isAuthed, token]);
 
   useEffect(() => {
+    console.log(isAuthed, loaded, user);
     if (isAuthed && user) {
       router.push('/');
     } else if (!isAuthed || (isAuthed && loaded && !user)) {

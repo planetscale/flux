@@ -67,7 +67,7 @@ export default function PostPage() {
 
   const comment =
     'I generally agree, but that HBR study looks a little suspicious. It says that they only surveyed developers, so where did that 73% statistic come from?';
-
+  console.log('postpage');
   return (
     <Wrapper>
       <BodyWrapper>

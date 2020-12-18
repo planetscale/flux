@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -10,9 +11,14 @@ const Post = styled.div`
   width: 452px;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+
+  :hover {
+    background: #e0e0e0;
+  }
 
   &:not(:last-of-type) {
-    margin: 0 0 16px 0;
+    margin: 0 0 24px 0;
   }
 `;
 
@@ -75,12 +81,25 @@ export default function PostList({
     },
   ],
 }) {
+  const router = useRouter();
+
+  const handlePostClick = postName => {
+    // replace all empty spaces with '-'
+    const postNameWithDash = postName.replace(/ /g, '-');
+    router.push(`/post/${postNameWithDash}`);
+  };
+
   return (
     <Wrapper>
       {posts.map(post => {
         const { name, author, createdAt, replies, stars } = post;
         return (
-          <Post key={createdAt}>
+          <Post
+            key={createdAt}
+            onClick={() => {
+              handlePostClick(name);
+            }}
+          >
             <PostInfo>
               <div>{name}</div>
               <div>
@@ -92,7 +111,7 @@ export default function PostList({
             </PostInfo>
             {stars && (
               <Stars>
-                {stars?.length} <img src="star.svg" alt="next" />
+                {stars?.length} <img src="/star.svg" alt="star" />
               </Stars>
             )}
           </Post>
