@@ -42,6 +42,7 @@ export default function AuthorNamePlate({
   time = '2 hours',
   numComments = '3',
   numStar = '4',
+  onStarClick = () => {},
   ...props
 }) {
   return (
@@ -51,9 +52,11 @@ export default function AuthorNamePlate({
           <span>{displayName} </span>
           <span>{userHandle}</span>
         </div>
-        <Stars>
-          {numStar} <img src="star.svg" alt="next" />
-        </Stars>
+        {numStar && (
+          <Stars onClick={onStarClick}>
+            {numStar} <img src="/star.svg" alt="star" />
+          </Stars>
+        )}
       </div>
       <div>
         {time} ago | {numComments} comments

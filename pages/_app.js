@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Global, css } from '@emotion/react';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
-import { UserContextProvider } from 'state/user';
-import { setFireAuthObserver } from 'utils/auth/clientConfig';
-import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
-import { AuthGuard } from 'components/AuthGuard';
+import AppContainer from 'components/AppContainer';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -16,38 +13,10 @@ const initContextDevTools = () => {
   }
 };
 
-// the URL to /api/graphql
-const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
-
 function App({ Component, pageProps }) {
-  const [token, setToken] = useState(null);
-
   useEffect(() => {
     initContextDevTools();
-    setFireAuthObserver(null, updateToken);
   }, []);
-
-  const updateToken = async user => {
-    try {
-      const jwt = await user.getIdToken();
-      setToken(jwt);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const createUrqlClient = token => {
-    return createClient({
-      url: GRAPHQL_ENDPOINT,
-      fetchOptions: () => {
-        return {
-          headers: { authorization: token ? `Bearer ${token}` : '' },
-        };
-      },
-      // TODO: add dedupExchange to this array and check cache before fire api request
-      exchanges: [cacheExchange, fetchExchange],
-    });
-  };
 
   return (
     <>
@@ -64,13 +33,9 @@ function App({ Component, pageProps }) {
         `}
       />
       <AuthContextProvider>
-        <Provider value={createUrqlClient(token)}>
-          <UserContextProvider>
-            <AuthGuard token={token}>
-              <Component {...pageProps} />
-            </AuthGuard>
-          </UserContextProvider>
-        </Provider>
+        <AppContainer>
+          <Component {...pageProps} />
+        </AppContainer>
       </AuthContextProvider>
     </>
   );
