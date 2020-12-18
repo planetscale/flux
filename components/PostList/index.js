@@ -56,6 +56,7 @@ const Stars = styled.div`
 export default function PostList({
   posts = [
     {
+      id: 1,
       name: 'User research on cloud spend',
       author: {
         displayName: 'Abhi Vaidyanatha',
@@ -68,6 +69,7 @@ export default function PostList({
       ],
     },
     {
+      id: 2,
       name: 'User research on cloud spend',
       author: {
         displayName: 'Abhi Vaidyanatha',
@@ -83,21 +85,19 @@ export default function PostList({
 }) {
   const router = useRouter();
 
-  const handlePostClick = postName => {
-    // replace all empty spaces with '-'
-    const postNameWithDash = postName.replace(/ /g, '-');
-    router.push(`/post/${postNameWithDash}`);
+  const handlePostClick = postId => {
+    router.push(`/post/${postId}`);
   };
 
   return (
     <Wrapper>
       {posts.map(post => {
-        const { name, author, createdAt, replies, stars } = post;
+        const { id, name, author, createdAt, replies, stars } = post;
         return (
           <Post
-            key={createdAt}
+            key={id}
             onClick={() => {
-              handlePostClick(name);
+              handlePostClick(id);
             }}
           >
             <PostInfo>

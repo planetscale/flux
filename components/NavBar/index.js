@@ -71,7 +71,7 @@ export default function Navbar({
     <Wrapper>
       <img src="/icon.svg" alt="parallax logo" />
       <div>
-        {titles.map(title => (
+        {titles?.map(title => (
           <ButtonBase key={title}>
             <div>{title}</div>
           </ButtonBase>
@@ -82,7 +82,7 @@ export default function Navbar({
           return (
             <div key={org.name}>
               <ButtonBase>{org.name}</ButtonBase>
-              {org.lenses.map(lens => (
+              {org.lenses?.map(lens => (
                 <ButtonBase key={lens}>
                   <div>{lens}</div>
                 </ButtonBase>

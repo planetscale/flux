@@ -1,13 +1,15 @@
 import Head from 'next/head';
 import PostList from 'components/PostList';
 import { useQuery } from 'urql';
+import gql from 'graphql-tag';
 
 // TODO: only get current org's data
-const postListQuery = `
+const postListQuery = gql`
   query {
     orgs {
       lenses {
         posts {
+          id
           name
           author {
             displayName
