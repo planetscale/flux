@@ -49,10 +49,6 @@ const LowerContainer = styled.div`
       font-size: 18px;
       line-height: 19px;
       color: #000000;
-
-      :nth-of-type(2) {
-        margin: 0 0 0 20px;
-      }
     }
 
     div {
@@ -84,6 +80,11 @@ const AddLensButton = styled(ButtonBase)`
   border: 2px solid black;
   padding: 5px;
   margin: 10px 0 0 0;
+`;
+
+const ToggleAddLensButton = styled(ButtonBase)`
+  margin: 0 0 0 20px;
+  text-transform: unset;
 `;
 
 export default function Navbar({
@@ -160,14 +161,14 @@ export default function Navbar({
               >
                 {org.name}
               </ButtonBase>
-              <ButtonBase
+              <ToggleAddLensButton
                 type="button"
                 onClick={() => {
                   toggleLensCreation(org.name);
                 }}
               >
                 {!isLensCreationOpened[org.name] ? '+' : 'x'}
-              </ButtonBase>
+              </ToggleAddLensButton>
               <div>
                 {org.lenses?.map(lens => (
                   <ButtonBase
