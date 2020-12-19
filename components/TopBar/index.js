@@ -6,6 +6,7 @@ import Logout from './Logout';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
 import PostUpload from 'components/PostUpload';
+import { useTopBarContext } from 'state/topBar';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -54,16 +55,10 @@ const StyledModal = styled(Modal)`
 const UPLOAD_MARKDOWN = 'upload markdown';
 const USER_SETTINGS = 'user settings';
 
-export default function TopBar({
-  org,
-  subOrg,
-  profileImg,
-  userDisplayName,
-  userHandle,
-}) {
+export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
-
+  const { header, subHeader } = useTopBarContext();
   const handleModalOpen = content => {
     setModalOpen(true);
     setModalContent(content);
@@ -76,8 +71,8 @@ export default function TopBar({
   return (
     <Wrapper>
       <div>
-        {org}
-        <span>{subOrg}</span>
+        {header}
+        <span>{subHeader}</span>
       </div>
       <ActionsWrapper>
         <StyledModal

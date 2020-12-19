@@ -101,6 +101,7 @@ const Query = queryType({
     t.list.field('lenses', {
       type: 'Lens',
       resolve(_parent, _args, ctx) {
+        ctx.prisma.user.updateOneUser();
         return ctx.prisma.lens.findMany({});
       },
     });

@@ -15,6 +15,10 @@ const postDataQuery = gql`
           avatar
         }
       }
+      lens {
+        id
+        name
+      }
       replies {
         id
         content

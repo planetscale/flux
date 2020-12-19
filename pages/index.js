@@ -2,6 +2,9 @@ import Head from 'next/head';
 import PostList from 'components/PostList';
 import { useQuery } from 'urql';
 import gql from 'graphql-tag';
+import { useTopBarActions } from 'state/topBar';
+import { useEffect } from 'react';
+import { useUserContext } from 'state/user';
 
 // TODO: only get current org's data
 const postListQuery = gql`
@@ -25,10 +28,19 @@ const postListQuery = gql`
 `;
 
 export default function Home({ href, ...props }) {
-
   const [postListResult, runPostListQuery] = useQuery({
     query: postListQuery,
   });
+  const { setHeaders } = useTopBarActions();
+  const { org } = useUserContext().user;
+
+  useEffect(() => {
+    if (org?.name) {
+      setHeaders({
+        header: org.name,
+      });
+    }
+  }, [org]);
 
   return (
     <div>
