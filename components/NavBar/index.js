@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { ButtonBase } from 'components/Button';
 import Input from 'components/Input';
 import { useRouter } from 'next/router';
+import { useTopBarActions } from 'state/topBar';
 import { useImmer } from 'use-immer';
 
 const Wrapper = styled.div`
@@ -48,10 +49,6 @@ const LowerContainer = styled.div`
       font-size: 18px;
       line-height: 19px;
       color: #000000;
-
-      :nth-of-type(2) {
-        margin: 0 0 0 20px;
-      }
     }
 
     div {
@@ -85,6 +82,11 @@ const AddLensButton = styled(ButtonBase)`
   margin: 10px 0 0 0;
 `;
 
+const ToggleAddLensButton = styled(ButtonBase)`
+  margin: 0 0 0 20px;
+  text-transform: unset;
+`;
+
 export default function Navbar({
   titles = ['Home'],
   orgs = [],
@@ -109,6 +111,7 @@ export default function Navbar({
     defaultLensCreationState
   );
   const [newLensNames, setNewLensName] = useImmer(defaultLensNameState);
+  const { setHeaders } = useTopBarActions();
 
   const redirectToHome = () => {
     router.push('/');
@@ -147,18 +150,36 @@ export default function Navbar({
         {orgs?.map(org => {
           return (
             <div key={org.id}>
-              <ButtonBase>{org.name}</ButtonBase>
               <ButtonBase
+                type="button"
+                onClick={() => {
+                  setHeaders({
+                    header: org.name,
+                    subHeader: null,
+                  });
+                }}
+              >
+                {org.name}
+              </ButtonBase>
+              <ToggleAddLensButton
                 type="button"
                 onClick={() => {
                   toggleLensCreation(org.name);
                 }}
               >
                 {!isLensCreationOpened[org.name] ? '+' : 'x'}
-              </ButtonBase>
+              </ToggleAddLensButton>
               <div>
                 {org.lenses?.map(lens => (
-                  <ButtonBase key={lens.id}>
+                  <ButtonBase
+                    key={lens.id}
+                    onClick={() => {
+                      setHeaders({
+                        header: org.name,
+                        subHeader: lens.name,
+                      });
+                    }}
+                  >
                     <div>{lens.name}</div>
                   </ButtonBase>
                 ))}

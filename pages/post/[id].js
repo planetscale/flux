@@ -14,14 +14,16 @@ import {
   Reply,
 } from 'pageUtils/post/styles';
 import { postDataQuery } from 'pageUtils/post/queries';
+import { useTopBarActions } from 'state/topBar';
 
 export default function PostPage() {
   const router = useRouter();
+  const { setHeaders } = useTopBarActions();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
     variables: { id: Number(router.query?.id) },
   });
-  const { createdAt, name, summary, content, author, replies } =
+  const { createdAt, name, summary, content, author, lens, replies } =
     postDataResult.data?.post || {};
 
   useEffect(() => {
@@ -29,6 +31,15 @@ export default function PostPage() {
       router.push('/');
     }
   }, [postDataQuery]);
+
+  useEffect(() => {
+    if (lens?.name) {
+      setHeaders({
+        header: lens.name,
+        subHeader: name,
+      });
+    }
+  }, [lens]);
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {

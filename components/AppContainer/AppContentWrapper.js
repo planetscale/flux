@@ -50,7 +50,7 @@ export default function AppContentWrapper({ children }) {
   const [sideNavResult, runSideNavDataQuery] = useQuery({
     query: sideNavDataQuery,
   });
-  const [createLenResult, createLens] = useMutation(createLensMutation);
+  const [createLensResult, createLens] = useMutation(createLensMutation);
 
   const handleLensCreate = async (orgId, lensName) => {
     try {
@@ -78,8 +78,6 @@ export default function AppContentWrapper({ children }) {
           />
           <CenterWrapper>
             <TopBar
-              org={user?.org.name}
-              subOrg="Engineering"
               profileImg={user?.profile?.avatar ?? '/user_profile_icon.svg'}
               userDisplayName={user?.displayName}
               userHandle={user?.username}

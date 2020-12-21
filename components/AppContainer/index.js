@@ -6,6 +6,7 @@ import AuthGuard from 'components/AuthGuard';
 import { useAuthActions } from 'state/auth';
 import AppContentWrapper from './AppContentWrapper';
 import { useRouter } from 'next/router';
+import { TopBarContextProvider } from 'state/topBar';
 
 // the URL to /api/graphql
 const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
@@ -54,12 +55,14 @@ function AppContainer({ children }) {
     <Provider value={createUrqlClient(token)}>
       <UserContextProvider>
         <AuthGuard token={token}>
-          {isLoginPage() ? (
-            <>{children}</>
-          ) : (
+          <TopBarContextProvider>
+            {isLoginPage() ? (
+              <>{children}</>
+            ) : (
+              <AppContentWrapper>{children}</AppContentWrapper>
+            )}
             <AppContentWrapper>{children}</AppContentWrapper>
-          )}
-          <AppContentWrapper>{children}</AppContentWrapper>
+          </TopBarContextProvider>
         </AuthGuard>
       </UserContextProvider>
     </Provider>
