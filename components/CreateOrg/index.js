@@ -60,7 +60,6 @@ const createUserWithOrgMutation = gql`
     $email: String!
     $userName: String!
     $displayName: String!
-    $createdAt: String!
     $orgName: String!
   ) {
     createOneUser(
@@ -68,8 +67,7 @@ const createUserWithOrgMutation = gql`
         email: $email
         username: $userName
         displayName: $displayName
-        createdAt: $createdAt
-        org: { create: { name: $orgName, createdAt: $createdAt } }
+        org: { create: { name: $orgName } }
       }
     ) {
       email
@@ -145,7 +143,6 @@ export default function CreateOrg({ name, email }) {
       email,
       userName: state.userName,
       displayName: state.name,
-      createdAt: `${Date.now()}`,
       orgName: state.orgName,
     });
   };

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { UserContextProvider } from 'state/user';
 import { setFireAuthObserver } from 'utils/auth/clientConfig';
 import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
+import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import AuthGuard from 'components/AuthGuard';
 import { useAuthActions } from 'state/auth';
 import AppContentWrapper from './AppContentWrapper';
@@ -43,7 +44,7 @@ function AppContainer({ children }) {
         };
       },
       // TODO: add dedupExchange to this array and check cache before fire api request
-      exchanges: [cacheExchange, fetchExchange],
+      exchanges: [cacheExchange, multipartFetchExchange],
     });
   };
 

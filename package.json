@@ -14,6 +14,7 @@
     "@nexus/schema": "^0.19.2",
     "@prisma/cli": "^2.13.0",
     "@prisma/client": "^2.13.0",
+    "@urql/exchange-multipart-fetch": "^0.1.11",
     "apollo-server-core": "^2.19.0",
     "apollo-server-micro": "^2.19.0",
     "firebase": "^8.1.1",
