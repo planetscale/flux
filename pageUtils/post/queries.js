@@ -5,7 +5,7 @@ const postDataQuery = gql`
     post(where: { id: $id }) {
       id
       createdAt
-      name
+      title
       summary
       content
       author {

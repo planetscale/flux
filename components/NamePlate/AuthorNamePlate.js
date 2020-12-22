@@ -52,7 +52,7 @@ export default function AuthorNamePlate({
           <span>{displayName} </span>
           <span>{userHandle}</span>
         </div>
-        {numStars && (
+        {!!numStars && (
           <Stars onClick={onStarClick}>
             {numStars} <img src="/star.svg" alt="star" />
           </Stars>

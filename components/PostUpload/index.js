@@ -49,7 +49,6 @@ const Body = styled.div`
       }
     }
 
-    button,
     ${ButtonBase} {
       border: none;
       background-color: unset;

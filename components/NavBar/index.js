@@ -49,6 +49,7 @@ const LowerContainer = styled.div`
       font-size: 18px;
       line-height: 19px;
       color: #000000;
+      display: inline-block;
     }
 
     div {
@@ -85,6 +86,7 @@ const AddLensButton = styled(ButtonBase)`
 const ToggleAddLensButton = styled(ButtonBase)`
   margin: 0 0 0 20px;
   text-transform: unset;
+  display: inline-block;
 `;
 
 export default function Navbar({

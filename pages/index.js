@@ -51,7 +51,7 @@ export default function Home({ href, ...props }) {
       </Head>
 
       <main>
-        <PostList posts={postListResult.data?.orgs?.lenses?.posts} />
+        <PostList posts={postListResult.data?.orgs?.[0].lenses?.[0].posts} />
       </main>
     </div>
   );

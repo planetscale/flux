@@ -2,8 +2,8 @@ import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import UserIcon from 'components/UserIcon';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useQuery } from 'urql';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'urql';
 import {
   Wrapper,
   BodyWrapper,
@@ -15,19 +15,39 @@ import {
 } from 'pageUtils/post/styles';
 import { postDataQuery } from 'pageUtils/post/queries';
 import { useTopBarActions } from 'state/topBar';
+import { ButtonBase } from 'components/Button';
+import gql from 'graphql-tag';
+
+const createReplyMutation = gql`
+  mutation($content: String!, $postId: Int!, $userId: Int!) {
+    createOneUser(
+      data: {
+        content: $content
+        post: { connect: { id: $postId } }
+        author: { connect: { id: $userId } }
+      }
+    ) {
+      id
+    }
+  }
+`;
 
 export default function PostPage() {
   const router = useRouter();
+  const [reply, setReply] = useState('');
   const { setHeaders } = useTopBarActions();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
     variables: { id: Number(router.query?.id) },
   });
-  const { createdAt, name, summary, content, author, lens, replies } =
+  const { createdAt, title, summary, content, author, lens, replies } =
     postDataResult.data?.post || {};
+  const [createReplyResult, runCreateReplyMutation] = useMutation(
+    createReplyMutation
+  );
 
   useEffect(() => {
-    if (!postDataResult.data?.post) {
+    if (!postDataResult.fetching && !postDataResult.data?.post) {
       router.push('/');
     }
   }, [postDataQuery]);
@@ -36,17 +56,27 @@ export default function PostPage() {
     if (lens?.name) {
       setHeaders({
         header: lens.name,
-        subHeader: name,
+        subHeader: title,
       });
     }
-  }, [lens]);
+  }, [lens, title]);
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
   }
 
-  const handleCommentSubmit = () => {};
+  const handleReplyChange = e => {
+    setReply(e.target.value);
+  };
+
+  const handleCommentSubmit = () => {
+    runCreateReplyMutation({
+      content: reply,
+      postId: 1,
+      userId: 1,
+    });
+  };
 
   return (
     <Wrapper>
@@ -73,7 +103,7 @@ export default function PostPage() {
           <Comment key={reply.id}>
             <UserIconWrapper>
               <UserIcon
-                src={reply.author?.profile?.avatar}
+                src={reply.author?.profile?.avatar || '/user_profile_icon.svg'}
                 width="62px"
                 height="62px"
                 alt="user avatar"
@@ -97,10 +127,10 @@ export default function PostPage() {
             alt="user avatar"
           />
         </UserIconWrapper>
-        <textarea></textarea>
-        <button type="submit" onClick={handleCommentSubmit}>
+        <textarea onChange={handleReplyChange}></textarea>
+        <ButtonBase type="submit" onClick={handleCommentSubmit}>
           Reply.
-        </button>
+        </ButtonBase>
       </Reply>
     </Wrapper>
   );

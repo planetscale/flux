@@ -55,7 +55,6 @@ const Stars = styled.div`
 
 export default function PostList({ posts = [] }) {
   const router = useRouter();
-
   const handlePostClick = postId => {
     router.push(`/post/${postId}`);
   };

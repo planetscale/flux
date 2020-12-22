@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ButtonBase } from 'components/Button';
 
 const Wrapper = styled.div`
   padding: 60px 68px;
@@ -14,7 +15,13 @@ const BodyWrapper = styled.div`
 `;
 
 const Post = styled.div`
-  margin: 0 0 72px 0;
+  :not(:last-of-type) {
+    margin: 0 0 72px 0;
+  }
+
+  :last-of-type {
+    padding: 0 0 36px 0;
+  }
 `;
 
 const Content = styled.div`
@@ -53,8 +60,14 @@ const Reply = styled.div`
     min-width: 495px;
   }
 
-  button {
-    display: block;
+  ${ButtonBase} {
+    border: 1px solid #423f3f;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 5px 18px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 18px;
   }
 `;
 
