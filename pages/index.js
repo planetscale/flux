@@ -13,7 +13,7 @@ const postListQuery = gql`
       lenses {
         posts {
           id
-          name
+          title
           author {
             displayName
           }
@@ -32,15 +32,15 @@ export default function Home({ href, ...props }) {
     query: postListQuery,
   });
   const { setHeaders } = useTopBarActions();
-  const { org } = useUserContext().user;
+  const { user } = useUserContext();
 
   useEffect(() => {
-    if (org?.name) {
+    if (user?.org?.name) {
       setHeaders({
-        header: org.name,
+        header: user?.org.name,
       });
     }
-  }, [org]);
+  }, [user?.org]);
 
   return (
     <div>

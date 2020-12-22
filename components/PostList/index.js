@@ -63,7 +63,7 @@ export default function PostList({ posts = [] }) {
   return (
     <Wrapper>
       {posts.map(post => {
-        const { id, name, author, createdAt, replies, stars } = post;
+        const { id, title, author, createdAt, replies, stars } = post;
         return (
           <Post
             key={id}
@@ -72,7 +72,7 @@ export default function PostList({ posts = [] }) {
             }}
           >
             <PostInfo>
-              <div>{name}</div>
+              <div>{title}</div>
               <div>
                 <div>{author?.displayName}</div>
                 <div>{createdAt}</div>
