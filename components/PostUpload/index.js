@@ -128,7 +128,7 @@ export default function PostUpload() {
       uploadPost({
         file: file.value,
         userId,
-        lensId: selectedLens.value,
+        lensId: Number(selectedLens.value),
         orgId,
       });
     }
