@@ -97,7 +97,7 @@ export default function UserSettings({
         <div>@{userHandle}</div>
       </UserInfo>
       <NotificationPreference>
-        <div>Email Notifications</div>
+        <div>Email Notifications (Coming soon)</div>
         <RadioGroup>
           {Object.values(RADIO_OPTIONS).map(option => (
             <label htmlFor={option} key={option}>
@@ -108,6 +108,7 @@ export default function UserSettings({
                 value={option}
                 checked={value === option}
                 onChange={handleChange}
+                disabled
               />
               {option}
             </label>
