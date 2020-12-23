@@ -31,6 +31,10 @@ const Stars = styled.div`
   align-items: baseline;
   font-size: 18px;
 
+  :hover {
+    cursor: pointer;
+  }
+
   img {
     margin: 0 0 0 8px;
   }
@@ -42,7 +46,7 @@ export default function AuthorNamePlate({
   time,
   numComments,
   numStars,
-  onStarClick = () => {},
+  onStarClick = null,
   ...props
 }) {
   return (
@@ -52,11 +56,9 @@ export default function AuthorNamePlate({
           <span>{displayName} </span>
           <span>{userHandle}</span>
         </div>
-        {numStars && (
-          <Stars onClick={onStarClick}>
-            {numStars} <img src="/star.svg" alt="star" />
-          </Stars>
-        )}
+        <Stars onClick={onStarClick}>
+          {numStars} <img src="/star.svg" alt="star" />
+        </Stars>
       </div>
       <div>
         {time} ago | {numComments} comments

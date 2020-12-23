@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
 import { useState } from 'react';
+import Logout from './Logout';
 
 const Wrapper = styled.div`
   width: 360px;
@@ -96,7 +97,7 @@ export default function UserSettings({
         <div>@{userHandle}</div>
       </UserInfo>
       <NotificationPreference>
-        <div>Email Notifications</div>
+        <div>Email Notifications (Coming soon)</div>
         <RadioGroup>
           {Object.values(RADIO_OPTIONS).map(option => (
             <label htmlFor={option} key={option}>
@@ -107,12 +108,14 @@ export default function UserSettings({
                 value={option}
                 checked={value === option}
                 onChange={handleChange}
+                disabled
               />
               {option}
             </label>
           ))}
         </RadioGroup>
       </NotificationPreference>
+      <Logout />
     </Wrapper>
   );
 }

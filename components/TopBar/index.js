@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import Modal from '@material-ui/core/Modal';
 import { ButtonBase } from 'components/Button';
 import UserIcon from '../UserIcon';
-import Logout from './Logout';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
 import PostUpload from 'components/PostUpload';
@@ -117,8 +116,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           />
         </ButtonBase>
       </ActionsWrapper>
-
-      <Logout />
     </Wrapper>
   );
 }

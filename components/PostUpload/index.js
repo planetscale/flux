@@ -49,7 +49,6 @@ const Body = styled.div`
       }
     }
 
-    button,
     ${ButtonBase} {
       border: none;
       background-color: unset;
@@ -63,10 +62,6 @@ const Body = styled.div`
       font-weight: 500;
       font-size: 16px;
       line-height: 18px;
-
-      &:focus {
-        outline: none;
-      }
     }
   }
 `;

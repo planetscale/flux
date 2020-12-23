@@ -2,8 +2,8 @@ import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import UserIcon from 'components/UserIcon';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useQuery } from 'urql';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'urql';
 import {
   Wrapper,
   BodyWrapper,
@@ -13,40 +13,74 @@ import {
   UserIconWrapper,
   Reply,
 } from 'pageUtils/post/styles';
-import { postDataQuery } from 'pageUtils/post/queries';
+import {
+  postDataQuery,
+  createReplyMutation,
+  createStarMutation,
+} from 'pageUtils/post/queries';
 import { useTopBarActions } from 'state/topBar';
+import { ButtonBase } from 'components/Button';
+import { useUserContext } from 'state/user';
 
 export default function PostPage() {
   const router = useRouter();
+  const [reply, setReply] = useState('');
   const { setHeaders } = useTopBarActions();
+  const userContext = useUserContext();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
-    variables: { id: Number(router.query?.id) },
+    variables: {
+      id: Number(router.query?.id),
+    },
   });
-  const { createdAt, name, summary, content, author, lens, replies } =
+  const { createdAt, title, summary, content, author, lens, replies, stars } =
     postDataResult.data?.post || {};
+  const [createReplyResult, runCreateReplyMutation] = useMutation(
+    createReplyMutation
+  );
+  const [createStarResult, runCreateStarMutation] = useMutation(
+    createStarMutation
+  );
 
   useEffect(() => {
-    if (!postDataResult.data?.post) {
+    if (!postDataResult.fetching && !postDataResult.data?.post) {
       router.push('/');
     }
-  }, [postDataQuery]);
+  }, [postDataResult]);
 
   useEffect(() => {
     if (lens?.name) {
       setHeaders({
         header: lens.name,
-        subHeader: name,
+        subHeader: title,
       });
     }
-  }, [lens]);
+  }, [lens, title]);
+
+  const handleReplyChange = e => {
+    setReply(e.target.value);
+  };
+
+  const handleCommentSubmit = () => {
+    runCreateReplyMutation({
+      content: reply,
+      postId: Number(router.query?.id),
+      userId: userContext.user.id,
+    });
+    setReply('');
+  };
+
+  const handleStarClick = () => {
+    runCreateStarMutation({
+      postId: Number(router.query?.id),
+      userId: userContext.user.id,
+    });
+  };
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
   }
-
-  const handleCommentSubmit = () => {};
 
   return (
     <Wrapper>
@@ -65,7 +99,8 @@ export default function PostPage() {
             userHandle={author?.username}
             time={createdAt}
             numComments={replies?.length}
-            numStars={0}
+            numStars={stars?.length ?? 0}
+            onStarClick={handleStarClick}
           />
           <Content>{content}</Content>
         </Post>
@@ -73,7 +108,7 @@ export default function PostPage() {
           <Comment key={reply.id}>
             <UserIconWrapper>
               <UserIcon
-                src={reply.author?.profile?.avatar}
+                src={reply.author?.profile?.avatar || '/user_profile_icon.svg'}
                 width="62px"
                 height="62px"
                 alt="user avatar"
@@ -97,10 +132,10 @@ export default function PostPage() {
             alt="user avatar"
           />
         </UserIconWrapper>
-        <textarea></textarea>
-        <button type="submit" onClick={handleCommentSubmit}>
+        <textarea value={reply} onChange={handleReplyChange}></textarea>
+        <ButtonBase type="submit" onClick={handleCommentSubmit}>
           Reply.
-        </button>
+        </ButtonBase>
       </Reply>
     </Wrapper>
   );

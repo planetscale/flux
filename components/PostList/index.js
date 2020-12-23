@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 138px;
   padding: 52px 48px;
 `;
 
@@ -14,7 +13,9 @@ const Post = styled.div`
   cursor: pointer;
 
   :hover {
-    background: #e0e0e0;
+    > div > div:first-of-type {
+      text-decoration: underline;
+    }
   }
 
   &:not(:last-of-type) {
@@ -55,7 +56,6 @@ const Stars = styled.div`
 
 export default function PostList({ posts = [] }) {
   const router = useRouter();
-
   const handlePostClick = postId => {
     router.push(`/post/${postId}`);
   };
@@ -80,11 +80,9 @@ export default function PostList({ posts = [] }) {
                 <div>{`${replies?.length} Comments`}</div>
               </div>
             </PostInfo>
-            {stars && (
-              <Stars>
-                {stars?.length} <img src="/star.svg" alt="star" />
-              </Stars>
-            )}
+            <Stars>
+              {stars?.length} <img src="/star.svg" alt="star" />
+            </Stars>
           </Post>
         );
       })}
