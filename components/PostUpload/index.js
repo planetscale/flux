@@ -163,6 +163,13 @@ export default function PostUpload({ closeModal }) {
     });
   };
 
+  const openDownloadWindow = () => {
+    window.open(
+      'https://drive.google.com/file/d/1EAK1Yobjkff6NQgths5lmGnAIxmMUSE0/view',
+      '_blank'
+    );
+  };
+
   if (uploadPostResult.data) {
     return <div>success</div>;
   }
@@ -173,7 +180,9 @@ export default function PostUpload({ closeModal }) {
       <Body>
         <div>
           <SubHeader>1. Get the template.</SubHeader>
-          <ButtonBase type="button">Download</ButtonBase>
+          <ButtonBase type="button" onClick={openDownloadWindow}>
+            Download
+          </ButtonBase>
         </div>
         <div>
           <SubHeader>2. Upload.</SubHeader>
