@@ -4,6 +4,7 @@ import UserIcon from 'components/UserIcon';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
+import ReactMarkdownWithHtml from 'react-markdown/with-html';
 import {
   Wrapper,
   BodyWrapper,
@@ -102,7 +103,11 @@ export default function PostPage() {
             numStars={stars?.length ?? 0}
             onStarClick={handleStarClick}
           />
-          <Content>{content}</Content>
+          <Content>
+            <ReactMarkdownWithHtml allowDangerousHtml>
+              {content}
+            </ReactMarkdownWithHtml>
+          </Content>
         </Post>
         {replies?.map(reply => (
           <Comment key={reply.id}>
