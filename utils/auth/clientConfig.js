@@ -11,6 +11,8 @@ const firebaseConfig = {
 };
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+console.log(firebaseConfig);
+console.log(process.env);
 
 if (!firebase.apps.length) {
   try {
