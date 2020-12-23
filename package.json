@@ -17,6 +17,7 @@
     "@urql/exchange-multipart-fetch": "^0.1.11",
     "apollo-server-core": "^2.19.0",
     "apollo-server-micro": "^2.19.0",
+    "cors": "^2.8.5",
     "firebase": "^8.1.1",
     "firebase-admin": "^9.4.2",
     "formidable": "^1.2.2",
