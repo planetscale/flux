@@ -7,8 +7,8 @@ import { useImmer } from 'use-immer';
 
 const Wrapper = styled.div`
   height: 100vh;
-  min-width: fit-content;
-  width: 236px;
+  min-width: 236px;
+  width: fit-content;
   box-sizing: border-box;
   border: 1px solid #000000;
   box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
@@ -30,6 +30,7 @@ const Wrapper = styled.div`
       font-size: 20px;
       line-height: 21px;
       color: #000000;
+      text-align: left;
     }
 
     > ${ButtonBase}:not(:last-of-type) {
