@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { getISODateTimeString } from 'utils/dateTime';
+import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
   margin: 0 0 24px 0;
@@ -62,7 +62,7 @@ export default function AuthorNamePlate({
         </Stars>
       </div>
       <div>
-        {getISODateTimeString(time)} | {numComments} comments
+        {getLocaleDateTimeString(time)} | {numComments} comments
       </div>
     </Wrapper>
   );

@@ -1,5 +1,5 @@
-const getISODateTimeString = timeUTC => {
+const getLocaleDateTimeString = timeUTC => {
   return new Date(`${timeUTC}`).toLocaleString();
 };
 
-export { getISODateTimeString };
+export { getLocaleDateTimeString };

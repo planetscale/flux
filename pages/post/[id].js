@@ -22,7 +22,7 @@ import {
 import { useTopBarActions } from 'state/topBar';
 import { ButtonBase } from 'components/Button';
 import { useUserContext } from 'state/user';
-import { getISODateTimeString } from 'utils/dateTime';
+import { getLocaleDateTimeString } from 'utils/dateTime';
 
 export default function PostPage() {
   const router = useRouter();
@@ -125,7 +125,7 @@ export default function PostPage() {
               userHandle={reply.author?.username}
             />
             <Content>{reply.content}</Content>
-            <div>{getISODateTimeString(reply.createdAt)}</div>
+            <div>{getLocaleDateTimeString(reply.createdAt)}</div>
           </Comment>
         ))}
       </BodyWrapper>

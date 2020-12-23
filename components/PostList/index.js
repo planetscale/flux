@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { getISODateTimeString } from 'utils/dateTime';
+import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -77,7 +77,7 @@ export default function PostList({ posts = [] }) {
               <div>{title}</div>
               <div>
                 <div>{author?.displayName}</div>
-                <div>{getISODateTimeString(createdAt)}</div>
+                <div>{getLocaleDateTimeString(createdAt)}</div>
                 <div>|</div>
                 <div>{`${replies?.length} Comments`}</div>
               </div>
