@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { TopBarContextProvider } from 'state/topBar';
 
 // the URL to /api/graphql
-const GRAPHQL_ENDPOINT = `http://localhost:3000/api/graphql`;
+const GRAPHQL_ENDPOINT = `/api/graphql`;
 
 function AppContainer({ children }) {
   const router = useRouter();
