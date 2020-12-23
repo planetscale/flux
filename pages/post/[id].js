@@ -20,7 +20,7 @@ import gql from 'graphql-tag';
 
 const createReplyMutation = gql`
   mutation($content: String!, $postId: Int!, $userId: Int!) {
-    createOneUser(
+    createOneReply(
       data: {
         content: $content
         post: { connect: { id: $postId } }

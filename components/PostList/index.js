@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 138px;
   padding: 52px 48px;
 `;
 
@@ -14,7 +13,9 @@ const Post = styled.div`
   cursor: pointer;
 
   :hover {
-    background: #e0e0e0;
+    > div > div:first-of-type {
+      text-decoration: underline;
+    }
   }
 
   &:not(:last-of-type) {
