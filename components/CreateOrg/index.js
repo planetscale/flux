@@ -5,6 +5,7 @@ import { useClient, useMutation } from 'urql';
 import { useImmer } from 'use-immer';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -84,6 +85,7 @@ const getOrg = async (urqlClient, { name }) => {
 };
 
 export default function CreateOrg({ name, email }) {
+  const router = useRouter();
   const client = useClient();
   const [state, setState] = useImmer({
     orgName: '',
@@ -144,7 +146,17 @@ export default function CreateOrg({ name, email }) {
       userName: state.userName,
       displayName: state.name,
       orgName: state.orgName,
-    });
+    })
+      .then(res => {
+        if (res.data) {
+          router.push('/');
+        } else if (res.error) {
+          console.error(e);
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   return (

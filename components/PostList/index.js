@@ -5,6 +5,7 @@ import { getISODateTimeString } from 'utils/dateTime';
 const Wrapper = styled.div`
   width: 100%;
   padding: 52px 48px;
+  box-sizing: border-box;
 `;
 
 const Post = styled.div`

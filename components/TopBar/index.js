@@ -81,7 +81,9 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           aria-describedby={modalContent}
         >
           <>
-            {modalContent === UPLOAD_MARKDOWN && <PostUpload />}
+            {modalContent === UPLOAD_MARKDOWN && (
+              <PostUpload closeModal={handleModalClose} />
+            )}
 
             {modalContent === USER_SETTINGS && (
               <UserSettings
