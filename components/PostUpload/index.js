@@ -116,15 +116,23 @@ export default function PostUpload() {
     }
   }, [lensesResult.data?.lenses]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const userId = userContext?.user?.id;
-    const orgId = userContext.user?.org?.id;
     if (file.value) {
-      uploadPost({
-        file: file.value,
-        userId,
-        lensId: Number(selectedLens.value),
-        orgId,
+      // TODO: use Graphql mutation when graphql-upload's compatibility issue with node v15 is resolved
+      // uploadPost({
+      //   file: file.value,
+      //   userId,
+      //   lensId: Number(selectedLens.value),
+      //
+      // });
+      const formData = new FormData();
+      formData.append('file', file.value);
+      formData.append('userId', userId);
+      formData.append('lensId', Number(selectedLens.value));
+      const response = await fetch('/api/upload/post', {
+        method: 'POST',
+        body: formData,
       });
     }
   };

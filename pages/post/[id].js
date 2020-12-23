@@ -124,7 +124,7 @@ export default function PostPage() {
               userHandle={reply.author?.username}
             />
             <Content>{reply.content}</Content>
-            <div>{reply.createdAt} ago</div>
+            <div>{reply.createdAt}</div>
           </Comment>
         ))}
       </BodyWrapper>

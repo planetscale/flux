@@ -61,7 +61,7 @@ export default function AuthorNamePlate({
         </Stars>
       </div>
       <div>
-        {time} ago | {numComments} comments
+        {time} | {numComments} comments
       </div>
     </Wrapper>
   );
