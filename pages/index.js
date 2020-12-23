@@ -21,6 +21,9 @@ const postListQuery = gql`
           replies {
             id
           }
+          stars {
+            id
+          }
         }
       }
     }

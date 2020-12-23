@@ -13,44 +13,40 @@ import {
   UserIconWrapper,
   Reply,
 } from 'pageUtils/post/styles';
-import { postDataQuery } from 'pageUtils/post/queries';
+import {
+  postDataQuery,
+  createReplyMutation,
+  createStarMutation,
+} from 'pageUtils/post/queries';
 import { useTopBarActions } from 'state/topBar';
 import { ButtonBase } from 'components/Button';
-import gql from 'graphql-tag';
-
-const createReplyMutation = gql`
-  mutation($content: String!, $postId: Int!, $userId: Int!) {
-    createOneReply(
-      data: {
-        content: $content
-        post: { connect: { id: $postId } }
-        author: { connect: { id: $userId } }
-      }
-    ) {
-      id
-    }
-  }
-`;
+import { useUserContext } from 'state/user';
 
 export default function PostPage() {
   const router = useRouter();
   const [reply, setReply] = useState('');
   const { setHeaders } = useTopBarActions();
+  const userContext = useUserContext();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
-    variables: { id: Number(router.query?.id) },
+    variables: {
+      id: Number(router.query?.id),
+    },
   });
-  const { createdAt, title, summary, content, author, lens, replies } =
+  const { createdAt, title, summary, content, author, lens, replies, stars } =
     postDataResult.data?.post || {};
   const [createReplyResult, runCreateReplyMutation] = useMutation(
     createReplyMutation
+  );
+  const [createStarResult, runCreateStarMutation] = useMutation(
+    createStarMutation
   );
 
   useEffect(() => {
     if (!postDataResult.fetching && !postDataResult.data?.post) {
       router.push('/');
     }
-  }, [postDataQuery]);
+  }, [postDataResult]);
 
   useEffect(() => {
     if (lens?.name) {
@@ -61,11 +57,6 @@ export default function PostPage() {
     }
   }, [lens, title]);
 
-  // TODO: add better loading indicator, now there's literally none
-  if (postDataResult.fetching) {
-    return <></>;
-  }
-
   const handleReplyChange = e => {
     setReply(e.target.value);
   };
@@ -73,10 +64,23 @@ export default function PostPage() {
   const handleCommentSubmit = () => {
     runCreateReplyMutation({
       content: reply,
-      postId: 1,
-      userId: 1,
+      postId: Number(router.query?.id),
+      userId: userContext.user.id,
+    });
+    setReply('');
+  };
+
+  const handleStarClick = () => {
+    runCreateStarMutation({
+      postId: Number(router.query?.id),
+      userId: userContext.user.id,
     });
   };
+
+  // TODO: add better loading indicator, now there's literally none
+  if (postDataResult.fetching) {
+    return <></>;
+  }
 
   return (
     <Wrapper>
@@ -95,7 +99,8 @@ export default function PostPage() {
             userHandle={author?.username}
             time={createdAt}
             numComments={replies?.length}
-            numStars={0}
+            numStars={stars?.length ?? 0}
+            onStarClick={handleStarClick}
           />
           <Content>{content}</Content>
         </Post>
@@ -127,7 +132,7 @@ export default function PostPage() {
             alt="user avatar"
           />
         </UserIconWrapper>
-        <textarea onChange={handleReplyChange}></textarea>
+        <textarea value={reply} onChange={handleReplyChange}></textarea>
         <ButtonBase type="submit" onClick={handleCommentSubmit}>
           Reply.
         </ButtonBase>

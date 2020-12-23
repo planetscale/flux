@@ -80,11 +80,9 @@ export default function PostList({ posts = [] }) {
                 <div>{`${replies?.length} Comments`}</div>
               </div>
             </PostInfo>
-            {stars && (
-              <Stars>
-                {stars?.length} <img src="/star.svg" alt="star" />
-              </Stars>
-            )}
+            <Stars>
+              {stars?.length} <img src="/star.svg" alt="star" />
+            </Stars>
           </Post>
         );
       })}

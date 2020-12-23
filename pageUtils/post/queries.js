@@ -31,8 +31,38 @@ const postDataQuery = gql`
           }
         }
       }
+      stars {
+        id
+      }
     }
   }
 `;
 
-export { postDataQuery };
+const createReplyMutation = gql`
+  mutation($content: String!, $postId: Int!, $userId: Int!) {
+    createOneReply(
+      data: {
+        content: $content
+        post: { connect: { id: $postId } }
+        author: { connect: { id: $userId } }
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+const createStarMutation = gql`
+  mutation($postId: Int!, $userId: Int!) {
+    createOneStar(
+      data: {
+        post: { connect: { id: $postId } }
+        user: { connect: { id: $userId } }
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+export { postDataQuery, createReplyMutation, createStarMutation };
