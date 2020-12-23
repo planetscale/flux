@@ -22,6 +22,7 @@ import {
 import { useTopBarActions } from 'state/topBar';
 import { ButtonBase } from 'components/Button';
 import { useUserContext } from 'state/user';
+import { getISODateTimeString } from 'utils/dateTime';
 
 export default function PostPage() {
   const router = useRouter();
@@ -124,14 +125,14 @@ export default function PostPage() {
               userHandle={reply.author?.username}
             />
             <Content>{reply.content}</Content>
-            <div>{reply.createdAt}</div>
+            <div>{getISODateTimeString(reply.createdAt)}</div>
           </Comment>
         ))}
       </BodyWrapper>
       <Reply>
         <UserIconWrapper>
           <UserIcon
-            src="/user_profile_icon.svg"
+            src={reply.author?.profile?.avatar || '/user_profile_icon.svg'}
             width="62px"
             height="62px"
             alt="user avatar"
