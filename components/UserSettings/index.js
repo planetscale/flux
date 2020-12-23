@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
 import { useState } from 'react';
+import Logout from './Logout';
 
 const Wrapper = styled.div`
   width: 360px;
@@ -113,6 +114,7 @@ export default function UserSettings({
           ))}
         </RadioGroup>
       </NotificationPreference>
+      <Logout />
     </Wrapper>
   );
 }

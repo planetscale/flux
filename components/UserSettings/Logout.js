@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
+import { ButtonPrimary } from 'components/Button';
 import { useAuthActions } from 'state/auth';
 
-const Wrapper = styled.div`
-  img {
-    border-radius: 50%;
-  }
+const StyledButtonPrimary = styled(ButtonPrimary)`
+  margin: 0 38px 15px 38px;
 `;
 
 export default function Logout() {
@@ -15,8 +14,8 @@ export default function Logout() {
   };
 
   return (
-    <button type="button" onClick={handleLogout}>
+    <StyledButtonPrimary type="button" onClick={handleLogout}>
       Logout
-    </button>
+    </StyledButtonPrimary>
   );
 }
