@@ -13,7 +13,6 @@ const rules = {
       token = tokenArray[1];
 
       try {
-        console.log('userId', userId);
       } catch (e) {
         console.error('Get User Id error: ', e);
       }
