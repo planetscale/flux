@@ -25,7 +25,6 @@ const Post = styled.div`
 `;
 
 const Content = styled.div`
-  font-family: monospace;
   font-size: 16px;
   line-height: 24px;
 `;
