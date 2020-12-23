@@ -1,10 +1,9 @@
 import * as admin from 'firebase-admin';
-import adminKey from 'firebase-sdk-key.json';
 
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
-      credential: admin.credential.cert(adminKey),
+      credential: admin.credential.cert(JSON.parse(process.env.ADMIN_KEY)),
     });
   } catch (e) {
     console.error('Error initializing Firebase Admin: ', e);
