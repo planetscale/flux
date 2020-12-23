@@ -1,0 +1,10 @@
+{
+  "env": {
+    "DATABASE_URL": "@parallax_psdb"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@parallax_psdb"
+    }
+  }
+}
