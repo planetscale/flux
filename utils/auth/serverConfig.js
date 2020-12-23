@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
-console.log(typeof process.env.ADMIN_KEY, process.env.ADMIN_KEY);
+console.log(typeof process.env.FIRE_ADMIN_KEY, process.env.FIRE_ADMIN_KEY);
 console.log(
-  typeof JSON.parse(process.env.ADMIN_KEY),
+  typeof JSON.parse(process.env.FIRE_ADMIN_KEY),
   '\n',
-  JSON.parse(process.env.ADMIN_KEY)
+  JSON.parse(process.env.FIRE_ADMIN_KEY)
 );
 if (!admin.apps.length) {
   try {
