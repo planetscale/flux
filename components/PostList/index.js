@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
   width: 100%;
   padding: 52px 48px;
+  box-sizing: border-box;
 `;
 
 const Post = styled.div`
@@ -75,7 +77,7 @@ export default function PostList({ posts = [] }) {
               <div>{title}</div>
               <div>
                 <div>{author?.displayName}</div>
-                <div>{createdAt}</div>
+                <div>{getLocaleDateTimeString(createdAt)}</div>
                 <div>|</div>
                 <div>{`${replies?.length} Comments`}</div>
               </div>

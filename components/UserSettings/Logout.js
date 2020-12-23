@@ -15,7 +15,7 @@ export default function Logout() {
 
   return (
     <StyledButtonPrimary type="button" onClick={handleLogout}>
-      Logout
+      Log Out
     </StyledButtonPrimary>
   );
 }

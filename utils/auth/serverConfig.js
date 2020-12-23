@@ -17,7 +17,7 @@ const getUserId = async idToken => {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     return decodedToken.uid;
   } catch (e) {
-    console.error(error);
+    console.error(e);
   }
 };
 

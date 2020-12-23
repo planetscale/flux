@@ -5,6 +5,11 @@ import gql from 'graphql-tag';
 import { useTopBarActions } from 'state/topBar';
 import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
+import styled from '@emotion/styled';
+
+const HomeWrapper = styled.div`
+  overflow-y: auto;
+`;
 
 // TODO: only get current org's data
 const postListQuery = gql`
@@ -41,12 +46,13 @@ export default function Home({ href, ...props }) {
     if (user?.org?.name) {
       setHeaders({
         header: user?.org.name,
+        subHeader: '',
       });
     }
   }, [user?.org]);
 
   return (
-    <div>
+    <HomeWrapper>
       <Head>
         {/* //TODO: Add custom title to each page, probably more link to a custom `Document` */}
         <title>Parallax</title>
@@ -56,6 +62,6 @@ export default function Home({ href, ...props }) {
       <main>
         <PostList posts={postListResult.data?.orgs?.[0].lenses?.[0].posts} />
       </main>
-    </div>
+    </HomeWrapper>
   );
 }
