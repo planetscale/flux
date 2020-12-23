@@ -8,7 +8,7 @@ console.log(
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(process.env.ADMIN_KEY)),
+      credential: admin.credential.cert(JSON.parse(process.env.FIRE_ADMIN_KEY)),
     });
   } catch (e) {
     console.error('Error initializing Firebase Admin: ', e);
