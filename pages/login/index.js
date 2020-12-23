@@ -4,7 +4,9 @@ import { useAuthActions, useAuthContext } from 'state/auth';
 
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext } from 'state/user';
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+console.log(publicRuntimeConfig);
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
