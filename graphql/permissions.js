@@ -13,6 +13,7 @@ const rules = {
       token = tokenArray[1];
 
       try {
+        userId = await getUserId(token);
       } catch (e) {
         console.error('Get User Id error: ', e);
       }
