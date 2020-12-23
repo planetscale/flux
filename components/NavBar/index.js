@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   border: 1px solid #000000;
   box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
 
   img {
     margin: 20px 0 44px 24px;
@@ -40,8 +41,9 @@ const Wrapper = styled.div`
 `;
 
 const LowerContainer = styled.div`
-  height: 100%;
+  height: fit-content;
   padding: 24px;
+  box-sizing: border-box;
 
   > div {
     margin: 0 0 44px 0;
