@@ -34,7 +34,7 @@ const useTopBarActions = () => {
           if (header) {
             draft.header = header;
           }
-          if (subHeader) {
+          if (subHeader || subHeader === '') {
             draft.subHeader = subHeader;
           }
         });

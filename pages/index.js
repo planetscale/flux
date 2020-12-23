@@ -41,6 +41,7 @@ export default function Home({ href, ...props }) {
     if (user?.org?.name) {
       setHeaders({
         header: user?.org.name,
+        subHeader: '',
       });
     }
   }, [user?.org]);

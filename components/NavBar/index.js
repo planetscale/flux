@@ -117,7 +117,9 @@ export default function Navbar({
   const { setHeaders } = useTopBarActions();
 
   const redirectToHome = () => {
-    router.push('/');
+    if (router.pathname !== '/') {
+      router.push('/');
+    }
   };
 
   const toggleLensCreation = orgName => {
@@ -158,8 +160,9 @@ export default function Navbar({
                 onClick={() => {
                   setHeaders({
                     header: org.name,
-                    subHeader: null,
+                    subHeader: '',
                   });
+                  redirectToHome();
                 }}
               >
                 {org.name}
@@ -181,6 +184,7 @@ export default function Navbar({
                         header: org.name,
                         subHeader: lens.name,
                       });
+                      redirectToHome();
                     }}
                   >
                     <div>{lens.name}</div>
