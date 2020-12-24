@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   > div:first-of-type {
     display: flex;
     flex-direction: column;
-
+    text-transform: capitalize;
     font-size: 36px;
     line-height: 38px;
     color: #000000;
