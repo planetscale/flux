@@ -63,6 +63,7 @@ export default function Login() {
           <CreateOrg
             name={authContext?.user?.displayName}
             email={authContext?.user?.email}
+            avatar={authContext?.user?.photoURL ?? ''}
           />
         )}
     </Wrapper>
