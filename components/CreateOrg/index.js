@@ -62,13 +62,21 @@ const createUserWithOrgMutation = gql`
     $userName: String!
     $displayName: String!
     $orgName: String!
+    $avatar: String!
+    $bio: String!
   ) {
     createOneUser(
       data: {
         email: $email
         username: $userName
         displayName: $displayName
-        org: { create: { name: $orgName } }
+        profile: { create: { bio: $bio, avatar: $avatar } }
+        org: {
+          connectOrCreate: {
+            where: { name: $orgName }
+            create: { name: $orgName }
+          }
+        }
       }
     ) {
       email
@@ -84,11 +92,15 @@ const getOrg = async (urqlClient, { name }) => {
     .toPromise();
 };
 
-export default function CreateOrg({ name, email }) {
+const getOrgNameFromEmailDomain = email => {
+  return email.split('@').pop().split('.')[0];
+};
+
+export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
   const client = useClient();
   const [state, setState] = useImmer({
-    orgName: '',
+    orgName: getOrgNameFromEmailDomain(email),
     userName: '',
     name: name ? name : '',
     isOrgExisted: false,
@@ -146,6 +158,8 @@ export default function CreateOrg({ name, email }) {
       userName: state.userName,
       displayName: state.name,
       orgName: state.orgName,
+      avatar,
+      bio: '',
     })
       .then(res => {
         if (res.data) {
@@ -163,7 +177,12 @@ export default function CreateOrg({ name, email }) {
     <Wrapper>
       <div>
         <InputWrapper>
-          <Input label="Organization Name" onChange={handleOrgNameChange} />
+          <Input
+            label="Organization Name"
+            value={state.orgName}
+            onChange={handleOrgNameChange}
+            disabled
+          />
         </InputWrapper>
         <InputWrapper>
           <Input
