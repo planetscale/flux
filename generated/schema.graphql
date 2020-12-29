@@ -706,7 +706,7 @@ type Query {
   lens(after: LensWhereUniqueInput, before: LensWhereUniqueInput, first: Int, last: Int): [Lens!]!
   lenses: [Lens]
   org(where: OrgWhereUniqueInput!): Org
-  orgs(after: OrgWhereUniqueInput, before: OrgWhereUniqueInput, first: Int, last: Int): [Org!]!
+  orgs: [Org]
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
