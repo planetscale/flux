@@ -111,7 +111,7 @@ const Query = queryType({
       resolve(_parent, _args, ctx) {
         return ctx.prisma.org.findMany({
           where: {
-            id: 7, // TODO: Fix hack to only return PlanetScale.
+            id: 7, // TODO: Fix hack to only return organizations which users belong to.
           },
         });
       },
