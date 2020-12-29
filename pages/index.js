@@ -2,7 +2,7 @@ import Head from 'next/head';
 import PostList from 'components/PostList';
 import { useQuery } from 'urql';
 import gql from 'graphql-tag';
-import { useTopBarActions } from 'state/topBar';
+import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
@@ -16,6 +16,7 @@ const postListQuery = gql`
   query {
     orgs {
       lenses {
+        name
         posts {
           id
           title
@@ -35,12 +36,33 @@ const postListQuery = gql`
   }
 `;
 
+function getLensPosts(lenses, subHeader) {
+  if (lenses === undefined || lenses === null) {
+    return [];
+  }
+
+  if (subHeader === '') {
+    return lenses.flatMap(lens => lens.posts);
+  }
+
+  const lens = lenses.find(lens => {
+    return lens.name !== undefined && lens.name === subHeader;
+  });
+
+  if (lens === undefined) {
+    return [];
+  }
+
+  return lens.posts;
+}
+
 export default function Home({ href, ...props }) {
   const [postListResult, runPostListQuery] = useQuery({
     query: postListQuery,
   });
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
+  const { subHeader } = useTopBarContext();
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -60,7 +82,9 @@ export default function Home({ href, ...props }) {
       </Head>
 
       <main>
-        <PostList posts={postListResult.data?.orgs?.[0].lenses?.[0].posts} />
+        <PostList
+          posts={getLensPosts(postListResult.data?.orgs?.[0].lenses, subHeader)}
+        />
       </main>
     </HomeWrapper>
   );
