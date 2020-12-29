@@ -106,7 +106,16 @@ const Query = queryType({
   definition(t) {
     t.crud.user();
     t.crud.org();
-    t.crud.orgs();
+    t.list.field('orgs', {
+      type: 'Org',
+      resolve(_parent, _args, ctx) {
+        return ctx.prisma.org.findMany({
+          where: {
+            id: 7, // TODO: Fix hack to only return organizations which users belong to.
+          },
+        });
+      },
+    });
     t.crud.post();
     t.crud.posts();
     t.crud.lens();
@@ -116,6 +125,7 @@ const Query = queryType({
         return ctx.prisma.lens.findMany({});
       },
     });
+
     t.crud.replies();
   },
 });
