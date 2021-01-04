@@ -36,6 +36,7 @@ const postListQuery = gql`
   }
 `;
 
+// TODO: replace this hack with backend implementation
 function getLensPosts(lenses, subHeader) {
   if (lenses === undefined || lenses === null) {
     return [];
