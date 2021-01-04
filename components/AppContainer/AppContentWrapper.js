@@ -73,7 +73,7 @@ export default function AppContentWrapper({ children }) {
       {authContext.isAuthed && (
         <MainWrapper>
           <Navbar
-            orgs={sideNavResult.data?.orgs}
+            orgs={sideNavResult.data?.orgs ?? []}
             handleLensCreate={handleLensCreate}
           />
           <CenterWrapper>
