@@ -23,7 +23,7 @@ function App({ Component, pageProps }) {
     <>
       <Head>
         <title>Parallax</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <Global
         styles={css`
