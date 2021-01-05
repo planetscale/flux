@@ -10,7 +10,7 @@ import { useTopBarContext } from 'state/topBar';
 const Wrapper = styled.div`
   width: 100%;
   height: 138px;
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid #000000;
   display: flex;
   justify-content: space-between;
 

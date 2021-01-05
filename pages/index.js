@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import PostList from 'components/PostList';
 import { useQuery } from 'urql';
 import gql from 'graphql-tag';
@@ -76,17 +75,9 @@ export default function Home({ href, ...props }) {
 
   return (
     <HomeWrapper>
-      <Head>
-        {/* //TODO: Add custom title to each page, probably more link to a custom `Document` */}
-        <title>Parallax</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <PostList
-          posts={getLensPosts(postListResult.data?.orgs?.[0].lenses, subHeader)}
-        />
-      </main>
+      <PostList
+        posts={getLensPosts(postListResult.data?.orgs?.[0].lenses, subHeader)}
+      />
     </HomeWrapper>
   );
 }

@@ -10,8 +10,7 @@ const Wrapper = styled.div`
   min-width: 236px;
   width: fit-content;
   box-sizing: border-box;
-  border: 1px solid #000000;
-  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+  border-right: 1px solid #000000;
   overflow-y: auto;
 
   img {
@@ -24,7 +23,6 @@ const Wrapper = styled.div`
     padding: 24px;
 
     > ${ButtonBase} {
-      font: unset;
       font-family: inherit;
       display: block;
       font-weight: 500;

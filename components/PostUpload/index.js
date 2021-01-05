@@ -37,7 +37,6 @@ const Body = styled.div`
     }
 
     > input {
-      font: unset;
       cursor: pointer;
       margin: 0 0 0 38px;
       background: #ffffff;
