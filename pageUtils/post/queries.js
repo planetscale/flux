@@ -48,6 +48,15 @@ const createReplyMutation = gql`
       }
     ) {
       id
+      createdAt
+      content
+      author {
+        username
+        displayName
+        profile {
+          avatar
+        }
+      }
     }
   }
 `;

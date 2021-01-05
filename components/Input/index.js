@@ -11,7 +11,6 @@ const StyledLabel = styled.label`
 `;
 
 const StyledInput = styled.input`
-  font: unset;
   width: 100%;
   padding: 0;
   border: unset;

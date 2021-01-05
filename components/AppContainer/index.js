@@ -62,7 +62,6 @@ function AppContainer({ children }) {
             ) : (
               <AppContentWrapper>{children}</AppContentWrapper>
             )}
-            <AppContentWrapper>{children}</AppContentWrapper>
           </TopBarContextProvider>
         </AuthGuard>
       </UserContextProvider>

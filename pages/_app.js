@@ -3,6 +3,7 @@ import { Global, css } from '@emotion/react';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
+import Head from 'next/head';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -20,15 +21,27 @@ function App({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <title>Parallax</title>
+        <link rel="icon" href="/favicon.svg" />
+      </Head>
       <Global
         styles={css`
+          @import url('https://fonts.googleapis.com/css?family=Inconsolata&display=swap');
           html,
           body {
             font-family: Inconsolata;
             margin: unset;
             width: 100vw;
             height: 100vh;
-            overflow: hidden;
+            overflow: auto;
+          }
+          input,
+          select,
+          textarea,
+          button {
+            font: unset;
+            font-family: Inconsolata;
           }
         `}
       />

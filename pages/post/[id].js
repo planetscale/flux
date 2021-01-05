@@ -23,9 +23,14 @@ import { useTopBarActions } from 'state/topBar';
 import { ButtonBase } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
+import { useImmer } from 'use-immer';
 
 export default function PostPage() {
   const router = useRouter();
+  const [postState, updatePostState] = useImmer({
+    replies: [],
+    numStars: 0,
+  });
   const [reply, setReply] = useState('');
   const { setHeaders } = useTopBarActions();
   const userContext = useUserContext();
@@ -48,6 +53,13 @@ export default function PostPage() {
     if (!postDataResult.fetching && !postDataResult.data?.post) {
       router.push('/');
     }
+
+    if (postDataResult.data?.post) {
+      updatePostState(draft => {
+        draft.replies = postDataResult.data?.post.replies;
+        draft.numStars = postDataResult.data?.post.stars.length;
+      });
+    }
   }, [postDataResult]);
 
   useEffect(() => {
@@ -63,20 +75,49 @@ export default function PostPage() {
     setReply(e.target.value);
   };
 
-  const handleCommentSubmit = () => {
-    runCreateReplyMutation({
-      content: reply,
-      postId: Number(router.query?.id),
-      userId: userContext.user.id,
-    });
-    setReply('');
+  const handleCommentSubmit = async () => {
+    try {
+      const res = await runCreateReplyMutation({
+        content: reply,
+        postId: Number(router.query?.id),
+        userId: userContext.user.id,
+      });
+      if (res.data) {
+        updatePostState(draft => {
+          draft.replies = [...draft.replies, res.data.createOneReply];
+        });
+
+        setReply('');
+      } else {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const handleStarClick = () => {
-    runCreateStarMutation({
-      postId: Number(router.query?.id),
-      userId: userContext.user.id,
+  const handleStarClick = async () => {
+    // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
+    updatePostState(draft => {
+      draft.numStars = draft.numStars + 1;
     });
+    try {
+      const res = await runCreateStarMutation({
+        postId: Number(router.query?.id),
+        userId: userContext.user.id,
+      });
+      if (!res.data) {
+        updatePostState(draft => {
+          draft.numStars = draft.numStars - 1;
+        });
+        console.error(e);
+      }
+    } catch (e) {
+      updatePostState(draft => {
+        draft.numStars = draft.numStars - 1;
+      });
+      console.error(e);
+    }
   };
 
   // TODO: add better loading indicator, now there's literally none
@@ -101,7 +142,7 @@ export default function PostPage() {
             userHandle={author?.username}
             time={createdAt}
             numComments={replies?.length}
-            numStars={stars?.length ?? 0}
+            numStars={postState.numStars}
             onStarClick={handleStarClick}
           />
           <Content>
@@ -110,7 +151,7 @@ export default function PostPage() {
             </ReactMarkdownWithHtml>
           </Content>
         </Post>
-        {replies?.map(reply => (
+        {postState.replies?.map(reply => (
           <Comment key={reply.id}>
             <UserIconWrapper>
               <UserIcon
