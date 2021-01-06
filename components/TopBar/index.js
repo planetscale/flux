@@ -9,19 +9,36 @@ import { useTopBarContext } from 'state/topBar';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 138px;
+  height: 95px;
   border-bottom: 1px solid #000000;
   display: flex;
   justify-content: space-between;
+  padding: 30px;
+  box-sizing: border-box;
 
   > div:first-of-type {
-    display: flex;
-    flex-direction: column;
-    text-transform: capitalize;
-    font-size: 36px;
-    line-height: 38px;
+    font-size: 24px;
+    line-height: 28px;
     color: #000000;
-    margin: 24px 0 0 48px;
+
+    > div {
+      display: flex;
+      display: inline-block;
+      padding: 0 10px 0 0;
+      position: relative;
+      height: 29px;
+      text-transform: capitalize;
+
+      &:first-of-type {
+        text-transform: uppercase;
+        font-style: italic;
+        font-weight: 900;
+      }
+
+      &:nth-of-type(even) {
+        color: #e1e1e1;
+      }
+    }
 
     span {
       width: fit-content;
@@ -36,9 +53,7 @@ const Wrapper = styled.div`
 
 const ActionsWrapper = styled.div`
   display: flex;
-  height: 60px;
   align-items: center;
-  margin: 18px 14px 0 0;
 
   button:first-of-type {
     margin: 0 12px 0 0;
@@ -49,6 +64,25 @@ const StyledModal = styled(Modal)`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const AddUpdateButton = styled(ButtonBase)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 34px;
+  background: #000000;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  border-radius: 99px;
+  color: #ffffff;
+
+  img {
+    width: 12px;
+    height: auto;
+    margin: 0 13.75px 0 0;
+  }
 `;
 
 const UPLOAD_MARKDOWN = 'upload markdown';
@@ -70,8 +104,11 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   return (
     <Wrapper>
       <div>
-        {header}
-        <span>{subHeader}</span>
+        <div>flux</div>
+        <div>/</div>
+        <div>{header}</div>
+        <div>/</div>
+        <div>{subHeader}</div>
       </div>
       <ActionsWrapper>
         <StyledModal
@@ -95,14 +132,15 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           </>
         </StyledModal>
 
-        <ButtonBase
+        <AddUpdateButton
           type="button"
           onClick={() => {
             handleModalOpen(UPLOAD_MARKDOWN);
           }}
         >
-          <img src="/upload.svg" alt="upload post" width="26px" height="26px" />
-        </ButtonBase>
+          <img src="/plus.svg" alt="upload post" width="26px" height="26px" />
+          <span>Add Update</span>
+        </AddUpdateButton>
 
         <ButtonBase
           type="button"
@@ -112,8 +150,8 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         >
           <UserIcon
             src={profileImg}
-            width="60px"
-            height="60px"
+            width="34px"
+            height="34px"
             alt="user avatar"
           />
         </ButtonBase>
