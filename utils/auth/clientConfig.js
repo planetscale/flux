@@ -46,4 +46,19 @@ const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
   });
 };
 
-export { loginWithFirebase, logoutWithFirebase, setFireAuthObserver };
+let defaultFetchHeaders = {};
+
+const setDefaultFetchHeaders = headersOverwrite => {
+  defaultFetchHeaders = {
+    ...defaultFetchHeaders,
+    ...headersOverwrite,
+  };
+};
+
+export {
+  loginWithFirebase,
+  logoutWithFirebase,
+  setFireAuthObserver,
+  defaultFetchHeaders,
+  setDefaultFetchHeaders,
+};

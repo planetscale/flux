@@ -3,10 +3,30 @@ import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import { IncomingForm } from 'formidable';
 import Cors from 'cors';
+import { getUserId } from 'utils/auth/serverConfig';
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],
 });
+
+const validateUser = async (req, res, callbackFn) => {
+  const authHeader = req.headers.authorization;
+  let token = '';
+  let userId = '';
+
+  if (authHeader?.startsWith('Bearer ')) {
+    const tokenArray = authHeader.split(' ');
+    // extract the JWT, tokenArray[0] is 'Bearer '
+    token = tokenArray[1];
+
+    try {
+      userId = await getUserId(token);
+      callbackFn(Boolean(userId));
+    } catch (e) {
+      callbackFn(e);
+    }
+  }
+};
 
 const prisma = new PrismaClient();
 
@@ -24,14 +44,19 @@ function runMiddleware(req, res, fn) {
       if (result instanceof Error) {
         return reject(result);
       }
-
       return resolve(result);
     });
   });
 }
 
 export default async (req, res) => {
-  await runMiddleware(req, res, cors);
+  try {
+    await runMiddleware(req, res, cors);
+    await runMiddleware(req, res, validateUser);
+  } catch (e) {
+    res.status(401).json({ error: e.toString() });
+    return;
+  }
 
   const uploadRequest = await new Promise((resolve, reject) => {
     const form = new IncomingForm();
