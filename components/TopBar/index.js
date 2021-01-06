@@ -5,7 +5,8 @@ import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
 import PostUpload from 'components/PostUpload';
-import { useTopBarContext } from 'state/topBar';
+import { useTopBarActions, useTopBarContext } from 'state/topBar';
+import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,9 +31,11 @@ const Wrapper = styled.div`
       text-transform: capitalize;
 
       &:first-of-type {
-        text-transform: uppercase;
-        font-style: italic;
-        font-weight: 900;
+        ${ButtonBase} {
+          text-transform: uppercase;
+          font-style: italic;
+          font-weight: 900;
+        }
       }
 
       &:nth-of-type(even) {
@@ -89,9 +92,11 @@ const UPLOAD_MARKDOWN = 'upload markdown';
 const USER_SETTINGS = 'user settings';
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
+  const router = useRouter();
   const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const { header, subHeader } = useTopBarContext();
+  const { setHeaders } = useTopBarActions();
   const handleModalOpen = content => {
     setModalOpen(true);
     setModalContent(content);
@@ -101,10 +106,21 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
     setModalOpen(false);
   };
 
+  const redirectToHome = () => {
+    setHeaders({
+      subHeader: 'all',
+    });
+    if (router.pathname !== '/') {
+      router.push('/');
+    }
+  };
+
   return (
     <Wrapper>
       <div>
-        <div>flux</div>
+        <div>
+          <ButtonBase onClick={redirectToHome}>flux</ButtonBase>
+        </div>
         <div>/</div>
         <div>{header}</div>
         <div>/</div>
