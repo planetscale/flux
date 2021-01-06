@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { UserContextProvider } from 'state/user';
-import { setFireAuthObserver } from 'utils/auth/clientConfig';
+import {
+  setDefaultFetchHeaders,
+  setFireAuthObserver,
+} from 'utils/auth/clientConfig';
 import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import AuthGuard from 'components/AuthGuard';
@@ -30,6 +33,9 @@ function AppContainer({ children }) {
     try {
       const jwt = await user.getIdToken();
       setToken(jwt);
+      setDefaultFetchHeaders({
+        authorization: jwt ? `Bearer ${jwt}` : '',
+      });
     } catch (e) {
       console.error(e);
     }

@@ -17,6 +17,7 @@ const getUserId = async idToken => {
     return decodedToken.uid;
   } catch (e) {
     console.error(e);
+    throw Error(e);
   }
 };
 

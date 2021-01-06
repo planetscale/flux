@@ -7,6 +7,7 @@ import { useUserContext } from 'state/user';
 import { useMutation, useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
+import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 
 const Wrapper = styled.div`
   width: 700px;
@@ -136,6 +137,7 @@ export default function PostUpload({ closeModal }) {
 
         const response = await fetch('/api/upload/post', {
           method: 'POST',
+          headers: defaultFetchHeaders,
           body: formData,
         });
 
