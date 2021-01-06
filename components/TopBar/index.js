@@ -35,6 +35,7 @@ const Wrapper = styled.div`
           text-transform: uppercase;
           font-style: italic;
           font-weight: 900;
+          font-family: 'Raleway', sans-serif;
         }
       }
 
