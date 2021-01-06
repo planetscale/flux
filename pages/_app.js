@@ -27,10 +27,10 @@ function App({ Component, pageProps }) {
       </Head>
       <Global
         styles={css`
-          @import url('https://fonts.googleapis.com/css?family=Inconsolata&display=swap');
+          @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
           html,
           body {
-            font-family: Inconsolata;
+            font-family: Inter;
             margin: unset;
             width: 100vw;
             height: 100vh;
@@ -41,7 +41,7 @@ function App({ Component, pageProps }) {
           textarea,
           button {
             font: unset;
-            font-family: Inconsolata;
+            font-family: Inter;
           }
         `}
       />
