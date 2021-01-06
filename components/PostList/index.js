@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 100%;
+  width: 747px;
   padding: 52px 48px;
   box-sizing: border-box;
 `;

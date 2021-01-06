@@ -8,6 +8,8 @@ import styled from '@emotion/styled';
 
 const HomeWrapper = styled.div`
   overflow-y: auto;
+  display: flex;
+  justify-content: center;
 `;
 
 // TODO: only get current org's data
@@ -37,11 +39,11 @@ const postListQuery = gql`
 
 // TODO: replace this hack with backend implementation
 function getLensPosts(lenses, subHeader) {
-  if (lenses === undefined || lenses === null) {
+  if (!lenses || lenses.length === 0) {
     return [];
   }
 
-  if (subHeader === '') {
+  if (subHeader.toLowerCase() === 'all') {
     return lenses.flatMap(lens => lens.posts);
   }
 
