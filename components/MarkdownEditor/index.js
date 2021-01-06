@@ -73,9 +73,9 @@ export default function MarkdownEditor() {
             tabIndex: -1,
           },
         }}
-        // paste={{
-        //   saveImage: save,
-        // }}
+        paste={{
+          saveImage: save,
+        }}
       />
     </div>
   );
