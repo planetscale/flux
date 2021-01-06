@@ -7,25 +7,19 @@ const TABS = {
   WRITE: 'write',
   PREVIWE: 'preview',
 };
+
+// TODO: remove before launch if we don't need this suggestions fn.
 function loadSuggestions(text) {
   return new Promise((accept, reject) => {
     setTimeout(() => {
       const suggestions = [
         {
-          preview: 'Andre',
-          value: '@andre',
+          preview: 'Abhi',
+          value: '@abhi',
         },
         {
-          preview: 'Angela',
-          value: '@angela',
-        },
-        {
-          preview: 'David',
-          value: '@david',
-        },
-        {
-          preview: 'Louise',
-          value: '@louise',
+          preview: 'Raunaq',
+          value: '@raunaq',
         },
       ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()));
       accept(suggestions);
