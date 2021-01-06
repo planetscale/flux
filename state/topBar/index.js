@@ -3,7 +3,7 @@ import { useImmer } from 'use-immer';
 
 const defaultContext = {
   header: null,
-  subHeader: null,
+  subHeader: 'all',
   error: null,
 };
 const TopBarContext = React.createContext();
@@ -34,7 +34,7 @@ const useTopBarActions = () => {
           if (header) {
             draft.header = header;
           }
-          if (subHeader || subHeader === '') {
+          if (subHeader) {
             draft.subHeader = subHeader;
           }
         });

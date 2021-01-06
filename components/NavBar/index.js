@@ -160,7 +160,6 @@ export default function Navbar({
                 onClick={() => {
                   setHeaders({
                     header: org.name,
-                    subHeader: '',
                   });
                   redirectToHome();
                 }}
