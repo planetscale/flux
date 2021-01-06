@@ -74,7 +74,7 @@ const useStyles = makeStyles(() => ({
     boxSizing: 'border-box',
 
     '& > .MuiInputBase-formControl': {
-      fontFamily: 'Inconsolata',
+      fontFamily: 'Inter',
       fontWeight: '500',
       lineHeight: '18px',
       fontSize: '18px',
