@@ -4,7 +4,7 @@ import { ButtonBase } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
-import { useTopBarActions, useTopBarContext } from 'state/topBar';
+import { useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
@@ -95,7 +95,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const { header, subHeader } = useTopBarContext();
-  const { setHeaders } = useTopBarActions();
   const handleModalOpen = content => {
     setModalOpen(true);
     setModalContent(content);
@@ -106,9 +105,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   };
 
   const redirectToHome = () => {
-    setHeaders({
-      subHeader: 'all',
-    });
     if (router.pathname !== '/') {
       router.push('/');
     }

@@ -18,15 +18,19 @@ const GRAPHQL_ENDPOINT = `/api/graphql`;
 function AppContainer({ children }) {
   const router = useRouter();
   const [token, setToken] = useState(null);
-  const { rehydrateUser } = useAuthActions();
+  const { rehydrateUser, setUserAuthChecked } = useAuthActions();
 
   useEffect(() => {
-    setFireAuthObserver(null, onAuthUserSuccess);
+    setFireAuthObserver(onAuthUserFailed, onAuthUserSuccess);
   }, []);
 
   const onAuthUserSuccess = user => {
     updateToken(user);
     rehydrateUser(user);
+  };
+
+  const onAuthUserFailed = () => {
+    setUserAuthChecked();
   };
 
   const updateToken = async user => {

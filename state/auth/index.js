@@ -5,6 +5,7 @@ import { loginWithFirebase, logoutWithFirebase } from 'utils/auth/clientConfig';
 const defaultContext = {
   isAuthed: false,
   user: null,
+  authChecked: false,
 };
 const AuthContext = React.createContext();
 AuthContext.displayName = 'Auth Context';
@@ -35,6 +36,7 @@ const useAuthActions = () => {
         updateState(draft => {
           draft.isAuthed = true;
           draft.user = res?.user;
+          draft.authChecked = true;
         });
       }
     } catch (e) {
@@ -50,6 +52,7 @@ const useAuthActions = () => {
         updateState(draft => {
           draft.isAuthed = false;
           draft.user = null;
+          draft.authChecked = false;
         });
       });
     } catch (e) {
@@ -74,7 +77,21 @@ const useAuthActions = () => {
     }
   };
 
-  return { userLogin, userLogout, rehydrateUser };
+  const setUserAuthChecked = () => {
+    try {
+      updateState(draft => {
+        draft.isAuthed = false;
+        draft.user = null;
+        draft.authChecked = true;
+      });
+    } catch (e) {
+      updateState(draft => {
+        draft.error = e;
+      });
+    }
+  };
+
+  return { userLogin, userLogout, rehydrateUser, setUserAuthChecked };
 };
 
 export { AuthContextProvider, useAuthContext, useAuthActions };
