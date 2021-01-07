@@ -21,16 +21,11 @@ const postListQuery = gql`
         posts {
           id
           title
+          summary
           author {
             displayName
           }
           createdAt
-          replies {
-            id
-          }
-          stars {
-            id
-          }
         }
       }
     }
