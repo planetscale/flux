@@ -73,7 +73,7 @@ export default function Home({ href, ...props }) {
       });
     }
   }, [user?.org]);
-  console.log(postListResult);
+
   return (
     <HomeWrapper>
       <PostList
