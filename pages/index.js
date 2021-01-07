@@ -7,7 +7,6 @@ import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 
 const HomeWrapper = styled.div`
-  overflow-y: auto;
   display: flex;
   justify-content: center;
 `;

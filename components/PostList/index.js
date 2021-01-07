@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 747px;
-  padding: 84px 48px;
+  width: 90ch;
+  padding: 48px;
   box-sizing: border-box;
+  border-left: 1px solid #eee;
 `;
 
 const Post = styled.div`
@@ -31,15 +32,6 @@ const PostInfo = styled.div`
     margin: 0 0 8px 0;
   }
 
-  > div:first-of-type {
-    display: flex;
-    align-items: center;
-    height: 15px;
-    font-size: 12px;
-    line-height: 15px;
-    color: #666666;
-  }
-
   > div:nth-of-type(2) {
     height: 39px;
     font-weight: bold;
@@ -53,6 +45,15 @@ const PostInfo = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+`;
+
+const MetaInformation = styled.div`
+  display: flex;
+  align-items: center;
+  height: 15px;
+  font-size: 12px;
+  line-height: 15px;
+  color: #666666;
 `;
 
 export default function PostList({ posts = [] }) {
@@ -73,11 +74,11 @@ export default function PostList({ posts = [] }) {
             }}
           >
             <PostInfo>
-              <div>
+              <MetaInformation>
                 <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
                 <div>&nbsp; &middot; &nbsp;</div>
                 <div>{author?.displayName}</div>
-              </div>
+              </MetaInformation>
               <div>{title}</div>
               {summary && <div>{summary}</div>}
             </PostInfo>
