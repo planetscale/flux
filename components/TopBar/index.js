@@ -9,13 +9,12 @@ import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 95px;
-  border-bottom: 1px solid #000000;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  width: 100vw;
+  border-bottom: 1px solid #eee;
   padding: 30px;
-  box-sizing: border-box;
 
   > div:first-of-type {
     font-size: 24px;
@@ -72,20 +71,21 @@ const StyledModal = styled(Modal)`
 
 const AddUpdateButton = styled(ButtonBase)`
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  width: 140px;
-  height: 34px;
-  background: #000000;
-  border: 1px solid #e1e1e1;
-  box-sizing: border-box;
+  background-color: #000000;
   border-radius: 99px;
   color: #ffffff;
+  padding: 8px 16px;
 
   img {
     width: 12px;
     height: auto;
-    margin: 0 13.75px 0 0;
+    margin-right: 16px;
+  }
+
+  span {
+    font-size: 14px;
   }
 `;
 

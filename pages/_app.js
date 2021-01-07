@@ -28,9 +28,14 @@ function App({ Component, pageProps }) {
       <Global
         styles={css`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap');
+
+          * {
+            box-sizing: border-box;
+          }
+
           html,
           body {
-            font-family: Inter;
+            font-family: 'Inter', sans-serif;
             margin: unset;
             width: 100vw;
             height: 100vh;
@@ -41,7 +46,7 @@ function App({ Component, pageProps }) {
           textarea,
           button {
             font: unset;
-            font-family: Inter;
+            font-family: 'Inter', sans-serif;
           }
         `}
       />
