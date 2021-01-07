@@ -14,6 +14,10 @@ const Wrapper = styled.div`
   width: 100vw;
   border-bottom: 1px solid #eee;
   padding: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
 
   > div:first-of-type {
     font-size: 24px;

@@ -3,23 +3,41 @@ import { useRouter } from 'next/router';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 747px;
-  padding: 84px 48px;
+  width: 90ch;
+  padding: 48px 16px;
   box-sizing: border-box;
+  border-left: 1px solid #eee;
 `;
 
 const Post = styled.div`
-  width: inherit;
+  position: relative;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  cursor: pointer;
-  margin: 0 0 50px 0;
+  padding: 24px 16px;
+  border-radius: 8px;
+  margin: 0 0 30px 0;
 
   :hover {
-    > div > div:first-of-type {
-      text-decoration: underline;
+    cursor: pointer;
+    background-color: #f7f7f7;
+
+    &:before {
+      background-color: #c56a86;
     }
+  }
+
+  :before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-radius: 99px;
+    border: 8px solid white;
+    width: 8px;
+    height: 8px;
+    background-color: #999;
+    left: -28px;
   }
 `;
 
@@ -27,32 +45,29 @@ const PostInfo = styled.div`
   display: flex;
   flex-direction: column;
 
-  > div {
-    margin: 0 0 8px 0;
+  > :not(:last-child) {
+    margin-bottom: 8px;
   }
+`;
 
-  > div:first-of-type {
-    display: flex;
-    align-items: center;
-    height: 15px;
-    font-size: 12px;
-    line-height: 15px;
-    color: #666666;
-  }
+const MetaInformation = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 12px;
+  line-height: 15px;
+  color: #666666;
+`;
 
-  > div:nth-of-type(2) {
-    height: 39px;
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 39px;
-  }
+const PostTitle = styled.h2`
+  margin: 0;
+  font-weight: bold;
+  font-size: 32px;
+`;
 
-  > div:nth-of-type(3) {
-    height: 19px;
-    max-width: 747px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+const PostSubTitle = styled.p`
+  margin: 0;
+  font-size: 16px;
 `;
 
 export default function PostList({ posts = [] }) {
@@ -73,13 +88,13 @@ export default function PostList({ posts = [] }) {
             }}
           >
             <PostInfo>
-              <div>
+              <MetaInformation>
                 <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
                 <div>&nbsp; &middot; &nbsp;</div>
                 <div>{author?.displayName}</div>
-              </div>
-              <div>{title}</div>
-              {summary && <div>{summary}</div>}
+              </MetaInformation>
+              <PostTitle>{title}</PostTitle>
+              <PostSubTitle>{summary}</PostSubTitle>
             </PostInfo>
           </Post>
         );
