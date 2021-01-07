@@ -33,6 +33,10 @@ const InputBase = styled.input`
   :focus {
     outline: none;
   }
+
+  ::placeholder {
+    color: #ccc;
+  }
 `;
 
 const TimeAndTags = styled.div``;
@@ -103,8 +107,26 @@ const lensesQuery = gql`
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
+
+  const months = {
+    0: 'Jan',
+    1: 'Feb',
+    2: 'Mar',
+    3: 'Apr',
+    4: 'May',
+    5: 'Jun',
+    6: 'Jul',
+    7: 'Aug',
+    8: 'Sep',
+    9: 'Oct',
+    10: 'Nov',
+    11: 'Dec',
+  };
+
   const [state, updateState] = useImmer({
-    time: new Date().toLocaleString(),
+    date: new Date().getDate(),
+    month: months[new Date().getMonth()],
+    year: new Date().getFullYear(),
     title: '',
     subtitle: '',
     content: '',
@@ -180,7 +202,9 @@ export default function NewPost() {
     <Wrapper>
       <div>
         <TimeAndTags>
-          <div>{state.time}</div>
+          <div>
+            {state.date} {state.month} {state.year}
+          </div>
           <div></div>
         </TimeAndTags>
         <TitleInput
