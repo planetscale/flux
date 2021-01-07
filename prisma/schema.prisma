@@ -68,6 +68,7 @@ model Reply {
   author     User        @relation(fields: [authorId], references: [id])
   authorId   Int
   content    String
+  parentId   Int?
 }
 
 model Star {

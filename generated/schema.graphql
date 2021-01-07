@@ -38,6 +38,17 @@ input IntFilter {
   notIn: [Int!]
 }
 
+input IntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
 type Lens {
   description: String!
   id: Int!
@@ -233,6 +244,17 @@ input NestedIntFilter {
   notIn: [Int!]
 }
 
+input NestedIntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
 input NestedStringFilter {
   contains: String
   endsWith: String
@@ -271,6 +293,14 @@ input NullableDateTimeFieldUpdateOperationsInput {
 
 input NullableEnumRoleFieldUpdateOperationsInput {
   set: Role
+}
+
+input NullableIntFieldUpdateOperationsInput {
+  decrement: Int
+  divide: Int
+  increment: Int
+  multiply: Int
+  set: Int
 }
 
 input NullableStringFieldUpdateOperationsInput {
@@ -718,6 +748,7 @@ type Reply {
   content: String!
   createdAt: DateTime
   id: Int!
+  parentId: Int
   post: Post!
 }
 
@@ -725,6 +756,7 @@ input ReplyCreateInput {
   author: UserCreateOneWithoutReplyInput!
   content: String!
   createdAt: DateTime
+  parentId: Int
   post: PostCreateOneWithoutRepliesInput!
 }
 
@@ -753,6 +785,7 @@ input ReplyCreateOrConnectWithoutpostInput {
 input ReplyCreateWithoutAuthorInput {
   content: String!
   createdAt: DateTime
+  parentId: Int
   post: PostCreateOneWithoutRepliesInput!
 }
 
@@ -760,6 +793,7 @@ input ReplyCreateWithoutPostInput {
   author: UserCreateOneWithoutReplyInput!
   content: String!
   createdAt: DateTime
+  parentId: Int
 }
 
 input ReplyScalarWhereInput {
@@ -770,6 +804,7 @@ input ReplyScalarWhereInput {
   id: IntFilter
   NOT: [ReplyScalarWhereInput!]
   OR: [ReplyScalarWhereInput!]
+  parentId: IntNullableFilter
   postId: IntFilter
 }
 
@@ -777,12 +812,14 @@ input ReplyUpdateInput {
   author: UserUpdateOneRequiredWithoutReplyInput
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  parentId: NullableIntFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
 input ReplyUpdateManyMutationInput {
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  parentId: NullableIntFieldUpdateOperationsInput
 }
 
 input ReplyUpdateManyWithoutAuthorInput {
@@ -824,6 +861,7 @@ input ReplyUpdateManyWithWhereWithoutPostInput {
 input ReplyUpdateWithoutAuthorInput {
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  parentId: NullableIntFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
@@ -831,6 +869,7 @@ input ReplyUpdateWithoutPostInput {
   author: UserUpdateOneRequiredWithoutReplyInput
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  parentId: NullableIntFieldUpdateOperationsInput
 }
 
 input ReplyUpdateWithWhereUniqueWithoutAuthorInput {
