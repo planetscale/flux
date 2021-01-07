@@ -5,7 +5,7 @@ import { useUserActions, useUserContext } from 'state/user';
 
 export default function AuthGuard({ token, children }) {
   const router = useRouter();
-  const { isAuthed, user: authUser } = useAuthContext();
+  const { isAuthed, authChecked, user: authUser } = useAuthContext();
   const { user, loaded } = useUserContext();
   const { getUser } = useUserActions();
 
@@ -20,10 +20,10 @@ export default function AuthGuard({ token, children }) {
   useEffect(() => {
     if (isAuthed && loaded && user) {
       router.push('/');
-    } else if ((!isAuthed && loaded) || (isAuthed && loaded && !user)) {
+    } else if ((!isAuthed && authChecked) || (isAuthed && loaded && !user)) {
       router.push('/login');
     }
-  }, [isAuthed, user, loaded]);
+  }, [isAuthed, user, loaded, authChecked]);
 
   return <>{children}</>;
 }
