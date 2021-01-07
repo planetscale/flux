@@ -22,7 +22,7 @@ function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Parallax</title>
+        <title>Flux</title>
         <link rel="icon" href="/favicon.svg" />
       </Head>
       <Global
