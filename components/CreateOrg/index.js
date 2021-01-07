@@ -93,7 +93,7 @@ const getOrg = async (urqlClient, { name }) => {
 };
 
 const getOrgNameFromEmailDomain = email => {
-  return email.split('@').pop().split('.')[0];
+  return email?.split('@').pop().split('.')[0] ?? '';
 };
 
 export default function CreateOrg({ name, email, avatar }) {

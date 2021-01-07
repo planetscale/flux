@@ -18,12 +18,12 @@ export default function AuthGuard({ token, children }) {
   }, [isAuthed, token]);
 
   useEffect(() => {
-    if (isAuthed && user) {
+    if (isAuthed && authUser) {
       router.push('/');
-    } else if (!isAuthed || (isAuthed && loaded && !user)) {
+    } else if (!isAuthed || (isAuthed && loaded && !authUser)) {
       router.push('/login');
     }
-  }, [isAuthed, user, loaded]);
+  }, [isAuthed, authUser, loaded]);
 
   return <>{children}</>;
 }
