@@ -14,13 +14,13 @@ const Post = styled.div`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  padding: 16px;
+  border-radius: 8px;
   margin: 0 0 50px 0;
 
   :hover {
-    > div > div:first-of-type {
-      text-decoration: underline;
-    }
+    cursor: pointer;
+    background-color: #f7f7f7;
   }
 `;
 
