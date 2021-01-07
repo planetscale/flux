@@ -1,6 +1,5 @@
 import { parseMarkdown } from '../../../utils/markdown/parser';
 import { PrismaClient } from '@prisma/client';
-import fs from 'fs';
 import { IncomingForm } from 'formidable';
 import Cors from 'cors';
 import { getUserId } from 'utils/auth/serverConfig';
@@ -67,27 +66,31 @@ export default async (req, res) => {
     });
   });
 
-  const readFileCallback = async (err, buf) => {
-    if (err) throw new Error('Error reading file: ', err);
-    const data = await parseMarkdown(buf);
-    const result = await prisma.post.create({
-      data: {
-        content: data.content,
-        summary: data.summary,
-        title: data.title,
-        tags: data.tags,
-        author: {
-          connect: { id: Number(uploadRequest.fields.userId) },
-        },
-        lens: {
-          connect: { id: Number(uploadRequest.fields.lensId) },
-        },
+  // TODO: handle error, return corresponding error message
+  const {
+    content,
+    summary,
+    title,
+    tags,
+    userId,
+    lensId,
+  } = uploadRequest.fields;
+  const parsedContent = await parseMarkdown(content);
+
+  const result = await prisma.post.create({
+    data: {
+      content: parsedContent,
+      summary: summary,
+      title: title,
+      tags: tags,
+      author: {
+        connect: { id: Number(userId) },
       },
-    });
+      lens: {
+        connect: { id: Number(lensId) },
+      },
+    },
+  });
 
-    res.json(result);
-  };
-
-  fs.readFile(uploadRequest?.files.file.path, 'utf8', readFileCallback);
-  // TODO: move the res.json(result) outside of the callback scope
+  res.json(result);
 };
