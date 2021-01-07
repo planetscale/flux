@@ -116,6 +116,11 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
     }
   };
 
+  const redirectToNew = () => {
+    if (router.pathname !== '/new') {
+      router.push('/new');
+    }
+  };
   return (
     <Wrapper>
       <div>
@@ -149,12 +154,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           </>
         </StyledModal>
 
-        <AddUpdateButton
-          type="button"
-          onClick={() => {
-            handleModalOpen(UPLOAD_MARKDOWN);
-          }}
-        >
+        <AddUpdateButton type="button" onClick={redirectToNew}>
           <img src="/plus.svg" alt="upload post" width="26px" height="26px" />
           <span>Add Update</span>
         </AddUpdateButton>
