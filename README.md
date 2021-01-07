@@ -28,3 +28,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Tech Debt
+
+Prisma currently does not support [native data types](https://github.com/prisma/prisma/issues/4713). Because of this,
+the following commands need to be ran against any new database that we set up against this project:
+
+```SQL
+ALTER TABLE Reply
+MODIFY COLUMN content TEXT;
+
+ALTER TABLE Post
+MODIFY COLUMN content TEXT;
+```
