@@ -4,7 +4,6 @@ import { ButtonBase } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
-import PostUpload from 'components/PostUpload';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 
@@ -89,7 +88,6 @@ const AddUpdateButton = styled(ButtonBase)`
   }
 `;
 
-const UPLOAD_MARKDOWN = 'upload markdown';
 const USER_SETTINGS = 'user settings';
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
@@ -140,10 +138,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           aria-describedby={modalContent}
         >
           <>
-            {modalContent === UPLOAD_MARKDOWN && (
-              <PostUpload closeModal={handleModalClose} />
-            )}
-
             {modalContent === USER_SETTINGS && (
               <UserSettings
                 profileImg={profileImg}
