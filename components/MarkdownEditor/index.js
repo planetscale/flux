@@ -27,12 +27,7 @@ function loadSuggestions(text) {
   });
 }
 
-export default function MarkdownEditor() {
-  const [value, setValue] = useState(
-    `---title: Test Post
-    summary: Testing uploading to Parallax.
-    ---`
-  );
+export default function MarkdownEditor({ content, handleContentChange }) {
   const [selectedTab, setSelectedTab] = useState(TABS.WRITE);
 
   const save = async function* (data) {
@@ -60,8 +55,8 @@ export default function MarkdownEditor() {
   return (
     <div className="container">
       <ReactMde
-        value={value}
-        onChange={setValue}
+        value={content}
+        onChange={handleContentChange}
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
         generateMarkdownPreview={markdown =>
