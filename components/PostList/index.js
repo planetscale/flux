@@ -4,7 +4,7 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
   width: 90ch;
-  padding: 48px;
+  padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid #eee;
 `;
@@ -14,9 +14,9 @@ const Post = styled.div`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  padding: 16px;
+  padding: 24px 16px;
   border-radius: 8px;
-  margin: 0 0 50px 0;
+  margin: 0 0 30px 0;
 
   :hover {
     cursor: pointer;
@@ -28,32 +28,32 @@ const PostInfo = styled.div`
   display: flex;
   flex-direction: column;
 
-  > div {
-    margin: 0 0 8px 0;
-  }
-
-  > div:nth-of-type(2) {
-    height: 39px;
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 39px;
-  }
-
-  > div:nth-of-type(3) {
-    height: 19px;
-    max-width: 747px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  > :not(:last-child) {
+    margin-bottom: 8px;
   }
 `;
 
 const MetaInformation = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
-  height: 15px;
   font-size: 12px;
   line-height: 15px;
   color: #666666;
+`;
+
+const PostTitle = styled.h2`
+  margin: 0;
+  font-weight: bold;
+  font-size: 32px;
+`;
+
+const PostSubTitle = styled.p`
+  margin: 0;
+  height: 19px;
+  max-width: 747px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default function PostList({ posts = [] }) {
@@ -79,8 +79,8 @@ export default function PostList({ posts = [] }) {
                 <div>&nbsp; &middot; &nbsp;</div>
                 <div>{author?.displayName}</div>
               </MetaInformation>
-              <div>{title}</div>
-              {summary && <div>{summary}</div>}
+              <PostTitle>{title}</PostTitle>
+              <PostSubTitle>{summary}</PostSubTitle>
             </PostInfo>
           </Post>
         );
