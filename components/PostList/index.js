@@ -4,24 +4,22 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
   width: 747px;
-  padding: 52px 48px;
+  padding: 84px 48px;
   box-sizing: border-box;
 `;
 
 const Post = styled.div`
-  width: 452px;
+  width: inherit;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+  margin: 0 0 50px 0;
 
   :hover {
     > div > div:first-of-type {
       text-decoration: underline;
     }
-  }
-
-  &:not(:last-of-type) {
-    margin: 0 0 24px 0;
   }
 `;
 

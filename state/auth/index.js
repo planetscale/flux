@@ -30,10 +30,13 @@ const useAuthActions = () => {
   const userLogin = async () => {
     try {
       const res = await loginWithFirebase();
-      updateState(draft => {
-        draft.isAuthed = true;
-        draft.user = res?.user;
-      });
+
+      if (res) {
+        updateState(draft => {
+          draft.isAuthed = true;
+          draft.user = res?.user;
+        });
+      }
     } catch (e) {
       updateState(draft => {
         draft.error = e;
