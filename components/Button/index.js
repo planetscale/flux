@@ -6,7 +6,7 @@ export const ButtonBase = styled.button`
   cursor: pointer;
   padding: unset;
   text-transform: capitalize;
-  display: block;
+  display: flex;
 
   &:focus {
     outline: none;

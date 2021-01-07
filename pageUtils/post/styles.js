@@ -7,6 +7,8 @@ const Wrapper = styled.div`
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const BodyWrapper = styled.div`

@@ -32,7 +32,6 @@ export default function PostPage() {
     numStars: 0,
   });
   const [reply, setReply] = useState('');
-  const { setHeaders } = useTopBarActions();
   const userContext = useUserContext();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
@@ -61,15 +60,6 @@ export default function PostPage() {
       });
     }
   }, [postDataResult]);
-
-  useEffect(() => {
-    if (lens?.name) {
-      setHeaders({
-        header: lens.name,
-        subHeader: title,
-      });
-    }
-  }, [lens, title]);
 
   const handleReplyChange = e => {
     setReply(e.target.value);
