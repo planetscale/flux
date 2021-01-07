@@ -10,9 +10,10 @@ const Wrapper = styled.div`
 `;
 
 const Post = styled.div`
-  width: inherit;
+  position: relative;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 24px 16px;
   border-radius: 8px;
@@ -21,6 +22,22 @@ const Post = styled.div`
   :hover {
     cursor: pointer;
     background-color: #f7f7f7;
+
+    &:before {
+      background-color: #c56a86;
+    }
+  }
+
+  :before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-radius: 99px;
+    border: 8px solid white;
+    width: 8px;
+    height: 8px;
+    background-color: #999;
+    left: -28px;
   }
 `;
 
@@ -50,10 +67,7 @@ const PostTitle = styled.h2`
 
 const PostSubTitle = styled.p`
   margin: 0;
-  height: 19px;
-  max-width: 747px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 16px;
 `;
 
 export default function PostList({ posts = [] }) {
