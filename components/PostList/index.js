@@ -26,33 +26,34 @@ const Post = styled.div`
 `;
 
 const PostInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    margin: 0 0 8px 0;
+  }
+
   > div:first-of-type {
-    font-size: 24px;
-    line-height: 25px;
-    color: #000000;
-    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+    height: 15px;
+    font-size: 12px;
+    line-height: 15px;
+    color: #666666;
   }
 
   > div:nth-of-type(2) {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    line-height: 15px;
-    color: #000000;
-
-    div {
-      margin: 0 16px 0 0;
-    }
+    height: 39px;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 39px;
   }
-`;
 
-const Stars = styled.div`
-  display: flex;
-  align-items: end;
-  margin: 6px 0 0 0;
-
-  img {
-    margin: 0 0 0 8px;
+  > div:nth-of-type(3) {
+    height: 19px;
+    max-width: 747px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -65,7 +66,7 @@ export default function PostList({ posts = [] }) {
   return (
     <Wrapper>
       {posts.map(post => {
-        const { id, title, author, createdAt, replies, stars } = post;
+        const { id, title, author, createdAt, summary } = post;
         return (
           <Post
             key={id}
@@ -74,17 +75,14 @@ export default function PostList({ posts = [] }) {
             }}
           >
             <PostInfo>
-              <div>{title}</div>
               <div>
+                <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
+                <div>&nbsp; &middot; &nbsp;</div>
                 <div>{author?.displayName}</div>
-                <div>{getLocaleDateTimeString(createdAt)}</div>
-                <div>|</div>
-                <div>{`${replies?.length} Comments`}</div>
               </div>
+              <div>{title}</div>
+              {summary && <div>{summary}</div>}
             </PostInfo>
-            <Stars>
-              {stars?.length} <img src="/star.svg" alt="star" />
-            </Stars>
           </Post>
         );
       })}
