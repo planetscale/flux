@@ -5,7 +5,7 @@ const options = {
 };
 
 const getLocaleDateTimeString = timeUTC => {
-  return new Date(`${timeUTC}`).toLocaleDateString(navigator.language, options);
+  return new Date(`${timeUTC}`).toLocaleDateString(process.env.language, options);
 };
 
 export { getLocaleDateTimeString };

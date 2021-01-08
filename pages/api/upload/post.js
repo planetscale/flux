@@ -3,6 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import { IncomingForm } from 'formidable';
 import Cors from 'cors';
 import { getUserId } from 'utils/auth/serverConfig';
+import { getLocaleDateTimeString } from '../../../utils/dateTime';
+
+const axios = require('axios');
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],
@@ -74,6 +77,9 @@ export default async (req, res) => {
     tags,
     userId,
     lensId,
+    userDisplayName = "Abhi Vaidyanatha",
+    userAvatar = "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
+    domain = "https://flux-lime.vercel.app",
   } = uploadRequest.fields;
   const parsedContent = await parseMarkdown(content);
 
@@ -92,5 +98,62 @@ export default async (req, res) => {
     },
   });
 
+  // If the post database request is pushed, fire a Slack notification.
+  const timeOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
+
+  const url = 'https://slack.com/api/chat.postMessage';
+  const slackRes = await axios.post(url, {
+    channel: '#flux-sandbox',
+    "attachments": [
+      {
+        "color": "#D491A5",
+        "blocks": [
+          {
+            "type": "context",
+            "elements": [
+              {
+                "type": "image",
+                "image_url": userAvatar,
+                "alt_text": "cute cat"
+              },
+              {
+                "type": "mrkdwn",
+                "text": `*${userDisplayName}* shared a new update.`
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `*<${domain}/|${title}>*  
+${summary}`
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "context",
+            "elements": [
+              {
+                "type": "plain_text",
+                "text": `posted on ${postTime}`,
+                "emoji": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }, { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } });
+
+  console.log('Done', slackRes.data);
   res.json(result);
 };
