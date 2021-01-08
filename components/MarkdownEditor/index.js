@@ -2,6 +2,15 @@ import ReactMde from 'react-mde';
 import ReactMarkdown from 'react-markdown';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { useState } from 'react';
+import styled from '@emotion/styled';
+
+const Wrapper = styled.div`
+  textarea {
+    :focus {
+      outline: none;
+    }
+  }
+`;
 
 const TABS = {
   WRITE: 'write',
@@ -53,7 +62,7 @@ export default function MarkdownEditor({ content, handleContentChange }) {
   };
 
   return (
-    <div className="container">
+    <Wrapper>
       <ReactMde
         value={content}
         onChange={handleContentChange}
@@ -72,6 +81,6 @@ export default function MarkdownEditor({ content, handleContentChange }) {
           saveImage: save,
         }}
       />
-    </div>
+    </Wrapper>
   );
 }
