@@ -35,7 +35,7 @@ const Content = styled.div`
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #f7f7f7;
   padding: 32px 0;
 `;
 
@@ -79,11 +79,10 @@ const CommentContent = styled.div`
 
 const Post = styled.div`
   width: 90ch;
-  margin-bottom: 60px;
 `;
 
 const ActionBar = styled.div`
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f7f7f7;
   padding: 16px 0;
 `;
 
