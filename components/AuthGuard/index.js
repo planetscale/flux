@@ -15,7 +15,7 @@ export default function AuthGuard({ token, children }) {
         email: authUser?.email,
       });
     }
-  }, [isAuthed, token, router.pathname]);
+  }, [isAuthed, token]);
 
   useEffect(() => {
     if (isAuthed && loaded && user) {
