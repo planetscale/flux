@@ -33,7 +33,7 @@ const Title = styled.div`
 const Content = styled.div`
   color: var(--text);
   font-size: 18px;
-  line-height: 22px;
+  line-height: 28px;
   letter-spacing: 0.02em;
   border-bottom: 1px solid #eeeeee;
   padding: 32px 0;
