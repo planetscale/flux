@@ -1,69 +1,43 @@
 import styled from '@emotion/styled';
-import { getLocaleDateTimeString } from 'utils/dateTime';
+import UserIcon from 'components/UserIcon';
 
 const Wrapper = styled.div`
-  margin: 0 0 24px 0;
-
-  > div:first-of-type {
-    line-height: 25px;
-    margin: 0 0 6px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    span:first-of-type {
-      font-size: 24px;
-    }
-
-    span:not(:first-of-type) {
-      opacity: 0.5;
-    }
-  }
-
-  > div:not(:first-of-type) {
-    font-size: 14px;
-    line-height: 15px;
-    opacity: 0.5;
-  }
-`;
-
-const Stars = styled.div`
   display: flex;
-  align-items: baseline;
-  font-size: 18px;
+  align-items: center;
+`;
 
-  :hover {
-    cursor: pointer;
+const UserMetadata = styled.div`
+  margin: 0 0 0 16px;
+  display: flex;
+  flex-direction: column;
+
+  span:first-of-type {
+    height: 22px;
+    font-size: 18px;
+    line-height: 22px;
   }
 
-  img {
-    margin: 0 0 0 8px;
+  span:nth-of-type(2) {
+    height: 19px;
+    font-size: 16px;
+    line-height: 19px;
+    color: #cccccc;
   }
 `;
 
-export default function AuthorNamePlate({
-  displayName,
-  userHandle,
-  time,
-  numComments,
-  numStars,
-  onStarClick = null,
-  ...props
-}) {
+export default function AuthorNamePlate({ displayName, userHandle, avatar }) {
   return (
     <Wrapper>
-      <div>
-        <div>
-          <span>{displayName} </span>
-          <span>{userHandle}</span>
-        </div>
-        <Stars onClick={onStarClick}>
-          {numStars} <img src="/star.svg" alt="star" />
-        </Stars>
-      </div>
-      <div>
-        {getLocaleDateTimeString(time)} | {numComments} comments
-      </div>
+      <UserIcon
+        src={avatar || '/user_profile_icon.svg'}
+        width="34px"
+        height="34px"
+        alt="user avatar"
+      />
+      <UserMetadata>
+        <span>{displayName} </span>
+        <span>@{userHandle}</span>
+      </UserMetadata>
     </Wrapper>
   );
 }

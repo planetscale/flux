@@ -1,38 +1,50 @@
 import styled from '@emotion/styled';
 import { ButtonBase } from 'components/Button';
 
-const Wrapper = styled.div`
-  padding: 60px 68px;
+const PageWrapper = styled.div`
+  padding: 42px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
-const BodyWrapper = styled.div`
-  padding: 0 0 0 60px;
-  border-left: 1px solid #000000;
+const PostMetadata = styled.div`
+  padding: 0 0 32px 0;
+  border-bottom: 1px solid #e1e1e1;
 `;
 
-const Post = styled.div`
-  :not(:last-of-type) {
-    margin: 0 0 72px 0;
-  }
+const DateTime = styled.div`
+  height: 19px;
+  font-size: 16px;
+  line-height: 19px;
+`;
 
-  :last-of-type {
-    padding: 0 0 36px 0;
-  }
+const Title = styled.div`
+  width: 392px;
+  height: 58px;
+  margin: 8px 0 24px 0;
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 58px;
 `;
 
 const Content = styled.div`
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+  margin: 32px 0 0 0;
+  padding: 0 0 42px 0;
+  border-bottom: 1px solid #eeeeee;
 `;
 
 const Comment = styled.div`
-  padding: 0 0 36px 0;
+  padding: 0 0 30px 0;
+  border-bottom: 1px solid #eeeeee;
+  margin: 42px 0 0 0;
 
   > div:last-of-type {
     font-size: 14px;
@@ -42,23 +54,19 @@ const Comment = styled.div`
   }
 `;
 
-const UserIconWrapper = styled.div`
-  padding: 12px;
-  background-color: #ffffff;
-  position: relative;
-  float: left;
-  overflow-y: hidden;
-  margin: 0 -86px 0 0; // user icon offsets
-  transform: translate(-104px, -18px);
-`;
-
 const Reply = styled.div`
-  padding: 0 0 86px 60px;
+  margin: 76px 42px 0;
 
   textarea {
     resize: none;
-    height: 125px;
+    height: 205px;
+    max-width: 747px;
     min-width: 495px;
+    border-radius: 8px;
+
+    :focus {
+      outline: none;
+    }
   }
 
   ${ButtonBase} {
@@ -72,4 +80,25 @@ const Reply = styled.div`
   }
 `;
 
-export { Wrapper, BodyWrapper, Post, Content, Comment, UserIconWrapper, Reply };
+const CommentContent = styled.div`
+  margin: 16px 0;
+  height: 22px;
+  font-size: 18px;
+  line-height: 22px;
+`;
+
+const Post = styled.div`
+  padding: 0 42px;
+`;
+
+export {
+  PageWrapper,
+  Content,
+  Comment,
+  Reply,
+  PostMetadata,
+  DateTime,
+  Title,
+  CommentContent,
+  Post,
+};
