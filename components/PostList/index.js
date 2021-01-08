@@ -15,16 +15,24 @@ const Post = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 16px;
-  border-radius: 8px;
+
   margin: 0 0 30px 0;
 
   :hover {
     cursor: pointer;
-    background-color: #f7f7f7;
+
+    > div {
+      background-color: #f7f7f7;
+    }
 
     &:before {
       background-color: #c56a86;
+    }
+  }
+
+  :active {
+    > div {
+      transform: scale(0.99);
     }
   }
 
@@ -37,8 +45,15 @@ const Post = styled.div`
     width: 8px;
     height: 8px;
     background-color: #999;
+    top: 20px;
     left: -28px;
   }
+`;
+
+const PostWrapper = styled.div`
+  padding: 24px 16px;
+  border-radius: 8px;
+  transition: all 350ms;
 `;
 
 const PostInfo = styled.div`
@@ -87,15 +102,17 @@ export default function PostList({ posts = [] }) {
               handlePostClick(id);
             }}
           >
-            <PostInfo>
-              <MetaInformation>
-                <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
-                <div>&nbsp; &middot; &nbsp;</div>
-                <div>{author?.displayName}</div>
-              </MetaInformation>
-              <PostTitle>{title}</PostTitle>
-              <PostSubTitle>{summary}</PostSubTitle>
-            </PostInfo>
+            <PostWrapper>
+              <PostInfo>
+                <MetaInformation>
+                  <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
+                  <div>&nbsp; &middot; &nbsp;</div>
+                  <div>{author?.displayName}</div>
+                </MetaInformation>
+                <PostTitle>{title}</PostTitle>
+                <PostSubTitle>{summary}</PostSubTitle>
+              </PostInfo>
+            </PostWrapper>
           </Post>
         );
       })}
