@@ -27,12 +27,17 @@ const Post = styled.div`
 
     &:before {
       background-color: #c56a86;
+      transform: scale(1.2);
     }
   }
 
   :active {
     > div {
       transform: scale(0.99);
+    }
+
+    &:before {
+      transform: scale(1.4);
     }
   }
 
@@ -47,6 +52,7 @@ const Post = styled.div`
     background-color: #999;
     top: 20px;
     left: -28px;
+    transition: all 150ms;
   }
 `;
 
