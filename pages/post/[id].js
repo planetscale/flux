@@ -150,7 +150,7 @@ export default function PostPage() {
         <textarea value={reply} onChange={handleReplyChange}></textarea>
         <ButtonBase type="submit" onClick={handleCommentSubmit}>
           <img src="/icon_comment.svg" alt="button to submit response" />
-          Respond
+          Reply
         </ButtonBase>
       </Reply>
     </PageWrapper>
