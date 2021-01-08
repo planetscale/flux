@@ -10,6 +10,7 @@ export const ButtonBase = styled.button`
   background-color: var(--background);
   border: 2px solid var(--foreground);
   transition: all 150ms;
+  font-size: 14px;
 
   > img {
     width: 18px;
@@ -19,6 +20,7 @@ export const ButtonBase = styled.button`
 
   &:hover {
     cursor: pointer;
+    transform: scale(0.97);
 
     > img {
       filter: invert(100%);
@@ -44,5 +46,28 @@ export const ButtonMinor = styled(ButtonBase)`
   &:hover {
     background-color: var(--foreground);
     color: var(--background);
+  }
+`;
+
+export const ButtonLink = styled(ButtonBase)`
+  border: 0;
+  padding: 0;
+`;
+
+export const ButtonImage = styled(ButtonBase)`
+  border: 0;
+  padding: 0;
+  width: 38px;
+  height: 38px;
+
+  > img {
+    width: 100%;
+    height: auto;
+  }
+
+  :hover {
+    > img {
+      filter: unset;
+    }
   }
 `;

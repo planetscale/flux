@@ -54,6 +54,8 @@ function App({ Component, pageProps }) {
             --link: #007bc7;
             --text: rgb(60, 66, 87);
             --accent: #ccc;
+            --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04),
+              0px 4px 13px rgba(0, 0, 0, 0.08);
           }
         `}
       />

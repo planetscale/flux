@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Modal from '@material-ui/core/Modal';
-import { ButtonBase, ButtonMajor } from 'components/Button';
+import { ButtonImage, ButtonMajor, ButtonLink } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   width: 100vw;
   border-bottom: 1px solid #eee;
@@ -33,11 +34,12 @@ const Wrapper = styled.div`
       text-transform: capitalize;
 
       &:first-of-type {
-        ${ButtonBase} {
+        ${ButtonLink} {
+          font-family: 'Raleway', sans-serif;
           text-transform: uppercase;
           font-style: italic;
           font-weight: 900;
-          font-family: 'Raleway', sans-serif;
+          font-size: 24px;
         }
       }
 
@@ -72,26 +74,6 @@ const StyledModal = styled(Modal)`
   justify-content: center;
 `;
 
-const AddUpdateButton = styled(ButtonBase)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #000000;
-  border-radius: 99px;
-  color: #ffffff;
-  padding: 8px 16px;
-
-  img {
-    width: 12px;
-    height: auto;
-    margin-right: 16px;
-  }
-
-  span {
-    font-size: 14px;
-  }
-`;
-
 const USER_SETTINGS = 'user settings';
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
@@ -123,7 +105,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
     <Wrapper>
       <div>
         <div>
-          <ButtonBase onClick={redirectToHome}>flux</ButtonBase>
+          <ButtonLink onClick={redirectToHome}>flux</ButtonLink>
         </div>
         <div>/</div>
         <div>{header}</div>
@@ -153,19 +135,14 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           <span>Add Update</span>
         </ButtonMajor>
 
-        <ButtonBase
+        <ButtonImage
           type="button"
           onClick={() => {
             handleModalOpen(USER_SETTINGS);
           }}
         >
-          <UserIcon
-            src={profileImg}
-            width="34px"
-            height="34px"
-            alt="user avatar"
-          />
-        </ButtonBase>
+          <UserIcon src={profileImg} alt="Image of user" />
+        </ButtonImage>
       </ActionsWrapper>
     </Wrapper>
   );
