@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Modal from '@material-ui/core/Modal';
-import { ButtonBase } from 'components/Button';
+import { ButtonBase, ButtonMajor } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState } from 'react';
@@ -148,10 +148,10 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           </>
         </StyledModal>
 
-        <AddUpdateButton type="button" onClick={redirectToNew}>
-          <img src="/plus.svg" alt="upload post" width="26px" height="26px" />
+        <ButtonMajor type="button" onClick={redirectToNew}>
+          <img src="/icon_plus.svg" alt="Button to add update" />
           <span>Add Update</span>
-        </AddUpdateButton>
+        </ButtonMajor>
 
         <ButtonBase
           type="button"

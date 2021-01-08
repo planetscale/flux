@@ -1,10 +1,5 @@
-import styled from '@emotion/styled';
-import { ButtonPrimary } from 'components/Button';
+import { ButtonMajor } from 'components/Button';
 import { useAuthActions } from 'state/auth';
-
-const StyledButtonPrimary = styled(ButtonPrimary)`
-  margin: 0 38px 15px 38px;
-`;
 
 export default function Logout() {
   const { userLogout } = useAuthActions();
@@ -14,8 +9,8 @@ export default function Logout() {
   };
 
   return (
-    <StyledButtonPrimary type="button" onClick={handleLogout}>
+    <ButtonMajor type="button" onClick={handleLogout}>
       Log Out
-    </StyledButtonPrimary>
+    </ButtonMajor>
   );
 }

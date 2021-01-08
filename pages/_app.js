@@ -33,20 +33,27 @@ function App({ Component, pageProps }) {
             box-sizing: border-box;
           }
 
-          html,
           body {
             font-family: 'Inter', sans-serif;
             margin: unset;
             width: 100vw;
-            height: 100vh;
             overflow: auto;
           }
+
           input,
           select,
           textarea,
           button {
             font: unset;
             font-family: 'Inter', sans-serif;
+          }
+
+          :root {
+            --background: #fff;
+            --foreground: #000;
+            --link: #007bc7;
+            --text: rgb(60, 66, 87);
+            --accent: #ccc;
           }
         `}
       />

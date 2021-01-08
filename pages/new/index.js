@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ButtonBase } from 'components/Button';
+import { ButtonMajor, ButtonMinor } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
@@ -35,7 +35,7 @@ const InputBase = styled.input`
   }
 
   ::placeholder {
-    color: #ccc;
+    color: var(--accent);
   }
 `;
 
@@ -53,32 +53,6 @@ const SubtitleInput = styled(InputBase)`
   height: 22px;
   font-size: 18px;
   line-height: 22px;
-`;
-
-const SubmitButton = styled(ButtonBase)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-  width: 90px;
-  height: 34px;
-  background: #000000;
-  color: #ffffff;
-  box-sizing: border-box;
-  border-radius: 99px;
-`;
-
-const CancelButton = styled(ButtonBase)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-  width: 78px;
-  height: 34px;
-  background: #ffffff;
-  border: 1px solid #000000;
-  box-sizing: border-box;
-  border-radius: 99px;
 `;
 
 const ActionItems = styled.div`
@@ -198,9 +172,7 @@ export default function NewPost() {
   return (
     <Wrapper>
       <div>
-        <TimeAndTags>
-          <div>{state.dateTime}</div>
-        </TimeAndTags>
+        <TimeAndTags>{state.dateTime}</TimeAndTags>
         <TitleInput
           placeholder="Enter Title"
           value={state.title}
@@ -218,8 +190,11 @@ export default function NewPost() {
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>
-          <SubmitButton onClick={handlePostSubmit}>Post</SubmitButton>
-          <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+          <ButtonMajor onClick={handlePostSubmit}>
+            <img src="/icon_post.svg" alt="Button to submit post" />
+            Post
+          </ButtonMajor>
+          <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
         </ActionItems>
       </div>
     </Wrapper>
