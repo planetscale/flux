@@ -30,6 +30,17 @@ export const ButtonBase = styled.button`
   &:focus {
     outline: none;
   }
+
+  &:disabled {
+    border: 2px solid #ccc;
+
+    &:hover {
+      cursor: default;
+      transform: scale(1);
+      background-color: unset;
+      color: #ccc;
+    }
+  }
 `;
 
 export const ButtonMajor = styled(ButtonBase)`

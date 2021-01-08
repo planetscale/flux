@@ -25,6 +25,11 @@ const StyledInput = styled.input`
   :focus {
     outline: none;
   }
+
+  :disabled {
+    color: #ccc;
+    background-color: unset;
+  }
 `;
 
 const StyledHelperText = styled.p((error = null, success = null) => {
