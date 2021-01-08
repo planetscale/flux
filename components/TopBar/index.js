@@ -23,7 +23,6 @@ const Wrapper = styled.div`
   > div:first-of-type {
     font-size: 24px;
     line-height: 28px;
-    color: #000000;
 
     > div {
       display: flex;
@@ -75,6 +74,10 @@ const ForwardSlash = styled.div`
   color: #e1e1e1;
 `;
 
+const SubHeader = styled.div`
+  color: var(--text);
+`;
+
 const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -124,7 +127,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         <ForwardSlash>/</ForwardSlash>
         <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
         <ForwardSlash>/</ForwardSlash>
-        <div>{subHeader}</div>
+        <SubHeader>{subHeader}</SubHeader>
       </SlasherFlick>
       <ActionsWrapper>
         <StyledModal
