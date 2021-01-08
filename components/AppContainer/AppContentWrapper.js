@@ -20,7 +20,7 @@ export default function AppContentWrapper({ children }) {
   useEffect(() => {
     if (router.pathname === '/new') {
       setHeaders({
-        subHeader: 'Add a new post',
+        subHeader: 'Add update',
       });
     } else {
       setHeaders({
