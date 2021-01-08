@@ -10,7 +10,6 @@ export default function AuthGuard({ token, children }) {
   const { getUser } = useUserActions();
 
   useEffect(async () => {
-    console.log(isAuthed, token);
     if (isAuthed && token) {
       getUser({
         email: authUser?.email,
