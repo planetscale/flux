@@ -13,6 +13,7 @@ import {
   Comment,
   Reply,
   Post,
+  StarBox,
   CommentContent,
 } from 'pageUtils/post/styles';
 import {
@@ -97,15 +98,9 @@ export default function PostPage() {
         userId: userContext.user.id,
       });
       if (!res.data) {
-        updatePostState(draft => {
-          draft.numStars = draft.numStars - 1;
-        });
         console.error(e);
       }
     } catch (e) {
-      updatePostState(draft => {
-        draft.numStars = draft.numStars - 1;
-      });
       console.error(e);
     }
   };
@@ -133,6 +128,10 @@ export default function PostPage() {
             <ReactMarkdownWithHtml allowDangerousHtml>
               {content}
             </ReactMarkdownWithHtml>
+            <StarBox onClick={handleStarClick}>
+              <img src="/star.svg" alt="star" />
+              <div>{postState.numStars}</div>
+            </StarBox>
           </Content>
         </Post>
 
