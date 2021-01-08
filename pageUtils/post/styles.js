@@ -31,18 +31,19 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
+  color: var(--text);
   font-size: 18px;
-  line-height: 22px;
+  line-height: 28px;
   letter-spacing: 0.02em;
-  margin: 32px 0 0 0;
-  padding: 0 0 32px 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #f7f7f7;
+  padding: 32px 0;
 `;
 
 const Comment = styled.div`
   width: 90ch;
   padding: 0 0 30px 0;
   border-bottom: 1px solid #eeeeee;
+  color: var(--text);
   margin: 42px 0 0 0;
 `;
 
@@ -78,32 +79,11 @@ const CommentContent = styled.div`
 
 const Post = styled.div`
   width: 90ch;
-  margin-bottom: 60px;
 `;
 
-const StarBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  width: 78px;
-  height: 34px;
-  border: 1px solid #e1e1e1;
-  box-sizing: border-box;
-  border-radius: 99px;
-
-  img {
-    width: 16px;
-    height: auto;
-  }
-
-  div {
-    font-size: 14px;
-    line-height: 18px;
-  }
-  :hover {
-    cursor: pointer;
-  }
+const ActionBar = styled.div`
+  border-bottom: 1px solid #f7f7f7;
+  padding: 16px 0;
 `;
 
 export {
@@ -116,5 +96,5 @@ export {
   Title,
   CommentContent,
   Post,
-  StarBox,
+  ActionBar,
 };

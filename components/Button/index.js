@@ -49,6 +49,20 @@ export const ButtonMinor = styled(ButtonBase)`
   }
 `;
 
+export const ButtonTertiary = styled(ButtonBase)`
+  border: 1px solid #e1e1e1;
+
+  &:hover {
+    color: var(--background);
+    background: #ff98b8;
+    border-color: #ff98b8;
+  }
+
+  &:active {
+    transform: scale(0.75);
+  }
+`;
+
 export const ButtonLink = styled(ButtonBase)`
   border: 0;
   padding: 0;
