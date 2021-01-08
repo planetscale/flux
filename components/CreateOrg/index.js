@@ -31,11 +31,29 @@ const InputWrapper = styled.div`
   border-bottom: 1px solid #f7f7f7;
   padding: 32px;
 
+  &:hover {
+    cursor: pointer;
+    background-color: #f7f7f7;
+
+    input {
+      background-color: #f7f7f7;
+    }
+  }
+
   &.disabled {
+    cursor: default;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     background-color: #f7f7f7;
     color: #ccc;
+
+    &:hover {
+      background-color: #f7f7f7;
+
+      input {
+        background-color: #f7f7f7;
+      }
+    }
   }
 `;
 
@@ -181,6 +199,11 @@ export default function CreateOrg({ name, email, avatar }) {
       });
   };
 
+  const onInputWrapperClick = e => {
+    e.preventDefault();
+    e.currentTarget.getElementsByTagName('input')[0].focus();
+  };
+
   return (
     <TopWrapper>
       <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
@@ -193,14 +216,14 @@ export default function CreateOrg({ name, email, avatar }) {
             disabled
           />
         </InputWrapper>
-        <InputWrapper>
+        <InputWrapper onClick={onInputWrapperClick}>
           <Input
             label="Your Username"
             value={state.userName}
             onChange={handleUserNameChange}
           />
         </InputWrapper>
-        <InputWrapper>
+        <InputWrapper onClick={onInputWrapperClick}>
           <Input
             label="Your Name"
             value={state.name}
