@@ -2,33 +2,42 @@ import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
 import Logout from './Logout';
 
-const Wrapper = styled.div`
+const UserSettingsWrapper = styled.div`
   width: 360px;
-  background: #ffffff;
-  border: 2px solid #000000;
+  background: var(--background);
+  border-radius: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  padding: 24px;
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  padding: 24px 0;
+  margin-bottom: 24px;
 
-  > div {
-    margin: 12px 0 0 0;
-  }
-
-  > div:last-of-type {
-    opacity: 0.5;
+  > ${UserIcon} {
+    width: 42px;
+    height: 42px;
+    margin-right: 16px;
   }
 `;
 
-const SettingsUserIcon = styled(UserIcon)`
-  width: 116px;
-  height: 116px;
+const UserNameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const UserName = styled.p`
+  margin: 0;
+  font-size: 24px;
+`;
+
+const UserNickname = styled.p`
+  margin: 0;
+  color: #666;
 `;
 
 export default function UserSettings({
@@ -38,13 +47,15 @@ export default function UserSettings({
   ...props
 }) {
   return (
-    <Wrapper>
+    <UserSettingsWrapper>
       <UserInfo>
-        <SettingsUserIcon src={profileImg} alt={`${displayName}'s avatar`} />
-        <div>{displayName}</div>
-        <div>@{userHandle}</div>
+        <UserIcon src={profileImg} alt={`${displayName}'s avatar`} />
+        <UserNameContainer>
+          <UserName>{displayName}</UserName>
+          <UserNickname>@{userHandle}</UserNickname>
+        </UserNameContainer>
       </UserInfo>
       <Logout />
-    </Wrapper>
+    </UserSettingsWrapper>
   );
 }
