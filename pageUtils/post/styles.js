@@ -24,7 +24,6 @@ const DateTime = styled.div`
 `;
 
 const Title = styled.div`
-  width: 392px;
   height: 58px;
   margin: 8px 0 24px 0;
   font-weight: bold;
