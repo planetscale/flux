@@ -78,6 +78,7 @@ const CommentContent = styled.div`
 
 const Post = styled.div`
   width: 90ch;
+  margin-bottom: 60px;
 `;
 
 const StarBox = styled.div`
