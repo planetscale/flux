@@ -7,46 +7,58 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuthActions } from 'state/auth';
+import { ButtonMinor } from 'components/Button';
 
-const Wrapper = styled.div`
-  padding: 24px;
-  width: 616px;
-  height: fit-content;
-  background: #ffffff;
-  border: 2px solid #000000;
-
-  > div {
-    width: 100%;
-    height: fit-content;
-    border: 1px solid #000000;
-  }
+const TopWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90ch;
 `;
 
+const Wrapper = styled.div`
+  width: 480px;
+  height: fit-content;
+  background: var(--background);
+  border-radius: 4px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
+`;
+
+const Logo = styled.img``;
+
 const InputWrapper = styled.div`
-  border-bottom: 1px solid #e1e1e1;
-  padding: 16px;
+  border-bottom: 1px solid #f7f7f7;
+  padding: 32px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f7f7f7;
+
+    input {
+      background-color: #f7f7f7;
+    }
+  }
+
+  &.disabled {
+    cursor: default;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    background-color: #f7f7f7;
+    color: #ccc;
+
+    &:hover {
+      background-color: #f7f7f7;
+
+      input {
+        background-color: #f7f7f7;
+      }
+    }
+  }
 `;
 
 const ButtonWrapper = styled.div`
-  padding: 16px;
-`;
-
-const Button = styled.button`
-  width: 71px;
-  height: 48px;
-  background: #ffffff;
-  border: 2px solid #000000;
-  cursor: pointer;
-
-  :focus {
-    outline: unset;
-  }
-
-  :disabled {
-    cursor: unset;
-    color: #e0e0e0;
-    border: 2px solid #e0e0e0;
-  }
+  padding: 32px;
 `;
 
 const orgQuery = gql`
@@ -187,10 +199,16 @@ export default function CreateOrg({ name, email, avatar }) {
       });
   };
 
+  const onInputWrapperClick = e => {
+    e.preventDefault();
+    e.currentTarget.getElementsByTagName('input')[0].focus();
+  };
+
   return (
-    <Wrapper>
-      <div>
-        <InputWrapper>
+    <TopWrapper>
+      <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
+      <Wrapper>
+        <InputWrapper className="disabled">
           <Input
             label="Organization Name"
             value={state.orgName}
@@ -198,14 +216,14 @@ export default function CreateOrg({ name, email, avatar }) {
             disabled
           />
         </InputWrapper>
-        <InputWrapper>
+        <InputWrapper onClick={onInputWrapperClick}>
           <Input
             label="Your Username"
             value={state.userName}
             onChange={handleUserNameChange}
           />
         </InputWrapper>
-        <InputWrapper>
+        <InputWrapper onClick={onInputWrapperClick}>
           <Input
             label="Your Name"
             value={state.name}
@@ -213,7 +231,7 @@ export default function CreateOrg({ name, email, avatar }) {
           />
         </InputWrapper>
         <ButtonWrapper>
-          <Button
+          <ButtonMinor
             type="submit"
             onClick={
               state.orgName && state.name && state.userName
@@ -223,9 +241,9 @@ export default function CreateOrg({ name, email, avatar }) {
             disabled={!(state.orgName && state.name && state.userName)}
           >
             Next
-          </Button>
+          </ButtonMinor>
         </ButtonWrapper>
-      </div>
-    </Wrapper>
+      </Wrapper>
+    </TopWrapper>
   );
 }

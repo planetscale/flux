@@ -25,6 +25,11 @@ const StyledInput = styled.input`
   :focus {
     outline: none;
   }
+
+  :disabled {
+    color: #ccc;
+    background-color: unset;
+  }
 `;
 
 const StyledHelperText = styled.p((error = null, success = null) => {
@@ -53,8 +58,8 @@ export default function Input({
 }) {
   return (
     <InputWrapper>
-      {label && <StyledLabel>{label}</StyledLabel>}
-      <StyledInput {...otherProps} />
+      {label && <StyledLabel for={label}>{label}</StyledLabel>}
+      <StyledInput id={label} {...otherProps} />
       {helperText && (
         <StyledHelperText error={error} success={success}>
           {helperText}
