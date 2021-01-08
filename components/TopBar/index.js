@@ -42,21 +42,37 @@ const Wrapper = styled.div`
           font-size: 24px;
         }
       }
-
-      &:nth-of-type(even) {
-        color: #e1e1e1;
-      }
-    }
-
-    span {
-      width: fit-content;
-      display: inline-block;
-      font-size: 24px;
-      line-height: 25px;
-      border-bottom: 2px solid black;
-      margin: 20px 0 0 0;
     }
   }
+`;
+
+const SlasherFlick = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > ${ButtonLink} {
+    font-size: 24px;
+    margin-right: 8px;
+    border-radius: unset;
+    padding: 0 4px;
+
+    &:first-of-type {
+      font-family: 'Raleway', sans-serif;
+      text-transform: uppercase;
+      font-style: italic;
+      font-weight: 900;
+      background: linear-gradient(90deg, #353e58 0%, #c56a86 138.77%), #000000;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-background-clip: text;
+      -moz-text-fill-color: transparent;
+    }
+  }
+`;
+
+const ForwardSlash = styled.div`
+  color: #e1e1e1;
 `;
 
 const ActionsWrapper = styled.div`
@@ -103,15 +119,13 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   };
   return (
     <Wrapper>
-      <div>
-        <div>
-          <ButtonLink onClick={redirectToHome}>flux</ButtonLink>
-        </div>
-        <div>/</div>
-        <div>{header}</div>
-        <div>/</div>
+      <SlasherFlick>
+        <ButtonLink onClick={redirectToHome}>flux</ButtonLink>
+        <ForwardSlash>/</ForwardSlash>
+        <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
+        <ForwardSlash>/</ForwardSlash>
         <div>{subHeader}</div>
-      </div>
+      </SlasherFlick>
       <ActionsWrapper>
         <StyledModal
           open={isOpen}
