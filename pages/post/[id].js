@@ -13,15 +13,15 @@ import {
   Comment,
   Reply,
   Post,
-  StarBox,
   CommentContent,
+  ActionBar,
 } from 'pageUtils/post/styles';
 import {
   postDataQuery,
   createReplyMutation,
   createStarMutation,
 } from 'pageUtils/post/queries';
-import { ButtonBase } from 'components/Button';
+import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -127,11 +127,13 @@ export default function PostPage() {
           <ReactMarkdownWithHtml allowDangerousHtml>
             {content}
           </ReactMarkdownWithHtml>
-          <StarBox onClick={handleStarClick}>
+        </Content>
+        <ActionBar>
+          <ButtonTertiary onClick={handleStarClick}>
             <img src="/star.svg" alt="star" />
             <div>{postState.numStars}</div>
-          </StarBox>
-        </Content>
+          </ButtonTertiary>
+        </ActionBar>
       </Post>
 
       {postState.replies?.map(reply => (
@@ -148,10 +150,10 @@ export default function PostPage() {
 
       <Reply>
         <textarea value={reply} onChange={handleReplyChange}></textarea>
-        <ButtonBase type="submit" onClick={handleCommentSubmit}>
+        <ButtonMinor type="submit" onClick={handleCommentSubmit}>
           <img src="/icon_comment.svg" alt="button to submit response" />
           Reply
-        </ButtonBase>
+        </ButtonMinor>
       </Reply>
     </PageWrapper>
   );
