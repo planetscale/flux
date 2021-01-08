@@ -1,0 +1,10 @@
+{
+  "env": {
+    "DATABASE_URL": "@flux_mysql_endpoint"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@flux_mysql_endpoint"
+    }
+  }
+}
