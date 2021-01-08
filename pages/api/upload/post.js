@@ -154,6 +154,5 @@ ${summary}`
     ]
   }, { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } });
 
-  console.log('Done', slackRes.data);
   res.json(result);
 };
