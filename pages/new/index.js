@@ -167,7 +167,7 @@ export default function NewPost() {
         userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg'
       );
       formData.append('userDisplayName', userContext?.user?.displayName);
-      formData.append('domain', location.origin);
+      formData.append('domain', window.location.origin);
 
       const rawResp = await fetch('/api/upload/post', {
         method: 'POST',

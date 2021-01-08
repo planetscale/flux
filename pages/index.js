@@ -38,7 +38,11 @@ function getLensPosts(lenses, subHeader) {
   }
 
   if (subHeader.toLowerCase() === 'all') {
-    return lenses.flatMap(lens => lens.posts);
+    return lenses
+      .flatMap(lens => lens.posts)
+      .sort((a, b) => {
+        return b.id - a.id;
+      });
   }
 
   const lens = lenses.find(lens => {
