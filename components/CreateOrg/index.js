@@ -160,6 +160,13 @@ export default function CreateOrg({ name, email, avatar }) {
 
   const handleNextClick = e => {
     e.preventDefault();
+
+    if (
+      !(state.userName?.trim() && state.name?.trim() && state.orgName?.trim())
+    ) {
+      return;
+    }
+
     createUserWithOrg({
       email,
       userName: state.userName,

@@ -23,7 +23,6 @@ const DateTime = styled.div`
 `;
 
 const Title = styled.div`
-  height: 58px;
   margin: 8px 0 24px 0;
   font-weight: bold;
   font-size: 48px;
