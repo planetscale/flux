@@ -1,10 +1,10 @@
 {
   "env": {
-    "DATABASE_URL": "@flux_mysql_prod"
+    "DATABASE_URL": "@parallax_psdb"
   },
   "build": {
     "env": {
-      "DATABASE_URL": "@flux_mysql_prod"
+      "DATABASE_URL": "@parallax_psdb"
     }
   }
 }
