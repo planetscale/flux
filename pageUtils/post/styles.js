@@ -4,7 +4,6 @@ import { ButtonBase } from 'components/Button';
 const PageWrapper = styled.div`
   padding: 42px;
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
   overflow: auto;
   display: flex;
@@ -14,7 +13,7 @@ const PageWrapper = styled.div`
 
 const PostMetadata = styled.div`
   padding: 0 0 32px 0;
-  border-bottom: 1px solid #e1e1e1;
+  border-bottom: 1px solid #eee;
 `;
 
 const DateTime = styled.div`
@@ -41,41 +40,32 @@ const Content = styled.div`
 `;
 
 const Comment = styled.div`
+  width: 90ch;
   padding: 0 0 30px 0;
   border-bottom: 1px solid #eeeeee;
   margin: 42px 0 0 0;
-
-  > div:last-of-type {
-    font-size: 14px;
-    line-height: 15px;
-    opacity: 0.5;
-    margin: 6px 0 0 0;
-  }
 `;
 
 const Reply = styled.div`
-  margin: 76px 42px 0;
+  margin: 42px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90ch;
 
   textarea {
     resize: none;
-    height: 205px;
-    max-width: 747px;
-    min-width: 495px;
+    height: 100px;
+    width: 100%;
     border-radius: 8px;
+    padding: 24px;
+    align-self: stretch;
+    margin-bottom: 24px;
+    border: 1px solid #ccc;
 
     :focus {
       outline: none;
     }
-  }
-
-  ${ButtonBase} {
-    border: 1px solid #423f3f;
-    box-sizing: border-box;
-    border-radius: 4px;
-    padding: 5px 18px;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 18px;
   }
 `;
 
@@ -87,7 +77,7 @@ const CommentContent = styled.div`
 `;
 
 const Post = styled.div`
-  padding: 0 42px;
+  width: 90ch;
 `;
 
 const StarBox = styled.div`
