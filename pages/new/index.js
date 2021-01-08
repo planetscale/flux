@@ -21,38 +21,38 @@ const Wrapper = styled.div`
   }
 `;
 
-const InputBase = styled.input`
-  padding: 0;
-  border: unset;
-  width: fit-content;
-  font-style: normal;
-  font-weight: bold;
-  letter-spacing: 0.75px;
-  margin: 8px 0 0;
+const TimeAndTags = styled.div``;
 
-  :focus {
-    outline: none;
-  }
+const TitleInput = styled.textarea`
+  outline: 0;
+  border: 0;
+  resize: none;
+  word-break: break-word;
+  overflow: hidden;
+  font-size: 48px;
+  line-height: 58px;
+  margin: 8px 0 24px;
+  font-weight: 700;
 
   ::placeholder {
     color: var(--accent);
   }
 `;
 
-const TimeAndTags = styled.div``;
-
-const TitleInput = styled(InputBase)`
-  height: 58px;
-  font-size: 48px;
-  line-height: 58px;
-  margin: 8px 0;
-`;
-
-const SubtitleInput = styled(InputBase)`
-  font-weight: normal;
-  height: 22px;
+const SubtitleInput = styled.textarea`
+  outline: 0;
+  border: 0;
+  resize: none;
+  word-break: break-word;
+  overflow: hidden;
+  width: 100%;
   font-size: 18px;
   line-height: 22px;
+  word-break: break-word;
+
+  ::placeholder {
+    color: var(--accent);
+  }
 `;
 
 const ActionItems = styled.div`
@@ -111,12 +111,18 @@ export default function NewPost() {
   }, [lensesResult.data?.lenses]);
 
   const handleTitleChange = e => {
+    let title = e.target;
+    title.height = '5px';
+    title.style.height = title.scrollHeight + 'px';
     updateState(draft => {
       draft.title = e.target.value;
     });
   };
 
   const handleSubtitleChange = e => {
+    let title = e.target;
+    title.height = '1px';
+    title.style.height = title.scrollHeight + 'px';
     updateState(draft => {
       draft.subtitle = e.target.value;
     });
@@ -159,7 +165,6 @@ export default function NewPost() {
   };
 
   const handleCancel = () => {
-    // TODO: redirect user to previous page
     router.push('/');
   };
 
@@ -175,11 +180,13 @@ export default function NewPost() {
         <TimeAndTags>{state.dateTime}</TimeAndTags>
         <TitleInput
           placeholder="Enter Title"
+          rows="1"
           value={state.title}
           onChange={handleTitleChange}
         ></TitleInput>
         <SubtitleInput
           placeholder="Enter Subtitle"
+          rows="1"
           value={state.subtitle}
           onChange={handleSubtitleChange}
         ></SubtitleInput>
