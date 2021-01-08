@@ -6,6 +6,7 @@ import { useImmer } from 'use-immer';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useAuthActions } from 'state/auth';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -96,9 +97,12 @@ const getOrgNameFromEmailDomain = email => {
   return email?.split('@').pop().split('.')[0] ?? '';
 };
 
+const DEFAULT_ORG_NAME = 'planetscale';
+
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
   const client = useClient();
+  const { userLogout } = useAuthActions();
   const [state, setState] = useImmer({
     orgName: getOrgNameFromEmailDomain(email),
     userName: '',
@@ -118,6 +122,9 @@ export default function CreateOrg({ name, email, avatar }) {
 
   useEffect(() => {
     debouncedOrgNameCheck(state.orgName);
+    if (state.orgName !== DEFAULT_ORG_NAME) {
+      userLogout();
+    }
   }, [state.orgName]);
 
   // lodash debounce need normal func to work, it doesn't work with arrow func
