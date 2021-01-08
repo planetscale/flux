@@ -86,11 +86,13 @@ const MetaDate = styled.span`
 
 const PostTitle = styled.h2`
   margin: 0;
-  font-weight: bold;
+  font-weight: 700;
+  color: var(--text);
   font-size: 32px;
 `;
 
 const PostSubTitle = styled.p`
+  color: var(--text);
   margin: 0;
   font-size: 16px;
 `;

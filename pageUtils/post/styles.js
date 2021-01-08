@@ -31,6 +31,7 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
+  color: var(--text);
   font-size: 18px;
   line-height: 22px;
   letter-spacing: 0.02em;
@@ -43,6 +44,7 @@ const Comment = styled.div`
   width: 90ch;
   padding: 0 0 30px 0;
   border-bottom: 1px solid #eeeeee;
+  color: var(--text);
   margin: 42px 0 0 0;
 `;
 
