@@ -1,25 +1,25 @@
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
-import UserIcon from 'components/UserIcon';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
 import ReactMarkdownWithHtml from 'react-markdown/with-html';
 import {
-  Wrapper,
-  BodyWrapper,
-  Post,
+  PageWrapper,
+  PostMetadata,
+  DateTime,
+  Title,
   Content,
   Comment,
-  UserIconWrapper,
   Reply,
+  Post,
+  CommentContent,
 } from 'pageUtils/post/styles';
 import {
   postDataQuery,
   createReplyMutation,
   createStarMutation,
 } from 'pageUtils/post/queries';
-import { useTopBarActions } from 'state/topBar';
 import { ButtonBase } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
@@ -116,64 +116,44 @@ export default function PostPage() {
   }
 
   return (
-    <Wrapper>
-      <BodyWrapper>
+    <PageWrapper>
+      <div>
         <Post>
-          <UserIconWrapper>
-            <UserIcon
-              src={author?.profile?.avatar || '/user_profile_icon.svg'}
-              width="62px"
-              height="62px"
-              alt="user avatar"
+          <PostMetadata>
+            <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+            <Title>{title}</Title>
+            <AuthorNamePlate
+              displayName={author?.displayName}
+              userHandle={author?.username}
+              avatar={author?.profile?.avatar}
             />
-          </UserIconWrapper>
-          <AuthorNamePlate
-            displayName={author?.displayName}
-            userHandle={author?.username}
-            time={createdAt}
-            numComments={replies?.length}
-            numStars={postState.numStars}
-            onStarClick={handleStarClick}
-          />
+          </PostMetadata>
+
           <Content>
             <ReactMarkdownWithHtml allowDangerousHtml>
               {content}
             </ReactMarkdownWithHtml>
           </Content>
         </Post>
+
         {postState.replies?.map(reply => (
           <Comment key={reply.id}>
-            <UserIconWrapper>
-              <UserIcon
-                src={reply.author?.profile?.avatar || '/user_profile_icon.svg'}
-                width="62px"
-                height="62px"
-                alt="user avatar"
-              />
-            </UserIconWrapper>
             <CommenterNamePlate
               displayName={reply.author?.displayName}
               userHandle={reply.author?.username}
+              avatar={reply.author?.profile?.avatar}
             />
-            <Content>{reply.content}</Content>
+            <CommentContent>{reply.content}</CommentContent>
             <div>{getLocaleDateTimeString(reply.createdAt)}</div>
           </Comment>
         ))}
-      </BodyWrapper>
-      <Reply>
-        <UserIconWrapper>
-          <UserIcon
-            src={reply.author?.profile?.avatar || '/user_profile_icon.svg'}
-            width="62px"
-            height="62px"
-            alt="user avatar"
-          />
-        </UserIconWrapper>
-        <textarea value={reply} onChange={handleReplyChange}></textarea>
-        <ButtonBase type="submit" onClick={handleCommentSubmit}>
-          Reply.
-        </ButtonBase>
-      </Reply>
-    </Wrapper>
+        <Reply>
+          <textarea value={reply} onChange={handleReplyChange}></textarea>
+          <ButtonBase type="submit" onClick={handleCommentSubmit}>
+            Reply.
+          </ButtonBase>
+        </Reply>
+      </div>
+    </PageWrapper>
   );
 }
