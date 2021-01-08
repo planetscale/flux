@@ -77,6 +77,7 @@ export const ButtonTertiary = styled(ButtonBase)`
 export const ButtonLink = styled(ButtonBase)`
   border: 0;
   padding: 0;
+  color: var(--text);
 `;
 
 export const ButtonImage = styled(ButtonBase)`

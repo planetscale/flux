@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { ButtonBase } from 'components/Button';
 
 const PageWrapper = styled.div`
   padding: 42px;
@@ -23,6 +22,7 @@ const DateTime = styled.div`
 `;
 
 const Title = styled.div`
+  color: var(--text);
   margin: 8px 0 24px 0;
   font-weight: bold;
   font-size: 48px;
@@ -62,6 +62,7 @@ const Reply = styled.div`
     align-self: stretch;
     margin-bottom: 24px;
     border: 1px solid #ccc;
+    color: var(--text);
 
     :focus {
       outline: none;
@@ -73,6 +74,7 @@ const CommentContent = styled.div`
   margin: 16px 0;
   height: 22px;
   font-size: 18px;
+  color: var(--text);
   line-height: 22px;
 `;
 
