@@ -67,6 +67,10 @@ export default function PostPage() {
   };
 
   const handleCommentSubmit = async () => {
+    if (!reply?.trim()) {
+      return;
+    }
+
     try {
       const res = await runCreateReplyMutation({
         content: reply,

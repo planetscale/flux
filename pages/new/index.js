@@ -130,7 +130,12 @@ export default function NewPost() {
 
   const handlePostSubmit = async () => {
     if (
-      !(state.title && state.subtitle && state.content && state.selectedLens)
+      !(
+        state.title?.trim() &&
+        state.subtitle?.trim() &&
+        state.content?.trim() &&
+        state.selectedLens
+      )
     ) {
       return;
     }
