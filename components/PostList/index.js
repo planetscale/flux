@@ -80,6 +80,10 @@ const MetaInformation = styled.div`
   color: #666666;
 `;
 
+const MetaDate = styled.span`
+  white-space: nowrap;
+`;
+
 const PostTitle = styled.h2`
   margin: 0;
   font-weight: bold;
@@ -111,9 +115,11 @@ export default function PostList({ posts = [] }) {
             <PostWrapper>
               <PostInfo>
                 <MetaInformation>
-                  <div>{getLocaleDateTimeString(createdAt).toUpperCase()}</div>
-                  <div>&nbsp; &middot; &nbsp;</div>
-                  <div>{author?.displayName}</div>
+                  <MetaDate>
+                    {getLocaleDateTimeString(createdAt).toUpperCase()}
+                  </MetaDate>
+                  <span>&nbsp; &middot; &nbsp;</span>
+                  <span>{author?.displayName}</span>
                 </MetaInformation>
                 <PostTitle>{title}</PostTitle>
                 <PostSubTitle>{summary}</PostSubTitle>

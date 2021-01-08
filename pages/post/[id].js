@@ -112,47 +112,47 @@ export default function PostPage() {
 
   return (
     <PageWrapper>
-      <div>
-        <Post>
-          <PostMetadata>
-            <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
-            <Title>{title}</Title>
-            <AuthorNamePlate
-              displayName={author?.displayName}
-              userHandle={author?.username}
-              avatar={author?.profile?.avatar}
-            />
-          </PostMetadata>
+      <Post>
+        <PostMetadata>
+          <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+          <Title>{title}</Title>
+          <AuthorNamePlate
+            displayName={author?.displayName}
+            userHandle={author?.username}
+            avatar={author?.profile?.avatar}
+          />
+        </PostMetadata>
 
-          <Content>
-            <ReactMarkdownWithHtml allowDangerousHtml>
-              {content}
-            </ReactMarkdownWithHtml>
-            <StarBox onClick={handleStarClick}>
-              <img src="/star.svg" alt="star" />
-              <div>{postState.numStars}</div>
-            </StarBox>
-          </Content>
-        </Post>
+        <Content>
+          <ReactMarkdownWithHtml allowDangerousHtml>
+            {content}
+          </ReactMarkdownWithHtml>
+          <StarBox onClick={handleStarClick}>
+            <img src="/star.svg" alt="star" />
+            <div>{postState.numStars}</div>
+          </StarBox>
+        </Content>
+      </Post>
 
-        {postState.replies?.map(reply => (
-          <Comment key={reply.id}>
-            <CommenterNamePlate
-              displayName={reply.author?.displayName}
-              userHandle={reply.author?.username}
-              avatar={reply.author?.profile?.avatar}
-            />
-            <CommentContent>{reply.content}</CommentContent>
-            <div>{getLocaleDateTimeString(reply.createdAt)}</div>
-          </Comment>
-        ))}
-        <Reply>
-          <textarea value={reply} onChange={handleReplyChange}></textarea>
-          <ButtonBase type="submit" onClick={handleCommentSubmit}>
-            Reply.
-          </ButtonBase>
-        </Reply>
-      </div>
+      {postState.replies?.map(reply => (
+        <Comment key={reply.id}>
+          <CommenterNamePlate
+            displayName={reply.author?.displayName}
+            userHandle={reply.author?.username}
+            avatar={reply.author?.profile?.avatar}
+            date={getLocaleDateTimeString(reply.createdAt)}
+          />
+          <CommentContent>{reply.content}</CommentContent>
+        </Comment>
+      ))}
+
+      <Reply>
+        <textarea value={reply} onChange={handleReplyChange}></textarea>
+        <ButtonBase type="submit" onClick={handleCommentSubmit}>
+          <img src="/icon_comment.svg" alt="button to submit response" />
+          Respond
+        </ButtonBase>
+      </Reply>
     </PageWrapper>
   );
 }

@@ -24,29 +24,41 @@ function App({ Component, pageProps }) {
       <Head>
         <title>Flux</title>
         <link rel="icon" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
       <Global
         styles={css`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap');
-
           * {
             box-sizing: border-box;
           }
 
-          html,
           body {
             font-family: 'Inter', sans-serif;
             margin: unset;
             width: 100vw;
-            height: 100vh;
             overflow: auto;
           }
+
           input,
           select,
           textarea,
           button {
             font: unset;
             font-family: 'Inter', sans-serif;
+          }
+
+          :root {
+            --background: #fff;
+            --foreground: #000;
+            --link: #007bc7;
+            --text: rgb(60, 66, 87);
+            --accent: #ccc;
+            --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04),
+              0px 4px 13px rgba(0, 0, 0, 0.08);
           }
         `}
       />
