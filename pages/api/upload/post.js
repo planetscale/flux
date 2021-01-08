@@ -77,7 +77,7 @@ export default async (req, res) => {
     tags,
     userId,
     lensId,
-    userDisplayName = "Abhi Vaidyanatha",
+    userDisplayName = "Abhi Vaidyanatha", // TODO: Remove these static variables.
     userAvatar = "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
     domain = "https://flux-lime.vercel.app",
   } = uploadRequest.fields;
