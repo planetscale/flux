@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+### Install dependencies
+
+```
+npm install
+```
+
+### Run dev server
 
 ```bash
 npx next dev
@@ -29,8 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Tech Debt
 
-Prisma currently does not support [native data types](https://github.com/prisma/prisma/issues/4713). Because of this,
-the following commands need to be ran against any new database that we set up against this project:
+Prisma currently does not support [native data types](https://github.com/prisma/prisma/issues/4713). Because of this, the following commands need to be ran against any new database that we set up against this project:
 
 ```SQL
 ALTER TABLE Reply
