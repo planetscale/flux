@@ -36,7 +36,7 @@ const Content = styled.div`
   line-height: 22px;
   letter-spacing: 0.02em;
   margin: 32px 0 0 0;
-  padding: 0 0 42px 0;
+  padding: 0 0 32px 0;
   border-bottom: 1px solid #eeeeee;
 `;
 
@@ -90,6 +90,31 @@ const Post = styled.div`
   padding: 0 42px;
 `;
 
+const StarBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  width: 78px;
+  height: 34px;
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  border-radius: 99px;
+
+  img {
+    width: 16px;
+    height: auto;
+  }
+
+  div {
+    font-size: 14px;
+    line-height: 18px;
+  }
+  :hover {
+    cursor: pointer;
+  }
+`;
+
 export {
   PageWrapper,
   Content,
@@ -100,4 +125,5 @@ export {
   Title,
   CommentContent,
   Post,
+  StarBox,
 };
