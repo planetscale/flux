@@ -162,6 +162,12 @@ export default function NewPost() {
       formData.append('summary', state.subtitle);
       formData.append('userId', userContext?.user?.id);
       formData.append('lensId', Number(state.selectedLens));
+      formData.append(
+        'userAvatar',
+        userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg'
+      );
+      formData.append('userDisplayName', userContext?.user?.displayName);
+      formData.append('domain', location.origin);
 
       const rawResp = await fetch('/api/upload/post', {
         method: 'POST',
