@@ -18,7 +18,7 @@ const UserInfo = styled.div`
   align-items: center;
   margin-bottom: 24px;
 
-  > ${UserIcon} {
+  > img {
     width: 42px;
     height: 42px;
     margin-right: 16px;

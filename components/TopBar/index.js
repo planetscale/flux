@@ -3,9 +3,10 @@ import Modal from '@material-ui/core/Modal';
 import { ButtonImage, ButtonMajor, ButtonLink } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
-import { useState } from 'react';
-import { useTopBarContext } from 'state/topBar';
+import { useState, useEffect } from 'react';
+import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
+import { useUserContext } from 'state/user';
 
 const Wrapper = styled.div`
   display: flex;
@@ -100,6 +101,17 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const { header, subHeader } = useTopBarContext();
+  const { setHeaders } = useTopBarActions();
+  const { user } = useUserContext();
+
+  useEffect(() => {
+    if (user?.org?.name) {
+      setHeaders({
+        header: user?.org.name,
+      });
+    }
+  }, [user?.org]);
+
   const handleModalOpen = content => {
     setModalOpen(true);
     setModalContent(content);

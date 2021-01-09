@@ -58,7 +58,7 @@ export default function Input({
 }) {
   return (
     <InputWrapper>
-      {label && <StyledLabel for={label}>{label}</StyledLabel>}
+      {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
       <StyledInput id={label} {...otherProps} />
       {helperText && (
         <StyledHelperText error={error} success={success}>
