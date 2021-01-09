@@ -7,7 +7,7 @@ const NamePlateWrapper = styled.div`
   position: relative;
   left: -46px;
 
-  ${UserIcon} {
+  > img {
     margin-right: 16px;
   }
 `;
