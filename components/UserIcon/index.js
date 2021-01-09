@@ -1,7 +1,13 @@
 import styled from '@emotion/styled';
 
-export const UserIcon = styled.img`
+const StyledIcon = styled.img`
   border-radius: 50%;
 `;
 
-export default UserIcon;
+export default function UserIcon({ ...props }) {
+  const replaceImgOnError = e => {
+    e.target.src = '/user_profile_icon.svg';
+  };
+
+  return <StyledIcon onError={replaceImgOnError} {...props} />;
+}
