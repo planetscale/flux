@@ -68,6 +68,7 @@ const useAuthActions = () => {
         updateState(draft => {
           draft.isAuthed = true;
           draft.user = user;
+          draft.authChecked = true;
         });
       } catch (e) {
         updateState(draft => {

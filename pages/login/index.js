@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { useAuthActions, useAuthContext } from 'state/auth';
-
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext } from 'state/user';
 
@@ -75,7 +74,7 @@ export default function Login() {
 
   return (
     <Wrapper>
-      {!authContext.isAuthed && (
+      {!authContext.isAuthed && authContext.authChecked && (
         <ContentContainer>
           <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
           <AuthButton onClick={handleLogin}>
@@ -89,15 +88,13 @@ export default function Login() {
           </AuthButton>
         </ContentContainer>
       )}
-      {authContext.isAuthed &&
-        !userContext.loading &&
-        !userContext.user?.org && (
-          <CreateOrg
-            name={authContext?.user?.displayName}
-            email={authContext?.user?.email}
-            avatar={authContext?.user?.photoURL ?? ''}
-          />
-        )}
+      {authContext.isAuthed && userContext.loaded && !userContext.user?.org && (
+        <CreateOrg
+          name={authContext?.user?.displayName}
+          email={authContext?.user?.email}
+          avatar={authContext?.user?.photoURL ?? ''}
+        />
+      )}
     </Wrapper>
   );
 }
