@@ -12,7 +12,6 @@ import AppContentWrapper from './AppContentWrapper';
 import { useRouter } from 'next/router';
 import { TopBarContextProvider } from 'state/topBar';
 
-// the URL to /api/graphql
 const GRAPHQL_ENDPOINT = `/api/graphql`;
 
 function AppContainer({ children }) {
@@ -70,7 +69,7 @@ function AppContainer({ children }) {
             {isLoginPage() ? (
               <>{children}</>
             ) : (
-              <AppContentWrapper>{children}</AppContentWrapper>
+              <AppContentWrapper token={token}>{children}</AppContentWrapper>
             )}
           </TopBarContextProvider>
         </AuthGuard>

@@ -117,6 +117,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       router.push('/new');
     }
   };
+
   return (
     <Wrapper>
       <SlasherFlick>

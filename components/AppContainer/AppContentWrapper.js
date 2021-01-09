@@ -11,7 +11,7 @@ const CenterWrapper = styled.div`
   flex-direction: column;
 `;
 
-export default function AppContentWrapper({ children }) {
+export default function AppContentWrapper({ token, children }) {
   const router = useRouter();
   const authContext = useAuthContext();
   const { user } = useUserContext();
@@ -31,7 +31,7 @@ export default function AppContentWrapper({ children }) {
 
   return (
     <main>
-      {authContext.isAuthed && (
+      {authContext.isAuthed && token && user && (
         <CenterWrapper>
           <TopBar
             profileImg={user?.profile?.avatar ?? '/user_profile_icon.svg'}
