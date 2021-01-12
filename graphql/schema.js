@@ -106,7 +106,9 @@ const Reply = objectType({
 const Tag = objectType({
   name: 'Tag',
   definition(t) {
-    t.id('id', { description: 'Unique identifier for slack channel' });
+    t.id('id', {
+      description: 'Unique identifier for slack channel(Flux tags)',
+    });
     t.string('tagName');
   },
 });
@@ -137,7 +139,7 @@ const Query = queryType({
     t.list.field('tags', {
       type: 'Tag',
       resolve(_parent, _args, ctx) {
-        return ctx.prisma.lens.findMany({});
+        // FIXME: fetch channel names with slack web api
       },
     });
     t.crud.replies();
