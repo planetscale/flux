@@ -80,6 +80,11 @@ model Star {
   shining   Boolean?    // Dummy field because models can't have no non-referenceable fields.
 }
 
+model Tag {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+}
+
 enum Role {
   USER
   ADMIN

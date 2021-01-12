@@ -106,10 +106,8 @@ const Reply = objectType({
 const Tag = objectType({
   name: 'Tag',
   definition(t) {
-    t.id('id', {
-      description: 'Unique identifier for slack channel(Flux tags)',
-    });
-    t.string('tagName');
+    t.model.id();
+    t.model.name();
   },
 });
 
