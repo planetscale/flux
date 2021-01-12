@@ -42,7 +42,8 @@
     "react-mde": "^11.0.0",
     "showdown": "^1.9.1",
     "urql": "^1.11.4",
-    "use-immer": "^0.4.2"
+    "use-immer": "^0.4.2",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.1.2",
