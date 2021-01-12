@@ -110,7 +110,6 @@ const Query = queryType({
     t.list.field('orgs', {
       type: 'Org',
       resolve(_parent, _args, ctx) {
-        console.log(_args);
         // TODO: check if returns correct number of orgs
         return ctx.prisma.org.findMany();
       },
