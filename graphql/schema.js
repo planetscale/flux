@@ -103,6 +103,14 @@ const Reply = objectType({
   },
 });
 
+const Tag = objectType({
+  name: 'Tag',
+  definition(t) {
+    t.id('id', { description: 'Unique identifier for slack channel' });
+    t.string('tagName');
+  },
+});
+
 const Query = queryType({
   definition(t) {
     t.crud.user();
@@ -126,7 +134,12 @@ const Query = queryType({
         return ctx.prisma.lens.findMany({});
       },
     });
-
+    t.list.field('tags', {
+      type: 'Tag',
+      resolve(_parent, _args, ctx) {
+        return ctx.prisma.lens.findMany({});
+      },
+    });
     t.crud.replies();
   },
 });
@@ -192,7 +205,19 @@ const Mutation = mutationType({
 });
 
 export const schema = makeSchema({
-  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star, Upload],
+  types: [
+    User,
+    Org,
+    Profile,
+    Lens,
+    Post,
+    Reply,
+    Query,
+    Mutation,
+    Star,
+    Upload,
+    Tag,
+  ],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
     schema: path.join(process.cwd(), 'generated', 'schema.graphql'),
