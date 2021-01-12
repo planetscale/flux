@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIRE_API_KEY,
@@ -11,10 +12,12 @@ const firebaseConfig = {
 };
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+let firebaseStorage;
 
 if (!firebase.apps.length) {
   try {
     firebase.initializeApp(firebaseConfig);
+    firebaseStorage = firebase.storage();
   } catch (e) {
     console.error('Error initializing Firebase: ', e);
   }
@@ -61,4 +64,5 @@ export {
   setFireAuthObserver,
   defaultFetchHeaders,
   setDefaultFetchHeaders,
+  firebaseStorage,
 };

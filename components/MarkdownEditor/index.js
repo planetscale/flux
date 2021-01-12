@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { useState } from 'react';
 import styled from '@emotion/styled';
+import { v4 as uuidv4 } from 'uuid';
+import { firebaseStorage } from 'utils/auth/clientConfig';
 
 const Wrapper = styled.div`
   textarea {
@@ -40,25 +42,51 @@ export default function MarkdownEditor({ content, handleContentChange }) {
   const [selectedTab, setSelectedTab] = useState(TABS.WRITE);
 
   const save = async function* (data) {
-    // Promise that waits for "time" milliseconds
-    const wait = function (time) {
-      return new Promise((a, r) => {
-        setTimeout(() => a(), time);
-      });
-    };
+    const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
 
-    // Upload "data" to your server
-    // Use XMLHttpRequest.send to send a FormData object containing
-    // "data"
-    // Check this question: https://stackoverflow.com/questions/18055422/how-to-receive-php-image-data-over-copy-n-paste-javascript-with-xmlhttprequest
+    try {
+      await storagePath.put(data);
+    } catch (error) {
+      console.error(error);
+      // TODO: handle errors
+      switch (error.code) {
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+        case 'storage/unknown':
+          // Unknown error occurred, inspect error.serverResponse
+          break;
+      }
+    }
 
-    await wait(2000);
-    // yields the URL that should be inserted in the markdown
-    yield 'https://picsum.photos/300';
-    await wait(2000);
+    let imgUrl = '';
+    try {
+      imgUrl = await storagePath.getDownloadURL();
+    } catch (error) {
+      console.error(error);
+      // TODO: handle errors
+      switch (error.code) {
+        case 'storage/object-not-found':
+          // File doesn't exist
+          break;
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+        case 'storage/unknown':
+          // Unknown error occurred, inspect the server response
+          break;
+      }
+    }
 
-    // returns true meaning that the save was successful
-    return true;
+    if (imgUrl) {
+      // yields the URL that should be inserted in the markdown
+      yield imgUrl;
+      // returns true meaning that the save was successful
+      return true;
+    }
+
+    // returns false meaning that the save was failed
+    return false;
   };
 
   return (
