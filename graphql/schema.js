@@ -110,11 +110,8 @@ const Query = queryType({
     t.list.field('orgs', {
       type: 'Org',
       resolve(_parent, _args, ctx) {
-        return ctx.prisma.org.findMany({
-          where: {
-            name: 'planetscale', // TODO: Fix hack to only return organizations which users belong to.
-          },
-        });
+        // TODO: check if returns correct number of orgs
+        return ctx.prisma.org.findMany();
       },
     });
     t.crud.post();

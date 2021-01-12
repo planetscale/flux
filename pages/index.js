@@ -13,8 +13,8 @@ const HomeWrapper = styled.div`
 
 // TODO: only get current org's data
 const postListQuery = gql`
-  query {
-    orgs {
+  query($id: Int!) {
+    org(where: { id: $id }) {
       lenses {
         name
         posts {
@@ -57,12 +57,15 @@ function getLensPosts(lenses, subHeader) {
 }
 
 export default function Home({ href, ...props }) {
-  const [postListResult, runPostListQuery] = useQuery({
-    query: postListQuery,
-  });
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
   const { subHeader } = useTopBarContext();
+  const [postListResult, runPostListQuery] = useQuery({
+    query: postListQuery,
+    variables: {
+      id: user?.org?.id,
+    },
+  });
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -75,7 +78,7 @@ export default function Home({ href, ...props }) {
   return (
     <HomeWrapper>
       <PostList
-        posts={getLensPosts(postListResult.data?.orgs?.[0].lenses, subHeader)}
+        posts={getLensPosts(postListResult.data?.org?.lenses, subHeader)}
       />
     </HomeWrapper>
   );
