@@ -83,7 +83,7 @@ const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  button:first-of-type {
+  ${ButtonMajor} {
     margin: 0 12px 0 0;
   }
 `;
@@ -133,6 +133,10 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
     }
   };
 
+  const notNewPostPage = () => {
+    return router.pathname !== '/new';
+  };
+
   return (
     <Wrapper>
       <SlasherFlick>
@@ -160,10 +164,12 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           </>
         </StyledModal>
 
-        <ButtonMajor type="button" onClick={redirectToNew}>
-          <img src="/icon_plus.svg" alt="Button to add update" />
-          <span>Add Update</span>
-        </ButtonMajor>
+        {notNewPostPage() && (
+          <ButtonMajor type="button" onClick={redirectToNew}>
+            <img src="/icon_plus.svg" alt="Button to add update" />
+            <span>Add Update</span>
+          </ButtonMajor>
+        )}
 
         <ButtonImage
           type="button"
