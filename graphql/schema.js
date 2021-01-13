@@ -181,6 +181,7 @@ const Tag = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
+    t.model.posts();
   },
 });
 

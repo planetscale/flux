@@ -84,6 +84,7 @@ model Tag {
   id            Int         @id @default(autoincrement())
   name          String      @unique
   channelId     String      @unique
+  posts         Post[]
 }
 
 enum Role {
