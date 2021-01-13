@@ -246,7 +246,7 @@ const Mutation = mutationType({
 });
 
 export const schema = makeSchema({
-  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star],
+  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star, Channel],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
     schema: path.join(process.cwd(), 'generated', 'schema.graphql'),
