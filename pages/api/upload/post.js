@@ -77,9 +77,9 @@ export default async (req, res) => {
     tags,
     userId,
     lensId,
-    userDisplayName = "Abhi Vaidyanatha", // TODO: Remove these static variables.
-    userAvatar = "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
-    domain = "https://flux-lime.vercel.app",
+    userDisplayName,
+    userAvatar,
+    domain,
   } = uploadRequest.fields;
   const parsedContent = await parseMarkdown(content);
 
@@ -108,51 +108,55 @@ export default async (req, res) => {
   const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
 
   const url = 'https://slack.com/api/chat.postMessage';
-  const slackRes = await axios.post(url, {
-    channel: '#flux-sandbox',
-    "attachments": [
-      {
-        "color": "#D491A5",
-        "blocks": [
-          {
-            "type": "context",
-            "elements": [
-              {
-                "type": "image",
-                "image_url": userAvatar,
-                "alt_text": "cute cat"
+  const slackRes = await axios.post(
+    url,
+    {
+      channel: '#flux-sandbox',
+      attachments: [
+        {
+          color: '#D491A5',
+          blocks: [
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'image',
+                  image_url: userAvatar,
+                  alt_text: 'cute cat',
+                },
+                {
+                  type: 'mrkdwn',
+                  text: `*${userDisplayName}* shared a new update.`,
+                },
+              ],
+            },
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*<${domain}/|${title}>*  
+${summary}`,
               },
-              {
-                "type": "mrkdwn",
-                "text": `*${userDisplayName}* shared a new update.`
-              }
-            ]
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": `*<${domain}/|${title}>*  
-${summary}`
-            }
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "context",
-            "elements": [
-              {
-                "type": "plain_text",
-                "text": `posted on ${postTime}`,
-                "emoji": true
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }, { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } });
+            },
+            {
+              type: 'divider',
+            },
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'plain_text',
+                  text: `posted on ${postTime}`,
+                  emoji: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } }
+  );
 
   res.json(result);
 };

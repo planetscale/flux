@@ -5,6 +5,9 @@ import {
   makeSchema,
   arg,
   intArg,
+  nonNull,
+  stringArg,
+  inputObjectType,
 } from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
@@ -61,7 +64,31 @@ const Lens = objectType({
     t.model.name();
     t.model.description();
     t.model.org();
-    t.model.posts();
+    // t.model.posts();
+    t.list.field('posts', {
+      type: 'Post',
+      args: {
+        first: intArg(),
+        last: intArg(),
+        after: UniqueIdInput,
+        before: UniqueIdInput,
+      },
+      resolve(_parent, _args, ctx) {
+        // TODO: handle all param existence cases
+        // first && after
+        // first && before
+        // last && after
+        // last && before
+
+        if (first) {
+        }
+        if (!before) {
+          return;
+        }
+        // default => return all
+        return ctx.prisma.post.findMany({});
+      },
+    });
   },
 });
 
@@ -100,6 +127,13 @@ const Reply = objectType({
     t.model.author();
     t.model.content();
     t.model.parentId();
+  },
+});
+
+const UniqueIdInput = inputObjectType({
+  name: 'UniqueIdInput',
+  definition(t) {
+    t.int('id');
   },
 });
 
