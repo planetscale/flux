@@ -145,8 +145,6 @@ const Query = queryType({
       type: 'Channel',
       async resolve(_parent, _args, _ctx) {
         try {
-          const authRes = await client.auth.test();
-          console.log(authRes)
           const slackRes = await client.conversations.list({
             exclude_archived: true,
             limit: 1000,
