@@ -50,7 +50,7 @@ model Post {
   title      String
   summary    String
   published  Boolean?    @default(false)
-  tags       String?
+  tags       Tag[]
   author     User        @relation(fields: [authorId], references: [id])
   authorId   Int
   lens       Lens        @relation(fields: [lensId], references: [id])
@@ -78,6 +78,12 @@ model Star {
   user      User        @relation(fields: [userId], references: [id])
   userId    Int
   shining   Boolean?    // Dummy field because models can't have no non-referenceable fields.
+}
+
+model Tag {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  channelId     String      @unique
 }
 
 enum Role {
