@@ -6,7 +6,7 @@ import {readStream} from '../utils/upload/stream';
 import {parseMarkdown} from '../utils/markdown/parser';
 import {GraphQLUpload} from 'apollo-server-core';
 
-const { WebClient, LogLevel } = require("@slack/web-api");
+const { WebClient } = require("@slack/web-api");
 
 const Org = objectType({
   name: 'Org',

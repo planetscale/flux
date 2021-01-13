@@ -6,6 +6,7 @@ import { getUserId } from 'utils/auth/serverConfig';
 import { getLocaleDateTimeString } from '../../../utils/dateTime';
 
 const axios = require('axios');
+const { WebClient, LogLevel } = require("@slack/web-api");
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],
@@ -106,11 +107,12 @@ export default async (req, res) => {
   };
 
   const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
+  const token = process.env.SLACK_API_TOKEN;
+  const client = new WebClient(token);
 
-  const url = 'https://slack.com/api/chat.postMessage';
-  const slackRes = await axios.post(url, {
+  await client.chat.postMessage({
     channel: '#flux-sandbox',
-    "attachments": [
+    attachments: [
       {
         "color": "#D491A5",
         "blocks": [
@@ -152,7 +154,7 @@ ${summary}`
         ]
       }
     ]
-  }, { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } });
+  })
 
   res.json(result);
 };
