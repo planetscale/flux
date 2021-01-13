@@ -57,8 +57,13 @@ export default function PostPage() {
     if (postDataResult.data?.post) {
       updatePostState(draft => {
         draft.replies = postDataResult.data?.post.replies;
-        draft.numStars = postDataResult.data?.post.stars.length;
       });
+
+      if (postState.numStars === 0) {
+        updatePostState(draft => {
+          draft.numStars = postDataResult.data?.post.stars.length;
+        });
+      }
     }
   }, [postDataResult]);
 
