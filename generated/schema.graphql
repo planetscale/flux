@@ -7,6 +7,11 @@ input BoolNullableFilter {
   not: NestedBoolNullableFilter
 }
 
+type Channel {
+  name: String
+  undefined: ID
+}
+
 scalar DateTime
 
 input DateTimeNullableFilter {
@@ -191,18 +196,6 @@ type Mutation {
   deleteOneReply(where: ReplyWhereUniqueInput!): Reply
   deleteOneStar(where: StarWhereUniqueInput!): Star
   deleteOneUser(where: UserWhereUniqueInput!): User
-  postUpload(
-    file: Upload
-
-    """lens the user is posting in"""
-    lensId: Int
-
-    """org the user is posting in"""
-    orgId: Int
-
-    """id of the user"""
-    userId: Int
-  ): Post
   updateOneLens(data: LensUpdateInput!, where: LensWhereUniqueInput!): Lens
   updateOneOrg(data: OrgUpdateInput!, where: OrgWhereUniqueInput!): Org
   updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
@@ -733,6 +726,7 @@ input ProfileWhereUniqueInput {
 }
 
 type Query {
+  channels: [Channel]
   lens(after: LensWhereUniqueInput, before: LensWhereUniqueInput, first: Int, last: Int): [Lens!]!
   lenses: [Lens]
   org(where: OrgWhereUniqueInput!): Org
@@ -1068,9 +1062,6 @@ input StringNullableFilter {
 input UniqueIdInput {
   id: Int
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 type User {
   createdAt: DateTime
