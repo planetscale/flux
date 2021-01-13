@@ -5,8 +5,7 @@ import Cors from 'cors';
 import { getUserId } from 'utils/auth/serverConfig';
 import { getLocaleDateTimeString } from '../../../utils/dateTime';
 
-const axios = require('axios');
-const { WebClient, LogLevel } = require("@slack/web-api");
+const { WebClient } = require("@slack/web-api");
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],

@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.1.2",
-    "axios": "^0.21.1",
     "prettier": "2.2.1",
     "source-map-explorer": "^2.5.2"
   }
