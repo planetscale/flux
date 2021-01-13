@@ -5,7 +5,7 @@ import Cors from 'cors';
 import { getUserId } from 'utils/auth/serverConfig';
 import { getLocaleDateTimeString } from '../../../utils/dateTime';
 
-const axios = require('axios');
+const { WebClient } = require("@slack/web-api");
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],
@@ -106,57 +106,54 @@ export default async (req, res) => {
   };
 
   const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
+  const token = process.env.SLACK_API_TOKEN;
+  const client = new WebClient(token);
 
-  const url = 'https://slack.com/api/chat.postMessage';
-  const slackRes = await axios.post(
-    url,
-    {
-      channel: '#flux-sandbox',
-      attachments: [
-        {
-          color: '#D491A5',
-          blocks: [
-            {
-              type: 'context',
-              elements: [
-                {
-                  type: 'image',
-                  image_url: userAvatar,
-                  alt_text: 'cute cat',
-                },
-                {
-                  type: 'mrkdwn',
-                  text: `*${userDisplayName}* shared a new update.`,
-                },
-              ],
-            },
-            {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `*<${domain}/|${title}>*  
-${summary}`,
+  await client.chat.postMessage({
+    channel: '#flux-sandbox',
+    attachments: [
+      {
+        "color": "#D491A5",
+        "blocks": [
+          {
+            "type": "context",
+            "elements": [
+              {
+                "type": "image",
+                "image_url": userAvatar,
+                "alt_text": "cute cat"
               },
-            },
-            {
-              type: 'divider',
-            },
-            {
-              type: 'context',
-              elements: [
-                {
-                  type: 'plain_text',
-                  text: `posted on ${postTime}`,
-                  emoji: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    { headers: { authorization: `Bearer ${process.env.SLACK_API_TOKEN}` } }
-  );
+              {
+                "type": "mrkdwn",
+                "text": `*${userDisplayName}* shared a new update.`
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `*<${domain}/|${title}>*  
+${summary}`
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "context",
+            "elements": [
+              {
+                "type": "plain_text",
+                "text": `posted on ${postTime}`,
+                "emoji": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
 
   res.json(result);
 };
