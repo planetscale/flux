@@ -7,6 +7,11 @@ input BoolNullableFilter {
   not: NestedBoolNullableFilter
 }
 
+type Channel {
+  name: String
+  undefined: ID
+}
+
 scalar DateTime
 
 input DateTimeNullableFilter {
@@ -733,6 +738,7 @@ input ProfileWhereUniqueInput {
 }
 
 type Query {
+  channels: [Channel]
   lens(after: LensWhereUniqueInput, before: LensWhereUniqueInput, first: Int, last: Int): [Lens!]!
   lenses: [Lens]
   org(where: OrgWhereUniqueInput!): Org
@@ -740,7 +746,6 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
-  tags: [Tag]
   user(where: UserWhereUniqueInput!): User
 }
 
@@ -1067,9 +1072,8 @@ input StringNullableFilter {
 }
 
 type Tag {
-  """Unique identifier for slack channel"""
-  id: ID
-  tagName: String
+  id: Int!
+  name: String!
 }
 
 """The `Upload` scalar type represents a file upload."""

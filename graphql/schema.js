@@ -1,17 +1,12 @@
-import {
-  objectType,
-  queryType,
-  mutationType,
-  makeSchema,
-  arg,
-  intArg,
-} from '@nexus/schema';
-import { nexusPrisma } from 'nexus-plugin-prisma';
+import {arg, intArg, makeSchema, mutationType, objectType, queryType,} from '@nexus/schema';
+import {nexusPrisma} from 'nexus-plugin-prisma';
 import path from 'path';
-import { notValidError } from '../utils/upload/errors';
-import { readStream } from '../utils/upload/stream';
-import { parseMarkdown } from '../utils/markdown/parser';
-import { GraphQLUpload } from 'apollo-server-core';
+import {notValidError} from '../utils/upload/errors';
+import {readStream} from '../utils/upload/stream';
+import {parseMarkdown} from '../utils/markdown/parser';
+import {GraphQLUpload} from 'apollo-server-core';
+
+const { WebClient, LogLevel } = require("@slack/web-api");
 
 const Org = objectType({
   name: 'Org',
@@ -111,6 +106,18 @@ const Tag = objectType({
   },
 });
 
+// Type for retrieving Slack channel names from Slack API.
+const Channel = objectType({
+  name: 'Channel',
+  definition(t) {
+    t.id();
+    t.string('name');
+  },
+});
+
+const token = process.env.SLACK_API_TOKEN;
+const client = new WebClient(token);
+
 const Query = queryType({
   definition(t) {
     t.crud.user();
@@ -134,10 +141,26 @@ const Query = queryType({
         return ctx.prisma.lens.findMany({});
       },
     });
-    t.list.field('tags', {
-      type: 'Tag',
-      resolve(_parent, _args, ctx) {
-        // FIXME: fetch channel names with slack web api
+    t.list.field('channels', {
+      type: 'Channel',
+      async resolve(_parent, _args, _ctx) {
+        try {
+          const authRes = await client.auth.test();
+          console.log(authRes)
+          const slackRes = await client.conversations.list({
+            exclude_archived: true,
+            limit: 1000,
+          });
+          return slackRes.channels.map(
+              channel => ({
+                id: channel.id,
+                name: channel.name
+              })
+          );
+        }
+        catch (error) {
+          console.error(error);
+        }
       },
     });
     t.crud.replies();
@@ -217,6 +240,7 @@ export const schema = makeSchema({
     Star,
     Upload,
     Tag,
+    Channel,
   ],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
