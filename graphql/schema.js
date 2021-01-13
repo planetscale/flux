@@ -3,18 +3,13 @@ import {
   queryType,
   mutationType,
   makeSchema,
-  arg,
   intArg,
-  nonNull,
-  stringArg,
   inputObjectType,
 } from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
-import { notValidError } from '../utils/upload/errors';
-import { readStream } from '../utils/upload/stream';
-import { parseMarkdown } from '../utils/markdown/parser';
-import { GraphQLUpload } from 'apollo-server-core';
+
+const { WebClient } = require("@slack/web-api");
 
 const Org = objectType({
   name: 'Org',
@@ -172,6 +167,18 @@ const UniqueIdInput = inputObjectType({
   },
 });
 
+// Type for retrieving Slack channel names from Slack API.
+const Channel = objectType({
+  name: 'Channel',
+  definition(t) {
+    t.id();
+    t.string('name');
+  },
+});
+
+const token = process.env.SLACK_API_TOKEN;
+const client = new WebClient(token);
+
 const Query = queryType({
   definition(t) {
     t.crud.user();
@@ -192,12 +199,29 @@ const Query = queryType({
         return ctx.prisma.lens.findMany({});
       },
     });
-
+    t.list.field('channels', {
+      type: 'Channel',
+      async resolve(_parent, _args, _ctx) {
+        try {
+          const slackRes = await client.conversations.list({
+            exclude_archived: true,
+            limit: 1000,
+          });
+          return slackRes.channels.map(
+              channel => ({
+                id: channel.id,
+                name: channel.name
+              })
+          );
+        }
+        catch (error) {
+          console.error(error);
+        }
+      },
+    });
     t.crud.replies();
   },
 });
-
-export const Upload = GraphQLUpload;
 
 const Mutation = mutationType({
   definition(t) {
@@ -218,47 +242,11 @@ const Mutation = mutationType({
     t.crud.deleteOneReply();
     t.crud.createOneStar();
     t.crud.deleteOneStar();
-    t.field('postUpload', {
-      type: 'Post',
-      args: {
-        file: arg({ type: 'Upload' }),
-        userId: intArg({ description: 'id of the user' }),
-        lensId: intArg({ description: 'lens the user is posting in' }),
-        orgId: intArg({ description: 'org the user is posting in' }),
-      },
-      resolve: async (root, args, ctx) => {
-        const { stream, filename, mimetype, encoding } = await args.file;
-        if (!filename) {
-          throw notValidError('Invalid file name.');
-        }
-        const ext = filename.split('.').pop();
-        if (ext !== 'md') {
-          throw notValidError('Invalid file type, must be Markdown.');
-        }
-        const buf = await readStream(stream);
-        const data = await parseMarkdown(buf.data);
-        const user = ctx.prisma.user.findFirst({ where: { id: args.userId } });
-        const lens = ctx.prisma.lens.findFirst({ where: { id: args.lensId } });
-        const org = ctx.prisma.lens.findFirst({ where: { id: args.orgId } });
-
-        return ctx.prisma.post.create({
-          data: {
-            content: data.content,
-            summary: data.summary,
-            title: data.title,
-            tags: data.tags,
-            author: user,
-            lens: lens,
-            org: org,
-          },
-        });
-      },
-    });
   },
 });
 
 export const schema = makeSchema({
-  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star, Upload],
+  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
     schema: path.join(process.cwd(), 'generated', 'schema.graphql'),
