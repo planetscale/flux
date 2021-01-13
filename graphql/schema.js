@@ -5,6 +5,9 @@ import {
   makeSchema,
   arg,
   intArg,
+  nonNull,
+  stringArg,
+  inputObjectType,
 } from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
@@ -61,7 +64,66 @@ const Lens = objectType({
     t.model.name();
     t.model.description();
     t.model.org();
-    t.model.posts();
+    // t.model.posts();
+    t.list.field('posts', {
+      type: 'Post',
+      args: {
+        first: intArg(),
+        last: intArg(),
+        after: UniqueIdInput,
+        before: UniqueIdInput,
+      },
+      resolve(_parent, _args, ctx) {
+        const { first, last, after, before } = _args;
+        // TODO: handle all param existence cases
+        // first && after
+        // first && before
+        // last && after
+        // last && before
+        if (last && before) {
+          // before.id === -1 means start from the last record in table
+          if (before.id && before.id === -1) {
+            return (async () => {
+              try {
+                const res = await ctx.prisma.post.findFirst({
+                  orderBy: {
+                    id: 'desc',
+                  },
+                });
+
+                const result = await ctx.prisma.post.findMany({
+                  take: Math.abs(last),
+                  cursor: {
+                    id: res.id,
+                  },
+                  orderBy: {
+                    id: 'desc',
+                  },
+                });
+
+                return result;
+              } catch (error) {
+                console.log(error);
+              }
+            })();
+          } else if (before.id && before.id !== -1) {
+            return ctx.prisma.post.findMany({
+              take: Math.abs(last),
+              skip: 1,
+              cursor: {
+                id: before.id,
+              },
+              orderBy: {
+                id: 'desc',
+              },
+            });
+          }
+        }
+
+        // default => return all
+        return ctx.prisma.post.findMany({});
+      },
+    });
   },
 });
 
@@ -100,6 +162,13 @@ const Reply = objectType({
     t.model.author();
     t.model.content();
     t.model.parentId();
+  },
+});
+
+const UniqueIdInput = inputObjectType({
+  name: 'UniqueIdInput',
+  definition(t) {
+    t.int('id');
   },
 });
 

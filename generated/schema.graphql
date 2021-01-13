@@ -54,7 +54,7 @@ type Lens {
   id: Int!
   name: String!
   org: Org!
-  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
+  posts(after: UniqueIdInput, before: UniqueIdInput, first: Int, last: Int): [Post]
 }
 
 input LensCreateInput {
@@ -1063,6 +1063,10 @@ input StringNullableFilter {
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
+}
+
+input UniqueIdInput {
+  id: Int
 }
 
 """The `Upload` scalar type represents a file upload."""

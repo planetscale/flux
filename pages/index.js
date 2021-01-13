@@ -5,6 +5,8 @@ import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
+import { useBottomScrollListener } from 'react-bottom-scroll-listener';
+import { useImmer } from 'use-immer';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -13,11 +15,11 @@ const HomeWrapper = styled.div`
 
 // TODO: only get current org's data
 const postListQuery = gql`
-  query($id: Int!) {
+  query($id: Int!, $last: Int!, $before: Int) {
     org(where: { id: $id }) {
       lenses {
         name
-        posts {
+        posts(last: $last, before: { id: $before }) {
           id
           title
           summary
@@ -38,11 +40,7 @@ function getLensPosts(lenses, subHeader) {
   }
 
   if (subHeader.toLowerCase() === 'all') {
-    return lenses
-      .flatMap(lens => lens.posts)
-      .sort((a, b) => {
-        return b.id - a.id;
-      });
+    return lenses.flatMap(lens => lens.posts);
   }
 
   const lens = lenses.find(lens => {
@@ -56,7 +54,15 @@ function getLensPosts(lenses, subHeader) {
   return lens.posts;
 }
 
+const DEFAULT_PAGE_ADDEND = 10;
+
 export default function Home({ href, ...props }) {
+  const [state, setState] = useImmer({
+    postList: [],
+    last: DEFAULT_PAGE_ADDEND,
+    before: -1,
+    prevCursor: null,
+  });
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
   const { subHeader } = useTopBarContext();
@@ -64,8 +70,37 @@ export default function Home({ href, ...props }) {
     query: postListQuery,
     variables: {
       id: user?.org?.id,
+      last: state.last,
+      before: state.before,
     },
   });
+
+  useEffect(() => {
+    if (postListResult.data?.org) {
+      setState(draft => {
+        draft.postList = state.postList.length
+          ? [
+              ...draft.postList,
+              ...getLensPosts(postListResult.data?.org?.lenses, subHeader),
+            ]
+          : getLensPosts(postListResult.data?.org?.lenses, subHeader);
+      });
+    }
+  }, [postListResult.data?.org]);
+
+  useBottomScrollListener(
+    () => {
+      setState(draft => {
+        draft.prevCursor = state.before;
+        draft.before = state.postList[state.postList.length - 1].id;
+      });
+    },
+    {
+      offset: 100,
+      debounce: 300,
+      DebounceOptions: { leading: false },
+    }
+  );
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -77,9 +112,7 @@ export default function Home({ href, ...props }) {
 
   return (
     <HomeWrapper>
-      <PostList
-        posts={getLensPosts(postListResult.data?.org?.lenses, subHeader)}
-      />
+      <PostList posts={state.postList} />
     </HomeWrapper>
   );
 }
