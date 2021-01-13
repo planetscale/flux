@@ -23,6 +23,7 @@ const postDataQuery = gql`
         id
         content
         createdAt
+        parentId
         author {
           username
           displayName
