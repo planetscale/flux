@@ -40,11 +40,7 @@ function getLensPosts(lenses, subHeader) {
   }
 
   if (subHeader.toLowerCase() === 'all') {
-    return lenses
-      .flatMap(lens => lens.posts)
-      .sort((a, b) => {
-        return b.id - a.id;
-      });
+    return lenses.flatMap(lens => lens.posts);
   }
 
   const lens = lenses.find(lens => {
@@ -64,7 +60,8 @@ export default function Home({ href, ...props }) {
   const [state, setState] = useImmer({
     postList: [],
     last: DEFAULT_PAGE_ADDEND,
-    before: undefined,
+    before: -1,
+    prevCursor: null,
   });
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
@@ -74,14 +71,14 @@ export default function Home({ href, ...props }) {
     variables: {
       id: user?.org?.id,
       last: state.last,
-      before: null,
+      before: state.before,
     },
   });
 
   useEffect(() => {
-    if (postListResult.data) {
+    if (postListResult.data?.org) {
       setState(draft => {
-        draft.postList = draft.postList.length
+        draft.postList = state.postList.length
           ? [
               ...draft.postList,
               ...getLensPosts(postListResult.data?.org?.lenses, subHeader),
@@ -89,16 +86,13 @@ export default function Home({ href, ...props }) {
           : getLensPosts(postListResult.data?.org?.lenses, subHeader);
       });
     }
-  }, [postListResult]);
-
-  useEffect(() => {
-    runPostListQuery;
-  }, [state.last]);
+  }, [postListResult.data?.org]);
 
   useBottomScrollListener(
     () => {
       setState(draft => {
-        draft.last = draft.last + DEFAULT_PAGE_ADDEND;
+        draft.prevCursor = state.before;
+        draft.before = state.postList[state.postList.length - 1].id;
       });
     },
     {
