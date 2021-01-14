@@ -31,7 +31,6 @@
     "graphql-upload": "^8.1.0",
     "immer": "^8.0.0",
     "lodash": "^4.17.20",
-    "luxon": "^1.25.0",
     "micro-cors": "^0.1.1",
     "next": "10.0.3",
     "next-urql": "^2.1.1",
