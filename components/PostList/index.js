@@ -27,7 +27,7 @@ const Post = styled.div`
     cursor: pointer;
 
     > div {
-      background-color: var(--accent3);
+      background-color: var(--accent2);
     }
 
     &:before {

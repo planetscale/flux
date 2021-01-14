@@ -37,6 +37,7 @@ const TitleInput = styled.textarea`
   margin: 8px 0 24px;
   font-weight: 700;
   background-color: var(--background);
+  color: var(--text);
 
   ::placeholder {
     color: var(--accent);
@@ -54,6 +55,7 @@ const SubtitleInput = styled.textarea`
   line-height: 22px;
   word-break: break-word;
   background-color: var(--background);
+  color: var(--text);
 
   ::placeholder {
     color: var(--accent);

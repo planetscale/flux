@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
 import gql from 'graphql-tag';
 import { useClient, useMutation } from 'urql';
@@ -9,34 +10,35 @@ import { useRouter } from 'next/router';
 import { useAuthActions } from 'state/auth';
 import { ButtonMinor } from 'components/Button';
 
-const TopWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 90ch;
-`;
-
 const Wrapper = styled.div`
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
   height: fit-content;
-  background: var(--background);
   border-radius: 4px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
-`;
+  box-shadow: var(--shadow);
 
-const Logo = styled.img``;
+  ${media.phone`
+    border-radius: 0;
+  `}
+`;
 
 const InputWrapper = styled.div`
-  border-bottom: 1px solid #f7f7f7;
+  background-color: var(--background);
+  color: var(--text);
+  border-bottom: 1px solid var(--accent2);
   padding: 32px;
+
+  input {
+    background-color: unset;
+    color: var(--text);
+  }
 
   &:hover {
     cursor: pointer;
-    background-color: #f7f7f7;
+    background-color: var(--accent2);
 
     input {
-      background-color: #f7f7f7;
+      background-color: var(--accent2);
     }
   }
 
@@ -44,21 +46,36 @@ const InputWrapper = styled.div`
     cursor: default;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
-    background-color: #f7f7f7;
-    color: #ccc;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+
+    input {
+      color: rgba(255, 255, 255, 0.4);
+    }
 
     &:hover {
-      background-color: #f7f7f7;
+      background-color: rgba(255, 255, 255, 0.1);
 
       input {
-        background-color: #f7f7f7;
+        background-color: rgba(255, 255, 255, 0);
       }
     }
+
+    ${media.phone`
+      border-radius: 0;
+    `}
   }
 `;
 
 const ButtonWrapper = styled.div`
+  background-color: var(--background);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   padding: 32px;
+
+  ${media.phone`
+    border-radius: 0;
+  `}
 `;
 
 const orgQuery = gql`
@@ -205,45 +222,42 @@ export default function CreateOrg({ name, email, avatar }) {
   };
 
   return (
-    <TopWrapper>
-      <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
-      <Wrapper>
-        <InputWrapper className="disabled">
-          <Input
-            label="Organization Name"
-            value={state.orgName}
-            onChange={handleOrgNameChange}
-            disabled
-          />
-        </InputWrapper>
-        <InputWrapper onClick={onInputWrapperClick}>
-          <Input
-            label="Your Username"
-            value={state.userName}
-            onChange={handleUserNameChange}
-          />
-        </InputWrapper>
-        <InputWrapper onClick={onInputWrapperClick}>
-          <Input
-            label="Your Name"
-            value={state.name}
-            onChange={handleNameChange}
-          />
-        </InputWrapper>
-        <ButtonWrapper>
-          <ButtonMinor
-            type="submit"
-            onClick={
-              state.orgName && state.name && state.userName
-                ? handleNextClick
-                : null
-            }
-            disabled={!(state.orgName && state.name && state.userName)}
-          >
-            Next
-          </ButtonMinor>
-        </ButtonWrapper>
-      </Wrapper>
-    </TopWrapper>
+    <Wrapper>
+      <InputWrapper className="disabled">
+        <Input
+          label="Organization Name"
+          value={state.orgName}
+          onChange={handleOrgNameChange}
+          disabled
+        />
+      </InputWrapper>
+      <InputWrapper onClick={onInputWrapperClick}>
+        <Input
+          label="Your Username"
+          value={state.userName}
+          onChange={handleUserNameChange}
+        />
+      </InputWrapper>
+      <InputWrapper onClick={onInputWrapperClick}>
+        <Input
+          label="Your Name"
+          value={state.name}
+          onChange={handleNameChange}
+        />
+      </InputWrapper>
+      <ButtonWrapper>
+        <ButtonMinor
+          type="submit"
+          onClick={
+            state.orgName && state.name && state.userName
+              ? handleNextClick
+              : null
+          }
+          disabled={!(state.orgName && state.name && state.userName)}
+        >
+          Next
+        </ButtonMinor>
+      </ButtonWrapper>
+    </Wrapper>
   );
 }
