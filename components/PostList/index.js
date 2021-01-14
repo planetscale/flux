@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
@@ -7,6 +8,10 @@ const Wrapper = styled.div`
   padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid #eee;
+
+  ${media.phone`
+    width: 95%;
+  `}
 `;
 
 const Post = styled.div`
