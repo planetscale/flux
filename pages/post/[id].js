@@ -127,7 +127,7 @@ export default function PostPage() {
       console.error(e);
     }
   };
-  console.log(postState);
+
   const handleStarClick = async () => {
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
     updatePostState(draft => {
