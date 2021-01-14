@@ -8,6 +8,7 @@ import { useUserContext } from 'state/user';
 import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { Post } from 'pageUtils/post/styles';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,7 +22,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const TimeAndTags = styled.div``;
+const TimeAndTags = styled.div`
+  color: var(--text);
+`;
 
 const TitleInput = styled.textarea`
   outline: 0;
@@ -33,6 +36,7 @@ const TitleInput = styled.textarea`
   line-height: 58px;
   margin: 8px 0 24px;
   font-weight: 700;
+  background-color: var(--background);
 
   ::placeholder {
     color: var(--accent);
@@ -49,6 +53,7 @@ const SubtitleInput = styled.textarea`
   font-size: 18px;
   line-height: 22px;
   word-break: break-word;
+  background-color: var(--background);
 
   ::placeholder {
     color: var(--accent);
@@ -181,7 +186,7 @@ export default function NewPost() {
 
   return (
     <Wrapper>
-      <div>
+      <Post>
         <TimeAndTags>{state.dateTime}</TimeAndTags>
         <TitleInput
           placeholder="Enter Title"
@@ -208,7 +213,7 @@ export default function NewPost() {
           </ButtonMajor>
           <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
         </ActionItems>
-      </div>
+      </Post>
     </Wrapper>
   );
 }

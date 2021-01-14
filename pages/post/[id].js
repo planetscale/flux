@@ -139,7 +139,7 @@ export default function PostPage() {
         </Content>
         <ActionBar>
           <ButtonTertiary onClick={handleStarClick}>
-            <img src="/star.svg" alt="star" />
+            <img src="/icon_star.svg" alt="star" />
             <div>{postState.numStars}</div>
           </ButtonTertiary>
         </ActionBar>
@@ -158,7 +158,11 @@ export default function PostPage() {
       ))}
 
       <Reply>
-        <textarea value={reply} onChange={handleReplyChange}></textarea>
+        <textarea
+          value={reply}
+          placeholder="Reply to this post"
+          onChange={handleReplyChange}
+        ></textarea>
         <ButtonMinor type="submit" onClick={handleCommentSubmit}>
           <img src="/icon_comment.svg" alt="button to submit response" />
           Reply

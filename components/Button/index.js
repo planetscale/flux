@@ -8,6 +8,7 @@ export const ButtonBase = styled.button`
   text-transform: capitalize;
   border-radius: 99px;
   background-color: var(--background);
+  color: var(--text);
   border: 2px solid var(--foreground);
   transition: all 150ms;
   font-size: 14px;

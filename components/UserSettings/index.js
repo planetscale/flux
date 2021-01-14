@@ -33,6 +33,7 @@ const UserNameContainer = styled.div`
 const UserName = styled.p`
   margin: 0;
   font-size: 24px;
+  color: var(--text);
 `;
 
 const UserNickname = styled.p`
