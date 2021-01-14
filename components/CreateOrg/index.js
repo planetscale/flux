@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
 import gql from 'graphql-tag';
 import { useClient, useMutation } from 'urql';
@@ -9,23 +10,18 @@ import { useRouter } from 'next/router';
 import { useAuthActions } from 'state/auth';
 import { ButtonMinor } from 'components/Button';
 
-const TopWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 90ch;
-`;
-
 const Wrapper = styled.div`
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
   height: fit-content;
   background: var(--background);
   border-radius: 4px;
   box-shadow: var(--shadow);
-`;
 
-const Logo = styled.img``;
+  ${media.phone`
+    border-radius: 0;
+  `}
+`;
 
 const InputWrapper = styled.div`
   color: var(--text);
@@ -215,45 +211,42 @@ export default function CreateOrg({ name, email, avatar }) {
   };
 
   return (
-    <TopWrapper>
-      <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
-      <Wrapper>
-        <InputWrapper className="disabled">
-          <Input
-            label="Organization Name"
-            value={state.orgName}
-            onChange={handleOrgNameChange}
-            disabled
-          />
-        </InputWrapper>
-        <InputWrapper onClick={onInputWrapperClick}>
-          <Input
-            label="Your Username"
-            value={state.userName}
-            onChange={handleUserNameChange}
-          />
-        </InputWrapper>
-        <InputWrapper onClick={onInputWrapperClick}>
-          <Input
-            label="Your Name"
-            value={state.name}
-            onChange={handleNameChange}
-          />
-        </InputWrapper>
-        <ButtonWrapper>
-          <ButtonMinor
-            type="submit"
-            onClick={
-              state.orgName && state.name && state.userName
-                ? handleNextClick
-                : null
-            }
-            disabled={!(state.orgName && state.name && state.userName)}
-          >
-            Next
-          </ButtonMinor>
-        </ButtonWrapper>
-      </Wrapper>
-    </TopWrapper>
+    <Wrapper>
+      <InputWrapper className="disabled">
+        <Input
+          label="Organization Name"
+          value={state.orgName}
+          onChange={handleOrgNameChange}
+          disabled
+        />
+      </InputWrapper>
+      <InputWrapper onClick={onInputWrapperClick}>
+        <Input
+          label="Your Username"
+          value={state.userName}
+          onChange={handleUserNameChange}
+        />
+      </InputWrapper>
+      <InputWrapper onClick={onInputWrapperClick}>
+        <Input
+          label="Your Name"
+          value={state.name}
+          onChange={handleNameChange}
+        />
+      </InputWrapper>
+      <ButtonWrapper>
+        <ButtonMinor
+          type="submit"
+          onClick={
+            state.orgName && state.name && state.userName
+              ? handleNextClick
+              : null
+          }
+          disabled={!(state.orgName && state.name && state.userName)}
+        >
+          Next
+        </ButtonMinor>
+      </ButtonWrapper>
+    </Wrapper>
   );
 }

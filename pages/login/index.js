@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { media } from 'pageUtils/post/theme';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext } from 'state/user';
@@ -25,10 +26,29 @@ const ContentContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 640px;
+  width: 90ch;
+
+  ${media.phone`
+    flex-direction: column;
+    width: 100%;
+  `}
+`;
+
+const LogoContainer = styled.div`
+  ${media.phone`
+    margin-bottom: 4em;
+  `}
 `;
 
 const Logo = styled.img``;
+
+const AuthButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+`;
 
 const AuthButton = styled.button`
   display: flex;
@@ -74,27 +94,33 @@ export default function Login() {
 
   return (
     <Wrapper>
-      {!authContext.isAuthed && authContext.authChecked && (
-        <ContentContainer>
+      <ContentContainer>
+        <LogoContainer>
           <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
-          <AuthButton onClick={handleLogin}>
-            <Logo
-              src="/logo_google.svg"
-              alt="login button"
-              width={54}
-              height={54}
-            ></Logo>
-            <span>Login With Google</span>
-          </AuthButton>
-        </ContentContainer>
-      )}
-      {authContext.isAuthed && userContext.loaded && !userContext.user?.org && (
-        <CreateOrg
-          name={authContext?.user?.displayName}
-          email={authContext?.user?.email}
-          avatar={authContext?.user?.photoURL ?? ''}
-        />
-      )}
+        </LogoContainer>
+        {!authContext.isAuthed && authContext.authChecked && (
+          <AuthButtonContainer>
+            <AuthButton onClick={handleLogin}>
+              <Logo
+                src="/logo_google.svg"
+                alt="login button"
+                width={54}
+                height={54}
+              ></Logo>
+              <span>Login With Google</span>
+            </AuthButton>
+          </AuthButtonContainer>
+        )}
+        {authContext.isAuthed &&
+          userContext.loaded &&
+          !userContext.user?.org && (
+            <CreateOrg
+              name={authContext?.user?.displayName}
+              email={authContext?.user?.email}
+              avatar={authContext?.user?.photoURL ?? ''}
+            />
+          )}
+      </ContentContainer>
     </Wrapper>
   );
 }
