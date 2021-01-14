@@ -39,7 +39,7 @@ const AuthButton = styled.button`
   border-radius: 99px;
   padding: 16px;
   outline: unset;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
   transition: all 300ms;
 
   &:hover {

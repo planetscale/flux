@@ -1,12 +1,17 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 90ch;
+  width: 80ch;
   padding: 48px 16px;
   box-sizing: border-box;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--accent2);
+
+  ${media.phone`
+    width: 95%;
+  `}
 `;
 
 const Post = styled.div`
@@ -22,11 +27,11 @@ const Post = styled.div`
     cursor: pointer;
 
     > div {
-      background-color: #f7f7f7;
+      background-color: var(--accent3);
     }
 
     &:before {
-      background-color: #c56a86;
+      background-color: var(--highlight);
       transform: scale(1.2);
     }
   }
@@ -46,10 +51,10 @@ const Post = styled.div`
     display: block;
     position: absolute;
     border-radius: 99px;
-    border: 8px solid white;
+    border: 8px solid var(--background);
     width: 8px;
     height: 8px;
-    background-color: #999;
+    background-color: var(--accent);
     top: 20px;
     left: -28px;
     transition: all 150ms;

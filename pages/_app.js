@@ -4,6 +4,7 @@ import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
 import Head from 'next/head';
+import './styles.css';
 
 const initContextDevTools = () => {
   // eslint-disable-next-line no-underscore-dangle
@@ -41,6 +42,7 @@ function App({ Component, pageProps }) {
             margin: unset;
             width: 100vw;
             overflow: auto;
+            background: var(--background);
           }
 
           input,
@@ -49,16 +51,6 @@ function App({ Component, pageProps }) {
           button {
             font: unset;
             font-family: 'Inter', sans-serif;
-          }
-
-          :root {
-            --background: #fff;
-            --foreground: #000;
-            --link: #007bc7;
-            --text: rgb(60, 66, 87);
-            --accent: #ccc;
-            --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04),
-              0px 4px 13px rgba(0, 0, 0, 0.08);
           }
         `}
       />

@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
+import { media } from '../../pageUtils/post/theme';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,23 +15,29 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--accent2);
   padding: 30px;
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: white;
+  background-color: var(--background);
+
+  ${media.phone`
+    align-items: stretch;
+    flex-direction: column;
+    padding: 0;
+  `}
 
   > div:first-of-type {
     font-size: 24px;
-    line-height: 28px;
+    line-height: 38px;
 
     > div {
       display: flex;
       display: inline-block;
       padding: 0 10px 0 0;
       position: relative;
-      height: 29px;
+      height: 38px;
       text-transform: capitalize;
 
       &:first-of-type {
@@ -50,6 +57,10 @@ const SlasherFlick = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.phone`
+    padding: 30px;
+  `}
 
   > ${ButtonLink} {
     font-size: 24px;
@@ -72,7 +83,7 @@ const SlasherFlick = styled.div`
 `;
 
 const ForwardSlash = styled.div`
-  color: #e1e1e1;
+  color: var(--accent);
 `;
 
 const SubHeader = styled.div`
@@ -81,7 +92,14 @@ const SubHeader = styled.div`
 
 const ActionsWrapper = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
+
+  ${media.phone`
+    padding: 30px;
+    border-top: 1px solid var(--accent2);
+  `}
 
   ${ButtonMajor} {
     margin: 0 12px 0 0;

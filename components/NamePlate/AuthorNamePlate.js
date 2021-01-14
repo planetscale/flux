@@ -10,6 +10,7 @@ const UserMetadata = styled.div`
   margin: 0 0 0 16px;
   display: flex;
   flex-direction: column;
+  color: var(--text);
 
   span:first-of-type {
     height: 22px;
@@ -21,7 +22,7 @@ const UserMetadata = styled.div`
     height: 19px;
     font-size: 16px;
     line-height: 19px;
-    color: #cccccc;
+    color: var(--text);
   }
 `;
 
