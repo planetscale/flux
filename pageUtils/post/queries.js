@@ -23,6 +23,7 @@ const postDataQuery = gql`
         id
         content
         createdAt
+        parentId
         author {
           username
           displayName
@@ -39,17 +40,41 @@ const postDataQuery = gql`
 `;
 
 const createReplyMutation = gql`
-  mutation($content: String!, $postId: Int!, $userId: Int!) {
+  mutation($content: String!, $postId: Int!, $userId: Int!, $parentId: Int) {
     createOneReply(
       data: {
         content: $content
         post: { connect: { id: $postId } }
         author: { connect: { id: $userId } }
+        parentId: $parentId
       }
     ) {
       id
+      parentId
       createdAt
       content
+      author {
+        username
+        displayName
+        profile {
+          avatar
+        }
+      }
+    }
+  }
+`;
+
+const updateReplyMutation = gql`
+  mutation($content: String!, $replyId: Int!) {
+    updateOneReply(
+      data: { content: { set: $content } }
+      where: { id: $replyId }
+    ) {
+      id
+      parentId
+      createdAt
+      content
+      parentId
       author {
         username
         displayName
@@ -74,4 +99,9 @@ const createStarMutation = gql`
   }
 `;
 
-export { postDataQuery, createReplyMutation, createStarMutation };
+export {
+  postDataQuery,
+  createReplyMutation,
+  createStarMutation,
+  updateReplyMutation,
+};

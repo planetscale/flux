@@ -15,11 +15,14 @@ import {
   Post,
   CommentContent,
   ActionBar,
+  CommenterNameplateWrapper,
+  CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
 import {
   postDataQuery,
   createReplyMutation,
   createStarMutation,
+  updateReplyMutation,
 } from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
@@ -28,11 +31,19 @@ import { useImmer } from 'use-immer';
 
 export default function PostPage() {
   const router = useRouter();
+  const [commentButtonState, setCommentButtonState] = useImmer({
+    replyButtons: {},
+    editButtons: {},
+  });
   const [postState, updatePostState] = useImmer({
-    replies: [],
+    replies: {},
     numStars: 0,
   });
   const [reply, setReply] = useState('');
+  const [commentInputs, setCommentInputs] = useImmer({
+    replies: {},
+    edits: {},
+  });
   const userContext = useUserContext();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
@@ -48,6 +59,9 @@ export default function PostPage() {
   const [createStarResult, runCreateStarMutation] = useMutation(
     createStarMutation
   );
+  const [updateReplyResult, runUpdateReplyMutation] = useMutation(
+    updateReplyMutation
+  );
 
   useEffect(() => {
     if (!postDataResult.fetching && !postDataResult.data?.post) {
@@ -55,8 +69,40 @@ export default function PostPage() {
     }
 
     if (postDataResult.data?.post) {
+      const replyMap = postDataResult.data?.post.replies.reduce((acc, curr) => {
+        const { author, content, createdAt } = curr;
+        if (!curr.parentId) {
+          acc[curr.id] = { author, content, createdAt, replies: {} };
+        } else {
+          // DFS to search for the parent
+          const stack = [];
+          Object.entries(acc).forEach(item => {
+            stack.push(item);
+
+            while (stack.length) {
+              const currItem = stack.pop();
+
+              if (Number(currItem[0]) === curr.parentId) {
+                currItem[1]['replies'][curr.id] = {
+                  author,
+                  content,
+                  createdAt,
+                  replies: {},
+                };
+              }
+
+              Object.entries(currItem[1].replies).forEach(item => {
+                stack.push(item);
+              });
+            }
+          });
+        }
+
+        return acc;
+      }, {});
+
       updatePostState(draft => {
-        draft.replies = postDataResult.data?.post.replies;
+        draft.replies = replyMap;
       });
 
       if (postState.numStars === 0) {
@@ -78,15 +124,11 @@ export default function PostPage() {
 
     try {
       const res = await runCreateReplyMutation({
-        content: reply,
+        content: reply.trim(),
         postId: Number(router.query?.id),
         userId: userContext.user.id,
       });
       if (res.data) {
-        updatePostState(draft => {
-          draft.replies = [...draft.replies, res.data.createOneReply];
-        });
-
         setReply('');
       } else {
         console.error(e);
@@ -107,6 +149,91 @@ export default function PostPage() {
         userId: userContext.user.id,
       });
       if (!res.data) {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCommentEditsChange = e => {
+    setCommentInputs(draft => {
+      draft.edits[e.target.dataset.commentId] = e.target.value;
+    });
+  };
+
+  const handleCommentRepliesChange = e => {
+    setCommentInputs(draft => {
+      draft.replies[e.target.dataset.commentId] = e.target.value;
+    });
+  };
+
+  const toggleCommentReply = e => {
+    setCommentButtonState(draft => {
+      draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
+        .replyButtons[e.target.dataset.commentId];
+    });
+  };
+
+  const toggleCommentEdit = (e, content) => {
+    setCommentButtonState(draft => {
+      draft.editButtons[e.target.dataset.commentId] = !commentButtonState
+        .editButtons[e.target.dataset.commentId];
+    });
+
+    setCommentInputs(draft => {
+      draft.edits[e.target.dataset.commentId] =
+        commentInputs.edits[e.target.dataset.commentId] || content;
+    });
+  };
+
+  const handleCommentEditSubmit = async e => {
+    if (!commentInputs.edits[e.target.dataset.commentId]?.trim()) {
+      return;
+    }
+
+    try {
+      const res = await runUpdateReplyMutation({
+        content: commentInputs.edits[e.target.dataset.commentId]?.trim(),
+        replyId: Number(e.target.dataset.commentId),
+      });
+      if (res.data) {
+        setCommentInputs(draft => {
+          draft.edits[e.target.dataset.commentId] = '';
+        });
+        setCommentButtonState(draft => {
+          draft.editButtons[e.target.dataset.commentId] = !commentButtonState
+            .editButtons[e.target.dataset.commentId];
+        });
+      } else {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCommentReplySubmit = async e => {
+    if (!commentInputs.replies[e.target.dataset.commentId]?.trim()) {
+      return;
+    }
+
+    try {
+      const res = await runCreateReplyMutation({
+        content: commentInputs.replies[e.target.dataset.commentId]?.trim(),
+        postId: Number(router.query?.id),
+        userId: userContext.user.id,
+        parentId: Number(e.target.dataset.commentId),
+      });
+      if (res.data) {
+        setCommentInputs(draft => {
+          draft.replies[e.target.dataset.commentId] = '';
+        });
+        setCommentButtonState(draft => {
+          draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
+            .replyButtons[e.target.dataset.commentId];
+        });
+      } else {
         console.error(e);
       }
     } catch (e) {
@@ -145,17 +272,102 @@ export default function PostPage() {
         </ActionBar>
       </Post>
 
-      {postState.replies?.map(reply => (
-        <Comment key={reply.id}>
-          <CommenterNamePlate
-            displayName={reply.author?.displayName}
-            userHandle={reply.author?.username}
-            avatar={reply.author?.profile?.avatar}
-            date={getLocaleDateTimeString(reply.createdAt)}
-          />
-          <CommentContent>{reply.content}</CommentContent>
-        </Comment>
-      ))}
+      {Object.entries(postState.replies).map(
+        ([firstLevelReplyKey, firstLevelReplyValue]) => (
+          <div key={firstLevelReplyKey}>
+            <Comment>
+              <CommenterNameplateWrapper>
+                <CommenterNamePlate
+                  displayName={firstLevelReplyValue.author?.displayName}
+                  userHandle={firstLevelReplyValue.author?.username}
+                  avatar={firstLevelReplyValue.author?.profile?.avatar}
+                  date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
+                />
+                <CommentActionButtonGroup>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={toggleCommentReply}
+                  >
+                    Reply
+                  </ButtonMinor>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={e => {
+                      toggleCommentEdit(e, firstLevelReplyValue.content);
+                    }}
+                  >
+                    Edit
+                  </ButtonMinor>
+                </CommentActionButtonGroup>
+              </CommenterNameplateWrapper>
+
+              {commentButtonState.editButtons[firstLevelReplyKey] ? (
+                <Reply>
+                  <textarea
+                    data-comment-id={firstLevelReplyKey}
+                    value={commentInputs.edits[firstLevelReplyKey]}
+                    onChange={handleCommentEditsChange}
+                  ></textarea>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={handleCommentEditSubmit}
+                    disabled={!commentInputs.edits[firstLevelReplyKey]?.trim()}
+                  >
+                    <img
+                      src="/icon_comment.svg"
+                      alt="button to submit comment edit"
+                    />
+                    Submit
+                  </ButtonMinor>
+                </Reply>
+              ) : (
+                <CommentContent>{firstLevelReplyValue.content}</CommentContent>
+              )}
+
+              {commentButtonState.replyButtons[firstLevelReplyKey] && (
+                <Reply>
+                  <textarea
+                    data-comment-id={firstLevelReplyKey}
+                    value={commentInputs.replies[firstLevelReplyKey]}
+                    onChange={handleCommentRepliesChange}
+                  ></textarea>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={handleCommentReplySubmit}
+                    disabled={
+                      !commentInputs.replies[firstLevelReplyKey]?.trim()
+                    }
+                  >
+                    <img
+                      src="/icon_comment.svg"
+                      alt="button to submit response to comment"
+                    />
+                    Submit
+                  </ButtonMinor>
+                </Reply>
+              )}
+            </Comment>
+
+            <div>
+              {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
+                <Comment key={k}>
+                  <CommenterNamePlate
+                    displayName={v.author?.displayName}
+                    userHandle={v.author?.username}
+                    avatar={v.author?.profile?.avatar}
+                    date={getLocaleDateTimeString(v.createdAt)}
+                  />
+                  <CommentContent>{v.content}</CommentContent>
+                </Comment>
+              ))}
+            </div>
+          </div>
+        )
+      )}
 
       <Reply>
         <textarea
@@ -163,7 +375,11 @@ export default function PostPage() {
           placeholder="Reply to this post"
           onChange={handleReplyChange}
         ></textarea>
-        <ButtonMinor type="submit" onClick={handleCommentSubmit}>
+        <ButtonMinor
+          type="submit"
+          onClick={handleCommentSubmit}
+          disabled={!reply?.trim()}
+        >
           <img src="/icon_comment.svg" alt="button to submit response" />
           Reply
         </ButtonMinor>
