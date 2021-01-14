@@ -29,14 +29,18 @@ import { useImmer } from 'use-immer';
 export default function PostPage() {
   const router = useRouter();
   const [commentButtonState, setCommentButtonState] = useImmer({
-    replyButton: false,
-    editButton: false,
+    replyButtons: {},
+    editButtons: {},
   });
   const [postState, updatePostState] = useImmer({
     replies: {},
     numStars: 0,
   });
   const [reply, setReply] = useState('');
+  const [commentInputs, setCommentInputs] = useImmer({
+    replies: {},
+    edits: {},
+  });
   const userContext = useUserContext();
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
@@ -150,9 +154,48 @@ export default function PostPage() {
     }
   };
 
-  const toggleCommentReply = () => {};
+  const handleCommentEditsChange = e => {
+    setCommentInputs(draft => {
+      draft.edits[e.target.dataset.commentId] = e.target.value;
+    });
+  };
 
-  const toggleCommentEdit = () => {};
+  const handleCommentRepliesChange = e => {
+    setCommentInputs(draft => {
+      draft.replies[e.target.dataset.commentId] = e.target.value;
+    });
+  };
+
+  const toggleCommentReply = e => {
+    setCommentButtonState(draft => {
+      draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
+        .replyButtons[e.target.dataset.commentId];
+    });
+  };
+
+  const toggleCommentEdit = (e, content) => {
+    setCommentButtonState(draft => {
+      draft.editButtons[e.target.dataset.commentId] = !commentButtonState
+        .editButtons[e.target.dataset.commentId];
+    });
+
+    setCommentInputs(draft => {
+      draft.edits[e.target.dataset.commentId] =
+        commentInputs.edits[e.target.dataset.commentId] ?? content;
+    });
+  };
+
+  const handleCommentEditSubmit = e => {
+    if (!commentInputs.edits[e.target.dataset.commentId]?.trim()) {
+      return;
+    }
+  };
+
+  const handleCommentReplySubmit = e => {
+    if (!commentInputs.replies[e.target.dataset.commentId]?.trim()) {
+      return;
+    }
+  };
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
@@ -197,29 +240,70 @@ export default function PostPage() {
                   date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
                 />
                 <div>
-                  <ButtonMinor type="submit" onClick={toggleCommentReply}>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={toggleCommentReply}
+                  >
                     Reply
                   </ButtonMinor>
-                  <ButtonMinor type="submit" onClick={toggleCommentEdit}>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={e => {
+                      toggleCommentEdit(e, firstLevelReplyValue.content);
+                    }}
+                  >
                     Edit
                   </ButtonMinor>
                 </div>
               </div>
-              <CommentContent>{firstLevelReplyValue.content}</CommentContent>
-              <Reply>
-                <textarea value={reply} onChange={handleReplyChange}></textarea>
-                <ButtonMinor
-                  type="submit"
-                  onClick={handleCommentSubmit}
-                  disabled={!reply?.trim()}
-                >
-                  <img
-                    src="/icon_comment.svg"
-                    alt="button to submit response"
-                  />
-                  Reply
-                </ButtonMinor>
-              </Reply>
+
+              {commentButtonState.editButtons[firstLevelReplyKey] ? (
+                <Reply>
+                  <textarea
+                    data-comment-id={firstLevelReplyKey}
+                    value={commentInputs.edits[firstLevelReplyKey]}
+                    onChange={handleCommentEditsChange}
+                  ></textarea>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={handleCommentEditSubmit}
+                    disabled={!reply?.trim()}
+                  >
+                    <img
+                      src="/icon_comment.svg"
+                      alt="button to submit response"
+                    />
+                    Submit
+                  </ButtonMinor>
+                </Reply>
+              ) : (
+                <CommentContent>{firstLevelReplyValue.content}</CommentContent>
+              )}
+
+              {commentButtonState.replyButtons[firstLevelReplyKey] && (
+                <Reply>
+                  <textarea
+                    data-comment-id={firstLevelReplyKey}
+                    value={commentInputs.replies[firstLevelReplyKey]}
+                    onChange={handleCommentRepliesChange}
+                  ></textarea>
+                  <ButtonMinor
+                    data-comment-id={firstLevelReplyKey}
+                    type="submit"
+                    onClick={handleCommentReplySubmit}
+                    disabled={!reply?.trim()}
+                  >
+                    <img
+                      src="/icon_comment.svg"
+                      alt="button to submit response"
+                    />
+                    Submit
+                  </ButtonMinor>
+                </Reply>
+              )}
             </Comment>
 
             <div>
