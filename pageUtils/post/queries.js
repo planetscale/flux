@@ -40,15 +40,17 @@ const postDataQuery = gql`
 `;
 
 const createReplyMutation = gql`
-  mutation($content: String!, $postId: Int!, $userId: Int!) {
+  mutation($content: String!, $postId: Int!, $userId: Int!, $parentId: Int) {
     createOneReply(
       data: {
         content: $content
         post: { connect: { id: $postId } }
         author: { connect: { id: $userId } }
+        parentId: $parentId
       }
     ) {
       id
+      parentId
       createdAt
       content
       author {

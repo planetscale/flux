@@ -118,15 +118,11 @@ export default function PostPage() {
 
     try {
       const res = await runCreateReplyMutation({
-        content: reply,
+        content: reply.trim(),
         postId: Number(router.query?.id),
         userId: userContext.user.id,
       });
       if (res.data) {
-        updatePostState(draft => {
-          draft.replies = [...draft.replies, res.data.createOneReply];
-        });
-
         setReply('');
       } else {
         console.error(e);
@@ -191,9 +187,27 @@ export default function PostPage() {
     }
   };
 
-  const handleCommentReplySubmit = e => {
+  const handleCommentReplySubmit = async e => {
     if (!commentInputs.replies[e.target.dataset.commentId]?.trim()) {
       return;
+    }
+
+    try {
+      const res = await runCreateReplyMutation({
+        content: commentInputs.replies[e.target.dataset.commentId]?.trim(),
+        postId: Number(router.query?.id),
+        userId: userContext.user.id,
+        parentId: Number(e.target.dataset.commentId),
+      });
+      if (res.data) {
+        setCommentInputs(draft => {
+          draft.replies[e.target.dataset.commentId] = '';
+        });
+      } else {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -270,11 +284,11 @@ export default function PostPage() {
                     data-comment-id={firstLevelReplyKey}
                     type="submit"
                     onClick={handleCommentEditSubmit}
-                    disabled={!reply?.trim()}
+                    disabled={!commentInputs.edits[firstLevelReplyKey]?.trim()}
                   >
                     <img
                       src="/icon_comment.svg"
-                      alt="button to submit response"
+                      alt="button to submit comment edit"
                     />
                     Submit
                   </ButtonMinor>
@@ -294,11 +308,13 @@ export default function PostPage() {
                     data-comment-id={firstLevelReplyKey}
                     type="submit"
                     onClick={handleCommentReplySubmit}
-                    disabled={!reply?.trim()}
+                    disabled={
+                      !commentInputs.replies[firstLevelReplyKey]?.trim()
+                    }
                   >
                     <img
                       src="/icon_comment.svg"
-                      alt="button to submit response"
+                      alt="button to submit response to comment"
                     />
                     Submit
                   </ButtonMinor>
