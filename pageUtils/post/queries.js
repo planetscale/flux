@@ -64,6 +64,28 @@ const createReplyMutation = gql`
   }
 `;
 
+const updateReplyMutation = gql`
+  mutation($content: String!, $replyId: Int!) {
+    updateOneReply(
+      data: { content: { set: $content } }
+      where: { id: $replyId }
+    ) {
+      id
+      parentId
+      createdAt
+      content
+      parentId
+      author {
+        username
+        displayName
+        profile {
+          avatar
+        }
+      }
+    }
+  }
+`;
+
 const createStarMutation = gql`
   mutation($postId: Int!, $userId: Int!) {
     createOneStar(
@@ -77,4 +99,9 @@ const createStarMutation = gql`
   }
 `;
 
-export { postDataQuery, createReplyMutation, createStarMutation };
+export {
+  postDataQuery,
+  createReplyMutation,
+  createStarMutation,
+  updateReplyMutation,
+};
