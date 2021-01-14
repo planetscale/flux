@@ -28,6 +28,10 @@ import { useImmer } from 'use-immer';
 
 export default function PostPage() {
   const router = useRouter();
+  const [commentButtonState, setCommentButtonState] = useImmer({
+    replyButton: false,
+    editButton: false,
+  });
   const [postState, updatePostState] = useImmer({
     replies: {},
     numStars: 0,
@@ -146,6 +150,10 @@ export default function PostPage() {
     }
   };
 
+  const toggleCommentReply = () => {};
+
+  const toggleCommentEdit = () => {};
+
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
@@ -181,14 +189,39 @@ export default function PostPage() {
         ([firstLevelReplyKey, firstLevelReplyValue]) => (
           <div key={firstLevelReplyKey}>
             <Comment>
-              <CommenterNamePlate
-                displayName={firstLevelReplyValue.author?.displayName}
-                userHandle={firstLevelReplyValue.author?.username}
-                avatar={firstLevelReplyValue.author?.profile?.avatar}
-                date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
-              />
+              <div>
+                <CommenterNamePlate
+                  displayName={firstLevelReplyValue.author?.displayName}
+                  userHandle={firstLevelReplyValue.author?.username}
+                  avatar={firstLevelReplyValue.author?.profile?.avatar}
+                  date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
+                />
+                <div>
+                  <ButtonMinor type="submit" onClick={toggleCommentReply}>
+                    Reply
+                  </ButtonMinor>
+                  <ButtonMinor type="submit" onClick={toggleCommentEdit}>
+                    Edit
+                  </ButtonMinor>
+                </div>
+              </div>
               <CommentContent>{firstLevelReplyValue.content}</CommentContent>
+              <Reply>
+                <textarea value={reply} onChange={handleReplyChange}></textarea>
+                <ButtonMinor
+                  type="submit"
+                  onClick={handleCommentSubmit}
+                  disabled={!reply?.trim()}
+                >
+                  <img
+                    src="/icon_comment.svg"
+                    alt="button to submit response"
+                  />
+                  Reply
+                </ButtonMinor>
+              </Reply>
             </Comment>
+
             <div>
               {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
                 <Comment key={k}>
