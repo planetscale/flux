@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ButtonMinor } from 'components/Button';
 
 const PageWrapper = styled.div`
   padding: 42px;
@@ -87,6 +88,19 @@ const ActionBar = styled.div`
   padding: 16px 0;
 `;
 
+const CommenterNameplateWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const CommentActionButtonGroup = styled.div`
+  display: flex;
+
+  ${ButtonMinor}:first-of-type {
+    margin: 0 8px 0 0;
+  }
+`;
+
 export {
   PageWrapper,
   Content,
@@ -98,4 +112,6 @@ export {
   CommentContent,
   Post,
   ActionBar,
+  CommenterNameplateWrapper,
+  CommentActionButtonGroup,
 };
