@@ -60,6 +60,10 @@ const InputWrapper = styled.div`
         background-color: rgba(255, 255, 255, 0);
       }
     }
+
+    ${media.phone`
+      border-radius: 0;
+    `}
   }
 `;
 
@@ -68,6 +72,10 @@ const ButtonWrapper = styled.div`
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   padding: 32px;
+
+  ${media.phone`
+    border-radius: 0;
+  `}
 `;
 
 const orgQuery = gql`
