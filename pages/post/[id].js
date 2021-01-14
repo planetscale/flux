@@ -139,7 +139,7 @@ export default function PostPage() {
         </Content>
         <ActionBar>
           <ButtonTertiary onClick={handleStarClick}>
-            <img src="/star.svg" alt="star" />
+            <img src="/icon_star.svg" alt="star" />
             <div>{postState.numStars}</div>
           </ButtonTertiary>
         </ActionBar>
