@@ -4,7 +4,7 @@ import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function CodeBlock({ language, value }) {
   return (
-    <SyntaxHighlighter language={language} style={tomorrow}>
+    <SyntaxHighlighter language={language || 'text'} style={tomorrow}>
       {value}
     </SyntaxHighlighter>
   );

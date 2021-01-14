@@ -176,6 +176,15 @@ const Channel = objectType({
   },
 });
 
+const Tag = objectType({
+  name: 'Tag',
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.posts();
+  },
+});
+
 const token = process.env.SLACK_API_TOKEN;
 const client = new WebClient(token);
 
@@ -217,6 +226,7 @@ const Query = queryType({
       },
     });
     t.crud.replies();
+    t.crud.tags();
   },
 });
 
@@ -239,6 +249,8 @@ const Mutation = mutationType({
     t.crud.deleteOneReply();
     t.crud.createOneStar();
     t.crud.deleteOneStar();
+    t.crud.createOneTag();
+    t.crud.deleteOneTag();
   },
 });
 
@@ -254,6 +266,7 @@ export const schema = makeSchema({
     Mutation,
     Star,
     Channel,
+    Tag,
   ],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
