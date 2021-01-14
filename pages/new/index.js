@@ -22,7 +22,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const TimeAndTags = styled.div``;
+const TimeAndTags = styled.div`
+  color: var(--text);
+`;
 
 const TitleInput = styled.textarea`
   outline: 0;
@@ -34,6 +36,7 @@ const TitleInput = styled.textarea`
   line-height: 58px;
   margin: 8px 0 24px;
   font-weight: 700;
+  background-color: var(--background);
 
   ::placeholder {
     color: var(--accent);
@@ -50,6 +53,7 @@ const SubtitleInput = styled.textarea`
   font-size: 18px;
   line-height: 22px;
   word-break: break-word;
+  background-color: var(--background);
 
   ::placeholder {
     color: var(--accent);
