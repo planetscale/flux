@@ -14,7 +14,6 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 480px;
   height: fit-content;
-  background: var(--background);
   border-radius: 4px;
   box-shadow: var(--shadow);
 
@@ -24,6 +23,7 @@ const Wrapper = styled.div`
 `;
 
 const InputWrapper = styled.div`
+  background-color: var(--background);
   color: var(--text);
   border-bottom: 1px solid var(--accent2);
   padding: 32px;
@@ -46,24 +46,27 @@ const InputWrapper = styled.div`
     cursor: default;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
-    background-color: var(--accent);
-    color: var(--accent3);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
 
     input {
-      color: var(--accent3);
+      color: rgba(255, 255, 255, 0.4);
     }
 
     &:hover {
-      background-color: var(--accent);
+      background-color: rgba(255, 255, 255, 0.1);
 
       input {
-        background-color: var(--accent);
+        background-color: rgba(255, 255, 255, 0);
       }
     }
   }
 `;
 
 const ButtonWrapper = styled.div`
+  background-color: var(--background);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   padding: 32px;
 `;
 
