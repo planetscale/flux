@@ -1,11 +1,10 @@
-import { parseMarkdown } from '../../../utils/markdown/parser';
 import { PrismaClient } from '@prisma/client';
 import { IncomingForm } from 'formidable';
 import Cors from 'cors';
 import { getUserId } from 'utils/auth/serverConfig';
 import { getLocaleDateTimeString } from '../../../utils/dateTime';
 
-const { WebClient } = require("@slack/web-api");
+const { WebClient } = require('@slack/web-api');
 
 const cors = Cors({
   methods: ['GET', 'POST', 'HEAD'],
@@ -81,11 +80,10 @@ export default async (req, res) => {
     userAvatar,
     domain,
   } = uploadRequest.fields;
-  const parsedContent = await parseMarkdown(content);
 
   const result = await prisma.post.create({
     data: {
-      content: parsedContent,
+      content,
       summary: summary,
       title: title,
       tags: tags,
@@ -113,47 +111,47 @@ export default async (req, res) => {
     channel: '#flux-sandbox',
     attachments: [
       {
-        "color": "#D491A5",
-        "blocks": [
+        color: '#D491A5',
+        blocks: [
           {
-            "type": "context",
-            "elements": [
+            type: 'context',
+            elements: [
               {
-                "type": "image",
-                "image_url": userAvatar,
-                "alt_text": "cute cat"
+                type: 'image',
+                image_url: userAvatar,
+                alt_text: 'cute cat',
               },
               {
-                "type": "mrkdwn",
-                "text": `*${userDisplayName}* shared a new update.`
-              }
-            ]
+                type: 'mrkdwn',
+                text: `*${userDisplayName}* shared a new update.`,
+              },
+            ],
           },
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": `*<${domain}/|${title}>*  
-${summary}`
-            }
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `*<${domain}/|${title}>*  
+${summary}`,
+            },
           },
           {
-            "type": "divider"
+            type: 'divider',
           },
           {
-            "type": "context",
-            "elements": [
+            type: 'context',
+            elements: [
               {
-                "type": "plain_text",
-                "text": `posted on ${postTime}`,
-                "emoji": true
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  })
+                type: 'plain_text',
+                text: `posted on ${postTime}`,
+                emoji: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
 
   res.json(result);
 };
