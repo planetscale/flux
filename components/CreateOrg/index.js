@@ -22,21 +22,27 @@ const Wrapper = styled.div`
   height: fit-content;
   background: var(--background);
   border-radius: 4px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
 `;
 
 const Logo = styled.img``;
 
 const InputWrapper = styled.div`
-  border-bottom: 1px solid #f7f7f7;
+  color: var(--text);
+  border-bottom: 1px solid var(--accent2);
   padding: 32px;
+
+  input {
+    background-color: unset;
+    color: var(--text);
+  }
 
   &:hover {
     cursor: pointer;
-    background-color: #f7f7f7;
+    background-color: var(--accent2);
 
     input {
-      background-color: #f7f7f7;
+      background-color: var(--accent2);
     }
   }
 
@@ -44,14 +50,18 @@ const InputWrapper = styled.div`
     cursor: default;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
-    background-color: #f7f7f7;
-    color: #ccc;
+    background-color: var(--accent);
+    color: var(--accent3);
+
+    input {
+      color: var(--accent3);
+    }
 
     &:hover {
-      background-color: #f7f7f7;
+      background-color: var(--accent);
 
       input {
-        background-color: #f7f7f7;
+        background-color: var(--accent);
       }
     }
   }
