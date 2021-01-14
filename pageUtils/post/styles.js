@@ -67,6 +67,7 @@ const Reply = styled.div`
     align-self: stretch;
     margin-bottom: 24px;
     border: 1px solid var(--accent);
+    background-color: var(--background);
     color: var(--text);
 
     :focus {
