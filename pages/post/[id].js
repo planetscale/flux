@@ -3,7 +3,8 @@ import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
-import ReactMarkdownWithHtml from 'react-markdown/with-html';
+import ReactMarkdown from 'react-markdown';
+
 import {
   PageWrapper,
   PostMetadata,
@@ -28,6 +29,7 @@ import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
+import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 
 export default function PostPage() {
   const router = useRouter();
@@ -260,9 +262,9 @@ export default function PostPage() {
         </PostMetadata>
 
         <Content>
-          <ReactMarkdownWithHtml allowDangerousHtml>
+          <ReactMarkdown renderers={{ code: CodeBlock }}>
             {content}
-          </ReactMarkdownWithHtml>
+          </ReactMarkdown>
         </Content>
         <ActionBar>
           <ButtonTertiary onClick={handleStarClick}>
