@@ -10,6 +10,7 @@ const CenterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--background);
 `;
 
 export default function AppContentWrapper({ token, children }) {
