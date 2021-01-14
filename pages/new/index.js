@@ -128,15 +128,17 @@ export default function NewPost() {
     });
   };
 
+  const canSubmitPost = () => {
+    return (
+      state.title?.trim() &&
+      state.subtitle?.trim() &&
+      state.content?.trim() &&
+      state.selectedLens
+    );
+  };
+
   const handlePostSubmit = async () => {
-    if (
-      !(
-        state.title?.trim() &&
-        state.subtitle?.trim() &&
-        state.content?.trim() &&
-        state.selectedLens
-      )
-    ) {
+    if (!canSubmitPost()) {
       return;
     }
 
@@ -202,7 +204,7 @@ export default function NewPost() {
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>
-          <ButtonMajor onClick={handlePostSubmit}>
+          <ButtonMajor onClick={handlePostSubmit} disabled={!canSubmitPost()}>
             <img src="/icon_post.svg" alt="Button to submit post" />
             Post
           </ButtonMajor>
