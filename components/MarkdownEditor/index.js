@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from 'utils/auth/clientConfig';
+import CodeBlock from './CodeBlock';
 
 const Wrapper = styled.div`
   textarea {
@@ -99,7 +100,9 @@ export default function MarkdownEditor({ content, handleContentChange }) {
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
         generateMarkdownPreview={markdown =>
-          Promise.resolve(<ReactMarkdown source={markdown} />)
+          Promise.resolve(
+            <ReactMarkdown source={markdown} renderers={{ code: CodeBlock }} />
+          )
         }
         loadSuggestions={loadSuggestions}
         childProps={{
