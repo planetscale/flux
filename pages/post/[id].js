@@ -29,7 +29,7 @@ import { useImmer } from 'use-immer';
 export default function PostPage() {
   const router = useRouter();
   const [postState, updatePostState] = useImmer({
-    replies: [],
+    replies: {},
     numStars: 0,
   });
   const [reply, setReply] = useState('');
@@ -55,8 +55,40 @@ export default function PostPage() {
     }
 
     if (postDataResult.data?.post) {
+      const replyMap = postDataResult.data?.post.replies.reduce((acc, curr) => {
+        const { author, content, createdAt } = curr;
+        if (!curr.parentId) {
+          acc[curr.id] = { author, content, createdAt, replies: {} };
+        } else {
+          // DFS to search for the parent
+          const stack = [];
+          Object.entries(acc).forEach(item => {
+            stack.push(item);
+
+            while (stack.length) {
+              const currItem = stack.pop();
+
+              if (Number(currItem[0]) === curr.parentId) {
+                currItem[1]['replies'][curr.id] = {
+                  author,
+                  content,
+                  createdAt,
+                  replies: {},
+                };
+              }
+
+              Object.entries(currItem[1].replies).forEach(item => {
+                stack.push(item);
+              });
+            }
+          });
+        }
+
+        return acc;
+      }, {});
+
       updatePostState(draft => {
-        draft.replies = postDataResult.data?.post.replies;
+        draft.replies = replyMap;
       });
 
       if (postState.numStars === 0) {
@@ -95,7 +127,7 @@ export default function PostPage() {
       console.error(e);
     }
   };
-
+  console.log(postState);
   const handleStarClick = async () => {
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
     updatePostState(draft => {
@@ -145,21 +177,42 @@ export default function PostPage() {
         </ActionBar>
       </Post>
 
-      {postState.replies?.map(reply => (
-        <Comment key={reply.id}>
-          <CommenterNamePlate
-            displayName={reply.author?.displayName}
-            userHandle={reply.author?.username}
-            avatar={reply.author?.profile?.avatar}
-            date={getLocaleDateTimeString(reply.createdAt)}
-          />
-          <CommentContent>{reply.content}</CommentContent>
-        </Comment>
-      ))}
+      {Object.entries(postState.replies).map(
+        ([firstLevelReplyKey, firstLevelReplyValue]) => (
+          <div key={firstLevelReplyKey}>
+            <Comment>
+              <CommenterNamePlate
+                displayName={firstLevelReplyValue.author?.displayName}
+                userHandle={firstLevelReplyValue.author?.username}
+                avatar={firstLevelReplyValue.author?.profile?.avatar}
+                date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
+              />
+              <CommentContent>{firstLevelReplyValue.content}</CommentContent>
+            </Comment>
+            <div>
+              {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
+                <Comment key={k}>
+                  <CommenterNamePlate
+                    displayName={v.author?.displayName}
+                    userHandle={v.author?.username}
+                    avatar={v.author?.profile?.avatar}
+                    date={getLocaleDateTimeString(v.createdAt)}
+                  />
+                  <CommentContent>{v.content}</CommentContent>
+                </Comment>
+              ))}
+            </div>
+          </div>
+        )
+      )}
 
       <Reply>
         <textarea value={reply} onChange={handleReplyChange}></textarea>
-        <ButtonMinor type="submit" onClick={handleCommentSubmit}>
+        <ButtonMinor
+          type="submit"
+          onClick={handleCommentSubmit}
+          disabled={!reply?.trim()}
+        >
           <img src="/icon_comment.svg" alt="button to submit response" />
           Reply
         </ButtonMinor>
