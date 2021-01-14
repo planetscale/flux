@@ -15,11 +15,14 @@ import {
   Post,
   CommentContent,
   ActionBar,
+  CommenterNameplateWrapper,
+  CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
 import {
   postDataQuery,
   createReplyMutation,
   createStarMutation,
+  updateReplyMutation,
 } from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
@@ -55,6 +58,9 @@ export default function PostPage() {
   );
   const [createStarResult, runCreateStarMutation] = useMutation(
     createStarMutation
+  );
+  const [updateReplyResult, runUpdateReplyMutation] = useMutation(
+    updateReplyMutation
   );
 
   useEffect(() => {
@@ -177,13 +183,33 @@ export default function PostPage() {
 
     setCommentInputs(draft => {
       draft.edits[e.target.dataset.commentId] =
-        commentInputs.edits[e.target.dataset.commentId] ?? content;
+        commentInputs.edits[e.target.dataset.commentId] || content;
     });
   };
 
-  const handleCommentEditSubmit = e => {
+  const handleCommentEditSubmit = async e => {
     if (!commentInputs.edits[e.target.dataset.commentId]?.trim()) {
       return;
+    }
+
+    try {
+      const res = await runUpdateReplyMutation({
+        content: commentInputs.edits[e.target.dataset.commentId]?.trim(),
+        replyId: Number(e.target.dataset.commentId),
+      });
+      if (res.data) {
+        setCommentInputs(draft => {
+          draft.edits[e.target.dataset.commentId] = '';
+        });
+        setCommentButtonState(draft => {
+          draft.editButtons[e.target.dataset.commentId] = !commentButtonState
+            .editButtons[e.target.dataset.commentId];
+        });
+      } else {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -202,6 +228,10 @@ export default function PostPage() {
       if (res.data) {
         setCommentInputs(draft => {
           draft.replies[e.target.dataset.commentId] = '';
+        });
+        setCommentButtonState(draft => {
+          draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
+            .replyButtons[e.target.dataset.commentId];
         });
       } else {
         console.error(e);
@@ -246,14 +276,14 @@ export default function PostPage() {
         ([firstLevelReplyKey, firstLevelReplyValue]) => (
           <div key={firstLevelReplyKey}>
             <Comment>
-              <div>
+              <CommenterNameplateWrapper>
                 <CommenterNamePlate
                   displayName={firstLevelReplyValue.author?.displayName}
                   userHandle={firstLevelReplyValue.author?.username}
                   avatar={firstLevelReplyValue.author?.profile?.avatar}
                   date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
                 />
-                <div>
+                <CommentActionButtonGroup>
                   <ButtonMinor
                     data-comment-id={firstLevelReplyKey}
                     type="submit"
@@ -270,8 +300,8 @@ export default function PostPage() {
                   >
                     Edit
                   </ButtonMinor>
-                </div>
-              </div>
+                </CommentActionButtonGroup>
+              </CommenterNameplateWrapper>
 
               {commentButtonState.editButtons[firstLevelReplyKey] ? (
                 <Reply>
