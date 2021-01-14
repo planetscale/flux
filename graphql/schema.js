@@ -9,7 +9,7 @@ import {
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
 
-const { WebClient } = require("@slack/web-api");
+const { WebClient } = require('@slack/web-api');
 
 const Org = objectType({
   name: 'Org',
@@ -98,7 +98,7 @@ const Lens = objectType({
 
                 return result;
               } catch (error) {
-                console.log(error);
+                console.error(error);
               }
             })();
           } else if (before.id && before.id !== -1) {
@@ -207,14 +207,11 @@ const Query = queryType({
             exclude_archived: true,
             limit: 1000,
           });
-          return slackRes.channels.map(
-              channel => ({
-                id: channel.id,
-                name: channel.name
-              })
-          );
-        }
-        catch (error) {
+          return slackRes.channels.map(channel => ({
+            id: channel.id,
+            name: channel.name,
+          }));
+        } catch (error) {
           console.error(error);
         }
       },
@@ -246,7 +243,18 @@ const Mutation = mutationType({
 });
 
 export const schema = makeSchema({
-  types: [User, Org, Profile, Lens, Post, Reply, Query, Mutation, Star, Channel],
+  types: [
+    User,
+    Org,
+    Profile,
+    Lens,
+    Post,
+    Reply,
+    Query,
+    Mutation,
+    Star,
+    Channel,
+  ],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
     schema: path.join(process.cwd(), 'generated', 'schema.graphql'),
