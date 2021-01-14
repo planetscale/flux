@@ -42,6 +42,7 @@ function App({ Component, pageProps }) {
             margin: unset;
             width: 100vw;
             overflow: auto;
+            background: var(--background);
           }
 
           input,
