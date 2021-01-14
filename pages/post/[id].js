@@ -158,7 +158,11 @@ export default function PostPage() {
       ))}
 
       <Reply>
-        <textarea value={reply} onChange={handleReplyChange}></textarea>
+        <textarea
+          value={reply}
+          placeholder="Reply to this post"
+          onChange={handleReplyChange}
+        ></textarea>
         <ButtonMinor type="submit" onClick={handleCommentSubmit}>
           <img src="/icon_comment.svg" alt="button to submit response" />
           Reply

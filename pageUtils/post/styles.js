@@ -1,18 +1,23 @@
 import styled from '@emotion/styled';
+import { media } from './theme';
 
 const PageWrapper = styled.div`
   padding: 42px;
-  width: 100%;
+  width: 80ch;
   box-sizing: border-box;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+
+  ${media.phone`
+    width: 100%;
+  `}
 `;
 
 const PostMetadata = styled.div`
   padding: 0 0 32px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--accent2);
 `;
 
 const DateTime = styled.div`
@@ -34,14 +39,13 @@ const Content = styled.div`
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid #f7f7f7;
+  border-bottom: 1px solid var(--accent2);
   padding: 32px 0;
 `;
 
 const Comment = styled.div`
-  width: 90ch;
   padding: 0 0 30px 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--accent2);
   color: var(--text);
   margin: 42px 0 0 0;
 `;
@@ -51,7 +55,7 @@ const Reply = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 90ch;
+  width: 100%;
 
   textarea {
     resize: none;
@@ -61,7 +65,7 @@ const Reply = styled.div`
     padding: 24px;
     align-self: stretch;
     margin-bottom: 24px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent3);
     color: var(--text);
 
     :focus {
@@ -78,12 +82,10 @@ const CommentContent = styled.div`
   line-height: 22px;
 `;
 
-const Post = styled.div`
-  width: 90ch;
-`;
+const Post = styled.div``;
 
 const ActionBar = styled.div`
-  border-bottom: 1px solid #f7f7f7;
+  border-bottom: 1px solid var(--accent2);
   padding: 16px 0;
 `;
 

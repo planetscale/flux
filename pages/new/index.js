@@ -8,6 +8,7 @@ import { useUserContext } from 'state/user';
 import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { Post } from 'pageUtils/post/styles';
 
 const Wrapper = styled.div`
   display: flex;
@@ -181,7 +182,7 @@ export default function NewPost() {
 
   return (
     <Wrapper>
-      <div>
+      <Post>
         <TimeAndTags>{state.dateTime}</TimeAndTags>
         <TitleInput
           placeholder="Enter Title"
@@ -208,7 +209,7 @@ export default function NewPost() {
           </ButtonMajor>
           <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
         </ActionItems>
-      </div>
+      </Post>
     </Wrapper>
   );
 }
