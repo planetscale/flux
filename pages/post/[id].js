@@ -300,15 +300,18 @@ export default function PostPage() {
                     >
                       Reply
                     </ButtonMinor>
-                    <ButtonMinor
-                      data-comment-id={firstLevelReplyKey}
-                      type="submit"
-                      onClick={e => {
-                        toggleCommentEdit(e, firstLevelReplyValue.content);
-                      }}
-                    >
-                      Edit
-                    </ButtonMinor>
+                    {userContext.user.id ===
+                      firstLevelReplyValue.author?.id && (
+                      <ButtonMinor
+                        data-comment-id={firstLevelReplyKey}
+                        type="submit"
+                        onClick={e => {
+                          toggleCommentEdit(e, firstLevelReplyValue.content);
+                        }}
+                      >
+                        Edit
+                      </ButtonMinor>
+                    )}
                   </CommentActionButtonGroup>
 
                   {commentButtonState.editButtons[firstLevelReplyKey] ? (
@@ -366,17 +369,104 @@ export default function PostPage() {
               </CommentListItem>
 
               {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
-                <CommentListItem className="leveltwo">
-                  <Comment className="leveltwo" key={k}>
-                    <CommenterNamePlate
-                      displayName={v.author?.displayName}
-                      userHandle={v.author?.username}
-                      avatar={v.author?.profile?.avatar}
-                      date={getLocaleDateTimeString(v.createdAt)}
-                    />
-                    <CommentContent>{v.content}</CommentContent>
-                  </Comment>
-                </CommentListItem>
+                <div key={k}>
+                  <CommentListItem className="leveltwo">
+                    <Comment className="leveltwo">
+                      <CommenterNameplateWrapper>
+                        <CommenterNamePlate
+                          displayName={v.author?.displayName}
+                          userHandle={v.author?.username}
+                          avatar={v.author?.profile?.avatar}
+                          date={getLocaleDateTimeString(v.createdAt)}
+                        />
+                      </CommenterNameplateWrapper>
+                      <CommentActionButtonGroup className="actions">
+                        <ButtonMinor
+                          data-comment-id={k}
+                          type="submit"
+                          onClick={toggleCommentReply}
+                        >
+                          Reply
+                        </ButtonMinor>
+                        {userContext.user.id === v.author?.id && (
+                          <ButtonMinor
+                            data-comment-id={k}
+                            type="submit"
+                            onClick={e => {
+                              toggleCommentEdit(e, v.content);
+                            }}
+                          >
+                            Edit
+                          </ButtonMinor>
+                        )}
+                      </CommentActionButtonGroup>
+
+                      {commentButtonState.editButtons[k] ? (
+                        <Reply>
+                          <textarea
+                            data-comment-id={k}
+                            value={commentInputs.edits[k]}
+                            onChange={handleCommentEditsChange}
+                          ></textarea>
+                          <ButtonMinor
+                            data-comment-id={k}
+                            type="submit"
+                            onClick={handleCommentEditSubmit}
+                            disabled={!commentInputs.edits[k]?.trim()}
+                          >
+                            <img
+                              src="/icon_comment.svg"
+                              alt="button to submit comment edit"
+                            />
+                            Update
+                          </ButtonMinor>
+                        </Reply>
+                      ) : (
+                        <CommentContent>{v.content}</CommentContent>
+                      )}
+
+                      {commentButtonState.replyButtons[k] && (
+                        <Reply>
+                          <textarea
+                            data-comment-id={k}
+                            value={commentInputs.replies[k]}
+                            onChange={handleCommentRepliesChange}
+                          ></textarea>
+                          <ButtonMinor
+                            data-comment-id={k}
+                            type="submit"
+                            onClick={handleCommentReplySubmit}
+                            disabled={!commentInputs.replies[k]?.trim()}
+                          >
+                            <img
+                              src="/icon_comment.svg"
+                              alt="button to submit response to comment"
+                            />
+                            Reply
+                          </ButtonMinor>
+                        </Reply>
+                      )}
+                    </Comment>
+                  </CommentListItem>
+
+                  {Object.entries(v.replies).map(([key, value]) => (
+                    <div key={key}>
+                      <CommentListItem className="leveltwo">
+                        <Comment className="leveltwo">
+                          <CommenterNameplateWrapper>
+                            <CommenterNamePlate
+                              displayName={value.author?.displayName}
+                              userHandle={value.author?.username}
+                              avatar={value.author?.profile?.avatar}
+                              date={getLocaleDateTimeString(value.createdAt)}
+                            />
+                          </CommenterNameplateWrapper>
+                          <CommentContent>{value.content}</CommentContent>
+                        </Comment>
+                      </CommentListItem>
+                    </div>
+                  ))}
+                </div>
               ))}
             </div>
           )

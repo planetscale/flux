@@ -134,8 +134,8 @@ const CommentActionButtonGroup = styled.div`
   right: 0;
   display: flex;
 
-  ${ButtonMinor}:first-of-type {
-    margin: 0 8px 0 0;
+  ${ButtonMinor}:nth-of-type(2) {
+    margin: 0 0 0 8px;
   }
 `;
 

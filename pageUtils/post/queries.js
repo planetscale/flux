@@ -9,6 +9,7 @@ const postDataQuery = gql`
       summary
       content
       author {
+        id
         username
         displayName
         profile {
@@ -25,6 +26,7 @@ const postDataQuery = gql`
         createdAt
         parentId
         author {
+          id
           username
           displayName
           profile {
@@ -76,6 +78,7 @@ const updateReplyMutation = gql`
       content
       parentId
       author {
+        id
         username
         displayName
         profile {
