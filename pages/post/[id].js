@@ -320,6 +320,7 @@ export default function PostPage() {
                         data-comment-id={firstLevelReplyKey}
                         value={commentInputs.edits[firstLevelReplyKey]}
                         onChange={handleCommentEditsChange}
+                        autoFocus
                       ></textarea>
                       <ButtonMinor
                         data-comment-id={firstLevelReplyKey}
@@ -348,6 +349,7 @@ export default function PostPage() {
                         data-comment-id={firstLevelReplyKey}
                         value={commentInputs.replies[firstLevelReplyKey]}
                         onChange={handleCommentRepliesChange}
+                        autoFocus
                       ></textarea>
                       <ButtonMinor
                         data-comment-id={firstLevelReplyKey}
@@ -407,6 +409,7 @@ export default function PostPage() {
                             data-comment-id={k}
                             value={commentInputs.edits[k]}
                             onChange={handleCommentEditsChange}
+                            autoFocus
                           ></textarea>
                           <ButtonMinor
                             data-comment-id={k}
@@ -431,6 +434,7 @@ export default function PostPage() {
                             data-comment-id={k}
                             value={commentInputs.replies[k]}
                             onChange={handleCommentRepliesChange}
+                            autoFocus
                           ></textarea>
                           <ButtonMinor
                             data-comment-id={k}
@@ -451,8 +455,8 @@ export default function PostPage() {
 
                   {Object.entries(v.replies).map(([key, value]) => (
                     <div key={key}>
-                      <CommentListItem className="leveltwo">
-                        <Comment className="leveltwo">
+                      <CommentListItem className="levelthree">
+                        <Comment className="levelthree">
                           <CommenterNameplateWrapper>
                             <CommenterNamePlate
                               displayName={value.author?.displayName}
