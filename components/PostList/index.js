@@ -50,14 +50,14 @@ const Post = styled.div`
     content: ' ';
     display: block;
     position: absolute;
-    border-radius: 99px;
+    border-radius: 50%;
     border: 8px solid var(--background);
     width: 8px;
     height: 8px;
     background-color: var(--accent);
     top: 20px;
     left: -28px;
-    transition: all 150ms;
+    transition: background-color 150ms;
   }
 `;
 
