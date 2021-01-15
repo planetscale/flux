@@ -137,6 +137,7 @@ const Post = objectType({
     t.model.replies();
     t.model.content();
     t.model.stars();
+    t.model.tag();
   },
 });
 

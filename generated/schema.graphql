@@ -393,6 +393,7 @@ type Post {
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
   stars(after: StarWhereUniqueInput, before: StarWhereUniqueInput, first: Int, last: Int): [Star!]!
   summary: String!
+  tag: Tag!
   title: String!
 }
 
