@@ -4,6 +4,7 @@ import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
 import Head from 'next/head';
+import { initTheme } from 'pageUtils/post/theme';
 import './styles.css';
 
 const initContextDevTools = () => {
@@ -18,6 +19,7 @@ const initContextDevTools = () => {
 function App({ Component, pageProps }) {
   useEffect(() => {
     initContextDevTools();
+    initTheme();
   }, []);
 
   return (
