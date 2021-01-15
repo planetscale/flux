@@ -63,7 +63,6 @@ export default async (req, res) => {
     const form = new IncomingForm();
 
     form.parse(req, (err, fields, files) => {
-      console.log(fields);
       if (err) return reject(err);
       resolve({ fields, files });
     });
