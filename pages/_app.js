@@ -45,6 +45,7 @@ function App({ Component, pageProps }) {
             width: 100vw;
             overflow: auto;
             background: var(--background);
+            color: var(--text);
           }
 
           input,
