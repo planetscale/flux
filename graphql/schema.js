@@ -171,7 +171,7 @@ const UniqueIdInput = inputObjectType({
 const Channel = objectType({
   name: 'Channel',
   definition(t) {
-    t.id();
+    t.id('id');
     t.string('name');
   },
 });

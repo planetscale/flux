@@ -86,6 +86,15 @@ const lensesQuery = gql`
   }
 `;
 
+const channelsQuery = gql`
+  query {
+    channels {
+      id
+      name
+    }
+  }
+`;
+
 const customStyles = {
   container: provided => ({
     ...provided,
@@ -127,12 +136,6 @@ const customStyles = {
   }),
 };
 
-const comboBoxOptions = [
-  { value: 'chocolate', label: '#design' },
-  { value: 'strawberry', label: '#general' },
-  { value: 'vanilla', label: '#sales' },
-];
-
 const dateTimeOptions = {
   year: 'numeric',
   month: 'short',
@@ -152,19 +155,37 @@ export default function NewPost() {
     content: '',
     selectedLens: '',
     selectedTag: null,
+    tagOptions: [],
   });
+
   const [lensesResult, runLensesQuery] = useQuery({
     query: lensesQuery,
+  });
+
+  const [channelsResult, runChannelsQuery] = useQuery({
+    query: channelsQuery,
   });
 
   useEffect(() => {
     if (lensesResult.data?.lenses) {
       updateState(draft => {
-        // TODO: let user select channel/tag/lens
+        // TODO: remove concept of lens if backend ready
         draft.selectedLens = lensesResult.data?.lenses?.[0].id;
       });
     }
   }, [lensesResult.data?.lenses]);
+
+  useEffect(() => {
+    if (channelsResult.data?.channels) {
+      const tagMap = channelsResult.data?.channels.map(item => {
+        return { value: item.name, label: `#${item.name}`, channelId: item.id };
+      });
+      updateState(draft => {
+        draft.tagOptions = tagMap;
+        draft.selectedTag = tagMap[0];
+      });
+    }
+  }, [channelsResult.data?.channels]);
 
   const handleTitleChange = e => {
     let title = e.target;
@@ -189,7 +210,8 @@ export default function NewPost() {
       state.title?.trim() &&
       state.subtitle?.trim() &&
       state.content?.trim() &&
-      state.selectedLens
+      state.selectedLens &&
+      state.selectedTag
     );
   };
 
@@ -211,6 +233,8 @@ export default function NewPost() {
       );
       formData.append('userDisplayName', userContext?.user?.displayName);
       formData.append('domain', window.location.origin);
+      formData.append('tagName', state.selectedTag.value);
+      formData.append('tagChannelId', state.selectedTag.channelId);
 
       const rawResp = await fetch('/api/upload/post', {
         method: 'POST',
@@ -241,8 +265,6 @@ export default function NewPost() {
     updateState(draft => {
       draft.selectedTag = selectedOption;
     });
-
-    console.log(`Option selected:`, selectedOption);
   };
 
   return (
@@ -255,9 +277,10 @@ export default function NewPost() {
               isClearable={true}
               isSearchable={true}
               styles={customStyles}
-              value={state.selectedOption}
+              value={state.selectedTag}
               onChange={handleTagChange}
-              options={comboBoxOptions}
+              options={state.tagOptions}
+              defaultValue={state.selectedTag}
               placeholder="Select a tag"
               theme={theme => ({
                 ...theme,

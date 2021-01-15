@@ -8,8 +8,8 @@ input BoolNullableFilter {
 }
 
 type Channel {
+  id: ID
   name: String
-  undefined: ID
 }
 
 scalar DateTime
