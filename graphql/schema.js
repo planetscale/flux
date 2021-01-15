@@ -186,6 +186,17 @@ const Tag = objectType({
   },
 });
 
+const SlackMember = objectType({
+  name: 'SlackMember',
+  definition(t) {
+    t.id('id');
+    t.string('realName');
+    t.string('displayName');
+    t.boolean('deleted');
+    t.boolean('isBot');
+  },
+});
+
 const token = process.env.SLACK_API_TOKEN;
 const client = new WebClient(token);
 
@@ -220,6 +231,23 @@ const Query = queryType({
           return slackRes.channels.map(channel => ({
             id: channel.id,
             name: channel.name,
+          }));
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    });
+    t.list.field('slackmembers', {
+      type: 'SlackMember',
+      async resolve(_parent, _args, _ctx) {
+        try {
+          const slackRes = await client.users.list({});
+          return slackRes.members.map(member => ({
+            id: member.id,
+            realName: member.profile.real_name,
+            displayName: member.profile.display_name,
+            deleted: member.deleted,
+            isBot: member.is_bot,
           }));
         } catch (error) {
           console.error(error);
@@ -268,6 +296,7 @@ export const schema = makeSchema({
     Star,
     Channel,
     Tag,
+    SlackMember,
   ],
   plugins: [nexusPrisma({ experimentalCRUD: true })],
   outputs: {
