@@ -329,7 +329,7 @@ export default function PostPage() {
                           !commentInputs.edits[firstLevelReplyKey]?.trim()
                         }
                       >
-                        <Icon className="icon-comment"></Icon>
+                        <Icon className="icon-edit"></Icon>
                         Update
                       </ButtonMinor>
                     </Reply>
@@ -408,7 +408,7 @@ export default function PostPage() {
                             onClick={handleCommentEditSubmit}
                             disabled={!commentInputs.edits[k]?.trim()}
                           >
-                            <Icon className="icon-comment"></Icon>
+                            <Icon className="icon-edit"></Icon>
                             Update
                           </ButtonMinor>
                         </Reply>

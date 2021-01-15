@@ -35,6 +35,10 @@ const Icon = styled.span`
   &.icon-star {
     mask: url('/icon_star.svg');
   }
+
+  &.icon-edit {
+    mask: url('/icon_edit.svg');
+  }
 `;
 
 export { Icon };
