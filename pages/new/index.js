@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
+import Select from 'react-select';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Post } from 'pageUtils/post/styles';
 
@@ -24,6 +25,8 @@ const Wrapper = styled.div`
 
 const TimeAndTags = styled.div`
   color: var(--text);
+  display: flex;
+  align-items: center;
 `;
 
 const TitleInput = styled.textarea`
@@ -85,6 +88,56 @@ const lensesQuery = gql`
   }
 `;
 
+const channelsQuery = gql`
+  query {
+    channels {
+      id
+      name
+    }
+  }
+`;
+
+const customStyles = {
+  container: provided => ({
+    ...provided,
+    width: '150px',
+  }),
+  control: provided => ({
+    ...provided,
+    borderColor: 'unset',
+    borderRadius: 'unset',
+    borderStyle: 'unset',
+    borderWidth: 'unset',
+    boxShadow: 'unset',
+    backgroundColor: 'var(--accent3)',
+    borderRadius: '5px',
+  }),
+  indicatorSeparator: provided => ({
+    ...provided,
+    backgroundColor: 'var(--background)',
+    marginBottom: '0',
+    marginTop: '0',
+  }),
+  indicatorContainer: provided => ({
+    ...provided,
+    color: 'var(--foreground)',
+  }),
+  option: provided => ({
+    ...provided,
+    ':hover': {
+      color: 'var(--background)',
+    },
+  }),
+  singleValue: provided => ({
+    ...provided,
+    color: '#0076A8',
+  }),
+  menu: provided => ({
+    ...provided,
+    borderRadius: '8px',
+  }),
+};
+
 const dateTimeOptions = {
   year: 'numeric',
   month: 'short',
@@ -103,19 +156,38 @@ export default function NewPost() {
     subtitle: '',
     content: '',
     selectedLens: '',
+    selectedTag: null,
+    tagOptions: [],
   });
+
   const [lensesResult, runLensesQuery] = useQuery({
     query: lensesQuery,
+  });
+
+  const [channelsResult, runChannelsQuery] = useQuery({
+    query: channelsQuery,
   });
 
   useEffect(() => {
     if (lensesResult.data?.lenses) {
       updateState(draft => {
-        // TODO: let user select channel/tag/lens
+        // TODO: remove concept of lens if backend ready
         draft.selectedLens = lensesResult.data?.lenses?.[0].id;
       });
     }
   }, [lensesResult.data?.lenses]);
+
+  useEffect(() => {
+    if (channelsResult.data?.channels) {
+      const tagMap = channelsResult.data?.channels.map(item => {
+        return { value: item.name, label: `#${item.name}`, channelId: item.id };
+      });
+      updateState(draft => {
+        draft.tagOptions = tagMap;
+        draft.selectedTag = tagMap[0];
+      });
+    }
+  }, [channelsResult.data?.channels]);
 
   const handleTitleChange = e => {
     let title = e.target;
@@ -140,7 +212,8 @@ export default function NewPost() {
       state.title?.trim() &&
       state.subtitle?.trim() &&
       state.content?.trim() &&
-      state.selectedLens
+      state.selectedLens &&
+      state.selectedTag
     );
   };
 
@@ -162,6 +235,8 @@ export default function NewPost() {
       );
       formData.append('userDisplayName', userContext?.user?.displayName);
       formData.append('domain', window.location.origin);
+      formData.append('tagName', state.selectedTag.value);
+      formData.append('tagChannelId', state.selectedTag.channelId);
 
       const rawResp = await fetch('/api/upload/post', {
         method: 'POST',
@@ -188,10 +263,40 @@ export default function NewPost() {
     });
   };
 
+  const handleTagChange = selectedOption => {
+    updateState(draft => {
+      draft.selectedTag = selectedOption;
+    });
+  };
+
   return (
     <Wrapper>
       <Post>
-        <TimeAndTags>{state.dateTime}</TimeAndTags>
+        <TimeAndTags>
+          <div>{state.dateTime}&nbsp; &middot; &nbsp;</div>
+          <div>
+            <Select
+              isClearable={true}
+              isSearchable={true}
+              styles={customStyles}
+              value={state.selectedTag}
+              onChange={handleTagChange}
+              options={state.tagOptions}
+              defaultValue={state.selectedTag}
+              placeholder="Select a tag"
+              theme={theme => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary25: 'var(--highlight)',
+                  primary50: 'var(--highlight)',
+                  primary75: 'var(--highlight)',
+                  primary: 'var(--highlight)',
+                },
+              })}
+            />
+          </div>
+        </TimeAndTags>
         <TitleInput
           placeholder="Enter Title"
           rows="1"

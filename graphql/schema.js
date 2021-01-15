@@ -86,17 +86,19 @@ const Lens = objectType({
                   },
                 });
 
-                const result = await ctx.prisma.post.findMany({
-                  take: Math.abs(last),
-                  cursor: {
-                    id: res.id,
-                  },
-                  orderBy: {
-                    id: 'desc',
-                  },
-                });
+                if (res) {
+                  const result = await ctx.prisma.post.findMany({
+                    take: Math.abs(last),
+                    cursor: {
+                      id: res.id,
+                    },
+                    orderBy: {
+                      id: 'desc',
+                    },
+                  });
 
-                return result;
+                  return result;
+                }
               } catch (error) {
                 console.error(error);
               }
@@ -130,7 +132,6 @@ const Post = objectType({
     t.model.title();
     t.model.summary();
     t.model.published();
-    t.model.tags();
     t.model.author();
     t.model.lens();
     t.model.replies();
@@ -171,7 +172,7 @@ const UniqueIdInput = inputObjectType({
 const Channel = objectType({
   name: 'Channel',
   definition(t) {
-    t.id();
+    t.id('id');
     t.string('name');
   },
 });

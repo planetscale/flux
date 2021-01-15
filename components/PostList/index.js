@@ -111,6 +111,7 @@ export default function PostList({ posts = [] }) {
   return (
     <Wrapper>
       {posts.map(post => {
+        if (!post) return;
         const { id, title, author, createdAt, summary } = post;
         return (
           <Post

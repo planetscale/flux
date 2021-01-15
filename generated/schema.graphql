@@ -8,8 +8,8 @@ input BoolNullableFilter {
 }
 
 type Channel {
+  id: ID
   name: String
-  undefined: ID
 }
 
 scalar DateTime
@@ -393,7 +393,6 @@ type Post {
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
   stars(after: StarWhereUniqueInput, before: StarWhereUniqueInput, first: Int, last: Int): [Star!]!
   summary: String!
-  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
   title: String!
 }
 
@@ -409,10 +408,10 @@ input PostCreateManyWithoutLensInput {
   create: [PostCreateWithoutLensInput!]
 }
 
-input PostCreateManyWithoutTagsInput {
+input PostCreateManyWithoutTagInput {
   connect: [PostWhereUniqueInput!]
-  connectOrCreate: [PostCreateOrConnectWithouttagsInput!]
-  create: [PostCreateWithoutTagsInput!]
+  connectOrCreate: [PostCreateOrConnectWithouttagInput!]
+  create: [PostCreateWithoutTagInput!]
 }
 
 input PostCreateOneWithoutRepliesInput {
@@ -447,8 +446,8 @@ input PostCreateOrConnectWithoutstarsInput {
   where: PostWhereUniqueInput!
 }
 
-input PostCreateOrConnectWithouttagsInput {
-  create: PostCreateWithoutTagsInput!
+input PostCreateOrConnectWithouttagInput {
+  create: PostCreateWithoutTagInput!
   where: PostWhereUniqueInput!
 }
 
@@ -460,7 +459,7 @@ input PostCreateWithoutAuthorInput {
   replies: ReplyCreateManyWithoutPostInput
   stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tag: TagCreateOneWithoutPostsInput!
   title: String!
 }
 
@@ -472,7 +471,7 @@ input PostCreateWithoutLensInput {
   replies: ReplyCreateManyWithoutPostInput
   stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tag: TagCreateOneWithoutPostsInput!
   title: String!
 }
 
@@ -484,7 +483,7 @@ input PostCreateWithoutRepliesInput {
   published: Boolean
   stars: StarCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tag: TagCreateOneWithoutPostsInput!
   title: String!
 }
 
@@ -496,11 +495,11 @@ input PostCreateWithoutStarsInput {
   published: Boolean
   replies: ReplyCreateManyWithoutPostInput
   summary: String!
-  tags: TagCreateManyWithoutPostsInput
+  tag: TagCreateOneWithoutPostsInput!
   title: String!
 }
 
-input PostCreateWithoutTagsInput {
+input PostCreateWithoutTagInput {
   author: UserCreateOneWithoutPostsInput!
   content: String!
   createdAt: DateTime
@@ -523,6 +522,7 @@ input PostScalarWhereInput {
   OR: [PostScalarWhereInput!]
   published: BoolNullableFilter
   summary: StringFilter
+  tagId: IntFilter
   title: StringFilter
 }
 
@@ -535,7 +535,7 @@ input PostUpdateInput {
   replies: ReplyUpdateManyWithoutPostInput
   stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tag: TagUpdateOneRequiredWithoutPostsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -607,7 +607,7 @@ input PostUpdateWithoutAuthorInput {
   replies: ReplyUpdateManyWithoutPostInput
   stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tag: TagUpdateOneRequiredWithoutPostsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -619,7 +619,7 @@ input PostUpdateWithoutLensInput {
   replies: ReplyUpdateManyWithoutPostInput
   stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tag: TagUpdateOneRequiredWithoutPostsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -631,7 +631,7 @@ input PostUpdateWithoutRepliesInput {
   published: NullableBoolFieldUpdateOperationsInput
   stars: StarUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tag: TagUpdateOneRequiredWithoutPostsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -643,7 +643,7 @@ input PostUpdateWithoutStarsInput {
   published: NullableBoolFieldUpdateOperationsInput
   replies: ReplyUpdateManyWithoutPostInput
   summary: StringFieldUpdateOperationsInput
-  tags: TagUpdateManyWithoutPostsInput
+  tag: TagUpdateOneRequiredWithoutPostsInput
   title: StringFieldUpdateOperationsInput
 }
 
@@ -1060,13 +1060,13 @@ type Tag {
 input TagCreateInput {
   channelId: String!
   name: String!
-  posts: PostCreateManyWithoutTagsInput
+  posts: PostCreateManyWithoutTagInput
 }
 
-input TagCreateManyWithoutPostsInput {
-  connect: [TagWhereUniqueInput!]
-  connectOrCreate: [TagCreateOrConnectWithoutpostsInput!]
-  create: [TagCreateWithoutPostsInput!]
+input TagCreateOneWithoutPostsInput {
+  connect: TagWhereUniqueInput
+  connectOrCreate: TagCreateOrConnectWithoutpostsInput
+  create: TagCreateWithoutPostsInput
 }
 
 input TagCreateOrConnectWithoutpostsInput {
@@ -1079,36 +1079,12 @@ input TagCreateWithoutPostsInput {
   name: String!
 }
 
-input TagScalarWhereInput {
-  AND: [TagScalarWhereInput!]
-  channelId: StringFilter
-  id: IntFilter
-  name: StringFilter
-  NOT: [TagScalarWhereInput!]
-  OR: [TagScalarWhereInput!]
-}
-
-input TagUpdateManyMutationInput {
-  channelId: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-}
-
-input TagUpdateManyWithoutPostsInput {
-  connect: [TagWhereUniqueInput!]
-  connectOrCreate: [TagCreateOrConnectWithoutpostsInput!]
-  create: [TagCreateWithoutPostsInput!]
-  delete: [TagWhereUniqueInput!]
-  deleteMany: [TagScalarWhereInput!]
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  update: [TagUpdateWithWhereUniqueWithoutPostsInput!]
-  updateMany: [TagUpdateManyWithWhereWithoutPostsInput!]
-  upsert: [TagUpsertWithWhereUniqueWithoutPostsInput!]
-}
-
-input TagUpdateManyWithWhereWithoutPostsInput {
-  data: TagUpdateManyMutationInput!
-  where: TagScalarWhereInput!
+input TagUpdateOneRequiredWithoutPostsInput {
+  connect: TagWhereUniqueInput
+  connectOrCreate: TagCreateOrConnectWithoutpostsInput
+  create: TagCreateWithoutPostsInput
+  update: TagUpdateWithoutPostsInput
+  upsert: TagUpsertWithoutPostsInput
 }
 
 input TagUpdateWithoutPostsInput {
@@ -1116,15 +1092,9 @@ input TagUpdateWithoutPostsInput {
   name: StringFieldUpdateOperationsInput
 }
 
-input TagUpdateWithWhereUniqueWithoutPostsInput {
-  data: TagUpdateWithoutPostsInput!
-  where: TagWhereUniqueInput!
-}
-
-input TagUpsertWithWhereUniqueWithoutPostsInput {
+input TagUpsertWithoutPostsInput {
   create: TagCreateWithoutPostsInput!
   update: TagUpdateWithoutPostsInput!
-  where: TagWhereUniqueInput!
 }
 
 input TagWhereUniqueInput {
