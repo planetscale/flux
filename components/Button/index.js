@@ -85,7 +85,7 @@ export const ButtonImage = styled(ButtonBase)`
     height: auto;
   }
 
-  :hover {
+  :hover:not([disabled]) {
     > img {
       filter: unset;
     }
