@@ -453,7 +453,41 @@ export default function PostPage() {
                               date={getLocaleDateTimeString(value.createdAt)}
                             />
                           </CommenterNameplateWrapper>
-                          <CommentContent>{value.content}</CommentContent>
+                          <CommentActionButtonGroup className="actions">
+                            {userContext.user.id === value.author?.id && (
+                              <ButtonMinor
+                                data-comment-id={key}
+                                type="submit"
+                                onClick={e => {
+                                  toggleCommentEdit(e, value.content);
+                                }}
+                              >
+                                Edit
+                              </ButtonMinor>
+                            )}
+                          </CommentActionButtonGroup>
+
+                          {commentButtonState.editButtons[key] ? (
+                            <Reply>
+                              <textarea
+                                data-comment-id={key}
+                                value={commentInputs.edits[key]}
+                                onChange={handleCommentEditsChange}
+                                autoFocus
+                              ></textarea>
+                              <ButtonMinor
+                                data-comment-id={key}
+                                type="submit"
+                                onClick={handleCommentEditSubmit}
+                                disabled={!commentInputs.edits[key]?.trim()}
+                              >
+                                <Icon className="icon-edit"></Icon>
+                                Update
+                              </ButtonMinor>
+                            </Reply>
+                          ) : (
+                            <CommentContent>{value.content}</CommentContent>
+                          )}
                         </Comment>
                       </CommentListItem>
                     </div>
