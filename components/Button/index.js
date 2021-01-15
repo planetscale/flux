@@ -19,7 +19,7 @@ export const ButtonBase = styled.button`
     margin-right: 8px;
   }
 
-  &:hover {
+  &:hover:not([disabled]) {
     cursor: pointer;
     transform: scale(0.97);
 
@@ -33,14 +33,7 @@ export const ButtonBase = styled.button`
   }
 
   &:disabled {
-    border: 2px solid #ccc;
-
-    &:hover {
-      cursor: default;
-      transform: scale(1);
-      background-color: unset;
-      color: #ccc;
-    }
+    opacity: 0.3;
   }
 `;
 
@@ -48,14 +41,14 @@ export const ButtonMajor = styled(ButtonBase)`
   background-color: var(--foreground);
   color: var(--background);
 
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: var(--background);
     color: var(--foreground);
   }
 `;
 
 export const ButtonMinor = styled(ButtonBase)`
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: var(--foreground);
     color: var(--background);
   }
