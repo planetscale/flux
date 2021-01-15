@@ -86,17 +86,19 @@ const Lens = objectType({
                   },
                 });
 
-                const result = await ctx.prisma.post.findMany({
-                  take: Math.abs(last),
-                  cursor: {
-                    id: res.id,
-                  },
-                  orderBy: {
-                    id: 'desc',
-                  },
-                });
+                if (res) {
+                  const result = await ctx.prisma.post.findMany({
+                    take: Math.abs(last),
+                    cursor: {
+                      id: res.id,
+                    },
+                    orderBy: {
+                      id: 'desc',
+                    },
+                  });
 
-                return result;
+                  return result;
+                }
               } catch (error) {
                 console.error(error);
               }

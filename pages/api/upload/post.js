@@ -84,38 +84,21 @@ export default async (req, res) => {
   } = uploadRequest.fields;
 
   try {
-    // const tag = await prisma.tag.findFirst({
-    //   where: {
-    //     name: tagName,
-    //   },
-    // });
-
-    // if (!tag) {
-    //   const tagsResult = await prisma.tag.create({
-    //     data: {
-    //       name: tagName,
-    //       channelId: tagChannelId,
-    //     },
-    //   });
-    // }
-
     const result = await prisma.post.create({
       data: {
         content,
         summary: summary,
         title: title,
-        tags: {
-          connectOrCreate: [
-            {
-              where: {
-                name: tagName,
-              },
-              create: {
-                name: tagName,
-                channelId: tagChannelId,
-              },
+        tag: {
+          connectOrCreate: {
+            where: {
+              name: tagName,
             },
-          ],
+            create: {
+              name: tagName,
+              channelId: tagChannelId,
+            },
+          },
         },
         author: {
           connect: { id: Number(userId) },
@@ -125,67 +108,67 @@ export default async (req, res) => {
         },
       },
     });
+
+    // If the post database request is pushed, fire a Slack notification.
+    const timeOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+
+    const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
+    const token = process.env.SLACK_API_TOKEN;
+    const client = new WebClient(token);
+
+    await client.chat.postMessage({
+      channel: `#${tagName}`,
+      attachments: [
+        {
+          color: '#D491A5',
+          blocks: [
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'image',
+                  image_url: userAvatar,
+                  alt_text: 'cute cat',
+                },
+                {
+                  type: 'mrkdwn',
+                  text: `*${userDisplayName}* shared a new update.`,
+                },
+              ],
+            },
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*<${domain}/|${title}>*
+  ${summary}`,
+              },
+            },
+            {
+              type: 'divider',
+            },
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'plain_text',
+                  text: `posted on ${postTime}`,
+                  emoji: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.json(result);
   } catch (e) {
     console.error(e);
     return res.json({ error: e });
   }
-
-  //   // If the post database request is pushed, fire a Slack notification.
-  //   const timeOptions = {
-  //     year: 'numeric',
-  //     month: 'short',
-  //     day: 'numeric',
-  //   };
-
-  //   const postTime = getLocaleDateTimeString(result.createdAt, timeOptions);
-  //   const token = process.env.SLACK_API_TOKEN;
-  //   const client = new WebClient(token);
-
-  //   await client.chat.postMessage({
-  //     channel: '#flux-sandbox',
-  //     attachments: [
-  //       {
-  //         color: '#D491A5',
-  //         blocks: [
-  //           {
-  //             type: 'context',
-  //             elements: [
-  //               {
-  //                 type: 'image',
-  //                 image_url: userAvatar,
-  //                 alt_text: 'cute cat',
-  //               },
-  //               {
-  //                 type: 'mrkdwn',
-  //                 text: `*${userDisplayName}* shared a new update.`,
-  //               },
-  //             ],
-  //           },
-  //           {
-  //             type: 'section',
-  //             text: {
-  //               type: 'mrkdwn',
-  //               text: `*<${domain}/|${title}>*
-  // ${summary}`,
-  //             },
-  //           },
-  //           {
-  //             type: 'divider',
-  //           },
-  //           {
-  //             type: 'context',
-  //             elements: [
-  //               {
-  //                 type: 'plain_text',
-  //                 text: `posted on ${postTime}`,
-  //                 emoji: true,
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   });
-
-  //   res.json(result);
 };
