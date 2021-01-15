@@ -60,7 +60,7 @@ export const ButtonMinor = styled(ButtonBase)`
 export const ButtonTertiary = styled(ButtonBase)`
   border: 1px solid var(--accent);
 
-  &:hover {
+  &:hover:not([disabled]) {
     color: var(--background);
     background-color: var(--highlight);
     border-color: var(--highlight);
@@ -70,7 +70,7 @@ export const ButtonTertiary = styled(ButtonBase)`
     }
   }
 
-  &:active {
+  &:active:not([disabled]) {
     transform: scale(0.75);
   }
 `;
