@@ -68,6 +68,10 @@ const CommentListItem = styled.li`
   &.leveltwo {
     margin: 0;
   }
+
+  &.levelthree {
+    margin: 0 24px;
+  }
 `;
 
 const Comment = styled.div`
@@ -81,6 +85,10 @@ const Comment = styled.div`
 
   &.leveltwo {
     border-left: 2px solid #fccada;
+  }
+
+  &.levelthree {
+    border-left: 2px solid #d3f1d6;
   }
 `;
 
