@@ -79,22 +79,17 @@ export const ButtonLink = styled(ButtonBase)`
   border: 0;
   padding: 0;
   color: var(--text);
+  background-color: unset;
 `;
 
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
 
   > img {
     width: 100%;
     height: auto;
-  }
-
-  :hover:not([disabled]) {
-    > img {
-      filter: unset;
-    }
   }
 `;
