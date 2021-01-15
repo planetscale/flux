@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
+import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
 
 const Wrapper = styled.div`
@@ -184,7 +185,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
         {notNewPostPage() && (
           <ButtonMajor type="button" onClick={redirectToNew}>
-            <img src="/icon_plus.svg" alt="Button to add update" />
+            <Icon className="icon-plus"></Icon>
             <span>Add Update</span>
           </ButtonMajor>
         )}

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
 import ReactMarkdown from 'react-markdown';
-
+import { Icon } from 'pageUtils/post/atoms';
 import {
   PageWrapper,
   PostMetadata,
@@ -270,7 +270,7 @@ export default function PostPage() {
         </Content>
         <ActionBar>
           <ButtonTertiary onClick={handleStarClick}>
-            <img src="/icon_star.svg" alt="star" />
+            <Icon className="icon-star"></Icon>
             <div>{postState.numStars}</div>
           </ButtonTertiary>
         </ActionBar>
@@ -329,10 +329,7 @@ export default function PostPage() {
                           !commentInputs.edits[firstLevelReplyKey]?.trim()
                         }
                       >
-                        <img
-                          src="/icon_comment.svg"
-                          alt="button to submit comment edit"
-                        />
+                        <Icon className="icon-comment"></Icon>
                         Update
                       </ButtonMinor>
                     </Reply>
@@ -357,10 +354,7 @@ export default function PostPage() {
                           !commentInputs.replies[firstLevelReplyKey]?.trim()
                         }
                       >
-                        <img
-                          src="/icon_comment.svg"
-                          alt="button to submit response to comment"
-                        />
+                        <Icon className="icon-comment"></Icon>
                         Reply
                       </ButtonMinor>
                     </Reply>
@@ -414,10 +408,7 @@ export default function PostPage() {
                             onClick={handleCommentEditSubmit}
                             disabled={!commentInputs.edits[k]?.trim()}
                           >
-                            <img
-                              src="/icon_comment.svg"
-                              alt="button to submit comment edit"
-                            />
+                            <Icon className="icon-comment"></Icon>
                             Update
                           </ButtonMinor>
                         </Reply>
@@ -438,10 +429,7 @@ export default function PostPage() {
                             onClick={handleCommentReplySubmit}
                             disabled={!commentInputs.replies[k]?.trim()}
                           >
-                            <img
-                              src="/icon_comment.svg"
-                              alt="button to submit response to comment"
-                            />
+                            <Icon className="icon-comment"></Icon>
                             Reply
                           </ButtonMinor>
                         </Reply>
@@ -483,7 +471,7 @@ export default function PostPage() {
           onClick={handleCommentSubmit}
           disabled={!reply?.trim()}
         >
-          <img src="/icon_comment.svg" alt="button to submit response" />
+          <Icon className="icon-comment"></Icon>
           Reply
         </ButtonMinor>
       </Reply>

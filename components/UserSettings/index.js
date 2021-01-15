@@ -2,28 +2,8 @@ import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
 import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
+import { Icon } from 'pageUtils/post/atoms';
 import * as RadioGroup from '@radix-ui/react-radio-group';
-
-const Icon = styled.span`
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background: var(--foreground);
-  mask-size: cover;
-  z-index: 1;
-
-  &.icon-system {
-    mask: url('/icon_system.svg');
-  }
-
-  &.icon-light {
-    mask: url('/icon_light.svg');
-  }
-
-  &.icon-dark {
-    mask: url('/icon_dark.svg');
-  }
-`;
 
 const UserSettingsWrapper = styled.ul`
   width: 360px;

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
   display: flex;
@@ -13,19 +14,13 @@ export const ButtonBase = styled.button`
   transition: all 150ms;
   font-size: 14px;
 
-  > img {
-    width: 18px;
-    height: 18px;
+  ${Icon} {
     margin-right: 8px;
   }
 
   &:hover:not([disabled]) {
     cursor: pointer;
     transform: scale(0.97);
-
-    > img {
-      filter: invert(100%);
-    }
   }
 
   &:focus {
@@ -41,9 +36,17 @@ export const ButtonMajor = styled(ButtonBase)`
   background-color: var(--foreground);
   color: var(--background);
 
+  ${Icon} {
+    background: var(--background);
+  }
+
   &:hover:not([disabled]) {
     background-color: var(--background);
     color: var(--foreground);
+
+    ${Icon} {
+      background: var(--foreground);
+    }
   }
 `;
 
@@ -55,12 +58,16 @@ export const ButtonMinor = styled(ButtonBase)`
 `;
 
 export const ButtonTertiary = styled(ButtonBase)`
-  border: 1px solid #e1e1e1;
+  border: 1px solid var(--accent);
 
   &:hover {
     color: var(--background);
-    background: #ff98b8;
-    border-color: #ff98b8;
+    background-color: var(--highlight);
+    border-color: var(--highlight);
+
+    ${Icon} {
+      background: var(--background);
+    }
   }
 
   &:active {

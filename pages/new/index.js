@@ -9,6 +9,7 @@ import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { Icon } from 'pageUtils/post/atoms';
 import { Post } from 'pageUtils/post/styles';
 
 const Wrapper = styled.div`
@@ -317,7 +318,7 @@ export default function NewPost() {
         </EditorWrapper>
         <ActionItems>
           <ButtonMajor onClick={handlePostSubmit} disabled={!canSubmitPost()}>
-            <img src="/icon_post.svg" alt="Button to submit post" />
+            <Icon className="icon-post"></Icon>
             Post
           </ButtonMajor>
           <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
