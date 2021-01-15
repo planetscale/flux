@@ -37,6 +37,10 @@ const postDataQuery = gql`
       stars {
         id
       }
+      tag {
+        id
+        name
+      }
     }
   }
 `;
