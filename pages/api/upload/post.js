@@ -144,7 +144,7 @@ export default async (req, res) => {
               text: {
                 type: 'mrkdwn',
                 text: `*<${domain}/|${title}>*
-  ${summary}`,
+${summary}`,
               },
             },
             {
