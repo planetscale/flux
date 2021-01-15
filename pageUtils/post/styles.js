@@ -34,6 +34,7 @@ const Title = styled.div`
   font-weight: bold;
   font-size: 48px;
   line-height: 58px;
+  text-transform: capitalize;
 `;
 
 const Content = styled.div`

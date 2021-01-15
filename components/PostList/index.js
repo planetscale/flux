@@ -94,6 +94,7 @@ const PostTitle = styled.h2`
   font-weight: 700;
   color: var(--text);
   font-size: 32px;
+  text-transform: capitalize;
 `;
 
 const PostSubTitle = styled.p`
