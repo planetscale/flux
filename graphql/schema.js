@@ -130,7 +130,6 @@ const Post = objectType({
     t.model.title();
     t.model.summary();
     t.model.published();
-    t.model.tags();
     t.model.author();
     t.model.lens();
     t.model.replies();

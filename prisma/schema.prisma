@@ -50,7 +50,6 @@ model Post {
   title      String
   summary    String
   published  Boolean?    @default(false)
-  tags       Tag[]
   author     User        @relation(fields: [authorId], references: [id])
   authorId   Int
   lens       Lens        @relation(fields: [lensId], references: [id])
@@ -58,6 +57,8 @@ model Post {
   replies    Reply[]
   content    String
   stars      Star[]
+  tag        Tag         @relation(fields: [tagId], references: [id])
+  tagId      Int
 }
 
 model Reply {
