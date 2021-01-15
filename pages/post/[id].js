@@ -32,6 +32,14 @@ import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
 import CodeBlock from 'components/MarkdownEditor/CodeBlock';
+import styled from '@emotion/styled';
+
+const Meta = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: var(--text);
+`;
 
 export default function PostPage() {
   const router = useRouter();
@@ -55,8 +63,17 @@ export default function PostPage() {
       id: Number(router.query?.id),
     },
   });
-  const { createdAt, title, summary, content, author, lens, replies, stars } =
-    postDataResult.data?.post || {};
+  const {
+    createdAt,
+    title,
+    summary,
+    content,
+    author,
+    lens,
+    replies,
+    stars,
+    tag,
+  } = postDataResult.data?.post || {};
   const [createReplyResult, runCreateReplyMutation] = useMutation(
     createReplyMutation
   );
@@ -254,7 +271,11 @@ export default function PostPage() {
     <PageWrapper>
       <Post>
         <PostMetadata>
-          <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+          <Meta>
+            <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+            <div>&nbsp; &middot; &nbsp;</div>
+            <div>#{tag.name}</div>
+          </Meta>
           <Title>{title}</Title>
           <AuthorNamePlate
             displayName={author?.displayName}
