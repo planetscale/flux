@@ -94,13 +94,22 @@ const PostTitle = styled.h2`
   font-weight: 700;
   color: var(--text);
   font-size: 32px;
-  text-transform: capitalize;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 const PostSubTitle = styled.p`
   color: var(--text);
   margin: 0;
   font-size: 16px;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 export default function PostList({ posts = [] }) {
