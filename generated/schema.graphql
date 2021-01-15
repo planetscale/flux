@@ -739,7 +739,7 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
   replies(after: ReplyWhereUniqueInput, before: ReplyWhereUniqueInput, first: Int, last: Int): [Reply!]!
-  slackmembers: [SlackMember]
+  slackMembers: [SlackMember]
   tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int): [Tag!]!
   user(where: UserWhereUniqueInput!): User
 }
@@ -905,10 +905,8 @@ enum Role {
 }
 
 type SlackMember {
-  deleted: Boolean
   displayName: String
   id: ID
-  isBot: Boolean
   realName: String
 }
 

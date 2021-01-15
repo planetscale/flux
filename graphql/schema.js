@@ -192,8 +192,6 @@ const SlackMember = objectType({
     t.id('id');
     t.string('realName');
     t.string('displayName');
-    t.boolean('deleted');
-    t.boolean('isBot');
   },
 });
 
@@ -237,18 +235,25 @@ const Query = queryType({
         }
       },
     });
-    t.list.field('slackmembers', {
+    t.list.field('slackMembers', {
       type: 'SlackMember',
       async resolve(_parent, _args, _ctx) {
         try {
           const slackRes = await client.users.list({});
-          return slackRes.members.map(member => ({
-            id: member.id,
-            realName: member.profile.real_name,
-            displayName: member.profile.display_name,
-            deleted: member.deleted,
-            isBot: member.is_bot,
-          }));
+
+          return slackRes.members
+            .filter(
+              member =>
+                !member.deleted &&
+                !member.is_bot &&
+                !member.is_restricted &&
+                member.profile.real_name.toLowerCase() !== 'slackbot'
+            )
+            .map(member => ({
+              id: member.id,
+              realName: member.profile.real_name,
+              displayName: member.profile.display_name,
+            }));
         } catch (error) {
           console.error(error);
         }
