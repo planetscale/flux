@@ -5,7 +5,6 @@ const NamePlateWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  left: -46px;
 
   > img {
     margin-right: 16px;

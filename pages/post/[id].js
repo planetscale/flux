@@ -11,6 +11,8 @@ import {
   DateTime,
   Title,
   Content,
+  CommentList,
+  CommentListItem,
   Comment,
   Reply,
   Post,
@@ -274,103 +276,112 @@ export default function PostPage() {
         </ActionBar>
       </Post>
 
-      {Object.entries(postState.replies).map(
-        ([firstLevelReplyKey, firstLevelReplyValue]) => (
-          <div key={firstLevelReplyKey}>
-            <Comment>
-              <CommenterNameplateWrapper>
-                <CommenterNamePlate
-                  displayName={firstLevelReplyValue.author?.displayName}
-                  userHandle={firstLevelReplyValue.author?.username}
-                  avatar={firstLevelReplyValue.author?.profile?.avatar}
-                  date={getLocaleDateTimeString(firstLevelReplyValue.createdAt)}
-                />
-                <CommentActionButtonGroup>
-                  <ButtonMinor
-                    data-comment-id={firstLevelReplyKey}
-                    type="submit"
-                    onClick={toggleCommentReply}
-                  >
-                    Reply
-                  </ButtonMinor>
-                  <ButtonMinor
-                    data-comment-id={firstLevelReplyKey}
-                    type="submit"
-                    onClick={e => {
-                      toggleCommentEdit(e, firstLevelReplyValue.content);
-                    }}
-                  >
-                    Edit
-                  </ButtonMinor>
-                </CommentActionButtonGroup>
-              </CommenterNameplateWrapper>
-
-              {commentButtonState.editButtons[firstLevelReplyKey] ? (
-                <Reply>
-                  <textarea
-                    data-comment-id={firstLevelReplyKey}
-                    value={commentInputs.edits[firstLevelReplyKey]}
-                    onChange={handleCommentEditsChange}
-                  ></textarea>
-                  <ButtonMinor
-                    data-comment-id={firstLevelReplyKey}
-                    type="submit"
-                    onClick={handleCommentEditSubmit}
-                    disabled={!commentInputs.edits[firstLevelReplyKey]?.trim()}
-                  >
-                    <img
-                      src="/icon_comment.svg"
-                      alt="button to submit comment edit"
+      <CommentList>
+        {Object.entries(postState.replies).map(
+          ([firstLevelReplyKey, firstLevelReplyValue]) => (
+            <div key={firstLevelReplyKey}>
+              <CommentListItem className="levelone">
+                <Comment className="levelone">
+                  <CommenterNameplateWrapper>
+                    <CommenterNamePlate
+                      displayName={firstLevelReplyValue.author?.displayName}
+                      userHandle={firstLevelReplyValue.author?.username}
+                      avatar={firstLevelReplyValue.author?.profile?.avatar}
+                      date={getLocaleDateTimeString(
+                        firstLevelReplyValue.createdAt
+                      )}
                     />
-                    Submit
-                  </ButtonMinor>
-                </Reply>
-              ) : (
-                <CommentContent>{firstLevelReplyValue.content}</CommentContent>
-              )}
+                  </CommenterNameplateWrapper>
+                  <CommentActionButtonGroup className="actions">
+                    <ButtonMinor
+                      data-comment-id={firstLevelReplyKey}
+                      type="submit"
+                      onClick={toggleCommentReply}
+                    >
+                      Reply
+                    </ButtonMinor>
+                    <ButtonMinor
+                      data-comment-id={firstLevelReplyKey}
+                      type="submit"
+                      onClick={e => {
+                        toggleCommentEdit(e, firstLevelReplyValue.content);
+                      }}
+                    >
+                      Edit
+                    </ButtonMinor>
+                  </CommentActionButtonGroup>
 
-              {commentButtonState.replyButtons[firstLevelReplyKey] && (
-                <Reply>
-                  <textarea
-                    data-comment-id={firstLevelReplyKey}
-                    value={commentInputs.replies[firstLevelReplyKey]}
-                    onChange={handleCommentRepliesChange}
-                  ></textarea>
-                  <ButtonMinor
-                    data-comment-id={firstLevelReplyKey}
-                    type="submit"
-                    onClick={handleCommentReplySubmit}
-                    disabled={
-                      !commentInputs.replies[firstLevelReplyKey]?.trim()
-                    }
-                  >
-                    <img
-                      src="/icon_comment.svg"
-                      alt="button to submit response to comment"
-                    />
-                    Submit
-                  </ButtonMinor>
-                </Reply>
-              )}
-            </Comment>
+                  {commentButtonState.editButtons[firstLevelReplyKey] ? (
+                    <Reply>
+                      <textarea
+                        data-comment-id={firstLevelReplyKey}
+                        value={commentInputs.edits[firstLevelReplyKey]}
+                        onChange={handleCommentEditsChange}
+                      ></textarea>
+                      <ButtonMinor
+                        data-comment-id={firstLevelReplyKey}
+                        type="submit"
+                        onClick={handleCommentEditSubmit}
+                        disabled={
+                          !commentInputs.edits[firstLevelReplyKey]?.trim()
+                        }
+                      >
+                        <img
+                          src="/icon_comment.svg"
+                          alt="button to submit comment edit"
+                        />
+                        Update
+                      </ButtonMinor>
+                    </Reply>
+                  ) : (
+                    <CommentContent>
+                      {firstLevelReplyValue.content}
+                    </CommentContent>
+                  )}
 
-            <div>
-              {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
-                <Comment key={k}>
-                  <CommenterNamePlate
-                    displayName={v.author?.displayName}
-                    userHandle={v.author?.username}
-                    avatar={v.author?.profile?.avatar}
-                    date={getLocaleDateTimeString(v.createdAt)}
-                  />
-                  <CommentContent>{v.content}</CommentContent>
+                  {commentButtonState.replyButtons[firstLevelReplyKey] && (
+                    <Reply>
+                      <textarea
+                        data-comment-id={firstLevelReplyKey}
+                        value={commentInputs.replies[firstLevelReplyKey]}
+                        onChange={handleCommentRepliesChange}
+                      ></textarea>
+                      <ButtonMinor
+                        data-comment-id={firstLevelReplyKey}
+                        type="submit"
+                        onClick={handleCommentReplySubmit}
+                        disabled={
+                          !commentInputs.replies[firstLevelReplyKey]?.trim()
+                        }
+                      >
+                        <img
+                          src="/icon_comment.svg"
+                          alt="button to submit response to comment"
+                        />
+                        Reply
+                      </ButtonMinor>
+                    </Reply>
+                  )}
                 </Comment>
+              </CommentListItem>
+
+              {Object.entries(firstLevelReplyValue.replies).map(([k, v]) => (
+                <CommentListItem className="leveltwo">
+                  <Comment className="leveltwo" key={k}>
+                    <CommenterNamePlate
+                      displayName={v.author?.displayName}
+                      userHandle={v.author?.username}
+                      avatar={v.author?.profile?.avatar}
+                      date={getLocaleDateTimeString(v.createdAt)}
+                    />
+                    <CommentContent>{v.content}</CommentContent>
+                  </Comment>
+                </CommentListItem>
               ))}
             </div>
-          </div>
-        )
-      )}
-
+          )
+        )}
+      </CommentList>
       <Reply>
         <textarea
           value={reply}

@@ -45,11 +45,42 @@ const Content = styled.div`
   padding: 32px 0;
 `;
 
+const CommentList = styled.ul`
+  padding: 24px 0;
+  margin: 0;
+  list-style: none;
+`;
+
+const CommentListItem = styled.li`
+  padding: 24px;
+  margin: 0 -24px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: var(--accent2);
+
+    .actions {
+      opacity: 1;
+    }
+  }
+
+  &.leveltwo {
+    margin: 0;
+  }
+`;
+
 const Comment = styled.div`
-  padding: 0 0 30px 0;
-  border-bottom: 1px solid var(--accent2);
+  position: relative;
+  padding: 0 24px;
   color: var(--text);
-  margin: 42px 0 0 0;
+
+  &.levelone {
+    border-left: 2px solid #9096ad;
+  }
+
+  &.leveltwo {
+    border-left: 2px solid #fccada;
+  }
 `;
 
 const Reply = styled.div`
@@ -78,8 +109,7 @@ const Reply = styled.div`
 `;
 
 const CommentContent = styled.div`
-  margin: 16px 0;
-  height: 22px;
+  margin: 16px 0 0;
   font-size: 18px;
   color: var(--text);
   line-height: 22px;
@@ -98,6 +128,10 @@ const CommenterNameplateWrapper = styled.div`
 `;
 
 const CommentActionButtonGroup = styled.div`
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
 
   ${ButtonMinor}:first-of-type {
@@ -108,6 +142,8 @@ const CommentActionButtonGroup = styled.div`
 export {
   PageWrapper,
   Content,
+  CommentList,
+  CommentListItem,
   Comment,
   Reply,
   PostMetadata,
