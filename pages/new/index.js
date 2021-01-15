@@ -125,17 +125,19 @@ const customStyles = {
   }),
   option: provided => ({
     ...provided,
+    whiteSpace: 'nowrap',
     ':hover': {
       color: 'var(--background)',
     },
   }),
   singleValue: provided => ({
     ...provided,
-    color: '#0076A8',
+    color: 'var(--text)',
   }),
   menu: provided => ({
     ...provided,
     borderRadius: '8px',
+    width: 'unset',
   }),
 };
 
