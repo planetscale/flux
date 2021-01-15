@@ -101,7 +101,7 @@ const channelsQuery = gql`
 const customStyles = {
   container: provided => ({
     ...provided,
-    width: '150px',
+    width: '200px',
   }),
   control: provided => ({
     ...provided,
@@ -126,8 +126,9 @@ const customStyles = {
   option: provided => ({
     ...provided,
     whiteSpace: 'nowrap',
+    color: 'var(--text)',
     ':hover': {
-      color: 'var(--background)',
+      backgroundColor: 'var(--accent)',
     },
   }),
   singleValue: provided => ({
@@ -136,7 +137,10 @@ const customStyles = {
   }),
   menu: provided => ({
     ...provided,
+    backgroundColor: 'var(--background)',
+    border: '1px solid var(--accent)',
     borderRadius: '8px',
+    boxShadow: 'var(--shadow)',
     width: 'unset',
   }),
 };
