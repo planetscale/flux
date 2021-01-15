@@ -84,20 +84,20 @@ export default async (req, res) => {
   } = uploadRequest.fields;
 
   try {
-    const tag = await prisma.tag.findFirst({
-      where: {
-        name: tagName,
-      },
-    });
+    // const tag = await prisma.tag.findFirst({
+    //   where: {
+    //     name: tagName,
+    //   },
+    // });
 
-    if (!tag) {
-      const tagsResult = await prisma.tag.create({
-        data: {
-          name: tagName,
-          channelId: tagChannelId,
-        },
-      });
-    }
+    // if (!tag) {
+    //   const tagsResult = await prisma.tag.create({
+    //     data: {
+    //       name: tagName,
+    //       channelId: tagChannelId,
+    //     },
+    //   });
+    // }
 
     const result = await prisma.post.create({
       data: {
@@ -105,7 +105,17 @@ export default async (req, res) => {
         summary: summary,
         title: title,
         tags: {
-          connect: [{ name: tagName }],
+          connectOrCreate: [
+            {
+              where: {
+                name: tagName,
+              },
+              create: {
+                name: tagName,
+                channelId: tagChannelId,
+              },
+            },
+          ],
         },
         author: {
           connect: { id: Number(userId) },
