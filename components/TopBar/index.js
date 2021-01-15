@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Modal from '@material-ui/core/Modal';
-import { ButtonImage, ButtonMajor, ButtonLink } from 'components/Button';
+import { ButtonImage, ButtonSpecial, ButtonLink } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useState, useEffect } from 'react';
@@ -103,7 +103,7 @@ const ActionsWrapper = styled.div`
     border-top: 1px solid var(--accent2);
   `}
 
-  ${ButtonMajor} {
+  ${ButtonSpecial} {
     margin: 0 12px 0 0;
   }
 `;
@@ -185,10 +185,10 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         </StyledModal>
 
         {notNewPostPage() && (
-          <ButtonMajor type="button" onClick={redirectToNew}>
+          <ButtonSpecial type="button" onClick={redirectToNew}>
             <Icon className="icon-plus"></Icon>
             <span>Add Update</span>
-          </ButtonMajor>
+          </ButtonSpecial>
         )}
 
         <ButtonImage

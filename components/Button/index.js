@@ -75,6 +75,16 @@ export const ButtonTertiary = styled(ButtonBase)`
   }
 `;
 
+export const ButtonSpecial = styled(ButtonBase)`
+  background-color: var(--highlight);
+  border-color: var(--highlight);
+  color: white;
+
+  ${Icon} {
+    background: white;
+  }
+`;
+
 export const ButtonLink = styled(ButtonBase)`
   border: 0;
   padding: 0;

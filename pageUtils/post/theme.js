@@ -21,7 +21,7 @@ const theme = {
       highlight: '#c56a86',
     },
     dark: {
-      background: '#090909',
+      background: '#131516',
       foreground: 'rgba(255, 255, 255, 0.9)',
       accent: '#666',
       accent2: '#1e1e1e',
