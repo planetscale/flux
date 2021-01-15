@@ -87,6 +87,7 @@ const StyledRadio = styled(RadioGroup.Item)`
   align-items: center;
   justify-content: center;
   vertical-align: middle;
+  outline: 0;
 
   & ~ & {
     border-left: 1px solid var(--accent2);
