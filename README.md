@@ -44,3 +44,5 @@ MODIFY COLUMN content TEXT;
 ALTER TABLE Post
 MODIFY COLUMN content TEXT;
 ```
+
+We need to use `prisma db push` when setting m-n relationships because it sets up [two indexes](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#conventions-for-relation-tables-in-implicit-m-n-relations) behind the scenes that are required for the many to many relationship table to work properly.
