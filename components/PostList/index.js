@@ -50,14 +50,14 @@ const Post = styled.div`
     content: ' ';
     display: block;
     position: absolute;
-    border-radius: 99px;
+    border-radius: 50%;
     border: 8px solid var(--background);
     width: 8px;
     height: 8px;
     background-color: var(--accent);
     top: 20px;
     left: -28px;
-    transition: all 150ms;
+    transition: background-color 150ms;
   }
 `;
 
@@ -94,13 +94,22 @@ const PostTitle = styled.h2`
   font-weight: 700;
   color: var(--text);
   font-size: 32px;
-  text-transform: capitalize;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 const PostSubTitle = styled.p`
   color: var(--text);
   margin: 0;
   font-size: 16px;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 export default function PostList({ posts = [] }) {

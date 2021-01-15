@@ -75,6 +75,7 @@ const SlasherFlick = styled.div`
       font-style: italic;
       font-weight: 900;
       background: linear-gradient(90deg, #353e58 0%, #c56a86 138.77%), #000000;
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       -moz-background-clip: text;
