@@ -34,7 +34,11 @@ const Title = styled.div`
   font-weight: bold;
   font-size: 48px;
   line-height: 58px;
-  text-transform: capitalize;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 const Content = styled.div`
