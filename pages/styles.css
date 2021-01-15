@@ -13,7 +13,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #090909;
-    --foreground: #fff;
+    --foreground: rgba(255, 255, 255, 0.9);
     --link: #007bc7;
     --text: #ccc;
     --accent: #666;

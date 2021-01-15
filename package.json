@@ -16,6 +16,7 @@
     "@nexus/schema": "^0.19.2",
     "@prisma/cli": "^2.13.0",
     "@prisma/client": "^2.13.0",
+    "@radix-ui/react-radio-group": "0.0.1",
     "@slack/web-api": "^6.0.0",
     "@urql/exchange-multipart-fetch": "^0.1.11",
     "apollo-server-micro": "^2.19.0",
