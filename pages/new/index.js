@@ -98,6 +98,16 @@ const channelsQuery = gql`
   }
 `;
 
+const slackMembersQuery = gql`
+  query {
+    slackMembers {
+      id
+      realName
+      displayName
+    }
+  }
+`;
+
 const customStyles = {
   container: provided => ({
     ...provided,
@@ -159,6 +169,7 @@ export default function NewPost() {
     selectedLens: '',
     selectedTag: null,
     tagOptions: [],
+    slackMemberSuggestions: [],
   });
 
   const [lensesResult, runLensesQuery] = useQuery({
@@ -167,6 +178,10 @@ export default function NewPost() {
 
   const [channelsResult, runChannelsQuery] = useQuery({
     query: channelsQuery,
+  });
+
+  const [slackMembersResult, runslackMembersQuery] = useQuery({
+    query: slackMembersQuery,
   });
 
   useEffect(() => {
@@ -189,6 +204,19 @@ export default function NewPost() {
       });
     }
   }, [channelsResult.data?.channels]);
+
+  useEffect(() => {
+    if (slackMembersResult.data?.slackMembers) {
+      updateState(draft => {
+        draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
+          member => ({
+            preview: member.realName,
+            value: `@${member.realName}`,
+          })
+        );
+      });
+    }
+  }, [slackMembersResult.data?.slackMembers]);
 
   const handleTitleChange = e => {
     let title = e.target;
@@ -314,6 +342,7 @@ export default function NewPost() {
           <MarkdownEditor
             content={state.content}
             handleContentChange={handleContentChange}
+            userTagSuggestions={state.slackMemberSuggestions}
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>

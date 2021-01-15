@@ -13,6 +13,11 @@ const Wrapper = styled.div`
       outline: none;
     }
   }
+  .mde-suggestions {
+    overflow-y: auto;
+    max-height: 150px;
+    z-index: 1;
+  }
 `;
 
 const TABS = {
@@ -20,27 +25,23 @@ const TABS = {
   PREVIWE: 'preview',
 };
 
-// TODO: remove before launch if we don't need this suggestions fn.
-function loadSuggestions(text) {
-  return new Promise((accept, reject) => {
-    setTimeout(() => {
-      const suggestions = [
-        {
-          preview: 'Abhi',
-          value: '@abhi',
-        },
-        {
-          preview: 'Raunaq',
-          value: '@raunaq',
-        },
-      ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()));
-      accept(suggestions);
-    }, 250);
-  });
-}
-
-export default function MarkdownEditor({ content, handleContentChange }) {
+export default function MarkdownEditor({
+  content,
+  handleContentChange,
+  userTagSuggestions,
+}) {
   const [selectedTab, setSelectedTab] = useState(TABS.WRITE);
+
+  const loadSuggestions = text => {
+    return new Promise((accept, reject) => {
+      setTimeout(() => {
+        const suggestions = userTagSuggestions.filter(i =>
+          i.preview.toLowerCase().includes(text.toLowerCase())
+        );
+        accept(suggestions);
+      }, 50);
+    });
+  };
 
   const save = async function* (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
@@ -105,6 +106,7 @@ export default function MarkdownEditor({ content, handleContentChange }) {
           )
         }
         loadSuggestions={loadSuggestions}
+        suggestionTriggerCharacters={['@']}
         childProps={{
           writeButton: {
             tabIndex: -1,
