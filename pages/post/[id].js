@@ -26,6 +26,7 @@ import {
   createReplyMutation,
   createStarMutation,
   updateReplyMutation,
+  updatePostMutation,
 } from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
@@ -33,6 +34,7 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
 import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 import styled from '@emotion/styled';
+import MarkdownEditor from 'components/MarkdownEditor';
 
 const Meta = styled.div`
   display: flex;
@@ -47,6 +49,11 @@ export default function PostPage() {
     replyButtons: {},
     editButtons: {},
   });
+  const [postEditState, setPostEditState] = useImmer({
+    content: '',
+    isOpened: false,
+  });
+
   const [postState, updatePostState] = useImmer({
     replies: {},
     numStars: 0,
@@ -83,6 +90,9 @@ export default function PostPage() {
   const [updateReplyResult, runUpdateReplyMutation] = useMutation(
     updateReplyMutation
   );
+  const [updatePostResult, runUpdatePostMutation] = useMutation(
+    updatePostMutation
+  );
 
   useEffect(() => {
     if (!postDataResult.fetching && !postDataResult.data?.post) {
@@ -90,6 +100,10 @@ export default function PostPage() {
     }
 
     if (postDataResult.data?.post) {
+      setPostEditState(draft => {
+        draft.content = postDataResult.data?.post.content;
+      });
+
       const replyMap = postDataResult.data?.post.replies.reduce((acc, curr) => {
         const { author, content, createdAt } = curr;
         if (!curr.parentId) {
@@ -262,6 +276,36 @@ export default function PostPage() {
     }
   };
 
+  const togglePostEdit = () => {
+    setPostEditState(draft => {
+      draft.isOpened = !postEditState.isOpened;
+    });
+  };
+
+  const handlePostContentChange = content => {
+    setPostEditState(draft => {
+      draft.content = content;
+    });
+  };
+
+  const handlePostEditSubmit = async () => {
+    try {
+      const res = await runUpdatePostMutation({
+        content: postEditState.content,
+        postId: Number(router.query?.id),
+      });
+      if (!res.data) {
+        console.error(e);
+      } else {
+        setPostEditState(draft => {
+          draft.isOpened = !postEditState.isOpened;
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
@@ -275,6 +319,11 @@ export default function PostPage() {
             <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
             <div>&nbsp; &middot; &nbsp;</div>
             <div>#{tag.name}</div>
+            {userContext.user.id === author?.id && (
+              <ButtonMinor type="submit" onClick={togglePostEdit}>
+                Edit
+              </ButtonMinor>
+            )}
           </Meta>
           <Title>{title}</Title>
           <AuthorNamePlate
@@ -285,9 +334,27 @@ export default function PostPage() {
         </PostMetadata>
 
         <Content>
-          <ReactMarkdown renderers={{ code: CodeBlock }}>
-            {content}
-          </ReactMarkdown>
+          {postEditState.isOpened ? (
+            <>
+              <MarkdownEditor
+                content={postEditState.content}
+                handleContentChange={handlePostContentChange}
+                // userTagSuggestions={state.slackMemberSuggestions}
+              ></MarkdownEditor>
+              <ButtonMinor
+                type="submit"
+                onClick={handlePostEditSubmit}
+                disabled={!postEditState.content?.trim()}
+              >
+                <Icon className="icon-edit"></Icon>
+                Update
+              </ButtonMinor>
+            </>
+          ) : (
+            <ReactMarkdown renderers={{ code: CodeBlock }}>
+              {content}
+            </ReactMarkdown>
+          )}
         </Content>
         <ActionBar>
           <ButtonTertiary onClick={handleStarClick}>

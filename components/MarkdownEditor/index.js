@@ -105,7 +105,7 @@ export default function MarkdownEditor({
             <ReactMarkdown source={markdown} renderers={{ code: CodeBlock }} />
           )
         }
-        loadSuggestions={loadSuggestions}
+        loadSuggestions={userTagSuggestions ? loadSuggestions : null}
         suggestionTriggerCharacters={['@']}
         childProps={{
           writeButton: {
