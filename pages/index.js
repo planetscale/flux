@@ -61,7 +61,6 @@ export default function Home({ href, ...props }) {
     postList: [],
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
-    prevCursor: null,
   });
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
@@ -90,10 +89,11 @@ export default function Home({ href, ...props }) {
 
   useBottomScrollListener(
     () => {
-      setState(draft => {
-        draft.prevCursor = state.before;
-        draft.before = state.postList[state.postList.length - 1].id;
-      });
+      if (state.postList.length) {
+        setState(draft => {
+          draft.before = state.postList[state.postList.length - 1].id;
+        });
+      }
     },
     {
       offset: 100,
