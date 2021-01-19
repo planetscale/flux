@@ -112,43 +112,6 @@ const updatePostMutation = gql`
       where: { id: $postId }
     ) {
       id
-      createdAt
-      title
-      summary
-      content
-      author {
-        id
-        username
-        displayName
-        profile {
-          avatar
-        }
-      }
-      lens {
-        id
-        name
-      }
-      replies {
-        id
-        content
-        createdAt
-        parentId
-        author {
-          id
-          username
-          displayName
-          profile {
-            avatar
-          }
-        }
-      }
-      stars {
-        id
-      }
-      tag {
-        id
-        name
-      }
     }
   }
 `;
