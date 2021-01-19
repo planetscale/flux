@@ -41,6 +41,10 @@ const Meta = styled.div`
   flex-direction: row;
   align-items: center;
   color: var(--text);
+
+  ${ButtonMinor} {
+    margin: 0 0 0 8px;
+  }
 `;
 
 export default function PostPage() {

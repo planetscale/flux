@@ -48,6 +48,10 @@ const Content = styled.div`
   letter-spacing: 0.02em;
   border-bottom: 1px solid var(--accent2);
   padding: 32px 0;
+
+  ${ButtonMinor} {
+    margin: 32px 0 0 0;
+  }
 `;
 
 const CommentList = styled.ul`
