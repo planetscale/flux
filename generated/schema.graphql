@@ -185,6 +185,7 @@ input LensWhereUniqueInput {
 }
 
 type Mutation {
+  addStar(postId: Int, userId: Int): Star
   createOneLens(data: LensCreateInput!): Lens!
   createOneOrg(data: OrgCreateInput!): Org!
   createOneReply(data: ReplyCreateInput!): Reply!

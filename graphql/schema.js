@@ -283,15 +283,21 @@ const Mutation = mutationType({
     t.crud.updateOneReply();
     t.crud.deleteOneReply();
     t.crud.createOneStar();
+    t.crud.deleteOneStar();
     t.field('addStar', {
       type: 'Star',
-      resolve(_root, args, ctx) {
-        const star = ctx.prisma.star.findFirst({
+      args: {
+        postId: intArg(),
+        userId: intArg(),
+      },
+      async resolve(_root, args, ctx) {
+        const star = await ctx.prisma.star.findFirst({
           where: {
             postId: args.postId,
             userId: args.userId,
           },
         });
+
         if (star) {
           console.error('Duplicate stars not permitted on posts.');
           return {};
@@ -299,8 +305,16 @@ const Mutation = mutationType({
 
         return ctx.prisma.star.create({
           data: {
-            postId: args.postId,
-            userId: args.userId,
+            post: {
+              connect: {
+                id: args.postId,
+              },
+            },
+            user: {
+              connect: {
+                id: args.userId,
+              },
+            },
           },
         });
       },

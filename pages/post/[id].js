@@ -1,7 +1,7 @@
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useMutation, useQuery } from 'urql';
 import ReactMarkdown from 'react-markdown';
 import { Icon } from 'pageUtils/post/atoms';
@@ -27,6 +27,7 @@ import {
   createStarMutation,
   updateReplyMutation,
   updatePostMutation,
+  deleteStarMutation,
 } from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
@@ -35,6 +36,7 @@ import { useImmer } from 'use-immer';
 import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
+import debounce from 'lodash/debounce';
 import LoadingIndicator from 'components/LoadingIndicator';
 
 const Meta = styled.div`
@@ -62,6 +64,7 @@ export default function PostPage() {
   const [postState, updatePostState] = useImmer({
     replies: {},
     numStars: 0,
+    starMap: {},
   });
   const [reply, setReply] = useState('');
   const [commentInputs, setCommentInputs] = useImmer({
@@ -86,11 +89,15 @@ export default function PostPage() {
     stars,
     tag,
   } = postDataResult.data?.post || {};
+
   const [createReplyResult, runCreateReplyMutation] = useMutation(
     createReplyMutation
   );
   const [createStarResult, runCreateStarMutation] = useMutation(
     createStarMutation
+  );
+  const [deleteStarResult, runDeleteStarMutation] = useMutation(
+    deleteStarMutation
   );
   const [updateReplyResult, runUpdateReplyMutation] = useMutation(
     updateReplyMutation
@@ -148,6 +155,13 @@ export default function PostPage() {
       if (postState.numStars === 0) {
         updatePostState(draft => {
           draft.numStars = postDataResult.data?.post.stars.length;
+          draft.starMap = postDataResult.data?.post.stars.reduce(
+            (acc, curr) => {
+              acc[curr.user.id] = { starId: curr.id };
+              return acc;
+            },
+            {}
+          );
         });
       }
     }
@@ -178,23 +192,66 @@ export default function PostPage() {
     }
   };
 
-  const handleStarClick = async () => {
+  const debouncedStarClick = useCallback(
+    debounce(handleStarClick, 500, {
+      leading: true,
+      trailing: false,
+    }),
+    [postState.starMap[userContext?.user?.id]?.starId]
+  );
+
+  async function handleStarClick() {
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
-    updatePostState(draft => {
-      draft.numStars = draft.numStars + 1;
-    });
-    try {
-      const res = await runCreateStarMutation({
-        postId: Number(router.query?.id),
-        userId: userContext.user.id,
+    if (postState.starMap[userContext?.user?.id]?.starId) {
+      updatePostState(draft => {
+        draft.numStars = draft.numStars - 1;
+        draft.starMap = {
+          ...postState.starMap,
+          [userContext?.user?.id]: undefined,
+        };
       });
-      if (!res.data) {
+
+      try {
+        const res = await runDeleteStarMutation({
+          starId: postState.starMap[userContext.user.id].starId,
+        });
+        if (res.error) {
+          console.error(res.error.message);
+        }
+      } catch (e) {
         console.error(e);
       }
-    } catch (e) {
-      console.error(e);
     }
-  };
+
+    if (!postState.starMap[userContext?.user?.id]) {
+      updatePostState(draft => {
+        draft.numStars = draft.numStars + 1;
+        draft.starMap = {
+          ...postState.starMap,
+          [userContext?.user?.id]: {},
+        };
+      });
+
+      try {
+        const res = await runCreateStarMutation({
+          postId: Number(router.query?.id),
+          userId: userContext.user.id,
+        });
+        if (res.error) {
+          console.error(res.error.message);
+        } else {
+          updatePostState(draft => {
+            draft.starMap = {
+              ...postState.starMap,
+              [userContext?.user?.id]: { starId: res.data.addStar.id },
+            };
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
 
   const handleCommentEditsChange = e => {
     setCommentInputs(draft => {
@@ -323,7 +380,7 @@ export default function PostPage() {
           <Meta>
             <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
             <div>&nbsp; &middot; &nbsp;</div>
-            <div>#{tag.name}</div>
+            <div>#{tag?.name}</div>
             {userContext.user.id === author?.id && (
               <ButtonMinor type="submit" onClick={togglePostEdit}>
                 Edit
@@ -362,7 +419,7 @@ export default function PostPage() {
           )}
         </Content>
         <ActionBar>
-          <ButtonTertiary onClick={handleStarClick}>
+          <ButtonTertiary onClick={debouncedStarClick}>
             <Icon className="icon-star"></Icon>
             <div>{postState.numStars}</div>
           </ButtonTertiary>

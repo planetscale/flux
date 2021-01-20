@@ -36,6 +36,9 @@ const postDataQuery = gql`
       }
       stars {
         id
+        user {
+          id
+        }
       }
       tag {
         id
@@ -94,12 +97,15 @@ const updateReplyMutation = gql`
 
 const createStarMutation = gql`
   mutation($postId: Int!, $userId: Int!) {
-    createOneStar(
-      data: {
-        post: { connect: { id: $postId } }
-        user: { connect: { id: $userId } }
-      }
-    ) {
+    addStar(postId: $postId, userId: $userId) {
+      id
+    }
+  }
+`;
+
+const deleteStarMutation = gql`
+  mutation($starId: Int!) {
+    deleteOneStar(where: { id: $starId }) {
       id
     }
   }
@@ -122,4 +128,5 @@ export {
   createStarMutation,
   updateReplyMutation,
   updatePostMutation,
+  deleteStarMutation,
 };
