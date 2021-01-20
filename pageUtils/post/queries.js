@@ -97,12 +97,7 @@ const updateReplyMutation = gql`
 
 const createStarMutation = gql`
   mutation($postId: Int!, $userId: Int!) {
-    createOneStar(
-      data: {
-        post: { connect: { id: $postId } }
-        user: { connect: { id: $userId } }
-      }
-    ) {
+    addStar(postId: $postId, userId: $userId) {
       id
     }
   }

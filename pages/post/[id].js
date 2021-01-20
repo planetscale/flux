@@ -215,7 +215,7 @@ export default function PostPage() {
         const res = await runDeleteStarMutation({
           starId: postState.starMap[userContext.user.id].starId,
         });
-        if (!res.data && res.error) {
+        if (res.error) {
           console.error(res.error.message);
         }
       } catch (e) {
@@ -237,13 +237,13 @@ export default function PostPage() {
           postId: Number(router.query?.id),
           userId: userContext.user.id,
         });
-        if (!res.data && res.error) {
+        if (res.error) {
           console.error(res.error.message);
         } else {
           updatePostState(draft => {
             draft.starMap = {
               ...postState.starMap,
-              [userContext?.user?.id]: { starId: res.data.createOneStar.id },
+              [userContext?.user?.id]: { starId: res.data.addStar.id },
             };
           });
         }
