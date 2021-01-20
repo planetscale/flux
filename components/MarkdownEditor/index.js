@@ -1,11 +1,14 @@
 import ReactMde from 'react-mde';
 import ReactMarkdown from 'react-markdown';
 import 'react-mde/lib/styles/css/react-mde-all.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from 'utils/auth/clientConfig';
 import CodeBlock from './CodeBlock';
+import { useQuery } from 'urql';
+import { useImmer } from 'use-immer';
+import gql from 'graphql-tag';
 
 const Wrapper = styled.div`
   textarea {
@@ -20,22 +23,48 @@ const Wrapper = styled.div`
   }
 `;
 
+const slackMembersQuery = gql`
+  query {
+    slackMembers {
+      id
+      realName
+      displayName
+    }
+  }
+`;
+
 const TABS = {
   WRITE: 'write',
   PREVIWE: 'preview',
 };
 
-export default function MarkdownEditor({
-  content,
-  handleContentChange,
-  userTagSuggestions,
-}) {
+export default function MarkdownEditor({ content, handleContentChange }) {
   const [selectedTab, setSelectedTab] = useState(TABS.WRITE);
+  const [state, updateState] = useImmer({
+    slackMemberSuggestions: [],
+  });
+
+  const [slackMembersResult, runslackMembersQuery] = useQuery({
+    query: slackMembersQuery,
+  });
+
+  useEffect(() => {
+    if (slackMembersResult.data?.slackMembers) {
+      updateState(draft => {
+        draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
+          member => ({
+            preview: member.realName,
+            value: `@${member.realName}`,
+          })
+        );
+      });
+    }
+  }, [slackMembersResult.data?.slackMembers]);
 
   const loadSuggestions = text => {
     return new Promise((accept, reject) => {
       setTimeout(() => {
-        const suggestions = userTagSuggestions.filter(i =>
+        const suggestions = state.slackMemberSuggestions.filter(i =>
           i.preview.toLowerCase().includes(text.toLowerCase())
         );
         accept(suggestions);
@@ -105,7 +134,7 @@ export default function MarkdownEditor({
             <ReactMarkdown source={markdown} renderers={{ code: CodeBlock }} />
           )
         }
-        loadSuggestions={userTagSuggestions ? loadSuggestions : null}
+        loadSuggestions={loadSuggestions}
         suggestionTriggerCharacters={['@']}
         childProps={{
           writeButton: {
