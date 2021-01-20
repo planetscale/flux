@@ -108,6 +108,14 @@ const createStarMutation = gql`
   }
 `;
 
+const deleteStarMutation = gql`
+  mutation($starId: Int!) {
+    deleteOneStar(where: { id: $starId }) {
+      id
+    }
+  }
+`;
+
 const updatePostMutation = gql`
   mutation($content: String!, $postId: Int!) {
     updateOnePost(
@@ -125,4 +133,5 @@ export {
   createStarMutation,
   updateReplyMutation,
   updatePostMutation,
+  deleteStarMutation,
 };
