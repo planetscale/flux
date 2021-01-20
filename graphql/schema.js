@@ -283,7 +283,27 @@ const Mutation = mutationType({
     t.crud.updateOneReply();
     t.crud.deleteOneReply();
     t.crud.createOneStar();
-    t.crud.deleteOneStar();
+    t.field('addStar', {
+      type: 'Star',
+      resolve(_root, args, ctx) {
+        const star = ctx.prisma.star.findFirst({
+          where: {
+            postId: args.postId,
+            userId: args.userId,
+          },
+        });
+        if (!!star) {
+          console.error('Duplicate stars not permitted on posts.');
+        }
+
+        return ctx.prisma.star.create({
+          data: {
+            postId: args.postId,
+            userId: args.userId,
+          },
+        });
+      },
+    });
     t.crud.createOneTag();
     t.crud.deleteOneTag();
   },
