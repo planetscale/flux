@@ -2,11 +2,12 @@ import PostList from 'components/PostList';
 import { useQuery } from 'urql';
 import gql from 'graphql-tag';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -65,6 +66,7 @@ export default function Home({ href, ...props }) {
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
   const { subHeader } = useTopBarContext();
+  const isLoading = useRef(true);
   const [postListResult, runPostListQuery] = useQuery({
     query: postListQuery,
     variables: {
@@ -84,6 +86,9 @@ export default function Home({ href, ...props }) {
             ]
           : getLensPosts(postListResult.data?.org?.lenses, subHeader);
       });
+      isLoading.current = false;
+    } else {
+      isLoading.current = true;
     }
   }, [postListResult.data?.org]);
 
@@ -112,7 +117,11 @@ export default function Home({ href, ...props }) {
 
   return (
     <HomeWrapper>
-      <PostList posts={state.postList} />
+      {isLoading.current ? (
+        <LoadingIndicator></LoadingIndicator>
+      ) : (
+        <PostList posts={state.postList} />
+      )}
     </HomeWrapper>
   );
 }
