@@ -61,6 +61,7 @@ export default function PostPage() {
   const [postState, updatePostState] = useImmer({
     replies: {},
     numStars: 0,
+    starMap: {},
   });
   const [reply, setReply] = useState('');
   const [commentInputs, setCommentInputs] = useImmer({
@@ -85,6 +86,7 @@ export default function PostPage() {
     stars,
     tag,
   } = postDataResult.data?.post || {};
+  console.log(postState.starMap);
   const [createReplyResult, runCreateReplyMutation] = useMutation(
     createReplyMutation
   );
@@ -147,6 +149,13 @@ export default function PostPage() {
       if (postState.numStars === 0) {
         updatePostState(draft => {
           draft.numStars = postDataResult.data?.post.stars.length;
+          draft.starMap = postDataResult.data?.post.stars.reduce(
+            (acc, curr) => {
+              acc[curr.user.id] = true;
+              return acc;
+            },
+            {}
+          );
         });
       }
     }
