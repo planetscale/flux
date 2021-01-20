@@ -35,6 +35,7 @@ import { useImmer } from 'use-immer';
 import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 const Meta = styled.div`
   display: flex;
@@ -312,7 +313,7 @@ export default function PostPage() {
 
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
-    return <></>;
+    return <LoadingIndicator></LoadingIndicator>;
   }
 
   return (
