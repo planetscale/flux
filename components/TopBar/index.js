@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ButtonImage, ButtonSpecial, ButtonLink } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
@@ -108,11 +108,8 @@ const ActionsWrapper = styled.div`
   }
 `;
 
-const USER_SETTINGS = 'user settings';
-
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
-  const [modalContent, setModalContent] = useState(null);
   const { header, subHeader } = useTopBarContext();
   const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
@@ -165,13 +162,11 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
             </ButtonImage>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
-            {modalContent === USER_SETTINGS && (
-              <UserSettings
-                profileImg={profileImg}
-                displayName={userDisplayName}
-                userHandle={userHandle}
-              />
-            )}
+            <UserSettings
+              profileImg={profileImg}
+              displayName={userDisplayName}
+              userHandle={userHandle}
+            />
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       </ActionsWrapper>
