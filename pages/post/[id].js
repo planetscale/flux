@@ -191,19 +191,17 @@ export default function PostPage() {
     }
   };
 
-  const debouncedStarClick = () => {
-    debounce(handleStarClick, 1000, {
+  const debouncedStarClick = useCallback(
+    debounce(handleStarClick, 500, {
       leading: true,
-      trailing: true,
-    });
-  };
+      trailing: false,
+    }),
+    [postState.starMap[userContext?.user?.id]?.starId]
+  );
 
   async function handleStarClick() {
-    console.log('star clicked', userContext?.user?.id);
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
-    console.log(postState.starMap[userContext?.user?.id]);
     if (postState.starMap[userContext?.user?.id]?.starId) {
-      console.log('has star object:', postState.starMap[userContext?.user?.id]);
       updatePostState(draft => {
         draft.numStars = draft.numStars - 1;
         draft.starMap = {
@@ -218,20 +216,13 @@ export default function PostPage() {
         });
         if (!res.data && res.error) {
           console.error(res.error.message);
-        } else {
-          // updatePostState(draft => {
-          //   draft.starMap = {
-          //     ...postState.starMap,
-          //     [userContext?.user?.id]: undefined,
-          //   };
-          // });
         }
       } catch (e) {
         console.error(e);
       }
     }
-    if (!postState.starMap[userContext?.user?.id]?.starId) {
-      console.log('no star:', postState.starMap[userContext?.user?.id]);
+
+    if (!postState.starMap[userContext?.user?.id]) {
       updatePostState(draft => {
         draft.numStars = draft.numStars + 1;
         draft.starMap = {
@@ -260,9 +251,7 @@ export default function PostPage() {
       }
     }
   }
-  useEffect(() => {
-    console.log('starMap:', postState.starMap);
-  }, [postState.starMap]);
+
   const handleCommentEditsChange = e => {
     setCommentInputs(draft => {
       draft.edits[e.target.dataset.commentId] = e.target.value;
