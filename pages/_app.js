@@ -55,6 +55,11 @@ function App({ Component, pageProps }) {
             font: unset;
             font-family: 'Inter', sans-serif;
           }
+
+          a:visited {
+              color: var(--link);
+            }
+          }
         `}
       />
       <AuthContextProvider>
