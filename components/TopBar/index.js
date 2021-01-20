@@ -156,18 +156,14 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         )}
 
         <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <ButtonImage type="button">
-              <UserIcon src={profileImg} alt="Image of user" />
-            </ButtonImage>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <UserSettings
-              profileImg={profileImg}
-              displayName={userDisplayName}
-              userHandle={userHandle}
-            />
-          </DropdownMenu.Content>
+          <ButtonImage as={DropdownMenu.Trigger}>
+            <UserIcon src={profileImg} alt="Image of user" />
+          </ButtonImage>
+          <UserSettings
+            profileImg={profileImg}
+            displayName={userDisplayName}
+            userHandle={userHandle}
+          />
         </DropdownMenu.Root>
       </ActionsWrapper>
     </Wrapper>
