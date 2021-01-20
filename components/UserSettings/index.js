@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import UserIcon from 'components/UserIcon';
 import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 import * as RadioGroup from '@radix-ui/react-radio-group';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
-const UserSettingsWrapper = styled.ul`
+const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
   background: var(--background);
   border-radius: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow);
   padding: 0 0 8px;
-  list-style: none;
 `;
 
 const UserInfo = styled.div`
@@ -45,7 +45,7 @@ const UserNickname = styled.p`
   color: #666;
 `;
 
-const MenuItemContainer = styled.li`
+const MenuItemContainer = styled(DropdownMenu.Group)`
   border-bottom: 1px solid var(--accent2);
 `;
 
@@ -133,10 +133,9 @@ export default function UserSettings({
   };
 
   return (
-    <UserSettingsWrapper>
+    <UserSettingsWrapper sideOffset={42}>
       <MenuItemContainer>
         <UserInfo>
-          <UserIcon src={profileImg} alt={`${displayName}'s avatar`} />
           <UserNameContainer>
             <UserName>{displayName}</UserName>
             <UserNickname>@{userHandle}</UserNickname>

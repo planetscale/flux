@@ -9,6 +9,7 @@ import CodeBlock from './CodeBlock';
 import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import gql from 'graphql-tag';
+import gfm from 'remark-gfm';
 
 const Wrapper = styled.div`
   textarea {
@@ -131,7 +132,7 @@ export default function MarkdownEditor({ content, handleContentChange }) {
         onTabChange={setSelectedTab}
         generateMarkdownPreview={markdown =>
           Promise.resolve(
-            <ReactMarkdown source={markdown} renderers={{ code: CodeBlock }} />
+            <ReactMarkdown source={markdown} plugins={[gfm]} renderers={{ code: CodeBlock }} />
           )
         }
         loadSuggestions={loadSuggestions}
