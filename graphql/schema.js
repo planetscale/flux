@@ -292,8 +292,9 @@ const Mutation = mutationType({
             userId: args.userId,
           },
         });
-        if (!!star) {
+        if (star) {
           console.error('Duplicate stars not permitted on posts.');
+          return {};
         }
 
         return ctx.prisma.star.create({
