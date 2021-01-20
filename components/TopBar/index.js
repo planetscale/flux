@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Modal from '@material-ui/core/Modal';
 import { ButtonImage, ButtonSpecial, ButtonLink } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
@@ -9,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const Wrapper = styled.div`
   display: flex;
@@ -108,17 +108,10 @@ const ActionsWrapper = styled.div`
   }
 `;
 
-const StyledModal = styled(Modal)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const USER_SETTINGS = 'user settings';
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
-  const [isOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const { header, subHeader } = useTopBarContext();
   const { setHeaders } = useTopBarActions();
@@ -131,15 +124,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       });
     }
   }, [user?.org]);
-
-  const handleModalOpen = content => {
-    setModalOpen(true);
-    setModalContent(content);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
 
   const redirectToHome = () => {
     if (router.pathname !== '/') {
@@ -167,23 +151,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         <SubHeader>{subHeader}</SubHeader>
       </SlasherFlick>
       <ActionsWrapper>
-        <StyledModal
-          open={isOpen}
-          onClose={handleModalClose}
-          aria-labelledby={modalContent}
-          aria-describedby={modalContent}
-        >
-          <>
-            {modalContent === USER_SETTINGS && (
-              <UserSettings
-                profileImg={profileImg}
-                displayName={userDisplayName}
-                userHandle={userHandle}
-              />
-            )}
-          </>
-        </StyledModal>
-
         {notNewPostPage() && (
           <ButtonSpecial type="button" onClick={redirectToNew}>
             <Icon className="icon-plus"></Icon>
@@ -191,14 +158,22 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           </ButtonSpecial>
         )}
 
-        <ButtonImage
-          type="button"
-          onClick={() => {
-            handleModalOpen(USER_SETTINGS);
-          }}
-        >
-          <UserIcon src={profileImg} alt="Image of user" />
-        </ButtonImage>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <ButtonImage type="button">
+              <UserIcon src={profileImg} alt="Image of user" />
+            </ButtonImage>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            {modalContent === USER_SETTINGS && (
+              <UserSettings
+                profileImg={profileImg}
+                displayName={userDisplayName}
+                userHandle={userHandle}
+              />
+            )}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </ActionsWrapper>
     </Wrapper>
   );
