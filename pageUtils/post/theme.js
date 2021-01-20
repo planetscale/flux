@@ -29,7 +29,7 @@ const theme = {
       link: '#009AFA',
       text: '#ccc',
       shadow:
-        '0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08)',
+        '0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);',
       highlight: '#c56a86',
     },
   },
