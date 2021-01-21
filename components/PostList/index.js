@@ -120,7 +120,7 @@ export default function PostList({ posts = [] }) {
     <Wrapper>
       {posts.map(post => {
         if (!post) return;
-        const { id, title, author, createdAt, summary } = post;
+        const { id, title, author, createdAt, summary, tag } = post;
         return (
           <Post
             key={id}
@@ -134,6 +134,8 @@ export default function PostList({ posts = [] }) {
                   <MetaDate>
                     {getLocaleDateTimeString(createdAt).toUpperCase()}
                   </MetaDate>
+                  <span>&nbsp; &middot; &nbsp;</span>
+                  <span>#{tag?.name}</span>
                   <span>&nbsp; &middot; &nbsp;</span>
                   <span>{author?.displayName}</span>
                 </MetaInformation>
