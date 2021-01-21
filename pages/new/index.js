@@ -10,15 +10,7 @@ import { useImmer } from 'use-immer';
 import Select from 'react-select';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
-import { Post } from 'pageUtils/post/styles';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 42px;
-  width: 80ch;
-`;
+import { PageWrapper, Post } from 'pageUtils/post/styles';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -42,15 +34,9 @@ const TitleInputWrapper = styled.div`
     border-radius: 50%;
   }
 
-  &:hover {
+  &.error {
     &:before {
-      background-color: var(--highlight);
-    }
-  }
-
-  &:focus-within {
-    &:before {
-      background-color: var(--highlight);
+      background-color: red;
     }
   }
 `;
@@ -89,15 +75,9 @@ const SubTitleInputWrapper = styled.div`
     border-radius: 50%;
   }
 
-  &:hover {
+  &.error {
     &:before {
-      background-color: var(--highlight);
-    }
-  }
-
-  &:focus-within {
-    &:before {
-      background-color: var(--highlight);
+      background-color: red;
     }
   }
 `;
@@ -252,20 +232,34 @@ export default function NewPost() {
 
   const handleTitleChange = e => {
     let title = e.target;
+    let titleWrapper = e.target.parentNode;
     title.height = '5px';
     title.style.height = title.scrollHeight + 'px';
     updateState(draft => {
       draft.title = e.target.value;
     });
+
+    if (e.target.value.length > 0) {
+      titleWrapper.classList.remove('error');
+    } else {
+      titleWrapper.classList.add('error');
+    }
   };
 
   const handleSubtitleChange = e => {
     let title = e.target;
+    let titleWrapper = e.target.parentNode;
     title.height = '1px';
     title.style.height = title.scrollHeight + 'px';
     updateState(draft => {
       draft.subtitle = e.target.value;
     });
+
+    if (e.target.value.length > 0) {
+      titleWrapper.classList.remove('error');
+    } else {
+      titleWrapper.classList.add('error');
+    }
   };
 
   const canSubmitPost = () => {
@@ -335,8 +329,16 @@ export default function NewPost() {
     e.currentTarget.getElementsByTagName('textarea')[0].focus();
   };
 
+  const onFocusLost = e => {
+    e.preventDefault();
+    const textarea = e.currentTarget.getElementsByTagName('textarea')[0];
+    if (textarea.value.length === 0) {
+      e.currentTarget.classList.add('error');
+    }
+  };
+
   return (
-    <Wrapper>
+    <PageWrapper>
       <Post>
         <TimeAndTags>
           <div>{state.dateTime}&nbsp; &middot; &nbsp;</div>
@@ -363,7 +365,7 @@ export default function NewPost() {
             />
           </div>
         </TimeAndTags>
-        <TitleInputWrapper onClick={onInputWrapperClick}>
+        <TitleInputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
           <TitleInput
             placeholder="Enter Title"
             rows="1"
@@ -371,7 +373,10 @@ export default function NewPost() {
             onChange={handleTitleChange}
           ></TitleInput>
         </TitleInputWrapper>
-        <SubTitleInputWrapper onClick={onInputWrapperClick}>
+        <SubTitleInputWrapper
+          onClick={onInputWrapperClick}
+          onBlur={onFocusLost}
+        >
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"
@@ -393,6 +398,6 @@ export default function NewPost() {
           <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
         </ActionItems>
       </Post>
-    </Wrapper>
+    </PageWrapper>
   );
 }

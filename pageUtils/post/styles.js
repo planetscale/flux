@@ -3,10 +3,9 @@ import { ButtonMinor } from 'components/Button';
 import { media } from './theme';
 
 const PageWrapper = styled.div`
-  padding: 42px;
+  padding: 42px 0;
   width: 80ch;
   box-sizing: border-box;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -132,7 +131,7 @@ const CommentContent = styled.div`
 `;
 
 const Post = styled.div`
-  width: 100%;
+  /* width: 100%; */
 `;
 
 const ActionBar = styled.div`
