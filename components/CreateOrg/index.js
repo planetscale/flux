@@ -23,6 +23,7 @@ const Wrapper = styled.div`
 `;
 
 const InputWrapper = styled.div`
+  position: relative;
   background-color: var(--background);
   color: var(--text);
   border-bottom: 1px solid var(--accent2);
@@ -31,6 +32,7 @@ const InputWrapper = styled.div`
   input {
     background-color: unset;
     color: var(--text);
+    border-bottom: 1px solid var(--background);
   }
 
   &:hover {
@@ -51,6 +53,7 @@ const InputWrapper = styled.div`
 
     input {
       color: rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0);
     }
 
     &:hover {
@@ -64,6 +67,12 @@ const InputWrapper = styled.div`
     ${media.phone`
       border-radius: 0;
     `}
+  }
+
+  &.error {
+    input {
+      border-bottom: 1px solid red;
+    }
   }
 `;
 
@@ -164,22 +173,38 @@ export default function CreateOrg({ name, email, avatar }) {
       });
   }
 
-  const handleOrgNameChange = e => {
-    setState(draft => {
-      draft.orgName = e.target.value;
-    });
-  };
-
   const handleNameChange = e => {
+    let target = e.target;
+    let targetWrapper = target.parentNode.parentNode;
+    console.log(target);
+    console.log(targetWrapper);
+
     setState(draft => {
       draft.name = e.target.value;
     });
+
+    if (target.value.length > 0) {
+      targetWrapper.classList.remove('error');
+    } else {
+      targetWrapper.classList.add('error');
+    }
   };
 
   const handleUserNameChange = e => {
+    let target = e.target;
+    let targetWrapper = target.parentNode.parentNode;
+    console.log(target);
+    console.log(targetWrapper);
+
     setState(draft => {
       draft.userName = e.target.value;
     });
+
+    if (target.value.length > 0) {
+      targetWrapper.classList.remove('error');
+    } else {
+      targetWrapper.classList.add('error');
+    }
   };
 
   const handleNextClick = e => {
@@ -221,24 +246,27 @@ export default function CreateOrg({ name, email, avatar }) {
     e.currentTarget.getElementsByTagName('input')[0].focus();
   };
 
+  const onFocusLost = e => {
+    e.preventDefault();
+    const inputElement = e.currentTarget.getElementsByTagName('input')[0];
+    if (inputElement.value.length === 0) {
+      e.currentTarget.classList.add('error');
+    }
+  };
+
   return (
     <Wrapper>
       <InputWrapper className="disabled">
-        <Input
-          label="Organization Name"
-          value={state.orgName}
-          onChange={handleOrgNameChange}
-          disabled
-        />
+        <Input label="Organization Name" value={state.orgName} disabled />
       </InputWrapper>
-      <InputWrapper onClick={onInputWrapperClick}>
+      <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
           label="Your Username"
           value={state.userName}
           onChange={handleUserNameChange}
         />
       </InputWrapper>
-      <InputWrapper onClick={onInputWrapperClick}>
+      <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
           label="Your Name"
           value={state.name}

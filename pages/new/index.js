@@ -39,6 +39,12 @@ const TitleInputWrapper = styled.div`
       background-color: red;
     }
   }
+
+  &.good {
+    &:before {
+      background-color: green;
+    }
+  }
 `;
 
 const TitleInput = styled.textarea`
