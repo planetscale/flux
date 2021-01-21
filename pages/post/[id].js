@@ -200,7 +200,6 @@ export default function PostPage() {
   async function handleStarClick() {
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
     if (postState.isStared) {
-      console.log('up:', postState.starMap[userContext?.user?.id]);
       updatePostState(draft => {
         draft.numStars = postState.numStars - 1;
         draft.isStared = false;
@@ -208,7 +207,7 @@ export default function PostPage() {
 
       try {
         const res = await runDeleteStarMutation({
-          starId: postState.starMap[userContext.user.id].starId,
+          starId: postState.starMap[userContext.user.id]?.starId,
         });
         if (res.error) {
           console.error(res.error.message);
@@ -224,13 +223,8 @@ export default function PostPage() {
         console.error(e);
       }
     } else {
-      console.log(postState.starMap[userContext?.user?.id]);
       updatePostState(draft => {
         draft.numStars = postState.numStars + 1;
-        draft.starMap = {
-          ...postState.starMap,
-          [userContext?.user?.id]: {},
-        };
         draft.isStared = true;
       });
 
