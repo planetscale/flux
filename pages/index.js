@@ -24,6 +24,9 @@ const postListQuery = gql`
           id
           title
           summary
+          tag {
+            name
+          }
           author {
             displayName
           }

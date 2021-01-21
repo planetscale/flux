@@ -110,38 +110,108 @@ const PostSubTitle = styled.p`
   }
 `;
 
+const DemarcationString = styled.div`
+  display: inline-block;
+  position: relative;
+  background-color: var(--background);
+  z-index: 3;
+  padding: 8px 16px;
+  width: 100px;
+  margin-bottom: 2em;
+  color: var(--accent);
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background-color: var(--accent2);
+    left: -1em;
+    top: 1.1em;
+  }
+`;
+
 export default function PostList({ posts = [] }) {
+  let lastDate = null;
   const router = useRouter();
   const handlePostClick = postId => {
     router.push(`/post/${postId}`);
+  };
+
+  const enumMonth = Object.freeze({
+    0: 'January',
+    1: 'February',
+    2: 'March',
+    3: 'April',
+    4: 'May',
+    5: 'June',
+    6: 'July',
+    7: 'August',
+    8: 'September',
+    9: 'October',
+    10: 'November',
+    11: 'December',
+  });
+
+  const getTimeDemarcatorString = timeUTC => {
+    const postDate = new Date(`${timeUTC}`);
+    let demarcationString = '';
+
+    if (lastDate && lastDate.getFullYear() !== postDate.getFullYear()) {
+      // print year
+      demarcationString = postDate.getFullYear().toString();
+    } else if (lastDate && lastDate.getMonth() !== postDate.getMonth()) {
+      // print month
+      demarcationString = enumMonth[postDate.getMonth()];
+    } else if (!lastDate) {
+      // print first appropriate demarcator
+      const latestDate = new Date();
+      if (latestDate.getFullYear() !== postDate.getFullYear()) {
+        demarcationString = postDate.getFullYear().toString();
+      } else {
+        demarcationString = enumMonth[postDate.getMonth()];
+      }
+    }
+
+    lastDate = postDate;
+    return demarcationString;
   };
 
   return (
     <Wrapper>
       {posts.map(post => {
         if (!post) return;
-        const { id, title, author, createdAt, summary } = post;
+        const { id, title, author, createdAt, summary, tag } = post;
+        const demarcationString = getTimeDemarcatorString(
+          getLocaleDateTimeString(createdAt).toUpperCase()
+        );
+
         return (
-          <Post
-            key={id}
-            onClick={() => {
-              handlePostClick(id);
-            }}
-          >
-            <PostWrapper>
-              <PostInfo>
-                <MetaInformation>
-                  <MetaDate>
-                    {getLocaleDateTimeString(createdAt).toUpperCase()}
-                  </MetaDate>
-                  <span>&nbsp; &middot; &nbsp;</span>
-                  <span>{author?.displayName}</span>
-                </MetaInformation>
-                <PostTitle>{title}</PostTitle>
-                <PostSubTitle>{summary}</PostSubTitle>
-              </PostInfo>
-            </PostWrapper>
-          </Post>
+          <>
+            <DemarcationString>{demarcationString}</DemarcationString>
+            <Post
+              key={id}
+              onClick={() => {
+                handlePostClick(id);
+              }}
+            >
+              <PostWrapper>
+                <PostInfo>
+                  <MetaInformation>
+                    <MetaDate>
+                      {getLocaleDateTimeString(createdAt).toUpperCase()}
+                    </MetaDate>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <span>#{tag?.name}</span>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <span>{author?.displayName}</span>
+                  </MetaInformation>
+                  <PostTitle>{title}</PostTitle>
+                  <PostSubTitle>{summary}</PostSubTitle>
+                </PostInfo>
+              </PostWrapper>
+            </Post>
+          </>
         );
       })}
     </Wrapper>
