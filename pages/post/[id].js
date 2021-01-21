@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import { Icon } from 'pageUtils/post/atoms';
 import {
   PageWrapper,
@@ -248,15 +249,15 @@ export default function PostPage() {
     }
   }
 
-  const handleCommentEditsChange = e => {
+  const handleCommentEditsChange = (content, key) => {
     setCommentInputs(draft => {
-      draft.edits[e.target.dataset.commentId] = e.target.value;
+      draft.edits[key] = content;
     });
   };
 
-  const handleCommentRepliesChange = e => {
+  const handleCommentRepliesChange = (content, key) => {
     setCommentInputs(draft => {
-      draft.replies[e.target.dataset.commentId] = e.target.value;
+      draft.replies[key] = content;
     });
   };
 
@@ -407,7 +408,7 @@ export default function PostPage() {
               </ButtonMinor>
             </>
           ) : (
-            <ReactMarkdown renderers={{ code: CodeBlock }}>
+            <ReactMarkdown renderers={{ code: CodeBlock }} plugins={[gfm]}>
               {content}
             </ReactMarkdown>
           )}
@@ -460,12 +461,12 @@ export default function PostPage() {
 
                   {commentButtonState.editButtons[firstLevelReplyKey] ? (
                     <Reply>
-                      <textarea
-                        data-comment-id={firstLevelReplyKey}
-                        value={commentInputs.edits[firstLevelReplyKey]}
-                        onChange={handleCommentEditsChange}
-                        autoFocus
-                      ></textarea>
+                      <MarkdownEditor
+                        content={commentInputs.edits[firstLevelReplyKey]}
+                        handleContentChange={content => {
+                          handleCommentEditsChange(content, firstLevelReplyKey);
+                        }}
+                      ></MarkdownEditor>
                       <ButtonMinor
                         data-comment-id={firstLevelReplyKey}
                         type="submit"
@@ -480,18 +481,26 @@ export default function PostPage() {
                     </Reply>
                   ) : (
                     <CommentContent>
-                      {firstLevelReplyValue.content}
+                      <ReactMarkdown
+                        renderers={{ code: CodeBlock }}
+                        plugins={[gfm]}
+                      >
+                        {firstLevelReplyValue.content}
+                      </ReactMarkdown>
                     </CommentContent>
                   )}
 
                   {commentButtonState.replyButtons[firstLevelReplyKey] && (
                     <Reply>
-                      <textarea
-                        data-comment-id={firstLevelReplyKey}
-                        value={commentInputs.replies[firstLevelReplyKey]}
-                        onChange={handleCommentRepliesChange}
-                        autoFocus
-                      ></textarea>
+                      <MarkdownEditor
+                        content={commentInputs.replies[firstLevelReplyKey]}
+                        handleContentChange={content => {
+                          handleCommentRepliesChange(
+                            content,
+                            firstLevelReplyKey
+                          );
+                        }}
+                      ></MarkdownEditor>
                       <ButtonMinor
                         data-comment-id={firstLevelReplyKey}
                         type="submit"
@@ -543,12 +552,12 @@ export default function PostPage() {
 
                       {commentButtonState.editButtons[k] ? (
                         <Reply>
-                          <textarea
-                            data-comment-id={k}
-                            value={commentInputs.edits[k]}
-                            onChange={handleCommentEditsChange}
-                            autoFocus
-                          ></textarea>
+                          <MarkdownEditor
+                            content={commentInputs.edits[k]}
+                            handleContentChange={content => {
+                              handleCommentEditsChange(content, k);
+                            }}
+                          ></MarkdownEditor>
                           <ButtonMinor
                             data-comment-id={k}
                             type="submit"
@@ -560,17 +569,24 @@ export default function PostPage() {
                           </ButtonMinor>
                         </Reply>
                       ) : (
-                        <CommentContent>{v.content}</CommentContent>
+                        <CommentContent>
+                          <ReactMarkdown
+                            renderers={{ code: CodeBlock }}
+                            plugins={[gfm]}
+                          >
+                            {v.content}
+                          </ReactMarkdown>
+                        </CommentContent>
                       )}
 
                       {commentButtonState.replyButtons[k] && (
                         <Reply>
-                          <textarea
-                            data-comment-id={k}
-                            value={commentInputs.replies[k]}
-                            onChange={handleCommentRepliesChange}
-                            autoFocus
-                          ></textarea>
+                          <MarkdownEditor
+                            content={commentInputs.replies[k]}
+                            handleContentChange={content => {
+                              handleCommentRepliesChange(content, k);
+                            }}
+                          ></MarkdownEditor>
                           <ButtonMinor
                             data-comment-id={k}
                             type="submit"
@@ -613,12 +629,12 @@ export default function PostPage() {
 
                           {commentButtonState.editButtons[key] ? (
                             <Reply>
-                              <textarea
-                                data-comment-id={key}
-                                value={commentInputs.edits[key]}
-                                onChange={handleCommentEditsChange}
-                                autoFocus
-                              ></textarea>
+                              <MarkdownEditor
+                                content={commentInputs.edits[key]}
+                                handleContentChange={content => {
+                                  handleCommentEditsChange(content, key);
+                                }}
+                              ></MarkdownEditor>
                               <ButtonMinor
                                 data-comment-id={key}
                                 type="submit"
@@ -630,7 +646,14 @@ export default function PostPage() {
                               </ButtonMinor>
                             </Reply>
                           ) : (
-                            <CommentContent>{value.content}</CommentContent>
+                            <CommentContent>
+                              <ReactMarkdown
+                                renderers={{ code: CodeBlock }}
+                                plugins={[gfm]}
+                              >
+                                {value.content}
+                              </ReactMarkdown>
+                            </CommentContent>
                           )}
                         </Comment>
                       </CommentListItem>
