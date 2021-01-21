@@ -12,13 +12,11 @@ const StyledLabel = styled.label`
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 0;
+  padding: 4px 0;
   border: unset;
-  height: 24px;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
-  line-height: 24px;
   letter-spacing: 0.75px;
   margin: 8px 0 0;
 

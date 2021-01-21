@@ -56,6 +56,10 @@ function App({ Component, pageProps }) {
             font-family: 'Inter', sans-serif;
           }
 
+          p {
+            overflow-wrap: break-word;
+          }
+
           a:visited {
               color: var(--link);
             }
