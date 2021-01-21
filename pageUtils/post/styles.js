@@ -130,9 +130,7 @@ const CommentContent = styled.div`
   line-height: 22px;
 `;
 
-const Post = styled.div`
-  /* width: 100%; */
-`;
+const Post = styled.div``;
 
 const ActionBar = styled.div`
   border-bottom: 1px solid var(--accent2);
