@@ -28,7 +28,7 @@ export const ButtonBase = styled.button`
   }
 
   &:disabled {
-    opacity: 0.3;
+    opacity: 0.42;
   }
 `;
 

@@ -132,7 +132,7 @@ const CommentContent = styled.div`
 `;
 
 const Post = styled.div`
-  width: 747px;
+  width: 100%;
 `;
 
 const ActionBar = styled.div`
