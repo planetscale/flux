@@ -106,21 +106,8 @@ const Reply = styled.div`
   align-items: flex-start;
   width: 100%;
 
-  textarea {
-    resize: none;
-    height: 100px;
-    width: 100%;
-    border-radius: 8px;
-    padding: 24px;
-    align-self: stretch;
-    margin-bottom: 24px;
-    border: 1px solid var(--accent);
-    background-color: var(--background);
-    color: var(--text);
-
-    :focus {
-      outline: none;
-    }
+  ${ButtonMinor} {
+    margin: 24px 0 0 0;
   }
 `;
 

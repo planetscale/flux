@@ -36,7 +36,6 @@ import { useImmer } from 'use-immer';
 import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
-import debounce from 'lodash/debounce';
 import LoadingIndicator from 'components/LoadingIndicator';
 
 const Meta = styled.div`
@@ -172,8 +171,8 @@ export default function PostPage() {
     }
   }, [postDataResult]);
 
-  const handleReplyChange = e => {
-    setReply(e.target.value);
+  const handleReplyChange = content => {
+    setReply(content);
   };
 
   const handleCommentSubmit = async () => {
@@ -397,7 +396,6 @@ export default function PostPage() {
               <MarkdownEditor
                 content={postEditState.content}
                 handleContentChange={handlePostContentChange}
-                // userTagSuggestions={state.slackMemberSuggestions}
               ></MarkdownEditor>
               <ButtonMinor
                 type="submit"
@@ -645,11 +643,10 @@ export default function PostPage() {
         )}
       </CommentList>
       <Reply>
-        <textarea
-          value={reply}
-          placeholder="Reply to this post"
-          onChange={handleReplyChange}
-        ></textarea>
+        <MarkdownEditor
+          content={reply}
+          handleContentChange={handleReplyChange}
+        ></MarkdownEditor>
         <ButtonMinor
           type="submit"
           onClick={handleCommentSubmit}
