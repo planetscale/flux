@@ -8,10 +8,15 @@ import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import LoadingIndicator from 'components/LoadingIndicator';
+import { media } from 'pageUtils/post/theme';
 
 const HomeWrapper = styled.div`
   display: flex;
   justify-content: center;
+
+  ${media.phone`
+    width: 100%;
+  `}
 `;
 
 // TODO: only get current org's data
