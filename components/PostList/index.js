@@ -188,7 +188,9 @@ export default function PostList({ posts = [] }) {
 
         return (
           <>
-            <DemarcationString>{demarcationString}</DemarcationString>
+            {demarcationString && (
+              <DemarcationString>{demarcationString}</DemarcationString>
+            )}
             <Post
               key={id}
               onClick={() => {
