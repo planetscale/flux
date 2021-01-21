@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ButtonMajor, ButtonMinor } from 'components/Button';
+import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
@@ -16,18 +16,43 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 42px 0 0 0;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-  }
+  padding: 42px;
+  width: 80ch;
 `;
 
 const TimeAndTags = styled.div`
   color: var(--text);
   display: flex;
   align-items: center;
+`;
+
+const TitleInputWrapper = styled.div`
+  position: relative;
+  margin: 8px 0 0;
+
+  &:before {
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    height: 1em;
+    width: 1em;
+    background-color: var(--accent);
+    top: 0.7em;
+    left: -2em;
+    border-radius: 50%;
+  }
+
+  &:hover {
+    &:before {
+      background-color: var(--highlight);
+    }
+  }
+
+  &:focus-within {
+    &:before {
+      background-color: var(--highlight);
+    }
+  }
 `;
 
 const TitleInput = styled.textarea`
@@ -38,13 +63,42 @@ const TitleInput = styled.textarea`
   overflow: hidden;
   font-size: 48px;
   line-height: 58px;
-  margin: 8px 0 24px;
   font-weight: 700;
-  background-color: var(--background);
+  background-color: unset;
   color: var(--text);
+  width: 100%;
 
   ::placeholder {
     color: var(--accent);
+  }
+`;
+
+const SubTitleInputWrapper = styled.div`
+  position: relative;
+  margin: 8px 0 0;
+
+  &:before {
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    height: 1em;
+    width: 1em;
+    background-color: var(--accent);
+    top: 0.2em;
+    left: -2em;
+    border-radius: 50%;
+  }
+
+  &:hover {
+    &:before {
+      background-color: var(--highlight);
+    }
+  }
+
+  &:focus-within {
+    &:before {
+      background-color: var(--highlight);
+    }
   }
 `;
 
@@ -276,6 +330,11 @@ export default function NewPost() {
     });
   };
 
+  const onInputWrapperClick = e => {
+    e.preventDefault();
+    e.currentTarget.getElementsByTagName('textarea')[0].focus();
+  };
+
   return (
     <Wrapper>
       <Post>
@@ -304,18 +363,22 @@ export default function NewPost() {
             />
           </div>
         </TimeAndTags>
-        <TitleInput
-          placeholder="Enter Title"
-          rows="1"
-          value={state.title}
-          onChange={handleTitleChange}
-        ></TitleInput>
-        <SubtitleInput
-          placeholder="Enter Subtitle"
-          rows="1"
-          value={state.subtitle}
-          onChange={handleSubtitleChange}
-        ></SubtitleInput>
+        <TitleInputWrapper onClick={onInputWrapperClick}>
+          <TitleInput
+            placeholder="Enter Title"
+            rows="1"
+            value={state.title}
+            onChange={handleTitleChange}
+          ></TitleInput>
+        </TitleInputWrapper>
+        <SubTitleInputWrapper onClick={onInputWrapperClick}>
+          <SubtitleInput
+            placeholder="Enter Subtitle"
+            rows="1"
+            value={state.subtitle}
+            onChange={handleSubtitleChange}
+          ></SubtitleInput>
+        </SubTitleInputWrapper>
         <EditorWrapper>
           <MarkdownEditor
             content={state.content}
@@ -323,10 +386,10 @@ export default function NewPost() {
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>
-          <ButtonMajor onClick={handlePostSubmit} disabled={!canSubmitPost()}>
+          <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
             <Icon className="icon-post"></Icon>
             Post
-          </ButtonMajor>
+          </ButtonSpecial>
           <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
         </ActionItems>
       </Post>
