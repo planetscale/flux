@@ -114,7 +114,6 @@ const DemarcationString = styled.div`
   display: inline-block;
   position: relative;
   background-color: var(--background);
-  z-index: 3;
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
