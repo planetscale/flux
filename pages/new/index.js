@@ -26,11 +26,11 @@ const TitleInputWrapper = styled.div`
     content: ' ';
     display: inline-block;
     position: absolute;
-    height: 1em;
-    width: 1em;
+    height: 0.5em;
+    width: 0.5em;
     background-color: var(--accent);
-    top: 0.7em;
-    left: -2em;
+    top: 0.8em;
+    left: -1em;
     border-radius: 50%;
   }
 
@@ -73,11 +73,11 @@ const SubTitleInputWrapper = styled.div`
     content: ' ';
     display: inline-block;
     position: absolute;
-    height: 1em;
-    width: 1em;
+    height: 0.5em;
+    width: 0.5em;
     background-color: var(--accent);
-    top: 0.2em;
-    left: -2em;
+    top: 0.3em;
+    left: -1em;
     border-radius: 50%;
   }
 
