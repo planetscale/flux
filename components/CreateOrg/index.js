@@ -176,8 +176,6 @@ export default function CreateOrg({ name, email, avatar }) {
   const handleNameChange = e => {
     let target = e.target;
     let targetWrapper = target.parentNode.parentNode;
-    console.log(target);
-    console.log(targetWrapper);
 
     setState(draft => {
       draft.name = e.target.value;
@@ -193,8 +191,6 @@ export default function CreateOrg({ name, email, avatar }) {
   const handleUserNameChange = e => {
     let target = e.target;
     let targetWrapper = target.parentNode.parentNode;
-    console.log(target);
-    console.log(targetWrapper);
 
     setState(draft => {
       draft.userName = e.target.value;
