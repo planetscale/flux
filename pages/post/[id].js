@@ -1,7 +1,7 @@
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
 import ReactMarkdown from 'react-markdown';
 import { Icon } from 'pageUtils/post/atoms';
@@ -65,6 +65,7 @@ export default function PostPage() {
     replies: {},
     numStars: 0,
     starMap: {},
+    isStared: false,
   });
   const [reply, setReply] = useState('');
   const [commentInputs, setCommentInputs] = useImmer({
@@ -162,6 +163,10 @@ export default function PostPage() {
             },
             {}
           );
+
+          if (draft.starMap[userContext?.user?.id]) {
+            draft.isStared = true;
+          }
         });
       }
     }
@@ -192,23 +197,13 @@ export default function PostPage() {
     }
   };
 
-  const debouncedStarClick = useCallback(
-    debounce(handleStarClick, 500, {
-      leading: true,
-      trailing: false,
-    }),
-    [postState.starMap[userContext?.user?.id]?.starId]
-  );
-
   async function handleStarClick() {
     // For constant UI re-render, first add one star to local state, subtract it if network request is not fulfilled.
-    if (postState.starMap[userContext?.user?.id]?.starId) {
+    if (postState.isStared) {
+      console.log('up:', postState.starMap[userContext?.user?.id]);
       updatePostState(draft => {
-        draft.numStars = draft.numStars - 1;
-        draft.starMap = {
-          ...postState.starMap,
-          [userContext?.user?.id]: undefined,
-        };
+        draft.numStars = postState.numStars - 1;
+        draft.isStared = false;
       });
 
       try {
@@ -217,19 +212,26 @@ export default function PostPage() {
         });
         if (res.error) {
           console.error(res.error.message);
+        } else {
+          updatePostState(draft => {
+            draft.starMap = {
+              ...postState.starMap,
+              [userContext?.user?.id]: undefined,
+            };
+          });
         }
       } catch (e) {
         console.error(e);
       }
-    }
-
-    if (!postState.starMap[userContext?.user?.id]) {
+    } else {
+      console.log(postState.starMap[userContext?.user?.id]);
       updatePostState(draft => {
-        draft.numStars = draft.numStars + 1;
+        draft.numStars = postState.numStars + 1;
         draft.starMap = {
           ...postState.starMap,
           [userContext?.user?.id]: {},
         };
+        draft.isStared = true;
       });
 
       try {
@@ -419,7 +421,7 @@ export default function PostPage() {
           )}
         </Content>
         <ActionBar>
-          <ButtonTertiary onClick={debouncedStarClick}>
+          <ButtonTertiary onClick={handleStarClick}>
             <Icon className="icon-star"></Icon>
             <div>{postState.numStars}</div>
           </ButtonTertiary>
