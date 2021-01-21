@@ -186,12 +186,24 @@ export default function NewPost() {
 
   useEffect(() => {
     if (channelsResult.data?.channels) {
+      const fluxSandboxChannel = {};
       const tagMap = channelsResult.data?.channels.map(item => {
+        // assign dev default channel
+        if (item.name.toLowerCase() === 'flux-sandbox') {
+          fluxSandboxChannel['value'] = item.name;
+          fluxSandboxChannel['label'] = `#${item.name}`;
+          fluxSandboxChannel['channelId'] = item.id;
+        }
+
         return { value: item.name, label: `#${item.name}`, channelId: item.id };
       });
+
       updateState(draft => {
         draft.tagOptions = tagMap;
-        draft.selectedTag = tagMap[0];
+        draft.selectedTag =
+          process.env.NODE_ENV === 'development'
+            ? fluxSandboxChannel
+            : tagMap[0];
       });
     }
   }, [channelsResult.data?.channels]);
