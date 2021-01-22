@@ -5,6 +5,7 @@ import {
   makeSchema,
   intArg,
   inputObjectType,
+  stringArg,
 } from '@nexus/schema';
 import { nexusPrisma } from 'nexus-plugin-prisma';
 import path from 'path';
@@ -67,9 +68,17 @@ const Lens = objectType({
         last: intArg(),
         after: UniqueIdInput,
         before: UniqueIdInput,
+        tag: stringArg(),
       },
-      resolve(_parent, _args, ctx) {
-        const { first, last, after, before } = _args;
+      async resolve(_parent, _args, ctx) {
+        const { first, last, after, before, tag } = _args;
+        const tagWhereClause = tag
+          ? {
+              tag: {
+                name: tag,
+              },
+            }
+          : undefined;
         // TODO: handle all param existence cases
         // first && after
         // first && before
@@ -78,31 +87,30 @@ const Lens = objectType({
         if (last && before) {
           // before.id === -1 means start from the last record in table
           if (before.id && before.id === -1) {
-            return (async () => {
-              try {
-                const res = await ctx.prisma.post.findFirst({
+            try {
+              const res = await ctx.prisma.post.findFirst({
+                orderBy: {
+                  id: 'desc',
+                },
+              });
+
+              if (res) {
+                const result = await ctx.prisma.post.findMany({
+                  take: Math.abs(last),
+                  cursor: {
+                    id: res.id,
+                  },
                   orderBy: {
                     id: 'desc',
                   },
+                  where: tagWhereClause,
                 });
 
-                if (res) {
-                  const result = await ctx.prisma.post.findMany({
-                    take: Math.abs(last),
-                    cursor: {
-                      id: res.id,
-                    },
-                    orderBy: {
-                      id: 'desc',
-                    },
-                  });
-
-                  return result;
-                }
-              } catch (error) {
-                console.error(error);
+                return result;
               }
-            })();
+            } catch (error) {
+              console.error(error);
+            }
           } else if (before.id && before.id !== -1) {
             return ctx.prisma.post.findMany({
               take: Math.abs(last),
@@ -113,12 +121,13 @@ const Lens = objectType({
               orderBy: {
                 id: 'desc',
               },
+              where: tagWhereClause,
             });
           }
         }
 
         // default => return all
-        return ctx.prisma.post.findMany({});
+        return ctx.prisma.post.findMany({ where: tagWhereClause });
       },
     });
   },

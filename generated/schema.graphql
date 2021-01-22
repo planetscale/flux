@@ -59,7 +59,7 @@ type Lens {
   id: Int!
   name: String!
   org: Org!
-  posts(after: UniqueIdInput, before: UniqueIdInput, first: Int, last: Int): [Post]
+  posts(after: UniqueIdInput, before: UniqueIdInput, first: Int, last: Int, tag: String): [Post]
 }
 
 input LensCreateInput {
