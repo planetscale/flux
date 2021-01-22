@@ -294,9 +294,9 @@ export default function NewPost() {
     router.push('/');
   };
 
-  const handleContentChange = content => {
+  const handleContentChange = getContent => {
     updateState(draft => {
-      draft.content = content();
+      draft.content = getContent();
     });
   };
 
