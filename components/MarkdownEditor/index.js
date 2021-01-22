@@ -202,8 +202,6 @@ export default function MarkdownEditor({
         placeholder="Start writing!"
         uploadImage={save}
         defaultValue={content}
-        // defaultValue={!readOnly ? content : undefined}
-        // value={readOnly ? content : undefined}
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
