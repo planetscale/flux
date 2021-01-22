@@ -130,23 +130,25 @@ export default function MarkdownEditor({
     slackMemberSuggestions: [],
   });
 
-  const [slackMembersResult, runslackMembersQuery] = useQuery({
-    query: slackMembersQuery,
-  });
-
-  useEffect(() => {
-    if (slackMembersResult.data?.slackMembers) {
-      updateState(draft => {
-        draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
-          member => ({
-            title: member.realName,
-            subtitle: `@${member.realName}`,
-            url: `https://flux.psdb.co/user/@${member.realName}`,
-          })
-        );
-      });
-    }
-  }, [slackMembersResult.data?.slackMembers]);
+  if (!readOnly) {
+    // TODO: use client
+    // const [slackMembersResult, runslackMembersQuery] = useQuery({
+    //   query: slackMembersQuery,
+    // });
+    // useEffect(() => {
+    //   if (slackMembersResult.data?.slackMembers) {
+    //     updateState(draft => {
+    //       draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
+    //         member => ({
+    //           title: member.realName,
+    //           subtitle: `@${member.realName}`,
+    //           url: `https://flux.psdb.co/user/@${member.realName}`,
+    //         })
+    //       );
+    //     });
+    //   }
+    // }, [slackMembersResult.data?.slackMembers]);
+  }
 
   const save = async function (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
@@ -187,6 +189,11 @@ export default function MarkdownEditor({
       }
     }
     return imgUrl;
+  };
+
+  const valueProps = {
+    defaultValue: !readOnly ? content : undefined,
+    value: readOnly ? content : undefined,
   };
 
   return (

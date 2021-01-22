@@ -72,8 +72,7 @@ function App({ Component, pageProps }) {
           }
 
           a:visited {
-              color: var(--link);
-            }
+            color: var(--link);
           }
         `}
       />
