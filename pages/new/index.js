@@ -95,7 +95,9 @@ const ActionItems = styled.div`
 
 const EditorWrapper = styled.div`
   margin: 32px 0 0 0;
+  padding: 2em 0;
   height: fit-content;
+  border-top: 1px solid var(--accent2);
 `;
 
 const lensesQuery = gql`
@@ -294,7 +296,7 @@ export default function NewPost() {
 
   const handleContentChange = content => {
     updateState(draft => {
-      draft.content = content;
+      draft.content = content();
     });
   };
 

@@ -1,17 +1,15 @@
-import ReactMde from 'react-mde';
-import ReactMarkdown from 'react-markdown';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from 'utils/auth/clientConfig';
-import CodeBlock from './CodeBlock';
 import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import gql from 'graphql-tag';
-import gfm from 'remark-gfm';
+import Editor from 'rich-markdown-editor';
 
 const Wrapper = styled.div`
+  position: relative;
   width: 100%;
 
   textarea {
@@ -36,13 +34,98 @@ const slackMembersQuery = gql`
   }
 `;
 
-const TABS = {
-  WRITE: 'write',
-  PREVIWE: 'preview',
+const colors = {
+  almostBlack: 'var(--background)',
+  lightBlack: '#2F3336',
+  almostWhite: 'var(--foreground)',
+  white: 'var(--background)',
+  white10: 'rgba(255, 255, 255, 0.1)',
+  black: '#000',
+  black10: 'rgba(0, 0, 0, 0.1)',
+  primary: '#1AB6FF',
+  greyLight: '#F4F7FA',
+  grey: '#E8EBED',
+  greyMid: '#C5CCD3',
+  greyDark: '#DAE1E9',
 };
 
-export default function MarkdownEditor({ content, handleContentChange }) {
-  const [selectedTab, setSelectedTab] = useState(TABS.WRITE);
+const base = {
+  ...colors,
+  fontFamily: "'Inter',sans-serif",
+  fontFamilyMono:
+    "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
+  fontWeight: 400,
+  zIndex: 100,
+  link: colors.primary,
+  placeholder: '#B1BECC',
+  textSecondary: '#4E5C6E',
+  textLight: colors.white,
+  textHighlight: 'var(--highlight)',
+  selected: 'var(--highlight)',
+  codeComment: '#6a737d',
+  codePunctuation: '#5e6687',
+  codeNumber: '#d73a49',
+  codeProperty: '#c08b30',
+  codeTag: '#3d8fd1',
+  codeString: '#032f62',
+  codeSelector: '#6679cc',
+  codeAttr: '#c76b29',
+  codeEntity: '#22a2c9',
+  codeKeyword: '#d73a49',
+  codeFunction: '#6f42c1',
+  codeStatement: '#22a2c9',
+  codePlaceholder: '#3d8fd1',
+  codeInserted: '#202746',
+  codeImportant: '#c94922',
+
+  blockToolbarBackground: 'var(--background)',
+  blockToolbarTrigger: 'var(--highlight)',
+  blockToolbarTriggerIcon: 'var(--highlight)',
+  blockToolbarItem: 'var(--highlight)',
+  blockToolbarText: 'var(--text)',
+  blockToolbarHoverBackground: 'var(--highlight)',
+  blockToolbarDivider: 'var(--accent2)',
+
+  noticeInfoBackground: '#F5BE31',
+  noticeInfoText: colors.almostBlack,
+  noticeTipBackground: '#9E5CF7',
+  noticeTipText: colors.white,
+  noticeWarningBackground: '#FF5C80',
+  noticeWarningText: colors.white,
+};
+
+const lightTheme = {
+  ...base,
+  background: 'var(--background)',
+  text: 'var(--text)',
+  code: 'var(--text)',
+  cursor: 'var(--text)',
+  divider: 'var(--accent)',
+
+  toolbarBackground: 'var(--background)',
+  toolbarHoverBackground: 'var(--accent)',
+  toolbarInput: 'var(--background)',
+  toolbarItem: 'var(--text)',
+
+  tableDivider: 'var(--accent)',
+  tableSelected: 'var(--accent)',
+  tableSelectedBackground: 'var(--highlight)',
+
+  quote: 'var(--highlight)',
+  codeBackground: 'var(--accent2)',
+  codeBorder: 'var(--accent2)',
+  horizontalRule: 'var(--accent)',
+  imageErrorBackground: 'var(--accent)',
+
+  scrollbarBackground: 'var(--accent)',
+  scrollbarThumb: 'var(--accent)',
+};
+
+export default function MarkdownEditor({
+  content,
+  handleContentChange,
+  readOnly,
+}) {
   const [state, updateState] = useImmer({
     slackMemberSuggestions: [],
   });
@@ -56,26 +139,16 @@ export default function MarkdownEditor({ content, handleContentChange }) {
       updateState(draft => {
         draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
           member => ({
-            preview: member.realName,
-            value: `@${member.realName}`,
+            title: member.realName,
+            subtitle: `@${member.realName}`,
+            url: `https://flux.psdb.co/user/@${member.realName}`,
           })
         );
       });
     }
   }, [slackMembersResult.data?.slackMembers]);
 
-  const loadSuggestions = text => {
-    return new Promise((accept, reject) => {
-      setTimeout(() => {
-        const suggestions = state.slackMemberSuggestions.filter(i =>
-          i.preview.toLowerCase().includes(text.toLowerCase())
-        );
-        accept(suggestions);
-      }, 50);
-    });
-  };
-
-  const save = async function* (data) {
+  const save = async function (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
 
     try {
@@ -113,45 +186,34 @@ export default function MarkdownEditor({ content, handleContentChange }) {
           break;
       }
     }
-
-    if (imgUrl) {
-      // yields the URL that should be inserted in the markdown
-      yield imgUrl;
-      // returns true meaning that the save was successful
-      return true;
-    }
-
-    // returns false meaning that the save was failed
-    return false;
+    return imgUrl;
   };
 
   return (
     <Wrapper>
-      <ReactMde
-        value={content}
+      <Editor
+        placeholder="Start writing!"
+        uploadImage={save}
+        defaultValue={content}
         onChange={handleContentChange}
-        selectedTab={selectedTab}
-        onTabChange={setSelectedTab}
-        generateMarkdownPreview={markdown =>
-          Promise.resolve(
-            <ReactMarkdown
-              source={markdown}
-              plugins={[gfm]}
-              renderers={{ code: CodeBlock }}
-            />
-          )
-        }
-        loadSuggestions={loadSuggestions}
-        suggestionTriggerCharacters={['@']}
-        childProps={{
-          writeButton: {
-            tabIndex: -1,
-          },
-        }}
-        paste={{
-          saveImage: save,
+        theme={lightTheme}
+        readOnly={readOnly}
+        onSearchLink={async term => {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve(
+                state.slackMemberSuggestions.filter(result =>
+                  result.subtitle.toLowerCase().includes(term.toLowerCase())
+                )
+              );
+            }, 50);
+          });
         }}
       />
     </Wrapper>
   );
 }
+
+MarkdownEditor.defaultProps = {
+  readOnly: false,
+};
