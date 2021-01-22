@@ -96,7 +96,7 @@ const base = {
 
 const lightTheme = {
   ...base,
-  background: 'var(--background)',
+  background: 'unset',
   text: 'var(--text)',
   code: 'var(--text)',
   cursor: 'var(--text)',
