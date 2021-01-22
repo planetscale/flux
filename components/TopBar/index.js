@@ -111,7 +111,7 @@ const ActionsWrapper = styled.div`
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
   const { header, subHeader } = useTopBarContext();
-  const { setHeaders } = useTopBarActions();
+  const { setHeaders, fetchTags } = useTopBarActions();
   const { user } = useUserContext();
 
   useEffect(() => {
@@ -119,6 +119,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       setHeaders({
         header: user?.org.name,
       });
+      fetchTags();
     }
   }, [user?.org]);
 
