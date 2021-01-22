@@ -3,8 +3,6 @@ import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'urql';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { Icon } from 'pageUtils/post/atoms';
 import {
   PageWrapper,
@@ -42,11 +40,19 @@ const Meta = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   color: var(--text);
+`;
 
-  ${ButtonMinor} {
-    margin: 0 0 0 8px;
-  }
+const MetaData = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+const MetaActions = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export default function PostPage() {
@@ -373,14 +379,18 @@ export default function PostPage() {
       <Post>
         <PostMetadata>
           <Meta>
-            <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
-            <div>&nbsp; &middot; &nbsp;</div>
-            <div>#{tag?.name}</div>
-            {userContext.user.id === author?.id && (
-              <ButtonMinor type="submit" onClick={togglePostEdit}>
-                Edit
-              </ButtonMinor>
-            )}
+            <MetaData>
+              <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+              <div>&nbsp; &middot; &nbsp;</div>
+              <div>#{tag?.name}</div>
+            </MetaData>
+            <MetaActions>
+              {userContext.user.id === author?.id && (
+                <ButtonMinor type="submit" onClick={togglePostEdit}>
+                  Edit Post
+                </ButtonMinor>
+              )}
+            </MetaActions>
           </Meta>
           <Title>{title}</Title>
           <AuthorNamePlate
