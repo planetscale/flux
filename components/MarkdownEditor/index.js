@@ -7,7 +7,6 @@ import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
-import UserSelector from 'components/UserSelector';
 
 const Wrapper = styled.div`
   position: relative;
@@ -129,18 +128,6 @@ export default function MarkdownEditor({
 }) {
   const [state, updateState] = useImmer({
     slackMemberSuggestions: [],
-    dummySlackMembers: [
-      {
-        title: 'Raunaq Gupta',
-        subtitle: '@raunaqgupta',
-        url: 'https://flux.psdb.co/user/@raunaqgupta',
-      },
-      {
-        title: 'Shawn Wang',
-        subtitle: '@shawnwang',
-        url: 'https://flux.psdb.co/user/@shawnwang',
-      },
-    ],
   });
 
   const [slackMembersResult, runslackMembersQuery] = useQuery({
@@ -152,24 +139,14 @@ export default function MarkdownEditor({
       updateState(draft => {
         draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
           member => ({
-            preview: member.realName,
-            value: `@${member.realName}`,
+            title: member.realName,
+            subtitle: `@${member.realName}`,
+            url: `https://flux.psdb.co/user/@${member.realName}`,
           })
         );
       });
     }
   }, [slackMembersResult.data?.slackMembers]);
-
-  const loadSuggestions = text => {
-    return new Promise((accept, reject) => {
-      setTimeout(() => {
-        const suggestions = state.slackMemberSuggestions.filter(i =>
-          i.preview.toLowerCase().includes(text.toLowerCase())
-        );
-        accept(suggestions);
-      }, 50);
-    });
-  };
 
   const save = async function (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
@@ -222,18 +199,14 @@ export default function MarkdownEditor({
         theme={lightTheme}
         readOnly={readOnly}
         onSearchLink={async term => {
-          console.log(state.dummySlackMembers);
-          console.log('Searched link: ', term);
-
-          // Delay to simulate time taken for remote API request to complete
           return new Promise(resolve => {
             setTimeout(() => {
               resolve(
-                state.dummySlackMembers.filter(result =>
+                state.slackMemberSuggestions.filter(result =>
                   result.subtitle.toLowerCase().includes(term.toLowerCase())
                 )
               );
-            }, Math.random() * 500);
+            }, 50);
           });
         }}
       />
