@@ -10,6 +10,7 @@ import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import gql from 'graphql-tag';
 import gfm from 'remark-gfm';
+import Editor from 'rich-markdown-editor';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -75,7 +76,7 @@ export default function MarkdownEditor({ content, handleContentChange }) {
     });
   };
 
-  const save = async function* (data) {
+  const save = async function (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
 
     try {
@@ -113,44 +114,16 @@ export default function MarkdownEditor({ content, handleContentChange }) {
           break;
       }
     }
-
-    if (imgUrl) {
-      // yields the URL that should be inserted in the markdown
-      yield imgUrl;
-      // returns true meaning that the save was successful
-      return true;
-    }
-
-    // returns false meaning that the save was failed
-    return false;
+    return imgUrl;
   };
 
   return (
     <Wrapper>
-      <ReactMde
-        value={content}
+      <Editor
+        placeholder="Start writing!"
+        uploadImage={save}
+        defaultValue={content}
         onChange={handleContentChange}
-        selectedTab={selectedTab}
-        onTabChange={setSelectedTab}
-        generateMarkdownPreview={markdown =>
-          Promise.resolve(
-            <ReactMarkdown
-              source={markdown}
-              plugins={[gfm]}
-              renderers={{ code: CodeBlock }}
-            />
-          )
-        }
-        loadSuggestions={loadSuggestions}
-        suggestionTriggerCharacters={['@']}
-        childProps={{
-          writeButton: {
-            tabIndex: -1,
-          },
-        }}
-        paste={{
-          saveImage: save,
-        }}
       />
     </Wrapper>
   );

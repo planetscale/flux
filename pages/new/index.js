@@ -332,7 +332,7 @@ export default function NewPost() {
 
   const handleContentChange = content => {
     updateState(draft => {
-      draft.content = content;
+      draft.content = content();
     });
   };
 
