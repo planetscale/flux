@@ -20,6 +20,7 @@ const TimeAndTags = styled.div`
 
 const TitleInputWrapper = styled.div`
   position: relative;
+  display: flex;
   margin: 8px 0 0;
 
   &:before {
@@ -44,6 +45,12 @@ const TitleInputWrapper = styled.div`
     &:before {
       background-color: green;
     }
+  }
+
+  .chars-left {
+    display: flex;
+    align-items: flex-end;
+    color: var(--accent);
   }
 `;
 
@@ -161,6 +168,8 @@ const dateTimeOptions = {
   month: 'short',
   day: 'numeric',
 };
+
+const TITLE_MAX_LENGTH = 70;
 
 export default function NewPost() {
   const router = useRouter();
@@ -342,9 +351,13 @@ export default function NewPost() {
           <TitleInput
             placeholder="Enter Title"
             rows="1"
+            maxLength={TITLE_MAX_LENGTH}
             value={state.title.value}
             onChange={e => handleTitleChange(e, 'title')}
           ></TitleInput>
+          <div className="chars-left">
+            {TITLE_MAX_LENGTH - state.title.value.length}
+          </div>
         </TitleInputWrapper>
         <TitleInputWrapper
           className={`${getTitleClasses(state.subtitle)}`}
@@ -353,9 +366,13 @@ export default function NewPost() {
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"
+            maxLength={TITLE_MAX_LENGTH}
             value={state.subtitle.value}
             onChange={e => handleTitleChange(e, 'subtitle')}
           ></SubtitleInput>
+          <div className="chars-left">
+            {TITLE_MAX_LENGTH - state.subtitle.value.length}
+          </div>
         </TitleInputWrapper>
         <EditorWrapper>
           <MarkdownEditor
