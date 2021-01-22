@@ -104,6 +104,8 @@ const Reply = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  padding: 1em 0;
+  border-top: 1px solid var(--accent2);
 
   ${ButtonMinor} {
     margin: 24px 0 0 0;
