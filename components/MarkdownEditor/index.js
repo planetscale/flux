@@ -7,8 +7,10 @@ import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
+import UserSelector from 'components/UserSelector';
 
 const Wrapper = styled.div`
+  position: relative;
   width: 100%;
 
   textarea {
@@ -127,6 +129,18 @@ export default function MarkdownEditor({
 }) {
   const [state, updateState] = useImmer({
     slackMemberSuggestions: [],
+    dummySlackMembers: [
+      {
+        title: 'Raunaq Gupta',
+        subtitle: '@raunaqgupta',
+        url: 'https://flux.psdb.co/user/@raunaqgupta',
+      },
+      {
+        title: 'Shawn Wang',
+        subtitle: '@shawnwang',
+        url: 'https://flux.psdb.co/user/@shawnwang',
+      },
+    ],
   });
 
   const [slackMembersResult, runslackMembersQuery] = useQuery({
@@ -207,6 +221,21 @@ export default function MarkdownEditor({
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
+        onSearchLink={async term => {
+          console.log(state.dummySlackMembers);
+          console.log('Searched link: ', term);
+
+          // Delay to simulate time taken for remote API request to complete
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve(
+                state.dummySlackMembers.filter(result =>
+                  result.subtitle.toLowerCase().includes(term.toLowerCase())
+                )
+              );
+            }, Math.random() * 500);
+          });
+        }}
       />
     </Wrapper>
   );

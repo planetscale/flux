@@ -401,7 +401,7 @@ export default function PostPage() {
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
-                disabled={!postEditState.content?.trim()}
+                disabled={!postEditState.content}
               >
                 <Icon className="icon-edit"></Icon>
                 Update
