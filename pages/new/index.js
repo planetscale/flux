@@ -20,7 +20,7 @@ const TimeAndTags = styled.div`
 
 const TitleInputWrapper = styled.div`
   position: relative;
-  margin: 8px 0 0;
+  margin: 1em 0 0;
 
   &:before {
     content: ' ';
@@ -67,7 +67,7 @@ const TitleInput = styled.textarea`
 
 const SubTitleInputWrapper = styled.div`
   position: relative;
-  margin: 8px 0 0;
+  margin: 1em 0 0;
 
   &:before {
     content: ' ';
@@ -117,7 +117,9 @@ const ActionItems = styled.div`
 
 const EditorWrapper = styled.div`
   margin: 32px 0 0 0;
+  padding: 2em 0;
   height: fit-content;
+  border-top: 1px solid var(--accent2);
 `;
 
 const lensesQuery = gql`
@@ -389,6 +391,7 @@ export default function NewPost() {
             rows="1"
             value={state.title}
             onChange={handleTitleChange}
+            maxLength="60"
           ></TitleInput>
         </TitleInputWrapper>
         <SubTitleInputWrapper
@@ -400,6 +403,7 @@ export default function NewPost() {
             rows="1"
             value={state.subtitle}
             onChange={handleSubtitleChange}
+            maxLength="191"
           ></SubtitleInput>
         </SubTitleInputWrapper>
         <EditorWrapper>

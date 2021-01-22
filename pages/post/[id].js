@@ -408,9 +408,7 @@ export default function PostPage() {
               </ButtonMinor>
             </>
           ) : (
-            <ReactMarkdown renderers={{ code: CodeBlock }} plugins={[gfm]}>
-              {content}
-            </ReactMarkdown>
+            <MarkdownEditor content={content} readOnly={true}></MarkdownEditor>
           )}
         </Content>
         <ActionBar>
