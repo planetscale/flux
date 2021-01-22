@@ -54,6 +54,10 @@ export const ButtonMinor = styled(ButtonBase)`
   &:hover:not([disabled]) {
     background-color: var(--foreground);
     color: var(--background);
+
+    ${Icon} {
+      background: var(--background);
+    }
   }
 `;
 

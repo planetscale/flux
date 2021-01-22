@@ -27,7 +27,11 @@ function App({ Component, pageProps }) {
       <Head>
         <title>Flux</title>
         <link rel="icon" href="/favicon.svg" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap"
           rel="preload"
@@ -68,8 +72,7 @@ function App({ Component, pageProps }) {
           }
 
           a:visited {
-              color: var(--link);
-            }
+            color: var(--link);
           }
         `}
       />

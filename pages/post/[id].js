@@ -34,7 +34,6 @@ import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
-import CodeBlock from 'components/MarkdownEditor/CodeBlock';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
 import LoadingIndicator from 'components/LoadingIndicator';
@@ -68,6 +67,7 @@ export default function PostPage() {
     isStared: false,
   });
   const [reply, setReply] = useState('');
+
   const [commentInputs, setCommentInputs] = useImmer({
     replies: {},
     edits: {},
@@ -340,9 +340,9 @@ export default function PostPage() {
     });
   };
 
-  const handlePostContentChange = content => {
+  const handlePostContentChange = getContent => {
     setPostEditState(draft => {
-      draft.content = content;
+      draft.content = getContent();
     });
   };
 
@@ -401,16 +401,14 @@ export default function PostPage() {
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
-                disabled={!postEditState.content?.trim()}
+                disabled={!postEditState.content}
               >
                 <Icon className="icon-edit"></Icon>
                 Update
               </ButtonMinor>
             </>
           ) : (
-            <ReactMarkdown renderers={{ code: CodeBlock }} plugins={[gfm]}>
-              {content}
-            </ReactMarkdown>
+            <MarkdownEditor content={content} readOnly={true}></MarkdownEditor>
           )}
         </Content>
         <ActionBar>
@@ -463,8 +461,11 @@ export default function PostPage() {
                     <Reply>
                       <MarkdownEditor
                         content={commentInputs.edits[firstLevelReplyKey]}
-                        handleContentChange={content => {
-                          handleCommentEditsChange(content, firstLevelReplyKey);
+                        handleContentChange={getContent => {
+                          handleCommentEditsChange(
+                            getContent(),
+                            firstLevelReplyKey
+                          );
                         }}
                       ></MarkdownEditor>
                       <ButtonMinor
@@ -481,12 +482,10 @@ export default function PostPage() {
                     </Reply>
                   ) : (
                     <CommentContent>
-                      <ReactMarkdown
-                        renderers={{ code: CodeBlock }}
-                        plugins={[gfm]}
-                      >
-                        {firstLevelReplyValue.content}
-                      </ReactMarkdown>
+                      <MarkdownEditor
+                        content={firstLevelReplyValue.content}
+                        readOnly={true}
+                      ></MarkdownEditor>
                     </CommentContent>
                   )}
 
@@ -494,9 +493,9 @@ export default function PostPage() {
                     <Reply>
                       <MarkdownEditor
                         content={commentInputs.replies[firstLevelReplyKey]}
-                        handleContentChange={content => {
+                        handleContentChange={getContent => {
                           handleCommentRepliesChange(
-                            content,
+                            getContent(),
                             firstLevelReplyKey
                           );
                         }}
@@ -554,8 +553,8 @@ export default function PostPage() {
                         <Reply>
                           <MarkdownEditor
                             content={commentInputs.edits[k]}
-                            handleContentChange={content => {
-                              handleCommentEditsChange(content, k);
+                            handleContentChange={getContent => {
+                              handleCommentEditsChange(getContent(), k);
                             }}
                           ></MarkdownEditor>
                           <ButtonMinor
@@ -570,12 +569,10 @@ export default function PostPage() {
                         </Reply>
                       ) : (
                         <CommentContent>
-                          <ReactMarkdown
-                            renderers={{ code: CodeBlock }}
-                            plugins={[gfm]}
-                          >
-                            {v.content}
-                          </ReactMarkdown>
+                          <MarkdownEditor
+                            content={v.content}
+                            readOnly={true}
+                          ></MarkdownEditor>
                         </CommentContent>
                       )}
 
@@ -583,8 +580,8 @@ export default function PostPage() {
                         <Reply>
                           <MarkdownEditor
                             content={commentInputs.replies[k]}
-                            handleContentChange={content => {
-                              handleCommentRepliesChange(content, k);
+                            handleContentChange={getContent => {
+                              handleCommentRepliesChange(getContent(), k);
                             }}
                           ></MarkdownEditor>
                           <ButtonMinor
@@ -631,8 +628,8 @@ export default function PostPage() {
                             <Reply>
                               <MarkdownEditor
                                 content={commentInputs.edits[key]}
-                                handleContentChange={content => {
-                                  handleCommentEditsChange(content, key);
+                                handleContentChange={getContent => {
+                                  handleCommentEditsChange(getContent(), key);
                                 }}
                               ></MarkdownEditor>
                               <ButtonMinor
@@ -647,12 +644,10 @@ export default function PostPage() {
                             </Reply>
                           ) : (
                             <CommentContent>
-                              <ReactMarkdown
-                                renderers={{ code: CodeBlock }}
-                                plugins={[gfm]}
-                              >
-                                {value.content}
-                              </ReactMarkdown>
+                              <MarkdownEditor
+                                content={value.content}
+                                readOnly={true}
+                              ></MarkdownEditor>
                             </CommentContent>
                           )}
                         </Comment>

@@ -27,7 +27,7 @@ const DateTime = styled.div`
   color: var(--text);
 `;
 
-const Title = styled.div`
+const Title = styled.h1`
   color: var(--text);
   margin: 8px 0 24px 0;
   font-weight: bold;
