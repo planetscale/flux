@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
-import * as RadioGroup from '@radix-ui/react-radio-group';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { useImmer } from 'use-immer';
 
 const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
@@ -73,11 +73,11 @@ const MenuAction = styled.a`
   }
 `;
 
-const StyledRadioGroup = styled(RadioGroup.Root)`
+const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
   border: 1px solid var(--accent3);
 `;
 
-const StyledRadio = styled(RadioGroup.Item)`
+const StyledRadio = styled(DropdownMenu.RadioItem)`
   appearance: none;
   background-color: var(--accent2);
   border: none;
@@ -99,11 +99,11 @@ const StyledRadio = styled(RadioGroup.Item)`
   }
 `;
 
-const StyledIndicator = styled(RadioGroup.Indicator)`
+const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #c56a86;
+  background-color: var(--highlight);
 
   & ~ ${Icon} {
     background: white;
@@ -111,20 +111,29 @@ const StyledIndicator = styled(RadioGroup.Indicator)`
 `;
 
 export default function UserSettings({
-  profileImg,
   displayName,
   userHandle,
-  ...props
+  currentTheme,
 }) {
+  const [state, setState] = useImmer({
+    currentTheme: getTheme(),
+  });
+
   const { userLogout } = useAuthActions();
-  const currentTheme = getTheme();
 
   const handleLogout = () => {
     userLogout();
   };
 
   const handleThemeChange = value => {
-    setTheme(value.target.value);
+    setTheme(value);
+    setState(draft => {
+      draft.currentTheme = value;
+    });
+  };
+
+  const handleRadioItem = event => {
+    event.preventDefault();
   };
 
   return (
@@ -141,18 +150,18 @@ export default function UserSettings({
         <MenuItem>
           <div>Mood</div>
           <StyledRadioGroup
-            defaultValue={currentTheme}
+            value={state.currentTheme}
             onValueChange={handleThemeChange}
           >
-            <StyledRadio value="system">
+            <StyledRadio value="system" onSelect={handleRadioItem}>
               <StyledIndicator />
               <Icon className="icon-system"></Icon>
             </StyledRadio>
-            <StyledRadio value="light">
+            <StyledRadio value="light" onSelect={handleRadioItem}>
               <StyledIndicator />
               <Icon className="icon-light"></Icon>
             </StyledRadio>
-            <StyledRadio value="dark">
+            <StyledRadio value="dark" onSelect={handleRadioItem}>
               <StyledIndicator />
               <Icon className="icon-dark"></Icon>
             </StyledRadio>
