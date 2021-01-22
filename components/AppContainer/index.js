@@ -53,7 +53,8 @@ function AppContainer({ children }) {
         };
       },
       // TODO: add dedupExchange to this array and check cache before fire api request
-      exchanges: [cacheExchange, multipartFetchExchange],
+      // cacheExchange, dedupExchange, multipartFetchExchange
+      exchanges: [multipartFetchExchange],
     });
   };
 

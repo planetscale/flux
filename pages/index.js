@@ -1,5 +1,5 @@
 import PostList from 'components/PostList';
-import { useQuery } from 'urql';
+import { useClient } from 'urql';
 import gql from 'graphql-tag';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useEffect, useRef } from 'react';
@@ -21,11 +21,11 @@ const HomeWrapper = styled.div`
 
 // TODO: only get current org's data
 const postListQuery = gql`
-  query($id: Int!, $last: Int!, $before: Int) {
+  query($id: Int!, $last: Int!, $before: Int, $tag: String) {
     org(where: { id: $id }) {
       lenses {
         name
-        posts(last: $last, before: { id: $before }) {
+        posts(last: $last, before: { id: $before }, tag: $tag) {
           id
           title
           summary
@@ -71,36 +71,32 @@ export default function Home({ href, ...props }) {
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
   });
-  const { setHeaders } = useTopBarActions();
+  const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
-  const { subHeader } = useTopBarContext();
+  const { subHeader, selectedTag } = useTopBarContext();
   const isLoading = useRef(true);
-  const [postListResult, runPostListQuery] = useQuery({
-    query: postListQuery,
-    variables: {
-      id: user?.org?.id,
-      last: state.last,
-      before: state.before,
-    },
-  });
+  const client = useClient();
 
   useEffect(() => {
-    if (postListResult.data?.org) {
-      const mappedPosts = getLensPosts(
-        postListResult.data?.org?.lenses,
-        subHeader
-      );
+    fetchPost();
+  }, [selectedTag, state.before, subHeader]);
 
-      setState(draft => {
-        draft.postList = state.postList.length
-          ? [...draft.postList, ...mappedPosts]
-          : mappedPosts;
+  useEffect(() => {
+    if (user?.org?.name) {
+      setHeaders({
+        header: user?.org.name,
       });
-      isLoading.current = false;
-    } else {
-      isLoading.current = true;
     }
-  }, [postListResult.data?.org]);
+  }, [user?.org]);
+
+  useEffect(() => {
+    if (!selectedTag) {
+      setState(draft => {
+        draft.postList = [];
+        draft.before = -1;
+      });
+    }
+  }, [selectedTag]);
 
   useBottomScrollListener(
     () => {
@@ -117,20 +113,56 @@ export default function Home({ href, ...props }) {
     }
   );
 
-  useEffect(() => {
-    if (user?.org?.name) {
-      setHeaders({
-        header: user?.org.name,
+  const fetchPost = async () => {
+    try {
+      const result = await client
+        .query(postListQuery, {
+          id: user?.org?.id,
+          last: state.last,
+          before: state.before,
+          tag: selectedTag,
+        })
+        .toPromise();
+
+      setState(draft => {
+        if (result.data?.org) {
+          const mappedPosts = getLensPosts(result.data?.org?.lenses, subHeader);
+
+          setState(draft => {
+            draft.postList = state.postList.length
+              ? [...state.postList, ...mappedPosts]
+              : mappedPosts;
+          });
+          isLoading.current = false;
+        } else {
+          isLoading.current = true;
+        }
       });
+    } catch (error) {
+      console.error(error);
     }
-  }, [user?.org]);
+  };
+
+  const handleTagClick = (e, tagName) => {
+    e.stopPropagation();
+
+    if (tagName) {
+      setTag(tagName);
+      setState(draft => {
+        draft.postList = [];
+        draft.before = -1;
+      });
+
+      isLoading.current = true;
+    }
+  };
 
   return (
     <HomeWrapper>
       {isLoading.current ? (
         <LoadingIndicator></LoadingIndicator>
       ) : (
-        <PostList posts={state.postList} />
+        <PostList posts={state.postList} handleTagClick={handleTagClick} />
       )}
     </HomeWrapper>
   );
