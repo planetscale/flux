@@ -132,9 +132,10 @@ const DemarcationString = styled.div`
   }
 `;
 
-export default function PostList({ posts = [] }) {
+export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
   const router = useRouter();
+
   const handlePostClick = postId => {
     router.push(`/post/${postId}`);
   };
@@ -207,7 +208,13 @@ export default function PostList({ posts = [] }) {
                       {getLocaleDateTimeString(createdAt).toUpperCase()}
                     </MetaDate>
                     <span>&nbsp; &middot; &nbsp;</span>
-                    <span>#{tag?.name}</span>
+                    <span
+                      onClick={e => {
+                        handleTagClick(e, tag?.name);
+                      }}
+                    >
+                      #{tag?.name}
+                    </span>
                     <span>&nbsp; &middot; &nbsp;</span>
                     <span>{author?.displayName}</span>
                   </MetaInformation>

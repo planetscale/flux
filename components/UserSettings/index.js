@@ -93,7 +93,7 @@ const StyledRadio = styled(RadioGroup.Item)`
     border-left: 1px solid var(--accent2);
   }
 
-  &:first-child {
+  &:first-of-type {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
   }

@@ -16,7 +16,7 @@ export default function AppContentWrapper({ token, children }) {
   const router = useRouter();
   const authContext = useAuthContext();
   const { user } = useUserContext();
-  const { setHeaders } = useTopBarActions();
+  const { setHeaders, setTag } = useTopBarActions();
 
   useEffect(() => {
     if (router.pathname === '/new') {
@@ -28,7 +28,8 @@ export default function AppContentWrapper({ token, children }) {
         subHeader: 'all',
       });
     }
-  }, [router]);
+    setTag(null);
+  }, [router.pathname]);
 
   return (
     <main>

@@ -110,8 +110,8 @@ const ActionsWrapper = styled.div`
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
-  const { header, subHeader } = useTopBarContext();
-  const { setHeaders, fetchTags } = useTopBarActions();
+  const { header, subHeader, selectedTag } = useTopBarContext();
+  const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
 
   useEffect(() => {
@@ -119,7 +119,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       setHeaders({
         header: user?.org.name,
       });
-      fetchTags();
     }
   }, [user?.org]);
 
@@ -147,6 +146,15 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
         <ForwardSlash>/</ForwardSlash>
         <SubHeader>{subHeader}</SubHeader>
+        {selectedTag && (
+          <ButtonSpecial
+            onClick={() => {
+              setTag(null);
+            }}
+          >
+            {selectedTag}
+          </ButtonSpecial>
+        )}
       </SlasherFlick>
       <ActionsWrapper>
         {notNewPostPage() && (
