@@ -14,6 +14,8 @@ const Wrapper = styled.div`
   `}
 `;
 
+const PostContainer = styled.div``;
+
 const Post = styled.div`
   position: relative;
   box-sizing: border-box;
@@ -186,12 +188,13 @@ export default function PostList({ posts = [] }) {
         );
 
         return (
-          <>
+          <PostContainer key={id}>
             {demarcationString && (
-              <DemarcationString>{demarcationString}</DemarcationString>
+              <DemarcationString key={demarcationString}>
+                {demarcationString}
+              </DemarcationString>
             )}
             <Post
-              key={id}
               onClick={() => {
                 handlePostClick(id);
               }}
@@ -212,7 +215,7 @@ export default function PostList({ posts = [] }) {
                 </PostInfo>
               </PostWrapper>
             </Post>
-          </>
+          </PostContainer>
         );
       })}
     </Wrapper>
