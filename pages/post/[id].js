@@ -377,11 +377,11 @@ export default function PostPage() {
             <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
             <div>&nbsp; &middot; &nbsp;</div>
             <div>#{tag?.name}</div>
-            {/* {userContext.user.id === author?.id && ( */}
-            <ButtonMinor type="submit" onClick={togglePostEdit}>
-              Edit
-            </ButtonMinor>
-            {/* )} */}
+            {userContext.user.id === author?.id && (
+              <ButtonMinor type="submit" onClick={togglePostEdit}>
+                Edit
+              </ButtonMinor>
+            )}
           </Meta>
           <Title>{title}</Title>
           <AuthorNamePlate
