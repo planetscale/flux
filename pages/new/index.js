@@ -29,81 +29,52 @@ const TitleInputWrapper = styled.div`
     height: 0.5em;
     width: 0.5em;
     background-color: var(--accent);
-    top: 0.8em;
+    top: calc(44% - 0.25em);
     left: -1em;
     border-radius: 50%;
   }
 
-  &.error {
+  &.invalid {
     &:before {
       background-color: red;
     }
   }
 
-  &.good {
+  &.valid {
     &:before {
       background-color: green;
     }
   }
 `;
 
-const TitleInput = styled.textarea`
+const TitleInputBase = `
   outline: 0;
   border: 0;
   resize: none;
   word-break: break-word;
   overflow: hidden;
+  width: 100%;
+  color: var(--text);
+
+  ::placeholder {
+    color: var(--accent);
+  }
+`;
+
+const TitleInput = styled.textarea`
+  ${TitleInputBase}
   font-size: 48px;
   line-height: 58px;
   font-weight: 700;
   background-color: unset;
-  color: var(--text);
-  width: 100%;
-
-  ::placeholder {
-    color: var(--accent);
-  }
-`;
-
-const SubTitleInputWrapper = styled.div`
-  position: relative;
-  margin: 8px 0 0;
-
-  &:before {
-    content: ' ';
-    display: inline-block;
-    position: absolute;
-    height: 0.5em;
-    width: 0.5em;
-    background-color: var(--accent);
-    top: 0.3em;
-    left: -1em;
-    border-radius: 50%;
-  }
-
-  &.error {
-    &:before {
-      background-color: red;
-    }
-  }
 `;
 
 const SubtitleInput = styled.textarea`
-  outline: 0;
-  border: 0;
-  resize: none;
-  word-break: break-word;
-  overflow: hidden;
-  width: 100%;
+  ${TitleInputBase}
   font-size: 18px;
   line-height: 22px;
   word-break: break-word;
   background-color: var(--background);
-  color: var(--text);
-
-  ::placeholder {
-    color: var(--accent);
-  }
 `;
 
 const ActionItems = styled.div`
@@ -199,8 +170,14 @@ export default function NewPost() {
       navigator.language,
       dateTimeOptions
     ),
-    title: '',
-    subtitle: '',
+    title: {
+      value: '',
+      hasFocused: false,
+    },
+    subtitle: {
+      value: '',
+      hasFocused: false,
+    },
     content: '',
     selectedLens: '',
     selectedTag: null,
@@ -248,42 +225,18 @@ export default function NewPost() {
     }
   }, [channelsResult.data?.channels]);
 
-  const handleTitleChange = e => {
+  const handleTitleChange = (e, field) => {
     let title = e.target;
-    let titleWrapper = e.target.parentNode;
-    title.height = '5px';
     title.style.height = title.scrollHeight + 'px';
     updateState(draft => {
-      draft.title = e.target.value;
+      draft[field].value = e.target.value;
     });
-
-    if (e.target.value.length > 0) {
-      titleWrapper.classList.remove('error');
-    } else {
-      titleWrapper.classList.add('error');
-    }
-  };
-
-  const handleSubtitleChange = e => {
-    let title = e.target;
-    let titleWrapper = e.target.parentNode;
-    title.height = '1px';
-    title.style.height = title.scrollHeight + 'px';
-    updateState(draft => {
-      draft.subtitle = e.target.value;
-    });
-
-    if (e.target.value.length > 0) {
-      titleWrapper.classList.remove('error');
-    } else {
-      titleWrapper.classList.add('error');
-    }
   };
 
   const canSubmitPost = () => {
     return (
-      state.title?.trim() &&
-      state.subtitle?.trim() &&
+      state.title?.value.trim() &&
+      state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.selectedLens &&
       state.selectedTag
@@ -297,9 +250,9 @@ export default function NewPost() {
 
     try {
       const formData = new FormData();
-      formData.append('title', state.title);
+      formData.append('title', state.title.value);
       formData.append('content', state.content);
-      formData.append('summary', state.subtitle);
+      formData.append('summary', state.subtitle.value);
       formData.append('userId', userContext?.user?.id);
       formData.append('lensId', Number(state.selectedLens));
       formData.append(
@@ -342,17 +295,16 @@ export default function NewPost() {
     });
   };
 
-  const onInputWrapperClick = e => {
-    e.preventDefault();
-    e.currentTarget.getElementsByTagName('textarea')[0].focus();
+  const handleBlur = key => {
+    updateState(draft => {
+      draft[key].hasFocused = true;
+    });
   };
 
-  const onFocusLost = e => {
-    e.preventDefault();
-    const textarea = e.currentTarget.getElementsByTagName('textarea')[0];
-    if (textarea.value.length === 0) {
-      e.currentTarget.classList.add('error');
-    }
+  const getTitleClasses = title => {
+    if (title.value.length) return 'valid';
+    if (!title.hasFocused) return '';
+    if (!title.value.length) return 'invalid';
   };
 
   return (
@@ -383,25 +335,28 @@ export default function NewPost() {
             />
           </div>
         </TimeAndTags>
-        <TitleInputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
+        <TitleInputWrapper
+          className={`${getTitleClasses(state.title)}`}
+          onBlur={() => handleBlur('title')}
+        >
           <TitleInput
             placeholder="Enter Title"
             rows="1"
-            value={state.title}
-            onChange={handleTitleChange}
+            value={state.title.value}
+            onChange={e => handleTitleChange(e, 'title')}
           ></TitleInput>
         </TitleInputWrapper>
-        <SubTitleInputWrapper
-          onClick={onInputWrapperClick}
-          onBlur={onFocusLost}
+        <TitleInputWrapper
+          className={`${getTitleClasses(state.subtitle)}`}
+          onBlur={() => handleBlur('subtitle')}
         >
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"
-            value={state.subtitle}
-            onChange={handleSubtitleChange}
+            value={state.subtitle.value}
+            onChange={e => handleTitleChange(e, 'subtitle')}
           ></SubtitleInput>
-        </SubTitleInputWrapper>
+        </TitleInputWrapper>
         <EditorWrapper>
           <MarkdownEditor
             content={state.content}
