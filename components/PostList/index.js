@@ -154,6 +154,7 @@ export default function PostList({ posts = [] }) {
     11: 'December',
   });
 
+  // TODO: rename timeUTC param name, it's not UTC time after converting by getLocaleDateTimeString util func
   const getTimeDemarcatorString = timeUTC => {
     const postDate = new Date(`${timeUTC}`);
     let demarcationString = '';

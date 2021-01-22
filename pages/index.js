@@ -86,13 +86,15 @@ export default function Home({ href, ...props }) {
 
   useEffect(() => {
     if (postListResult.data?.org) {
+      const mappedPosts = getLensPosts(
+        postListResult.data?.org?.lenses,
+        subHeader
+      );
+
       setState(draft => {
         draft.postList = state.postList.length
-          ? [
-              ...draft.postList,
-              ...getLensPosts(postListResult.data?.org?.lenses, subHeader),
-            ]
-          : getLensPosts(postListResult.data?.org?.lenses, subHeader);
+          ? [...draft.postList, ...mappedPosts]
+          : mappedPosts;
       });
       isLoading.current = false;
     } else {
