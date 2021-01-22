@@ -187,11 +187,12 @@ export default function PostList({ posts = [] }) {
         );
 
         return (
-          <div key={id}>
+          <>
             {demarcationString && (
               <DemarcationString>{demarcationString}</DemarcationString>
             )}
             <Post
+              key={id}
               onClick={() => {
                 handlePostClick(id);
               }}
@@ -212,7 +213,7 @@ export default function PostList({ posts = [] }) {
                 </PostInfo>
               </PostWrapper>
             </Post>
-          </div>
+          </>
         );
       })}
     </Wrapper>
