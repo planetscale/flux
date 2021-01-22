@@ -152,6 +152,7 @@ export default function PostList({ posts = [] }) {
     11: 'December',
   });
 
+  // TODO: rename timeUTC param name, it's not UTC time after converting by getLocaleDateTimeString util func
   const getTimeDemarcatorString = timeUTC => {
     const postDate = new Date(`${timeUTC}`);
     let demarcationString = '';
@@ -186,12 +187,11 @@ export default function PostList({ posts = [] }) {
         );
 
         return (
-          <>
+          <div key={id}>
             {demarcationString && (
               <DemarcationString>{demarcationString}</DemarcationString>
             )}
             <Post
-              key={id}
               onClick={() => {
                 handlePostClick(id);
               }}
@@ -212,7 +212,7 @@ export default function PostList({ posts = [] }) {
                 </PostInfo>
               </PostWrapper>
             </Post>
-          </>
+          </div>
         );
       })}
     </Wrapper>
