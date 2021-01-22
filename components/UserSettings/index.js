@@ -7,7 +7,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
-  background: var(--background);
+  background: var(--accent3);
   border-radius: 4px;
   box-sizing: border-box;
   display: flex;
@@ -74,12 +74,12 @@ const MenuAction = styled.a`
 `;
 
 const StyledRadioGroup = styled(RadioGroup.Root)`
-  border: 1px solid var(--accent2);
+  border: 1px solid var(--accent3);
 `;
 
 const StyledRadio = styled(RadioGroup.Item)`
   appearance: none;
-  background-color: var(--background);
+  background-color: var(--accent2);
   border: none;
   padding: 8px;
   position: relative;
@@ -90,7 +90,7 @@ const StyledRadio = styled(RadioGroup.Item)`
   outline: 0;
 
   & ~ & {
-    border-left: 1px solid var(--accent2);
+    border-left: 1px solid var(--accent3);
   }
 
   &:focus {
