@@ -364,9 +364,8 @@ export default function PostPage() {
     }
   };
 
-  // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
-    return <LoadingIndicator></LoadingIndicator>;
+    return <></>;
   }
 
   return (

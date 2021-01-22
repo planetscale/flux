@@ -127,11 +127,7 @@ export default function Home({ href, ...props }) {
 
   return (
     <HomeWrapper>
-      {isLoading.current ? (
-        <LoadingIndicator></LoadingIndicator>
-      ) : (
-        <PostList posts={state.postList} />
-      )}
+      {isLoading.current ? <></> : <PostList posts={state.postList} />}
     </HomeWrapper>
   );
 }
