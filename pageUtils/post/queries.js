@@ -63,6 +63,7 @@ const createReplyMutation = gql`
       createdAt
       content
       author {
+        id
         username
         displayName
         profile {
