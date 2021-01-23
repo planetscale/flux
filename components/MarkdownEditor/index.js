@@ -1,4 +1,3 @@
-import 'react-mde/lib/styles/css/react-mde-all.css';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
