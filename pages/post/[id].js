@@ -34,7 +34,6 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
-import LoadingIndicator from 'components/LoadingIndicator';
 
 const Meta = styled.div`
   display: flex;
@@ -195,6 +194,13 @@ export default function PostPage() {
       });
       if (res.data) {
         setReply('');
+        updatePostState(draft => {
+          draft.replies = updateReplyMap(
+            postState.replies,
+            res.data.createOneReply,
+            'insert'
+          );
+        });
       } else {
         console.error(e);
       }
@@ -297,6 +303,13 @@ export default function PostPage() {
         replyId: Number(e.target.dataset.commentId),
       });
       if (res.data) {
+        updatePostState(draft => {
+          draft.replies = updateReplyMap(
+            postState.replies,
+            res.data.updateOneReply,
+            'update'
+          );
+        });
         setCommentInputs(draft => {
           draft.edits[e.target.dataset.commentId] = '';
         });
@@ -325,6 +338,13 @@ export default function PostPage() {
         parentId: Number(e.target.dataset.commentId),
       });
       if (res.data) {
+        updatePostState(draft => {
+          draft.replies = updateReplyMap(
+            postState.replies,
+            res.data.createOneReply,
+            'insert'
+          );
+        });
         setCommentInputs(draft => {
           draft.replies[e.target.dataset.commentId] = '';
         });
@@ -370,6 +390,57 @@ export default function PostPage() {
     }
   };
 
+  const updateReplyMap = (replyMap, node, mode) => {
+    const newReplyMap = JSON.parse(JSON.stringify(replyMap));
+    const { author, content, createdAt, id, parentId } = node;
+
+    // !parentId means it' a lvl 1 reply
+    if (!parentId && mode === 'insert') {
+      return {
+        ...newReplyMap,
+        [id]: {
+          author,
+          content,
+          createdAt,
+          replies: {},
+        },
+      };
+    }
+
+    const stack = [];
+    Object.entries(newReplyMap).forEach(item => {
+      stack.push(item);
+
+      while (stack.length) {
+        const currItem = stack.pop();
+
+        if (mode === 'insert') {
+          if (Number(currItem[0]) === parentId) {
+            currItem[1]['replies'][id] = {
+              author,
+              content,
+              createdAt,
+              replies: {},
+            };
+          }
+        }
+
+        if (mode === 'update') {
+          if (Number(currItem[0]) === id) {
+            currItem[1].content = content;
+            currItem[1].createdAt = createdAt;
+          }
+        }
+
+        Object.entries(currItem[1].replies).forEach(item => {
+          stack.push(item);
+        });
+      }
+    });
+    return newReplyMap;
+  };
+
+  // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
   }
