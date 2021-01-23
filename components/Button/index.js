@@ -13,7 +13,6 @@ export const ButtonBase = styled.button`
   border: 2px solid var(--foreground);
   transition: all 150ms;
   font-size: 14px;
-  line-height: 14px;
 
   ${Icon} {
     margin-right: 8px;
@@ -111,4 +110,5 @@ export const ButtonImage = styled(ButtonBase)`
 
 export const ButtonTag = styled(ButtonBase)`
   text-transform: lowercase;
+  line-height: 14px;
 `;
