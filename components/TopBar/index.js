@@ -123,6 +123,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
     if (user?.org?.name) {
       setHeaders({
         header: user?.org.name,
+        query: router.query.id,
       });
     }
   }, [user?.org]);
