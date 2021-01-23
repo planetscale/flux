@@ -107,3 +107,8 @@ export const ButtonImage = styled(ButtonBase)`
     height: auto;
   }
 `;
+
+export const ButtonTag = styled(ButtonBase)`
+  text-transform: lowercase;
+  line-height: 14px;
+`;

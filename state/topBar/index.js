@@ -32,15 +32,22 @@ const useTopBarActions = () => {
   const [state, updateState] = useContext(TopBarContext);
   const client = useClient();
 
-  const setHeaders = ({ header, subHeader }) => {
-    if (header || subHeader) {
+  const setHeaders = ({ header, subHeader, query }) => {
+    if (header || subHeader || query) {
       try {
         updateState(draft => {
           if (header) {
             draft.header = header;
           }
+
           if (subHeader) {
             draft.subHeader = subHeader;
+          }
+
+          if (query) {
+            draft.query = query;
+          } else {
+            draft.query = '';
           }
         });
       } catch (e) {

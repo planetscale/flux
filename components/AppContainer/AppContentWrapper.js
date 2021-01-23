@@ -23,9 +23,18 @@ export default function AppContentWrapper({ token, children }) {
       setHeaders({
         subHeader: 'Add update',
       });
+    } else if (router.pathname === '/404') {
+      setHeaders({
+        subHeader: '404',
+      });
+    } else if (router.pathname.startsWith('/post')) {
+      setHeaders({
+        subHeader: `Posts`,
+        query: `${router.query.id}`,
+      });
     } else {
       setHeaders({
-        subHeader: 'all',
+        subHeader: 'Posts',
       });
     }
     setTag(null);

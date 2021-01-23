@@ -48,7 +48,7 @@ function getLensPosts(lenses, subHeader) {
     return [];
   }
 
-  if (subHeader.toLowerCase() === 'all') {
+  if (subHeader.toLowerCase() === 'posts') {
     return lenses.flatMap(lens => lens.posts);
   }
 

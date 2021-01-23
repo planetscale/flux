@@ -91,6 +91,14 @@ const MetaDate = styled.span`
   white-space: nowrap;
 `;
 
+const MetaTag = styled.span`
+  color: var(--link);
+
+  &:hover {
+    color: var(--highlight);
+  }
+`;
+
 const PostTitle = styled.h2`
   margin: 0;
   font-weight: 700;
@@ -208,13 +216,13 @@ export default function PostList({ posts = [], handleTagClick }) {
                       {getLocaleDateTimeString(createdAt).toUpperCase()}
                     </MetaDate>
                     <span>&nbsp; &middot; &nbsp;</span>
-                    <span
+                    <MetaTag
                       onClick={e => {
                         handleTagClick(e, tag?.name);
                       }}
                     >
                       #{tag?.name}
-                    </span>
+                    </MetaTag>
                     <span>&nbsp; &middot; &nbsp;</span>
                     <span>{author?.displayName}</span>
                   </MetaInformation>
