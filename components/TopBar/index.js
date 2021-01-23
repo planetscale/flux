@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
-import { ButtonImage, ButtonSpecial, ButtonLink } from 'components/Button';
+import {
+  ButtonImage,
+  ButtonSpecial,
+  ButtonLink,
+  ButtonTag,
+} from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
@@ -110,7 +115,7 @@ const ActionsWrapper = styled.div`
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
-  const { header, subHeader, selectedTag } = useTopBarContext();
+  const { header, subHeader, query, selectedTag } = useTopBarContext();
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
 
@@ -146,14 +151,21 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
         <ForwardSlash>/</ForwardSlash>
         <SubHeader>{subHeader}</SubHeader>
+        {query !== '' && (
+          <>
+            <ForwardSlash>/</ForwardSlash>
+            <SubHeader>{query}</SubHeader>
+          </>
+        )}
+
         {selectedTag && (
-          <ButtonSpecial
+          <ButtonTag
             onClick={() => {
               setTag(null);
             }}
           >
-            {selectedTag}
-          </ButtonSpecial>
+            <span>#{selectedTag.toLowerCase()}</span>
+          </ButtonTag>
         )}
       </SlasherFlick>
       <ActionsWrapper>
