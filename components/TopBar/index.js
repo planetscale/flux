@@ -129,6 +129,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   }, [user?.org]);
 
   const redirectToHome = () => {
+    setTag(null);
     if (router.pathname !== '/') {
       router.push('/');
     }

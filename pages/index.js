@@ -7,7 +7,6 @@ import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
-import LoadingIndicator from 'components/LoadingIndicator';
 import { media } from 'pageUtils/post/theme';
 
 const HomeWrapper = styled.div`
@@ -67,7 +66,7 @@ const DEFAULT_PAGE_ADDEND = 10;
 
 export default function Home({ href, ...props }) {
   const [state, setState] = useImmer({
-    postList: [],
+    postList: {},
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
   });
@@ -92,7 +91,7 @@ export default function Home({ href, ...props }) {
   useEffect(() => {
     if (!selectedTag) {
       setState(draft => {
-        draft.postList = [];
+        draft.postList = {};
         draft.before = -1;
       });
     }
@@ -100,9 +99,15 @@ export default function Home({ href, ...props }) {
 
   useBottomScrollListener(
     () => {
-      if (state.postList.length) {
+      if (Object.keys(state.postList).length) {
+        const sortedPostIdArray = Object.keys(state.postList).sort(
+          (a, b) => Number(b) - Number(a)
+        );
+
         setState(draft => {
-          draft.before = state.postList[state.postList.length - 1].id;
+          draft.before = Number(
+            sortedPostIdArray[sortedPostIdArray.length - 1]
+          );
         });
       }
     },
@@ -126,13 +131,18 @@ export default function Home({ href, ...props }) {
 
       setState(draft => {
         if (result.data?.org) {
-          const mappedPosts = getLensPosts(result.data?.org?.lenses, subHeader);
+          const mappedPosts = getLensPosts(
+            result.data?.org?.lenses,
+            subHeader
+          ).reduce((acc, curr) => {
+            acc[curr.id] = { ...curr };
+            return acc;
+          }, {});
 
           setState(draft => {
-            draft.postList = state.postList.length
-              ? [...state.postList, ...mappedPosts]
-              : mappedPosts;
+            draft.postList = { ...state.postList, ...mappedPosts };
           });
+
           isLoading.current = false;
         } else {
           isLoading.current = true;
@@ -147,12 +157,11 @@ export default function Home({ href, ...props }) {
     e.stopPropagation();
 
     if (tagName) {
-      setTag(tagName);
       setState(draft => {
-        draft.postList = [];
+        draft.postList = {};
         draft.before = -1;
       });
-
+      setTag(tagName);
       isLoading.current = true;
     }
   };
