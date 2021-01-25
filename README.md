@@ -16,12 +16,11 @@ npx next dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ### Environment Variables
-Please add Dev Environment Variables to `.env.development` file, add Prod Environment Variables on [Vercel](https://vercel.com/planetscale/flux) .
+Please add Dev Environment Variables to `.env.development` file
 
 
 ## Deploy on Vercel
 
-The Vercel project for Flux is [Flux](https://vercel.com/planetscale/flux)
 
 ## Tech Debt
 
