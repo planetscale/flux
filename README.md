@@ -16,7 +16,7 @@ npx next dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ### Environment Variables
-Please add Dev Environment Variables to `.env.development` file
+Please add Dev Environment Variables to `.env.development.local` file.
 
 
 ## Deploy on Vercel
