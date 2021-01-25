@@ -167,15 +167,18 @@ export default function MarkdownEditor({
   };
 
   const populateUsers = async term => {
-    console.log(term);
     try {
       const result = await client.query(slackMembersQuery).toPromise();
+
       if (result.data?.slackMembers) {
         return result.data?.slackMembers
           .map(member => ({
             title: member.realName,
             subtitle: `@${member.realName}`,
-            url: `https://flux.psdb.co/user/${member.realName}`,
+            // TODO: replace this hack with real non-breaking user handle
+            url: `https://flux.psdb.co/user/${member.displayName
+              .split(' ')
+              .join('-')}`,
           }))
           .filter(result =>
             result.subtitle.toLowerCase().includes(term.toLowerCase())
