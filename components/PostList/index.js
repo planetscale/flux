@@ -4,7 +4,7 @@ import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 80ch;
+  width: 800px;
   padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid var(--accent2);
@@ -292,52 +292,50 @@ export default function PostList({ posts = [], handleTagClick }) {
 
   return (
     <Wrapper>
-      {Object.values(posts)
-        .sort((a, b) => b?.id - a?.id)
-        .map((post, index) => {
-          if (!post) return generateEmptyPost(index);
-          const { id, title, author, createdAt, summary, tag } = post;
-          const demarcationString = getTimeDemarcatorString(
-            getLocaleDateTimeString(createdAt).toUpperCase()
-          );
+      {posts.map((post, index) => {
+        if (!post) return generateEmptyPost(index);
+        const { id, title, author, createdAt, summary, tag } = post;
+        const demarcationString = getTimeDemarcatorString(
+          getLocaleDateTimeString(createdAt).toUpperCase()
+        );
 
-          return (
-            <PostContainer key={id}>
-              {demarcationString && (
-                <DemarcationString key={demarcationString}>
-                  {demarcationString}
-                </DemarcationString>
-              )}
-              <Post
-                onClick={() => {
-                  handlePostClick(id);
-                }}
-              >
-                <PostWrapper>
-                  <PostInfo>
-                    <MetaInformation>
-                      <MetaDate>
-                        {getLocaleDateTimeString(createdAt).toUpperCase()}
-                      </MetaDate>
-                      <span>&nbsp; &middot; &nbsp;</span>
-                      <MetaTag
-                        onClick={e => {
-                          handleTagClick(e, tag?.name);
-                        }}
-                      >
-                        #{tag?.name}
-                      </MetaTag>
-                      <span>&nbsp; &middot; &nbsp;</span>
-                      <span>{author?.displayName}</span>
-                    </MetaInformation>
-                    <PostTitle>{title}</PostTitle>
-                    <PostSubTitle>{summary}</PostSubTitle>
-                  </PostInfo>
-                </PostWrapper>
-              </Post>
-            </PostContainer>
-          );
-        })}
+        return (
+          <PostContainer key={id}>
+            {demarcationString && (
+              <DemarcationString key={demarcationString}>
+                {demarcationString}
+              </DemarcationString>
+            )}
+            <Post
+              onClick={() => {
+                handlePostClick(id);
+              }}
+            >
+              <PostWrapper>
+                <PostInfo>
+                  <MetaInformation>
+                    <MetaDate>
+                      {getLocaleDateTimeString(createdAt).toUpperCase()}
+                    </MetaDate>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <MetaTag
+                      onClick={e => {
+                        handleTagClick(e, tag?.name);
+                      }}
+                    >
+                      #{tag?.name}
+                    </MetaTag>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <span>{author?.displayName}</span>
+                  </MetaInformation>
+                  <PostTitle>{title}</PostTitle>
+                  <PostSubTitle>{summary}</PostSubTitle>
+                </PostInfo>
+              </PostWrapper>
+            </Post>
+          </PostContainer>
+        );
+      })}
     </Wrapper>
   );
 }
