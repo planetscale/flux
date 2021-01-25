@@ -18,13 +18,13 @@ const PostContainer = styled.div`
   &.empty {
     @keyframes loadingAnimation {
       0% {
-        opacity: 0.75;
+        opacity: 0.5;
       }
       50% {
         opacity: 0.25;
       }
       100% {
-        opacity: 0.75;
+        opacity: 0.5;
       }
     }
     animation: loadingAnimation 3s infinite;
@@ -40,7 +40,7 @@ const Post = styled.div`
 
   margin: 0 0 30px 0;
 
-  :hover {
+  :hover:not(.loading) {
     cursor: pointer;
 
     > div {
@@ -159,14 +159,13 @@ const EmptyDemarcationString = styled.div`
   display: inline-block;
   position: relative;
   width: 100px;
-  height: 36px;
   padding: 8px 16px;
   margin-bottom: 2em;
 
   > div {
+    color: var(--accent);
     background-color: var(--accent);
     width: 100%;
-    height: 100%;
     border-radius: 8px;
   }
 
@@ -193,82 +192,17 @@ const EmptyMeta = styled.div`
 `;
 
 const EmptyPostTitle = styled.div`
-  width: 100%;
+  width: 75%;
   height: 39px;
-  display: flex;
-  padding: 2px 0px;
-
-  > div {
-    height: 100%;
-    border-radius: 8px;
-    background-color: var(--text);
-    margin: 0px 4px;
-
-    &:nth-of-type(1) {
-      flex: 1;
-      margin-left: 0px;
-    }
-    &:nth-of-type(2) {
-      flex: 0.5;
-    }
-    &:nth-of-type(3) {
-      flex: 2;
-    }
-    &:nth-of-type(4) {
-      flex: 0.75;
-    }
-    &:nth-of-type(5) {
-      flex: 1.5;
-      margin-right: 0px;
-    }
-  }
+  border-radius: 8px;
+  background-color: #666666;
 `;
 
 const EmptySummary = styled.div`
-  width: 100%;
+  width: 75%;
   height: 20px;
-  display: flex;
-  padding: 1px 0px;
-
-  > div {
-    height: 100%;
-    border-radius: 8px;
-    background-color: var(--text);
-    margin: 0px 2px;
-
-    &:nth-of-type(1) {
-      flex: 1;
-      margin-left: 0px;
-    }
-    &:nth-of-type(2) {
-      flex: 0.5;
-    }
-    &:nth-of-type(3) {
-      flex: 2;
-    }
-    &:nth-of-type(4) {
-      flex: 0.75;
-    }
-    &:nth-of-type(5) {
-      flex: 1.5;
-    }
-    &:nth-of-type(6) {
-      flex: 1;
-    }
-    &:nth-of-type(7) {
-      flex: 0.5;
-    }
-    &:nth-of-type(8) {
-      flex: 2;
-    }
-    &:nth-of-type(9) {
-      flex: 0.75;
-    }
-    &:nth-of-type(10) {
-      flex: 1.5;
-      margin-right: 0px;
-    }
-  }
+  border-radius: 8px;
+  background-color: #666666;
 `;
 
 export default function PostList({ posts = [], handleTagClick }) {
@@ -324,10 +258,10 @@ export default function PostList({ posts = [], handleTagClick }) {
       <PostContainer key={`empty-${index}`} className="empty">
         {index === 0 && (
           <EmptyDemarcationString>
-            <div />
+            <div>Loading</div>
           </EmptyDemarcationString>
         )}
-        <Post>
+        <Post className="loading">
           <PostWrapper>
             <PostInfo>
               <MetaInformation>
@@ -344,27 +278,10 @@ export default function PostList({ posts = [], handleTagClick }) {
                 </span>
               </MetaInformation>
               <PostTitle>
-                <EmptyPostTitle>
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </EmptyPostTitle>
+                <EmptyPostTitle></EmptyPostTitle>
               </PostTitle>
               <PostSubTitle>
-                <EmptySummary>
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </EmptySummary>
+                <EmptySummary></EmptySummary>
               </PostSubTitle>
             </PostInfo>
           </PostWrapper>
