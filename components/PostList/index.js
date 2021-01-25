@@ -14,7 +14,22 @@ const Wrapper = styled.div`
   `}
 `;
 
-const PostContainer = styled.div``;
+const PostContainer = styled.div`
+  &.empty {
+    @keyframes loadingAnimation {
+      0% {
+        opacity: 0.75;
+      }
+      50% {
+        opacity: 0.25;
+      }
+      100% {
+        opacity: 0.75;
+      }
+    }
+    animation: loadingAnimation 3s infinite;
+  }
+`;
 
 const Post = styled.div`
   position: relative;
@@ -140,6 +155,122 @@ const DemarcationString = styled.div`
   }
 `;
 
+const EmptyDemarcationString = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  height: 36px;
+  padding: 8px 16px;
+  margin-bottom: 2em;
+
+  > div {
+    background-color: var(--accent);
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background-color: var(--accent2);
+    left: -1em;
+    top: 1.1em;
+  }
+`;
+
+const EmptyMeta = styled.div`
+  border-radius: 8px;
+  background-color: #666666;
+  width: 78px;
+  height: 15px;
+
+  &.link {
+    background-color: var(--link);
+  }
+`;
+
+const EmptyPostTitle = styled.div`
+  width: 100%;
+  height: 39px;
+  display: flex;
+  padding: 2px 0px;
+
+  > div {
+    height: 100%;
+    border-radius: 8px;
+    background-color: var(--text);
+    margin: 0px 4px;
+
+    &:nth-of-type(1) {
+      flex: 1;
+      margin-left: 0px;
+    }
+    &:nth-of-type(2) {
+      flex: 0.5;
+    }
+    &:nth-of-type(3) {
+      flex: 2;
+    }
+    &:nth-of-type(4) {
+      flex: 0.75;
+    }
+    &:nth-of-type(5) {
+      flex: 1.5;
+      margin-right: 0px;
+    }
+  }
+`;
+
+const EmptySummary = styled.div`
+  width: 100%;
+  height: 20px;
+  display: flex;
+  padding: 1px 0px;
+
+  > div {
+    height: 100%;
+    border-radius: 8px;
+    background-color: var(--text);
+    margin: 0px 2px;
+
+    &:nth-of-type(1) {
+      flex: 1;
+      margin-left: 0px;
+    }
+    &:nth-of-type(2) {
+      flex: 0.5;
+    }
+    &:nth-of-type(3) {
+      flex: 2;
+    }
+    &:nth-of-type(4) {
+      flex: 0.75;
+    }
+    &:nth-of-type(5) {
+      flex: 1.5;
+    }
+    &:nth-of-type(6) {
+      flex: 1;
+    }
+    &:nth-of-type(7) {
+      flex: 0.5;
+    }
+    &:nth-of-type(8) {
+      flex: 2;
+    }
+    &:nth-of-type(9) {
+      flex: 0.75;
+    }
+    &:nth-of-type(10) {
+      flex: 1.5;
+      margin-right: 0px;
+    }
+  }
+`;
+
 export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
   const router = useRouter();
@@ -188,12 +319,66 @@ export default function PostList({ posts = [], handleTagClick }) {
     return demarcationString;
   };
 
+  const generateEmptyPost = index => {
+    return (
+      <PostContainer key={`empty-${index}`} className="empty">
+        {index === 0 && (
+          <EmptyDemarcationString>
+            <div />
+          </EmptyDemarcationString>
+        )}
+        <Post>
+          <PostWrapper>
+            <PostInfo>
+              <MetaInformation>
+                <MetaDate>
+                  <EmptyMeta />
+                </MetaDate>
+                <span>&nbsp; &middot; &nbsp;</span>
+                <span>
+                  <EmptyMeta className="link" />
+                </span>
+                <span>&nbsp; &middot; &nbsp;</span>
+                <span>
+                  <EmptyMeta />
+                </span>
+              </MetaInformation>
+              <PostTitle>
+                <EmptyPostTitle>
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </EmptyPostTitle>
+              </PostTitle>
+              <PostSubTitle>
+                <EmptySummary>
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </EmptySummary>
+              </PostSubTitle>
+            </PostInfo>
+          </PostWrapper>
+        </Post>
+      </PostContainer>
+    );
+  };
+
   return (
     <Wrapper>
       {Object.values(posts)
-        .sort((a, b) => b.id - a.id)
-        .map(post => {
-          if (!post) return;
+        .sort((a, b) => b?.id - a?.id)
+        .map((post, index) => {
+          if (!post) return generateEmptyPost(index);
           const { id, title, author, createdAt, summary, tag } = post;
           const demarcationString = getTimeDemarcatorString(
             getLocaleDateTimeString(createdAt).toUpperCase()

@@ -64,6 +64,8 @@ function getLensPosts(lenses, subHeader) {
 
 const DEFAULT_PAGE_ADDEND = 10;
 
+const LOADING_POSTS = Object.assign({}, Array(10).fill(null));
+
 export default function Home({ href, ...props }) {
   const [state, setState] = useImmer({
     postList: {},
@@ -99,7 +101,7 @@ export default function Home({ href, ...props }) {
 
   useBottomScrollListener(
     () => {
-      if (Object.keys(state.postList).length) {
+      if (Object.keys(state.postList).length && !isLoading.current) {
         const sortedPostIdArray = Object.keys(state.postList).sort(
           (a, b) => Number(b) - Number(a)
         );
@@ -168,11 +170,14 @@ export default function Home({ href, ...props }) {
 
   return (
     <HomeWrapper>
-      {isLoading.current ? (
-        <></>
-      ) : (
-        <PostList posts={state.postList} handleTagClick={handleTagClick} />
-      )}
+      <PostList
+        posts={
+          isLoading.current && !Object.keys(state.postList).length
+            ? LOADING_POSTS
+            : state.postList
+        }
+        handleTagClick={handleTagClick}
+      />
     </HomeWrapper>
   );
 }
