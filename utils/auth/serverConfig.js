@@ -11,14 +11,14 @@ if (!admin.apps.length) {
 }
 
 // idToken comes from the client app
-const getUserId = async idToken => {
+const decodeToken = async idToken => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    return decodedToken.uid;
+    return decodedToken;
   } catch (e) {
     console.error(e);
     throw Error(e);
   }
 };
 
-export { getUserId };
+export { decodeToken };

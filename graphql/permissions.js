@@ -1,11 +1,11 @@
 import { rule, shield } from 'graphql-shield';
-import { getUserId } from '../utils/auth/serverConfig';
+import { decodeToken } from '../utils/auth/serverConfig';
 
 const rules = {
   isAuthenticatedUser: rule()(async (parent, args, ctx) => {
     const authHeader = ctx.req.headers.authorization;
     let token = '';
-    let userId = '';
+    let decodedToken = '';
 
     if (authHeader?.startsWith('Bearer ')) {
       const tokenArray = authHeader.split(' ');
@@ -13,13 +13,20 @@ const rules = {
       token = tokenArray[1];
 
       try {
-        userId = await getUserId(token);
+        decodedToken = await decodeToken(token);
       } catch (e) {
-        console.error('Get User Id error: ', e);
+        console.error('Decode token error: ', e);
       }
     }
 
-    return Boolean(userId);
+    return (
+      Boolean(decodedToken.uid) &&
+      Boolean(
+        decodedToken.email.match(
+          new RegExp(process.env.NEXT_PUBLIC_ALLOWED_EMAIL_REGEX)
+        )
+      )
+    );
   }),
 };
 

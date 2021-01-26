@@ -13,7 +13,7 @@ const cors = Cors({
 const validateUser = async (req, res, callbackFn) => {
   const authHeader = req.headers.authorization;
   let token = '';
-  let userId = '';
+  let decodedToken = '';
 
   if (authHeader?.startsWith('Bearer ')) {
     const tokenArray = authHeader.split(' ');
@@ -21,8 +21,15 @@ const validateUser = async (req, res, callbackFn) => {
     token = tokenArray[1];
 
     try {
-      userId = await getUserId(token);
-      callbackFn(Boolean(userId));
+      decodedToken = await decodeToken(token);
+      callbackFn(
+        Boolean(decodedToken.uid) &&
+          Boolean(
+            decodedToken.email.match(
+              new RegExp(process.env.NEXT_PUBLIC_ALLOWED_EMAIL_REGEX)
+            )
+          )
+      );
     } catch (e) {
       callbackFn(e);
     }
