@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { IncomingForm } from 'formidable';
 import Cors from 'cors';
-import { getUserId } from 'utils/auth/serverConfig';
+import { decodeToken } from 'utils/auth/serverConfig';
 import { getLocaleDateTimeString } from '../../../utils/dateTime';
 
 const { WebClient } = require('@slack/web-api');
