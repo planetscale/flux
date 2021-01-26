@@ -17,13 +17,22 @@ const GRAPHQL_ENDPOINT = `/api/graphql`;
 function AppContainer({ children }) {
   const router = useRouter();
   const [token, setToken] = useState(null);
-  const { rehydrateUser, setUserAuthChecked } = useAuthActions();
+  const {
+    rehydrateUser,
+    setUserAuthChecked,
+    isValidUser,
+    userLogout,
+  } = useAuthActions();
 
   useEffect(() => {
     setFireAuthObserver(onAuthUserFailed, onAuthUserSuccess);
   }, []);
 
   const onAuthUserSuccess = user => {
+    // Ensure a user with bad email can't use the product after the sign in phase
+    if (user && !isValidUser(user)) {
+      return userLogout();
+    }
     updateToken(user);
     rehydrateUser(user);
   };

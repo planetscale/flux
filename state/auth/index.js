@@ -32,6 +32,10 @@ const useAuthActions = () => {
     try {
       const res = await loginWithFirebase();
 
+      if (!isValidUser(res?.user)) {
+        return userLogout();
+      }
+
       if (res) {
         updateState(draft => {
           draft.isAuthed = true;
@@ -92,7 +96,21 @@ const useAuthActions = () => {
     }
   };
 
-  return { userLogin, userLogout, rehydrateUser, setUserAuthChecked };
+  // It doesn't seem possible to actually tell OAuth to block emails that don't match a certain domain.
+  // A user without access can still create a firebase user unfortunately, but will be blocked from the app from here.
+  const isValidUser = user => {
+    return user.email.match(
+      new RegExp(process.env.NEXT_PUBLIC_ALLOWED_EMAIL_REGEX)
+    );
+  };
+
+  return {
+    userLogin,
+    userLogout,
+    rehydrateUser,
+    setUserAuthChecked,
+    isValidUser,
+  };
 };
 
 export { AuthContextProvider, useAuthContext, useAuthActions };
