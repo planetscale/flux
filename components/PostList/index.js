@@ -198,7 +198,7 @@ const EmptyPostTitle = styled.div`
   background-color: #666666;
 `;
 
-const EmptySummary = styled.div`
+const EmptySummary = styled.span`
   width: 75%;
   height: 20px;
   border-radius: 8px;
