@@ -4,7 +4,7 @@ import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
 const Wrapper = styled.div`
-  width: 80ch;
+  width: 800px;
   padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid var(--accent2);
@@ -14,7 +14,22 @@ const Wrapper = styled.div`
   `}
 `;
 
-const PostContainer = styled.div``;
+const PostContainer = styled.div`
+  &.empty {
+    @keyframes loadingAnimation {
+      0% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 0.25;
+      }
+      100% {
+        opacity: 0.5;
+      }
+    }
+    animation: loadingAnimation 3s infinite;
+  }
+`;
 
 const Post = styled.div`
   position: relative;
@@ -25,7 +40,7 @@ const Post = styled.div`
 
   margin: 0 0 30px 0;
 
-  :hover {
+  :hover:not(.loading) {
     cursor: pointer;
 
     > div {
@@ -140,6 +155,57 @@ const DemarcationString = styled.div`
   }
 `;
 
+const EmptyDemarcationString = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  padding: 8px 16px;
+  margin-bottom: 2em;
+
+  > div {
+    color: var(--accent);
+    background-color: var(--accent);
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background-color: var(--accent2);
+    left: -1em;
+    top: 1.1em;
+  }
+`;
+
+const EmptyMeta = styled.div`
+  border-radius: 8px;
+  background-color: #666666;
+  width: 78px;
+  height: 15px;
+
+  &.link {
+    background-color: var(--link);
+  }
+`;
+
+const EmptyPostTitle = styled.div`
+  width: 75%;
+  height: 39px;
+  border-radius: 8px;
+  background-color: #666666;
+`;
+
+const EmptySummary = styled.p`
+  margin: 0px;
+  width: 75%;
+  height: 20px;
+  border-radius: 8px;
+  background-color: #666666;
+`;
+
 export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
   const router = useRouter();
@@ -188,54 +254,89 @@ export default function PostList({ posts = [], handleTagClick }) {
     return demarcationString;
   };
 
+  const generateEmptyPost = index => {
+    return (
+      <PostContainer key={`empty-${index}`} className="empty">
+        {index === 0 && (
+          <EmptyDemarcationString>
+            <div>Loading</div>
+          </EmptyDemarcationString>
+        )}
+        <Post className="loading">
+          <PostWrapper>
+            <PostInfo>
+              <MetaInformation>
+                <MetaDate>
+                  <EmptyMeta />
+                </MetaDate>
+                <span>&nbsp; &middot; &nbsp;</span>
+                <span>
+                  <EmptyMeta className="link" />
+                </span>
+                <span>&nbsp; &middot; &nbsp;</span>
+                <span>
+                  <EmptyMeta />
+                </span>
+              </MetaInformation>
+              <PostTitle>
+                <EmptyPostTitle></EmptyPostTitle>
+              </PostTitle>
+              <PostSubTitle>
+                <EmptySummary></EmptySummary>
+              </PostSubTitle>
+            </PostInfo>
+          </PostWrapper>
+        </Post>
+      </PostContainer>
+    );
+  };
+
   return (
     <Wrapper>
-      {Object.values(posts)
-        .sort((a, b) => b.id - a.id)
-        .map(post => {
-          if (!post) return;
-          const { id, title, author, createdAt, summary, tag } = post;
-          const demarcationString = getTimeDemarcatorString(
-            getLocaleDateTimeString(createdAt).toUpperCase()
-          );
+      {posts.map((post, index) => {
+        if (!post) return generateEmptyPost(index);
+        const { id, title, author, createdAt, summary, tag } = post;
+        const demarcationString = getTimeDemarcatorString(
+          getLocaleDateTimeString(createdAt).toUpperCase()
+        );
 
-          return (
-            <PostContainer key={id}>
-              {demarcationString && (
-                <DemarcationString key={demarcationString}>
-                  {demarcationString}
-                </DemarcationString>
-              )}
-              <Post
-                onClick={() => {
-                  handlePostClick(id);
-                }}
-              >
-                <PostWrapper>
-                  <PostInfo>
-                    <MetaInformation>
-                      <MetaDate>
-                        {getLocaleDateTimeString(createdAt).toUpperCase()}
-                      </MetaDate>
-                      <span>&nbsp; &middot; &nbsp;</span>
-                      <MetaTag
-                        onClick={e => {
-                          handleTagClick(e, tag?.name);
-                        }}
-                      >
-                        #{tag?.name}
-                      </MetaTag>
-                      <span>&nbsp; &middot; &nbsp;</span>
-                      <span>{author?.displayName}</span>
-                    </MetaInformation>
-                    <PostTitle>{title}</PostTitle>
-                    <PostSubTitle>{summary}</PostSubTitle>
-                  </PostInfo>
-                </PostWrapper>
-              </Post>
-            </PostContainer>
-          );
-        })}
+        return (
+          <PostContainer key={id}>
+            {demarcationString && (
+              <DemarcationString key={demarcationString}>
+                {demarcationString}
+              </DemarcationString>
+            )}
+            <Post
+              onClick={() => {
+                handlePostClick(id);
+              }}
+            >
+              <PostWrapper>
+                <PostInfo>
+                  <MetaInformation>
+                    <MetaDate>
+                      {getLocaleDateTimeString(createdAt).toUpperCase()}
+                    </MetaDate>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <MetaTag
+                      onClick={e => {
+                        handleTagClick(e, tag?.name);
+                      }}
+                    >
+                      #{tag?.name}
+                    </MetaTag>
+                    <span>&nbsp; &middot; &nbsp;</span>
+                    <span>{author?.displayName}</span>
+                  </MetaInformation>
+                  <PostTitle>{title}</PostTitle>
+                  <PostSubTitle>{summary}</PostSubTitle>
+                </PostInfo>
+              </PostWrapper>
+            </Post>
+          </PostContainer>
+        );
+      })}
     </Wrapper>
   );
 }

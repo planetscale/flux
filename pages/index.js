@@ -2,7 +2,7 @@ import PostList from 'components/PostList';
 import { useClient } from 'urql';
 import gql from 'graphql-tag';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
@@ -64,21 +64,32 @@ function getLensPosts(lenses, subHeader) {
 
 const DEFAULT_PAGE_ADDEND = 10;
 
+const LOADING_POSTS = Array(10).fill(null);
+
 export default function Home({ href, ...props }) {
   const [state, setState] = useImmer({
     postList: {},
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
+    forceFetch: 0,
   });
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
   const { subHeader, selectedTag } = useTopBarContext();
-  const isLoading = useRef(true);
+  const [isLoading, setLoading] = useState(false);
   const client = useClient();
 
+  // We want to fetch new posts when:
+  // - The pagination (before) changes
+  // - The subheader changes
+  // - A force fetch has triggered. This is probably a useEffect anti-patern but a way to trigger fetches on our terms.
+  //   We don't want to listen for a selectedTag change here directly because we have another effect below that handles it
+  //   and we don't want to fire double queries.
   useEffect(() => {
+    // Skip initial render for this effect, the selectTag effect will trigger this again.
+    if (state.forceFetch === 0) return;
     fetchPost();
-  }, [selectedTag, state.before, subHeader]);
+  }, [state.forceFetch, state.before, subHeader]);
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -88,26 +99,25 @@ export default function Home({ href, ...props }) {
     }
   }, [user?.org]);
 
+  // This effect will handle triggering the fetchPost effect when the tag is changed.
   useEffect(() => {
-    if (!selectedTag) {
-      setState(draft => {
-        draft.postList = {};
-        draft.before = -1;
-      });
-    }
+    setLoading(true);
+    // The useBottomScrollListener will fire unecessarily if we are still scrolled to the bottom as we reset the post list.
+    window.scrollTo(0, 0);
+    setState(draft => {
+      draft.postList = {};
+      draft.before = -1;
+      draft.forceFetch = draft.forceFetch + 1;
+    });
   }, [selectedTag]);
 
   useBottomScrollListener(
     () => {
-      if (Object.keys(state.postList).length) {
-        const sortedPostIdArray = Object.keys(state.postList).sort(
-          (a, b) => Number(b) - Number(a)
-        );
-
+      const postLength = Object.keys(state.postList).length;
+      if (postLength && !isLoading) {
         setState(draft => {
-          draft.before = Number(
-            sortedPostIdArray[sortedPostIdArray.length - 1]
-          );
+          // We can garuntee the object is sorted by id ASC, so the oldest post is first element
+          draft.before = Number(Object.keys(state.postList)[0]);
         });
       }
     },
@@ -119,6 +129,7 @@ export default function Home({ href, ...props }) {
   );
 
   const fetchPost = async () => {
+    setLoading(true);
     try {
       const result = await client
         .query(postListQuery, {
@@ -142,14 +153,11 @@ export default function Home({ href, ...props }) {
           setState(draft => {
             draft.postList = { ...state.postList, ...mappedPosts };
           });
-
-          isLoading.current = false;
-        } else {
-          isLoading.current = true;
         }
+        setLoading(false);
       });
     } catch (error) {
-      console.error(error);
+      setLoading(false);
     }
   };
 
@@ -157,22 +165,19 @@ export default function Home({ href, ...props }) {
     e.stopPropagation();
 
     if (tagName) {
-      setState(draft => {
-        draft.postList = {};
-        draft.before = -1;
-      });
       setTag(tagName);
-      isLoading.current = true;
     }
   };
 
   return (
     <HomeWrapper>
-      {isLoading.current ? (
-        <></>
-      ) : (
-        <PostList posts={state.postList} handleTagClick={handleTagClick} />
-      )}
+      <PostList
+        posts={[
+          ...Object.values(state.postList).reverse(),
+          ...(isLoading ? LOADING_POSTS : []),
+        ]}
+        handleTagClick={handleTagClick}
+      />
     </HomeWrapper>
   );
 }
