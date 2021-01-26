@@ -16,20 +16,12 @@ npx next dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ### Environment Variables
-Please add Dev Environment Variables to `.env.development` file, add Prod Environment Variables on [Vercel](https://vercel.com/planetscale/flux) .
+Please add Dev Environment Variables to `.env.development.local` file.
 
 `NEXT_PUBLIC_ALLOWED_EMAIL_REGEX` - Regex to limit users based on email address to accessing the app. Leave blank to allow all.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
 ## Deploy on Vercel
 
-The Vercel project for Flux is [Flux](https://vercel.com/planetscale/flux)
 
 ## Tech Debt
 

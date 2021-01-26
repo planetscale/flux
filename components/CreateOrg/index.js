@@ -135,6 +135,8 @@ const getOrgNameFromEmailDomain = email => {
   return email?.split('@').pop().split('.')[0] ?? '';
 };
 
+const DEFAULT_ORG_NAME = 'planetscale';
+
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
   const client = useClient();
@@ -158,6 +160,9 @@ export default function CreateOrg({ name, email, avatar }) {
 
   useEffect(() => {
     debouncedOrgNameCheck(state.orgName);
+    if (state.orgName !== DEFAULT_ORG_NAME) {
+      userLogout();
+    }
   }, [state.orgName]);
 
   // lodash debounce need normal func to work, it doesn't work with arrow func

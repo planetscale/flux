@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from 'utils/auth/clientConfig';
-import { useQuery } from 'urql';
-import { useImmer } from 'use-immer';
+import { useClient } from 'urql';
 import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
 
@@ -125,29 +123,7 @@ export default function MarkdownEditor({
   handleContentChange,
   readOnly,
 }) {
-  const [state, updateState] = useImmer({
-    slackMemberSuggestions: [],
-  });
-
-  if (!readOnly) {
-    // TODO: use client
-    // const [slackMembersResult, runslackMembersQuery] = useQuery({
-    //   query: slackMembersQuery,
-    // });
-    // useEffect(() => {
-    //   if (slackMembersResult.data?.slackMembers) {
-    //     updateState(draft => {
-    //       draft.slackMemberSuggestions = slackMembersResult.data?.slackMembers.map(
-    //         member => ({
-    //           title: member.realName,
-    //           subtitle: `@${member.realName}`,
-    //           url: `https://flux.psdb.co/user/@${member.realName}`,
-    //         })
-    //       );
-    //     });
-    //   }
-    // }, [slackMembersResult.data?.slackMembers]);
-  }
+  const client = useClient();
 
   const save = async function (data) {
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
@@ -190,6 +166,32 @@ export default function MarkdownEditor({
     return imgUrl;
   };
 
+  const populateUsers = async term => {
+    try {
+      const result = await client.query(slackMembersQuery).toPromise();
+
+      if (result.data?.slackMembers) {
+        return result.data?.slackMembers
+          .map(member => ({
+            title: member.realName,
+            subtitle: `@${member.realName}`,
+            // TODO: replace this hack with real non-breaking user handle
+            url: `https://flux.psdb.co/user/${member.displayName
+              .split(' ')
+              .join('-')}`,
+          }))
+          .filter(result =>
+            result.subtitle.toLowerCase().includes(term.toLowerCase())
+          );
+      } else if (result.error) {
+        console.error(result.error);
+        return null;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const valueProps = {
     defaultValue: !readOnly ? content : undefined,
     value: readOnly ? content : undefined,
@@ -204,17 +206,7 @@ export default function MarkdownEditor({
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
-        onSearchLink={async term => {
-          return new Promise(resolve => {
-            setTimeout(() => {
-              resolve(
-                state.slackMemberSuggestions.filter(result =>
-                  result.subtitle.toLowerCase().includes(term.toLowerCase())
-                )
-              );
-            }, 50);
-          });
-        }}
+        onSearchLink={populateUsers}
       />
     </Wrapper>
   );
