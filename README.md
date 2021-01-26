@@ -18,6 +18,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Environment Variables
 Please add Dev Environment Variables to `.env.development` file, add Prod Environment Variables on [Vercel](https://vercel.com/planetscale/flux) .
 
+`NEXT_PUBLIC_ALLOWED_EMAIL_REGEX` - Regex to limit users based on email address to accessing the app. Leave blank to allow all.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
