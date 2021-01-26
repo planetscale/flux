@@ -150,7 +150,7 @@ export default async (req, res) => {
               type: 'section',
               text: {
                 type: 'mrkdwn',
-                text: `*<${domain}/|${title}>*
+                text: `*<${domain}/post/${result.id}|${title}>*
 ${summary}`,
               },
             },
