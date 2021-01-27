@@ -132,7 +132,6 @@ const getPlugins = populateUsers => {
   let mentionPlugin = getMentionsPlugin({
     getSuggestions: (type, text, done) => {
       setTimeout(async () => {
-        console.log(type, text, await populateUsers(text));
         if (type === 'mention') {
           const users = await populateUsers(text);
           if (users?.length) {
