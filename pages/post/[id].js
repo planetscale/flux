@@ -440,6 +440,11 @@ export default function PostPage() {
     return newReplyMap;
   };
 
+  const canSubmit = str => {
+    if (!str) return false;
+    return str.trim().match(/[0-9a-zA-Z]+/);
+  };
+
   // TODO: add better loading indicator, now there's literally none
   if (postDataResult.fetching) {
     return <></>;
@@ -458,7 +463,7 @@ export default function PostPage() {
             <MetaActions>
               {userContext.user.id === author?.id && (
                 <ButtonMinor type="submit" onClick={togglePostEdit}>
-                  Edit Post
+                  {postEditState.isOpened ? 'Cancel Edit' : 'Edit Post'}
                 </ButtonMinor>
               )}
             </MetaActions>
@@ -481,7 +486,7 @@ export default function PostPage() {
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
-                disabled={!postEditState.content}
+                disabled={!canSubmit(postEditState.content)}
               >
                 <Icon className="icon-edit"></Icon>
                 Update
@@ -521,7 +526,9 @@ export default function PostPage() {
                       type="submit"
                       onClick={toggleCommentReply}
                     >
-                      Reply
+                      {commentButtonState.replyButtons[firstLevelReplyKey]
+                        ? 'Cancel Reply'
+                        : 'Reply'}
                     </ButtonMinor>
                     {userContext.user.id ===
                       firstLevelReplyValue.author?.id && (
@@ -532,7 +539,9 @@ export default function PostPage() {
                           toggleCommentEdit(e, firstLevelReplyValue.content);
                         }}
                       >
-                        Edit
+                        {commentButtonState.editButtons[firstLevelReplyKey]
+                          ? 'Cancel Edit'
+                          : 'Edit'}
                       </ButtonMinor>
                     )}
                   </CommentActionButtonGroup>
@@ -553,7 +562,7 @@ export default function PostPage() {
                         type="submit"
                         onClick={handleCommentEditSubmit}
                         disabled={
-                          !commentInputs.edits[firstLevelReplyKey]?.trim()
+                          !canSubmit(commentInputs.edits[firstLevelReplyKey])
                         }
                       >
                         <Icon className="icon-edit"></Icon>
@@ -585,7 +594,7 @@ export default function PostPage() {
                         type="submit"
                         onClick={handleCommentReplySubmit}
                         disabled={
-                          !commentInputs.replies[firstLevelReplyKey]?.trim()
+                          !canSubmit(commentInputs.replies[firstLevelReplyKey])
                         }
                       >
                         <Icon className="icon-comment"></Icon>
@@ -614,7 +623,9 @@ export default function PostPage() {
                           type="submit"
                           onClick={toggleCommentReply}
                         >
-                          Reply
+                          {commentButtonState.replyButtons[k]
+                            ? 'Cancel Reply'
+                            : 'Reply'}
                         </ButtonMinor>
                         {userContext.user.id === v.author?.id && (
                           <ButtonMinor
@@ -624,7 +635,9 @@ export default function PostPage() {
                               toggleCommentEdit(e, v.content);
                             }}
                           >
-                            Edit
+                            {commentButtonState.editButtons[k]
+                              ? 'Cancel Edit'
+                              : 'Edit'}
                           </ButtonMinor>
                         )}
                       </CommentActionButtonGroup>
@@ -641,7 +654,7 @@ export default function PostPage() {
                             data-comment-id={k}
                             type="submit"
                             onClick={handleCommentEditSubmit}
-                            disabled={!commentInputs.edits[k]?.trim()}
+                            disabled={!canSubmit(commentInputs.edits[k])}
                           >
                             <Icon className="icon-edit"></Icon>
                             Update
@@ -668,7 +681,7 @@ export default function PostPage() {
                             data-comment-id={k}
                             type="submit"
                             onClick={handleCommentReplySubmit}
-                            disabled={!commentInputs.replies[k]?.trim()}
+                            disabled={!canSubmit(commentInputs.replies[k])}
                           >
                             <Icon className="icon-comment"></Icon>
                             Reply
@@ -699,7 +712,9 @@ export default function PostPage() {
                                   toggleCommentEdit(e, value.content);
                                 }}
                               >
-                                Edit
+                                {commentButtonState.editButtons[key]
+                                  ? 'Cancel Edit'
+                                  : 'Edit'}
                               </ButtonMinor>
                             )}
                           </CommentActionButtonGroup>
@@ -716,7 +731,7 @@ export default function PostPage() {
                                 data-comment-id={key}
                                 type="submit"
                                 onClick={handleCommentEditSubmit}
-                                disabled={!commentInputs.edits[key]?.trim()}
+                                disabled={!canSubmit(commentInputs.edits[key])}
                               >
                                 <Icon className="icon-edit"></Icon>
                                 Update
@@ -748,7 +763,7 @@ export default function PostPage() {
         <ButtonMinor
           type="submit"
           onClick={handleCommentSubmit}
-          disabled={!reply?.trim()}
+          disabled={!canSubmit(reply)}
         >
           <Icon className="icon-comment"></Icon>
           Reply
