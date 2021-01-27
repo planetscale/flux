@@ -458,7 +458,7 @@ export default function PostPage() {
             <MetaActions>
               {userContext.user.id === author?.id && (
                 <ButtonMinor type="submit" onClick={togglePostEdit}>
-                  Edit Post
+                  {postEditState.isOpened ? 'Cancel Edit' : 'Edit Post'}
                 </ButtonMinor>
               )}
             </MetaActions>
@@ -521,7 +521,9 @@ export default function PostPage() {
                       type="submit"
                       onClick={toggleCommentReply}
                     >
-                      Reply
+                      {commentButtonState.replyButtons[firstLevelReplyKey]
+                        ? 'Cancel Reply'
+                        : 'Reply'}
                     </ButtonMinor>
                     {userContext.user.id ===
                       firstLevelReplyValue.author?.id && (
@@ -532,7 +534,9 @@ export default function PostPage() {
                           toggleCommentEdit(e, firstLevelReplyValue.content);
                         }}
                       >
-                        Edit
+                        {commentButtonState.editButtons[firstLevelReplyKey]
+                          ? 'Cancel Edit'
+                          : 'Edit'}
                       </ButtonMinor>
                     )}
                   </CommentActionButtonGroup>
@@ -614,7 +618,9 @@ export default function PostPage() {
                           type="submit"
                           onClick={toggleCommentReply}
                         >
-                          Reply
+                          {commentButtonState.replyButtons[k]
+                            ? 'Cancel Reply'
+                            : 'Reply'}
                         </ButtonMinor>
                         {userContext.user.id === v.author?.id && (
                           <ButtonMinor
@@ -624,7 +630,9 @@ export default function PostPage() {
                               toggleCommentEdit(e, v.content);
                             }}
                           >
-                            Edit
+                            {commentButtonState.editButtons[k]
+                              ? 'Cancel Edit'
+                              : 'Edit'}
                           </ButtonMinor>
                         )}
                       </CommentActionButtonGroup>
@@ -699,7 +707,9 @@ export default function PostPage() {
                                   toggleCommentEdit(e, value.content);
                                 }}
                               >
-                                Edit
+                                {commentButtonState.editButtons[key]
+                                  ? 'Cancel Edit'
+                                  : 'Edit'}
                               </ButtonMinor>
                             )}
                           </CommentActionButtonGroup>
