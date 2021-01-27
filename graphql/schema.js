@@ -236,10 +236,21 @@ const Query = queryType({
             exclude_archived: true,
             limit: 1000,
           });
-          return slackRes.channels.map(channel => ({
-            id: channel.id,
-            name: channel.name,
-          }));
+
+          return slackRes.channels
+            .filter(
+              channel =>
+                !channel.is_archived &&
+                !channel.is_ext_shared &&
+                !channel.is_private &&
+                !channel.is_org_shared &&
+                !channel.is_shared &&
+                !channel.name.match('^support-')
+            )
+            .map(channel => ({
+              id: channel.id,
+              name: channel.name,
+            }));
         } catch (error) {
           console.error(error);
         }
