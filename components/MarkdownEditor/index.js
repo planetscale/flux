@@ -4,6 +4,7 @@ import { firebaseStorage } from 'utils/auth/clientConfig';
 import { useClient } from 'urql';
 import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
+import getPlugins from './plugins';
 
 const Wrapper = styled.div`
   position: relative;
@@ -13,11 +14,6 @@ const Wrapper = styled.div`
     :focus {
       outline: none;
     }
-  }
-  .mde-suggestions {
-    overflow-y: auto;
-    max-height: 150px;
-    z-index: 1;
   }
 `;
 
@@ -166,29 +162,31 @@ export default function MarkdownEditor({
     return imgUrl;
   };
 
-  const populateUsers = async term => {
+  const populateUsers = async text => {
     try {
       const result = await client.query(slackMembersQuery).toPromise();
 
       if (result.data?.slackMembers) {
         return result.data?.slackMembers
           .map(member => ({
-            title: member.realName,
-            subtitle: `@${member.realName}`,
+            // fields have to be {name,id,email}
+            name: member.realName,
+            id: `@${member.realName}`,
             // TODO: replace this hack with real non-breaking user handle
-            url: `https://flux.psdb.co/user/${member.displayName
+            email: `https://flux.psdb.co/user/${member.displayName
               .split(' ')
               .join('-')}`,
           }))
           .filter(result =>
-            result.subtitle.toLowerCase().includes(term.toLowerCase())
+            result.name.toLowerCase().includes(text.toLowerCase())
           );
       } else if (result.error) {
         console.error(result.error);
-        return null;
+        return [];
       }
     } catch (e) {
       console.error(e);
+      return [];
     }
   };
 
@@ -206,7 +204,7 @@ export default function MarkdownEditor({
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
-        onSearchLink={populateUsers}
+        extensions={getPlugins(populateUsers)}
       />
     </Wrapper>
   );
