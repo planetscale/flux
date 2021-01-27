@@ -204,7 +204,7 @@ export default function MarkdownEditor({
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
-        extensions={getPlugins(populateUsers)}
+        // extensions={getPlugins(populateUsers)}
       />
     </Wrapper>
   );
