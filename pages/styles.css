@@ -23,3 +23,27 @@
     --highlight: #c56a86;
   }
 }
+
+/* Hack editor's css for user-tagging feature, tried other ways couldn't apply styles*/
+.suggestion-item {
+  padding: 5px;
+}
+
+.suggestion-item-active {
+  background: var(--highlight);
+  color: var(--foreground);
+}
+
+.suggestion-item-list {
+  background: var(--background);
+  border: 1px solid #999;
+}
+
+.prosemirror-mention-node {
+  color: var(--link);
+}
+
+.prosemirror-suggestion {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #999;
+}
