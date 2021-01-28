@@ -38,6 +38,11 @@ const Title = styled.h1`
   &:first-letter {
     text-transform: uppercase;
   }
+
+  ${media.phone`
+    font-size: 32px;
+    margin: 0.5em 0;
+  `}
 `;
 
 const Content = styled.div`

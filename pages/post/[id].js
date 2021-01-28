@@ -34,6 +34,7 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
+import { media } from 'pageUtils/post/theme';
 
 const Meta = styled.div`
   display: flex;
@@ -41,6 +42,11 @@ const Meta = styled.div`
   align-items: center;
   justify-content: space-between;
   color: var(--text);
+
+  ${media.phone`
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  `}
 `;
 
 const MetaData = styled.div`
@@ -48,10 +54,15 @@ const MetaData = styled.div`
   flex-direction: row;
   align-items: center;
 `;
+
 const MetaActions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.phone`
+    margin-bottom: 2em;
+  `}
 `;
 
 export default function PostPage() {
