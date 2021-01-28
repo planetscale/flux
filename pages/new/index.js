@@ -24,6 +24,12 @@ const TimeAndTags = styled.div`
   `}
 `;
 
+const MetaTime = styled.div`
+  ${media.phone`
+    margin-bottom: 1em;
+  `}
+`;
+
 const DotSeperator = styled.div`
   ${media.phone`
     display: none;
@@ -335,7 +341,7 @@ export default function NewPost() {
     <PageWrapper>
       <Post>
         <TimeAndTags>
-          <div>{state.dateTime}</div>
+          <MetaTime>{state.dateTime}</MetaTime>
           <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
           <div>
             <Select
