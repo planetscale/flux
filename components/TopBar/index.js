@@ -39,12 +39,6 @@ const BreadcrumbContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  ${media.phone`
-    flex-direction: column;
-    align-items: flex-start;
-
-  `}
 `;
 
 const Logo = styled(ButtonLink)`
@@ -65,7 +59,6 @@ const Logo = styled(ButtonLink)`
 
   ${media.phone`
     font-size: 1em;
-    margin-bottom: 0.5em;
   `}
 `;
 
