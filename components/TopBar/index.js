@@ -29,6 +29,7 @@ const Wrapper = styled.div`
   background-color: var(--background);
 
   ${media.phone`
+    flex-direction: column;
     align-items: stretch;
     padding: 1em;
   `}
@@ -113,6 +114,12 @@ const ActionsWrapper = styled.div`
   ${ButtonSpecial} {
     margin: 0 12px 0 0;
   }
+
+  ${media.phone`
+    border-top: 1px solid var(--accent2);
+    margin-top: 1em;
+    padding-top: 1em;
+  `}
 `;
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
