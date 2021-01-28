@@ -4,6 +4,7 @@ import { firebaseStorage } from 'utils/auth/clientConfig';
 import { useClient } from 'urql';
 import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
+import imageCompression from 'browser-image-compression';
 import getPlugins from './plugins';
 
 const Wrapper = styled.div`
@@ -122,10 +123,15 @@ export default function MarkdownEditor({
   const client = useClient();
 
   const save = async function (data) {
+    const fileCompressionOptions = {
+      maxSizeMB: 1, // (default: Number.POSITIVE_INFINITY),
+      maxWidthOrHeight: 1280,
+    };
+    const compressedFile = await imageCompression(data, fileCompressionOptions);
     const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
 
     try {
-      await storagePath.put(data);
+      await storagePath.put(compressedFile);
     } catch (error) {
       console.error(error);
       // TODO: handle errors

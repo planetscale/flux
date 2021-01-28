@@ -21,6 +21,7 @@
     "@slack/web-api": "^6.0.0",
     "@urql/exchange-multipart-fetch": "^0.1.11",
     "apollo-server-micro": "^2.19.0",
+    "browser-image-compression": "^1.0.14",
     "cors": "^2.8.5",
     "firebase": "^8.1.1",
     "firebase-admin": "^9.4.2",
