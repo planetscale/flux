@@ -32,6 +32,7 @@ function App({ Component, pageProps }) {
           href="https://fonts.gstatic.com"
           crossOrigin="true"
         />
+        <link rel="manifest" href="/manifest.json"></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap"
           rel="preload"
