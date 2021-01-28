@@ -42,36 +42,26 @@ const DotSeperator = styled.div`
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 8px 0 0;
-
-  &:before {
-    content: ' ';
-    display: inline-block;
-    position: absolute;
-    height: 0.5em;
-    width: 0.5em;
-    background-color: var(--accent);
-    top: calc(44% - 0.25em);
-    left: -1em;
-    border-radius: 50%;
-  }
+  margin: 2em 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--background);
 
   &.invalid {
-    &:before {
-      background-color: red;
-    }
+    border-color: red;
   }
 
   &.valid {
-    &:before {
-      background-color: green;
-    }
+    border-color: var(--background);
   }
 
   .chars-left {
     display: flex;
+    flex-direction: row;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+      monospace;
     align-items: flex-end;
     color: var(--accent);
+    font-size: 12px;
   }
 `;
 
