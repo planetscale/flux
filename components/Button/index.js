@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { media } from '../../pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
@@ -106,6 +107,11 @@ export const ButtonImage = styled(ButtonBase)`
     width: 100%;
     height: auto;
   }
+
+  ${media.phone`
+    width: 32px;
+    height: 32px;
+  `}
 `;
 
 export const ButtonTag = styled(ButtonBase)`

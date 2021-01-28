@@ -29,71 +29,72 @@ const Wrapper = styled.div`
   background-color: var(--background);
 
   ${media.phone`
-    align-items: stretch;
     flex-direction: column;
-    padding: 0;
+    align-items: stretch;
+    padding: 1em;
   `}
-
-  > div:first-of-type {
-    font-size: 24px;
-    line-height: 38px;
-
-    > div {
-      display: flex;
-      display: inline-block;
-      padding: 0 10px 0 0;
-      position: relative;
-      height: 38px;
-      text-transform: capitalize;
-
-      &:first-of-type {
-        ${ButtonLink} {
-          font-family: 'Raleway', sans-serif;
-          text-transform: uppercase;
-          font-style: italic;
-          font-weight: 900;
-          font-size: 24px;
-        }
-      }
-    }
-  }
 `;
 
-const SlasherFlick = styled.div`
+const BreadcrumbContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const Logo = styled(ButtonLink)`
+  font-size: 24px;
+  margin-right: 8px;
+  border-radius: unset;
+  padding: 0 4px;
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 900;
+  background: linear-gradient(90deg, #5b71b3 0%, #c56a86 138.77%), #000000;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 
   ${media.phone`
-    padding: 30px;
+    font-size: 1em;
   `}
-
-  > ${ButtonLink} {
-    font-size: 24px;
-    margin-right: 8px;
-    border-radius: unset;
-    padding: 0 4px;
-
-    &:first-of-type {
-      font-family: 'Raleway', sans-serif;
-      text-transform: uppercase;
-      font-style: italic;
-      font-weight: 900;
-      background: linear-gradient(90deg, #5b71b3 0%, #c56a86 138.77%), #000000;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      -moz-background-clip: text;
-      -moz-text-fill-color: transparent;
-    }
-  }
 `;
 
 const ForwardSlash = styled.div`
   color: var(--accent);
 `;
 
-const SubHeader = styled.div`
+const Breadcrumb = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-size: 24px;
+
+  > ${ForwardSlash} {
+    margin: 0 0.5em;
+  }
+
+  > ${ButtonLink} {
+    border-radius: unset;
+    padding: 0 4px;
+    font-size: 24px;
+  }
+
+  ${media.phone`
+    font-size: 1em;
+
+    > ${ForwardSlash}:first-of-type {
+      margin-left: 0;
+    }
+
+    > ${ButtonLink} {
+      font-size: 1em;
+    }
+  `}
+`;
+
+const PageTitle = styled.div`
   color: var(--text);
 `;
 
@@ -103,14 +104,15 @@ const ActionsWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
 
-  ${media.phone`
-    padding: 30px;
-    border-top: 1px solid var(--accent2);
-  `}
-
   ${ButtonSpecial} {
     margin: 0 12px 0 0;
   }
+
+  ${media.phone`
+    border-top: 1px solid var(--accent2);
+    margin-top: 1em;
+    padding-top: 1em;
+  `}
 `;
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
@@ -147,18 +149,20 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
   return (
     <Wrapper>
-      <SlasherFlick>
-        <ButtonLink onClick={redirectToHome}>flux</ButtonLink>
-        <ForwardSlash>/</ForwardSlash>
-        <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
-        <ForwardSlash>/</ForwardSlash>
-        <SubHeader>{subHeader}</SubHeader>
-        {query !== '' && (
-          <>
-            <ForwardSlash>/</ForwardSlash>
-            <SubHeader>{query}</SubHeader>
-          </>
-        )}
+      <BreadcrumbContainer>
+        <Logo onClick={redirectToHome}>flux</Logo>
+        <Breadcrumb>
+          <ForwardSlash>/</ForwardSlash>
+          <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
+          <ForwardSlash>/</ForwardSlash>
+          <PageTitle>{subHeader}</PageTitle>
+          {query !== '' && (
+            <>
+              <ForwardSlash>/</ForwardSlash>
+              <PageTitle>{query}</PageTitle>
+            </>
+          )}
+        </Breadcrumb>
 
         {selectedTag && (
           <ButtonTag
@@ -169,7 +173,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
             <span>#{selectedTag.toLowerCase()}</span>
           </ButtonTag>
         )}
-      </SlasherFlick>
+      </BreadcrumbContainer>
       <ActionsWrapper>
         {notNewPostPage() && (
           <ButtonSpecial type="button" onClick={redirectToNew}>

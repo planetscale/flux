@@ -11,46 +11,57 @@ import Select from 'react-select';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
+import { media } from 'pageUtils/post/theme';
 
 const TimeAndTags = styled.div`
   color: var(--text);
   display: flex;
   align-items: center;
+  margin-bottom: 1em;
+
+  ${media.phone`
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--accent2);
+  `}
+`;
+
+const MetaTime = styled.div`
+  ${media.phone`
+    margin-bottom: 1em;
+  `}
+`;
+
+const DotSeperator = styled.div`
+  ${media.phone`
+    display: none;
+  `}
 `;
 
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 8px 0 0;
-
-  &:before {
-    content: ' ';
-    display: inline-block;
-    position: absolute;
-    height: 0.5em;
-    width: 0.5em;
-    background-color: var(--accent);
-    top: calc(44% - 0.25em);
-    left: -1em;
-    border-radius: 50%;
-  }
+  margin: 2em 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--background);
 
   &.invalid {
-    &:before {
-      background-color: red;
-    }
+    border-color: red;
   }
 
   &.valid {
-    &:before {
-      background-color: green;
-    }
+    border-color: var(--background);
   }
 
   .chars-left {
     display: flex;
+    flex-direction: row;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+      monospace;
     align-items: flex-end;
     color: var(--accent);
+    font-size: 12px;
   }
 `;
 
@@ -323,7 +334,8 @@ export default function NewPost() {
     <PageWrapper>
       <Post>
         <TimeAndTags>
-          <div>{state.dateTime}&nbsp; &middot; &nbsp;</div>
+          <MetaTime>{state.dateTime}</MetaTime>
+          <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
           <div>
             <Select
               isClearable={true}
