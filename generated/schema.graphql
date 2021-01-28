@@ -185,7 +185,7 @@ input LensWhereUniqueInput {
 }
 
 type Mutation {
-  addStar(postId: Int, userId: Int): Star
+  addStar(postId: Int, replyId: Int, userId: Int): Star
   createOneLens(data: LensCreateInput!): Lens!
   createOneOrg(data: OrgCreateInput!): Org!
   createOneReply(data: ReplyCreateInput!): Reply!
@@ -753,6 +753,7 @@ type Reply {
   id: Int!
   parentId: Int
   post: Post!
+  stars(after: StarWhereUniqueInput, before: StarWhereUniqueInput, first: Int, last: Int): [Star!]!
 }
 
 input ReplyCreateInput {
@@ -761,6 +762,7 @@ input ReplyCreateInput {
   createdAt: DateTime
   parentId: Int
   post: PostCreateOneWithoutRepliesInput!
+  stars: StarCreateManyWithoutReplyInput
 }
 
 input ReplyCreateManyWithoutAuthorInput {
@@ -775,6 +777,12 @@ input ReplyCreateManyWithoutPostInput {
   create: [ReplyCreateWithoutPostInput!]
 }
 
+input ReplyCreateOneWithoutStarsInput {
+  connect: ReplyWhereUniqueInput
+  connectOrCreate: ReplyCreateOrConnectWithoutstarsInput
+  create: ReplyCreateWithoutStarsInput
+}
+
 input ReplyCreateOrConnectWithoutauthorInput {
   create: ReplyCreateWithoutAuthorInput!
   where: ReplyWhereUniqueInput!
@@ -785,11 +793,17 @@ input ReplyCreateOrConnectWithoutpostInput {
   where: ReplyWhereUniqueInput!
 }
 
+input ReplyCreateOrConnectWithoutstarsInput {
+  create: ReplyCreateWithoutStarsInput!
+  where: ReplyWhereUniqueInput!
+}
+
 input ReplyCreateWithoutAuthorInput {
   content: String!
   createdAt: DateTime
   parentId: Int
   post: PostCreateOneWithoutRepliesInput!
+  stars: StarCreateManyWithoutReplyInput
 }
 
 input ReplyCreateWithoutPostInput {
@@ -797,6 +811,15 @@ input ReplyCreateWithoutPostInput {
   content: String!
   createdAt: DateTime
   parentId: Int
+  stars: StarCreateManyWithoutReplyInput
+}
+
+input ReplyCreateWithoutStarsInput {
+  author: UserCreateOneWithoutReplyInput!
+  content: String!
+  createdAt: DateTime
+  parentId: Int
+  post: PostCreateOneWithoutRepliesInput!
 }
 
 input ReplyScalarWhereInput {
@@ -817,6 +840,7 @@ input ReplyUpdateInput {
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   parentId: NullableIntFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
+  stars: StarUpdateManyWithoutReplyInput
 }
 
 input ReplyUpdateManyMutationInput {
@@ -861,11 +885,22 @@ input ReplyUpdateManyWithWhereWithoutPostInput {
   where: ReplyScalarWhereInput!
 }
 
+input ReplyUpdateOneWithoutStarsInput {
+  connect: ReplyWhereUniqueInput
+  connectOrCreate: ReplyCreateOrConnectWithoutstarsInput
+  create: ReplyCreateWithoutStarsInput
+  delete: Boolean
+  disconnect: Boolean
+  update: ReplyUpdateWithoutStarsInput
+  upsert: ReplyUpsertWithoutStarsInput
+}
+
 input ReplyUpdateWithoutAuthorInput {
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   parentId: NullableIntFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutRepliesInput
+  stars: StarUpdateManyWithoutReplyInput
 }
 
 input ReplyUpdateWithoutPostInput {
@@ -873,6 +908,15 @@ input ReplyUpdateWithoutPostInput {
   content: StringFieldUpdateOperationsInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   parentId: NullableIntFieldUpdateOperationsInput
+  stars: StarUpdateManyWithoutReplyInput
+}
+
+input ReplyUpdateWithoutStarsInput {
+  author: UserUpdateOneRequiredWithoutReplyInput
+  content: StringFieldUpdateOperationsInput
+  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  parentId: NullableIntFieldUpdateOperationsInput
+  post: PostUpdateOneRequiredWithoutRepliesInput
 }
 
 input ReplyUpdateWithWhereUniqueWithoutAuthorInput {
@@ -883,6 +927,11 @@ input ReplyUpdateWithWhereUniqueWithoutAuthorInput {
 input ReplyUpdateWithWhereUniqueWithoutPostInput {
   data: ReplyUpdateWithoutPostInput!
   where: ReplyWhereUniqueInput!
+}
+
+input ReplyUpsertWithoutStarsInput {
+  create: ReplyCreateWithoutStarsInput!
+  update: ReplyUpdateWithoutStarsInput!
 }
 
 input ReplyUpsertWithWhereUniqueWithoutAuthorInput {
@@ -915,11 +964,13 @@ type SlackMember {
 type Star {
   id: Int!
   post: Post!
+  reply: Reply
   user: User!
 }
 
 input StarCreateInput {
   post: PostCreateOneWithoutStarsInput!
+  reply: ReplyCreateOneWithoutStarsInput
   shining: Boolean
   user: UserCreateOneWithoutStarInput!
 }
@@ -928,6 +979,12 @@ input StarCreateManyWithoutPostInput {
   connect: [StarWhereUniqueInput!]
   connectOrCreate: [StarCreateOrConnectWithoutpostInput!]
   create: [StarCreateWithoutPostInput!]
+}
+
+input StarCreateManyWithoutReplyInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutreplyInput!]
+  create: [StarCreateWithoutReplyInput!]
 }
 
 input StarCreateManyWithoutUserInput {
@@ -941,18 +998,31 @@ input StarCreateOrConnectWithoutpostInput {
   where: StarWhereUniqueInput!
 }
 
+input StarCreateOrConnectWithoutreplyInput {
+  create: StarCreateWithoutReplyInput!
+  where: StarWhereUniqueInput!
+}
+
 input StarCreateOrConnectWithoutuserInput {
   create: StarCreateWithoutUserInput!
   where: StarWhereUniqueInput!
 }
 
 input StarCreateWithoutPostInput {
+  reply: ReplyCreateOneWithoutStarsInput
+  shining: Boolean
+  user: UserCreateOneWithoutStarInput!
+}
+
+input StarCreateWithoutReplyInput {
+  post: PostCreateOneWithoutStarsInput!
   shining: Boolean
   user: UserCreateOneWithoutStarInput!
 }
 
 input StarCreateWithoutUserInput {
   post: PostCreateOneWithoutStarsInput!
+  reply: ReplyCreateOneWithoutStarsInput
   shining: Boolean
 }
 
@@ -962,6 +1032,7 @@ input StarScalarWhereInput {
   NOT: [StarScalarWhereInput!]
   OR: [StarScalarWhereInput!]
   postId: IntFilter
+  replyId: IntNullableFilter
   shining: BoolNullableFilter
   userId: IntFilter
 }
@@ -983,6 +1054,19 @@ input StarUpdateManyWithoutPostInput {
   upsert: [StarUpsertWithWhereUniqueWithoutPostInput!]
 }
 
+input StarUpdateManyWithoutReplyInput {
+  connect: [StarWhereUniqueInput!]
+  connectOrCreate: [StarCreateOrConnectWithoutreplyInput!]
+  create: [StarCreateWithoutReplyInput!]
+  delete: [StarWhereUniqueInput!]
+  deleteMany: [StarScalarWhereInput!]
+  disconnect: [StarWhereUniqueInput!]
+  set: [StarWhereUniqueInput!]
+  update: [StarUpdateWithWhereUniqueWithoutReplyInput!]
+  updateMany: [StarUpdateManyWithWhereWithoutReplyInput!]
+  upsert: [StarUpsertWithWhereUniqueWithoutReplyInput!]
+}
+
 input StarUpdateManyWithoutUserInput {
   connect: [StarWhereUniqueInput!]
   connectOrCreate: [StarCreateOrConnectWithoutuserInput!]
@@ -1001,23 +1085,41 @@ input StarUpdateManyWithWhereWithoutPostInput {
   where: StarScalarWhereInput!
 }
 
+input StarUpdateManyWithWhereWithoutReplyInput {
+  data: StarUpdateManyMutationInput!
+  where: StarScalarWhereInput!
+}
+
 input StarUpdateManyWithWhereWithoutUserInput {
   data: StarUpdateManyMutationInput!
   where: StarScalarWhereInput!
 }
 
 input StarUpdateWithoutPostInput {
+  reply: ReplyUpdateOneWithoutStarsInput
+  shining: NullableBoolFieldUpdateOperationsInput
+  user: UserUpdateOneRequiredWithoutStarInput
+}
+
+input StarUpdateWithoutReplyInput {
+  post: PostUpdateOneRequiredWithoutStarsInput
   shining: NullableBoolFieldUpdateOperationsInput
   user: UserUpdateOneRequiredWithoutStarInput
 }
 
 input StarUpdateWithoutUserInput {
   post: PostUpdateOneRequiredWithoutStarsInput
+  reply: ReplyUpdateOneWithoutStarsInput
   shining: NullableBoolFieldUpdateOperationsInput
 }
 
 input StarUpdateWithWhereUniqueWithoutPostInput {
   data: StarUpdateWithoutPostInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarUpdateWithWhereUniqueWithoutReplyInput {
+  data: StarUpdateWithoutReplyInput!
   where: StarWhereUniqueInput!
 }
 
@@ -1029,6 +1131,12 @@ input StarUpdateWithWhereUniqueWithoutUserInput {
 input StarUpsertWithWhereUniqueWithoutPostInput {
   create: StarCreateWithoutPostInput!
   update: StarUpdateWithoutPostInput!
+  where: StarWhereUniqueInput!
+}
+
+input StarUpsertWithWhereUniqueWithoutReplyInput {
+  create: StarCreateWithoutReplyInput!
+  update: StarUpdateWithoutReplyInput!
   where: StarWhereUniqueInput!
 }
 
