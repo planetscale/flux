@@ -17,10 +17,13 @@ const TimeAndTags = styled.div`
   color: var(--text);
   display: flex;
   align-items: center;
+  margin-bottom: 1em;
 
   ${media.phone`
     flex-direction: column;
     align-items: flex-start;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--accent2);
   `}
 `;
 
