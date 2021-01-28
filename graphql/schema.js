@@ -156,6 +156,7 @@ const Star = objectType({
     t.model.id();
     t.model.post();
     t.model.user();
+    t.model.reply();
   },
 });
 
@@ -168,6 +169,7 @@ const Reply = objectType({
     t.model.author();
     t.model.content();
     t.model.parentId();
+    t.model.stars();
   },
 });
 
@@ -308,12 +310,14 @@ const Mutation = mutationType({
       type: 'Star',
       args: {
         postId: intArg(),
+        replyId: intArg(),
         userId: intArg(),
       },
       async resolve(_root, args, ctx) {
         const star = await ctx.prisma.star.findFirst({
           where: {
             postId: args.postId,
+            replyId: args.replyId,
             userId: args.userId,
           },
         });
@@ -323,7 +327,7 @@ const Mutation = mutationType({
           return {};
         }
 
-        return ctx.prisma.star.create({
+        const params = {
           data: {
             post: {
               connect: {
@@ -336,7 +340,16 @@ const Mutation = mutationType({
               },
             },
           },
-        });
+        };
+        if (args.replyId !== undefined) {
+          params.data.reply = {
+            connect: {
+              id: args.replyId,
+            },
+          };
+        }
+
+        return ctx.prisma.star.create(params);
       },
     });
     t.crud.createOneTag();

@@ -25,6 +25,9 @@ const postDataQuery = gql`
         content
         createdAt
         parentId
+        stars {
+          id
+        }
         author {
           id
           username
@@ -97,8 +100,8 @@ const updateReplyMutation = gql`
 `;
 
 const createStarMutation = gql`
-  mutation($postId: Int!, $userId: Int!) {
-    addStar(postId: $postId, userId: $userId) {
+  mutation($postId: Int!, $replyId: Int, $userId: Int!) {
+    addStar(postId: $postId, replyId: $replyId, userId: $userId) {
       id
     }
   }
