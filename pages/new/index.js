@@ -11,11 +11,23 @@ import Select from 'react-select';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
+import { media } from 'pageUtils/post/theme';
 
 const TimeAndTags = styled.div`
   color: var(--text);
   display: flex;
   align-items: center;
+
+  ${media.phone`
+    flex-direction: column;
+    align-items: flex-start;
+  `}
+`;
+
+const DotSeperator = styled.div`
+  ${media.phone`
+    display: none;
+  `}
 `;
 
 const TitleInputWrapper = styled.div`
@@ -323,7 +335,8 @@ export default function NewPost() {
     <PageWrapper>
       <Post>
         <TimeAndTags>
-          <div>{state.dateTime}&nbsp; &middot; &nbsp;</div>
+          <div>{state.dateTime}</div>
+          <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
           <div>
             <Select
               isClearable={true}

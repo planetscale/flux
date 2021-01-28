@@ -11,6 +11,7 @@ const PageWrapper = styled.div`
   align-items: stretch;
 
   ${media.phone`
+    padding: 42px;
     width: 100%;
   `}
 `;
