@@ -27,6 +27,9 @@ const postDataQuery = gql`
         parentId
         stars {
           id
+          user {
+            id
+          }
         }
         author {
           id
@@ -40,6 +43,9 @@ const postDataQuery = gql`
       stars {
         id
         user {
+          id
+        }
+        reply {
           id
         }
       }

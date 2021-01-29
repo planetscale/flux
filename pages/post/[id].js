@@ -146,7 +146,9 @@ export default function PostPage() {
 
       updatePostState(draft => {
         draft.replies = replyMap;
-        draft.stars = stars;
+        // FIXME: Manually filtering out stars for replies since this is for the top level post.
+        // This is bad, we should not even be querying them but I'm not quite sure how to do that in prisma and need quick fix.
+        draft.stars = stars.filter(s => s.reply === null);
       });
     }
   }, [postDataResult]);
@@ -254,7 +256,7 @@ export default function PostPage() {
       try {
         const res = await runCreateStarMutation({
           postId: Number(router.query?.id),
-          replyId: Number(replyId) || undefined,
+          replyId: Number(replyId) || null,
           userId: userId,
         });
         if (res.error) {
