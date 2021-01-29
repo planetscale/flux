@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
+import Editor from 'components/Editor';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -105,10 +106,16 @@ const ActionItems = styled.div`
 `;
 
 const EditorWrapper = styled.div`
-  margin: 32px 0 0 0;
-  padding: 2em 0;
+  display: flex;
+  flex-direction: column;
   height: fit-content;
   border-top: 1px solid var(--accent2);
+
+  > .slate-Toolbar {
+    margin: 0;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--accent2);
+  }
 `;
 
 const lensesQuery = gql`
@@ -390,10 +397,11 @@ export default function NewPost() {
           </div>
         </TitleInputWrapper>
         <EditorWrapper>
-          <MarkdownEditor
+          {/* <MarkdownEditor
             content={state.content}
             handleContentChange={handleContentChange}
-          ></MarkdownEditor>
+          ></MarkdownEditor> */}
+          <Editor></Editor>
         </EditorWrapper>
         <ActionItems>
           <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
