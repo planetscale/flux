@@ -455,7 +455,7 @@ export default function PostPage() {
     updatePostState(draft => {
       draft.replies[node.id] = {
         replies: {},
-        stars: {},
+        stars: [],
         children: [],
         ...matchedNode,
         ...node,
