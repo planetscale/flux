@@ -113,3 +113,18 @@ export const createList = (items, { splitSeparator = '`' }) => {
     },
   ];
 };
+
+export const initialValueAutoformat = [
+  {
+    children: [
+      {
+        type: options.p.type,
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+    ],
+  },
+];

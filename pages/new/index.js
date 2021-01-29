@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
-import Editor from 'components/Editor';
+import { Example } from 'components/Editor';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -401,7 +401,7 @@ export default function NewPost() {
             content={state.content}
             handleContentChange={handleContentChange}
           ></MarkdownEditor> */}
-          <Editor></Editor>
+          <Example></Example>
         </EditorWrapper>
         <ActionItems>
           <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
