@@ -47,7 +47,9 @@ class EditorMarksExtension extends Extension {
   }
 
   parseMarkdown() {
-    return;
+    return {
+      mark: this.name,
+    };
   }
 
   commands({ type }) {
@@ -78,13 +80,18 @@ class EditorNodesExtension extends Extension {
   get markdownToken() {
     return '';
   }
-
   toMarkdown(state, node) {
-    return {};
+    state.write(`${node.attrs.id}`);
   }
-
   parseMarkdown() {
-    return;
+    // TODO: make parseMarkdown work, need to read source code
+
+    return {
+      block: this.name,
+      getAttrs: token => {
+        // do something here
+      },
+    };
   }
 }
 
@@ -102,7 +109,11 @@ for (let marksIndex = 0; marksIndex < marksRaw.length; marksIndex += 2) {
 }
 
 let nodes = [];
-for (let nodesIndex = 0; nodesIndex < nodesRaw.length; nodesIndex += 2) {
+for (
+  let nodesIndex = nodesRaw.length - 4;
+  nodesIndex < nodesRaw.length;
+  nodesIndex += 2
+) {
   nodes.push(
     new EditorNodesExtension({
       name: nodesRaw[nodesIndex],
@@ -151,7 +162,6 @@ const getPlugins = populateUsers => {
       }
     },
   });
-
   return [
     new EditorPluginsExtension({ plugins: [mentionPlugin] }),
     ...marks,
