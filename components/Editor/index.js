@@ -83,7 +83,6 @@ export const Example = () => {
 
   const createReactEditor = () => () => {
     const [value, setValue] = useState(initialValueAutoformat);
-
     const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
     return (
