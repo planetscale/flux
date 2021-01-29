@@ -210,7 +210,7 @@ export default function MarkdownEditor({
         onChange={handleContentChange}
         theme={lightTheme}
         readOnly={readOnly}
-        extensions={getPlugins(populateUsers)}
+        // extensions={readOnly ? undefined : getPlugins(populateUsers)}
       />
     </Wrapper>
   );
