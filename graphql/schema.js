@@ -341,7 +341,7 @@ const Mutation = mutationType({
             },
           },
         };
-        if (args.replyId !== undefined) {
+        if (args.replyId !== null) {
           params.data.reply = {
             connect: {
               id: args.replyId,
