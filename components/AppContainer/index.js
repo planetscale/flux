@@ -12,7 +12,7 @@ import AppContentWrapper from './AppContentWrapper';
 import { useRouter } from 'next/router';
 import { TopBarContextProvider } from 'state/topBar';
 
-const GRAPHQL_ENDPOINT = `/api/graphql`;
+const GRAPHQL_ENDPOINT = `/api`;
 
 function AppContainer({ children }) {
   const router = useRouter();
