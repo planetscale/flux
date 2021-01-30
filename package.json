@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.1.1",
@@ -55,6 +56,12 @@
   "devDependencies": {
     "@emotion/babel-plugin": "^11.1.2",
     "@next/bundle-analyzer": "^10.0.5",
+    "@testing-library/dom": "^7.29.4",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
+    "babel-jest": "^26.6.3",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
     "prettier": "2.2.1"
   }
 }
