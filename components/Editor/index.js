@@ -16,6 +16,10 @@ import {
   StrikethroughPlugin,
   withAutoformat,
   withList,
+  MentionPlugin,
+  MentionSelect,
+  useMention,
+  withInlineVoid,
 } from '@udecode/slate-plugins';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -28,16 +32,7 @@ import {
   initialValueAutoformat,
 } from './initialValues';
 
-const withPlugins = [
-  withReact,
-  withHistory,
-  withList(options),
-  withAutoformat({
-    rules: autoformatRules,
-  }),
-];
-
-export const Example = () => {
+export const SlateEditor = ({ users }) => {
   const plugins = [
     ParagraphPlugin(options),
     BoldPlugin(),
@@ -79,29 +74,59 @@ export const Example = () => {
         },
       ],
     }),
+    MentionPlugin(),
   ];
 
-  const createReactEditor = () => () => {
-    const [value, setValue] = useState(initialValueAutoformat);
-    const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
+  const withPlugins = [
+    withReact,
+    withHistory,
+    withList(options),
+    withAutoformat({
+      rules: autoformatRules,
+    }),
+    withInlineVoid({ plugins }),
+  ];
 
-    return (
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={newValue => setValue(newValue)}
-      >
-        <EditablePlugins
-          plugins={plugins}
-          placeholder="Write some markdown..."
-          spellCheck
-          autoFocus
-        />
-      </Slate>
-    );
-  };
+  const [value, setValue] = useState(initialValueAutoformat);
+  const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
-  const Editor = createReactEditor();
+  const {
+    onAddMention,
+    onChangeMention,
+    onKeyDownMention,
+    search,
+    index,
+    target,
+    values,
+  } = useMention(users, {
+    maxSuggestions: 10,
+    trigger: '@',
+  });
 
-  return <Editor />;
+  return (
+    <Slate
+      editor={editor}
+      value={value}
+      onChange={newValue => {
+        setValue(newValue);
+        onChangeMention(editor);
+      }}
+    >
+      <EditablePlugins
+        plugins={plugins}
+        placeholder="Start writing!"
+        onKeyDown={[onKeyDownMention]}
+        onKeyDownDeps={[index, search, target]}
+        spellCheck
+        autoFocus
+      />
+
+      <MentionSelect
+        at={target}
+        valueIndex={index}
+        options={values}
+        onClickMention={onAddMention}
+      />
+    </Slate>
+  );
 };

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
-import { Example } from 'components/Editor';
+import { SlateEditor } from 'components/Editor';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -337,6 +337,12 @@ export default function NewPost() {
     if (!title.value.length) return 'invalid';
   };
 
+  const demoUserList = [
+    { value: 'shawnw' },
+    { value: 'abhiv' },
+    { value: 'raunaqg' },
+  ];
+
   return (
     <PageWrapper>
       <Post>
@@ -401,7 +407,7 @@ export default function NewPost() {
             content={state.content}
             handleContentChange={handleContentChange}
           ></MarkdownEditor> */}
-          <Example></Example>
+          <SlateEditor users={demoUserList}></SlateEditor>
         </EditorWrapper>
         <ActionItems>
           <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
