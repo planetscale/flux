@@ -43,16 +43,17 @@ const DotSeperator = styled.div`
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 2em 0;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--background);
+  margin: 1em 0;
+  padding: 0.5em;
+  border-radius: 6px;
+  border: 1px solid var(--accent2);
 
   &.invalid {
     border-color: red;
   }
 
   &.valid {
-    border-color: var(--background);
+    border-color: var(--accent2);
   }
 
   .chars-left {
