@@ -57,6 +57,34 @@ const postDataQuery = gql`
   }
 `;
 
+const getAllUsers = gql`
+  query {
+    slackMembers {
+      id
+      realName
+      displayName
+    }
+  }
+`;
+
+const getAllLenses = gql`
+  query {
+    lenses {
+      id
+      name
+    }
+  }
+`;
+
+const getAllChannels = gql`
+  query {
+    channels {
+      id
+      name
+    }
+  }
+`;
+
 const createReplyMutation = gql`
   mutation($content: String!, $postId: Int!, $userId: Int!, $parentId: Int) {
     createOneReply(
@@ -139,4 +167,7 @@ export {
   updateReplyMutation,
   updatePostMutation,
   deleteStarMutation,
+  getAllUsers,
+  getAllLenses,
+  getAllChannels,
 };

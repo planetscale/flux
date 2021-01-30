@@ -25,4 +25,4 @@ const handler = apolloServer.createHandler({
   path: '/api/graphql',
 });
 
-export default cors(handler);
+module.exports = cors(handler);

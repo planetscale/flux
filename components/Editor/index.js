@@ -90,17 +90,14 @@ export const SlateEditor = ({ users }) => {
   const [value, setValue] = useState(initialValueAutoformat);
   const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
-  const {
-    onAddMention,
-    onChangeMention,
-    onKeyDownMention,
-    search,
-    index,
-    target,
-    values,
-  } = useMention(users, {
+  const userMention = useMention(users, {
     maxSuggestions: 10,
     trigger: '@',
+  });
+
+  const chanMention = useMention(users, {
+    maxSuggestions: 10,
+    trigger: '#',
   });
 
   return (
@@ -109,23 +106,38 @@ export const SlateEditor = ({ users }) => {
       value={value}
       onChange={newValue => {
         setValue(newValue);
-        onChangeMention(editor);
+        userMention.onChangeMention(editor);
+        chanMention.onChangeMention(editor);
       }}
     >
       <EditablePlugins
         plugins={plugins}
         placeholder="Start writing!"
-        onKeyDown={[onKeyDownMention]}
-        onKeyDownDeps={[index, search, target]}
+        onKeyDown={[userMention.onKeyDownMention, chanMention.onKeyDownMention]}
+        onKeyDownDeps={[
+          userMention.index,
+          userMention.search,
+          userMention.target,
+          chanMention.index,
+          chanMention.search,
+          chanMention.target,
+        ]}
         spellCheck
         autoFocus
       />
 
       <MentionSelect
-        at={target}
-        valueIndex={index}
-        options={values}
-        onClickMention={onAddMention}
+        at={userMention.target}
+        valueIndex={userMention.index}
+        options={userMention.values}
+        onClickMention={userMention.onAddMention}
+      />
+
+      <MentionSelect
+        at={chanMention.target}
+        valueIndex={chanMention.index}
+        options={chanMention.values}
+        onClickMention={chanMention.onAddMention}
       />
     </Slate>
   );

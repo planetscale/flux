@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
-import MarkdownEditor from 'components/MarkdownEditor';
 import { SlateEditor } from 'components/Editor';
-import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
@@ -13,6 +11,11 @@ import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
+import {
+  getAllUsers,
+  getAllLenses,
+  getAllChannels,
+} from 'pageUtils/post/queries';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -119,24 +122,6 @@ const EditorWrapper = styled.div`
   }
 `;
 
-const lensesQuery = gql`
-  query {
-    lenses {
-      id
-      name
-    }
-  }
-`;
-
-const channelsQuery = gql`
-  query {
-    channels {
-      id
-      name
-    }
-  }
-`;
-
 const customStyles = {
   container: provided => ({
     ...provided,
@@ -212,15 +197,32 @@ export default function NewPost() {
     selectedLens: '',
     selectedTag: null,
     tagOptions: [],
+    allUsers: [],
   });
 
-  const [lensesResult, runLensesQuery] = useQuery({
-    query: lensesQuery,
+  const [lensesResult] = useQuery({
+    query: getAllLenses,
   });
 
-  const [channelsResult, runChannelsQuery] = useQuery({
-    query: channelsQuery,
+  const [channelsResult] = useQuery({
+    query: getAllChannels,
   });
+
+  const [getAllUsersResult] = useQuery({
+    query: getAllUsers,
+  });
+
+  useEffect(() => {
+    if (getAllUsersResult.data?.slackMembers) {
+      const allUsers = getAllUsersResult.data?.slackMembers.map(member => ({
+        value: member.displayName,
+      }));
+
+      updateState(draft => {
+        draft.allUsers = allUsers;
+      });
+    }
+  }, [getAllUsersResult.data?.slackMembers]);
 
   useEffect(() => {
     if (lensesResult.data?.lenses) {
@@ -338,12 +340,6 @@ export default function NewPost() {
     if (!title.value.length) return 'invalid';
   };
 
-  const demoUserList = [
-    { value: 'shawnw' },
-    { value: 'abhiv' },
-    { value: 'raunaqg' },
-  ];
-
   return (
     <PageWrapper>
       <Post>
@@ -404,11 +400,7 @@ export default function NewPost() {
           </div>
         </TitleInputWrapper>
         <EditorWrapper>
-          {/* <MarkdownEditor
-            content={state.content}
-            handleContentChange={handleContentChange}
-          ></MarkdownEditor> */}
-          <SlateEditor users={demoUserList}></SlateEditor>
+          <SlateEditor users={state.allUsers}></SlateEditor>
         </EditorWrapper>
         <ActionItems>
           <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
