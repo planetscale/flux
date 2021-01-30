@@ -58,10 +58,6 @@ export const autoformatRules = [
     },
   },
   {
-    type: options.todo_li.type,
-    markup: ['[]'],
-  },
-  {
     type: options.blockquote.type,
     markup: ['>'],
     preFormat,
