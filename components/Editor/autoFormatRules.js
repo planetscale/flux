@@ -12,7 +12,7 @@ const preFormat = editor => unwrapList(editor, options);
 
 export const autoformatRules = [
   {
-    type: options.h1.type,
+    type: options.h2.type,
     markup: '#',
     preFormat,
   },
