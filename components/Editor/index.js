@@ -95,11 +95,6 @@ export const SlateEditor = ({ users }) => {
     trigger: '@',
   });
 
-  const chanMention = useMention(users, {
-    maxSuggestions: 10,
-    trigger: '#',
-  });
-
   return (
     <Slate
       editor={editor}
@@ -107,20 +102,16 @@ export const SlateEditor = ({ users }) => {
       onChange={newValue => {
         setValue(newValue);
         userMention.onChangeMention(editor);
-        chanMention.onChangeMention(editor);
       }}
     >
       <EditablePlugins
         plugins={plugins}
         placeholder="Start writing!"
-        onKeyDown={[userMention.onKeyDownMention, chanMention.onKeyDownMention]}
+        onKeyDown={[userMention.onKeyDownMention]}
         onKeyDownDeps={[
           userMention.index,
           userMention.search,
           userMention.target,
-          chanMention.index,
-          chanMention.search,
-          chanMention.target,
         ]}
         spellCheck
         autoFocus
@@ -131,13 +122,6 @@ export const SlateEditor = ({ users }) => {
         valueIndex={userMention.index}
         options={userMention.values}
         onClickMention={userMention.onAddMention}
-      />
-
-      <MentionSelect
-        at={chanMention.target}
-        valueIndex={chanMention.index}
-        options={chanMention.values}
-        onClickMention={chanMention.onAddMention}
       />
     </Slate>
   );
