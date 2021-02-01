@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import PostList from 'components/PostList';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
@@ -32,27 +32,6 @@ const HomeWrapper = styled.div`
     width: 100%;
   `}
 `;
-
-// TODO: replace this hack with backend implementation
-function getLensPosts(lenses, subHeader) {
-  if (!lenses || lenses.length === 0) {
-    return [];
-  }
-
-  if (subHeader.toLowerCase() === 'posts') {
-    return lenses.flatMap(lens => lens.posts);
-  }
-
-  const lens = lenses.find(lens => {
-    return lens.name !== undefined && lens.name === subHeader;
-  });
-
-  if (lens === undefined) {
-    return [];
-  }
-
-  return lens.posts;
-}
 
 const DEFAULT_PAGE_ADDEND = 10;
 
@@ -97,7 +76,7 @@ export default function Home({ href, ...props }) {
   );
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
-  const { subHeader, selectedTag } = useTopBarContext();
+  const { selectedTag } = useTopBarContext();
 
   useEffect(() => {
     if (user?.org?.name) {
