@@ -43,7 +43,7 @@ function AppContainer({ children }) {
 
   const updateToken = async user => {
     try {
-      const jwt = await user.getIdToken();
+      const jwt = await user.getIdToken(true);
       setToken(jwt);
       setDefaultFetchHeaders({
         authorization: jwt ? `Bearer ${jwt}` : '',
