@@ -9,8 +9,12 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
 
-const fetcher = async (url, last, before, _) => {
-  const response = await fetch(url, {
+const fetcher = async (url, auth, last, before, _) => {
+  const params = new URLSearchParams({
+    last,
+    before,
+  });
+  const response = await fetch(`${url}?${params}`, {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -62,7 +66,7 @@ export default function Home({ href, ...props }) {
     forceFetch: 0,
   });
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     [
       '/api/get-posts',
       defaultFetchHeaders.authorization,
@@ -74,7 +78,14 @@ export default function Home({ href, ...props }) {
     {
       onSuccess: data => {
         const mappedPosts = data.reduce((acc, curr) => {
-          acc[curr.id] = { ...curr };
+          // FIXME: Update when PostList is updated with new format
+          acc[curr.id] = {
+            ...curr,
+            tag: { name: curr.tagName },
+            author: { displayName: curr.authorName },
+          };
+          delete acc[curr.id].tagName;
+          delete acc[curr.id].authorName;
           return acc;
         }, {});
 
@@ -87,7 +98,6 @@ export default function Home({ href, ...props }) {
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
   const { subHeader, selectedTag } = useTopBarContext();
-  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -99,7 +109,6 @@ export default function Home({ href, ...props }) {
 
   // This effect will handle triggering the fetchPost effect when the tag is changed.
   useEffect(() => {
-    setLoading(true);
     // The useBottomScrollListener will fire unecessarily if we are still scrolled to the bottom as we reset the post list.
     window.scrollTo(0, 0);
     setState(draft => {
@@ -112,7 +121,7 @@ export default function Home({ href, ...props }) {
   useBottomScrollListener(
     () => {
       const postLength = Object.keys(state.postList).length;
-      if (postLength && !isLoading) {
+      if (postLength && data) {
         setState(draft => {
           // We can garuntee the object is sorted by id ASC, so the oldest post is first element
           draft.before = Number(Object.keys(state.postList)[0]);
@@ -139,7 +148,7 @@ export default function Home({ href, ...props }) {
       <PostList
         posts={[
           ...Object.values(state.postList).reverse(),
-          ...(isLoading ? LOADING_POSTS : []),
+          ...(!data ? LOADING_POSTS : []),
         ]}
         handleTagClick={handleTagClick}
       />
