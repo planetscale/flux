@@ -6,7 +6,6 @@ const Icon = styled.span`
   height: 24px;
   background: var(--foreground);
   mask-size: cover;
-  z-index: 1;
 
   &.icon-system {
     mask: url('/icon_system.svg');
