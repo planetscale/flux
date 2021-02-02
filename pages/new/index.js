@@ -403,6 +403,7 @@ export default function NewPost() {
           <SlateEditor
             users={state.allUsers}
             onChange={handleContentChange}
+            readOnly={false}
           ></SlateEditor>
         </EditorWrapper>
         <ActionItems>

@@ -32,7 +32,7 @@ import {
   initialValueAutoformat,
 } from './initialValues';
 
-export const SlateEditor = ({ users, onChange }) => {
+export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
   const plugins = [
     ParagraphPlugin(options),
     BoldPlugin(),
@@ -98,7 +98,7 @@ export const SlateEditor = ({ users, onChange }) => {
   return (
     <Slate
       editor={editor}
-      value={value}
+      value={defaultValue ? defaultValue : value}
       onChange={newValue => {
         setValue(newValue);
         onChange(newValue);
@@ -106,6 +106,7 @@ export const SlateEditor = ({ users, onChange }) => {
       }}
     >
       <EditablePlugins
+        readOnly={readOnly || false}
         plugins={plugins}
         placeholder="Start writing!"
         onKeyDown={[userMention.onKeyDownMention]}

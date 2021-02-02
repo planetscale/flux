@@ -2,7 +2,6 @@ import {
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
-  MARK_STRIKETHROUGH,
   toggleList,
   unwrapList,
 } from '@udecode/slate-plugins';
@@ -89,12 +88,6 @@ export const autoformatRules = [
   {
     type: MARK_CODE,
     between: ['`', '`'],
-    mode: 'inline',
-    insertTrigger: true,
-  },
-  {
-    type: MARK_STRIKETHROUGH,
-    between: ['~~', '~~'],
     mode: 'inline',
     insertTrigger: true,
   },

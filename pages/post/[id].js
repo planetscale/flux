@@ -27,6 +27,7 @@ import {
   updateReplyMutation,
   updatePostMutation,
   deleteStarMutation,
+  getAllUsers,
 } from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
@@ -35,7 +36,9 @@ import { useImmer } from 'use-immer';
 import { original } from 'immer';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
+import { SlateEditor } from 'components/Editor';
 import { media } from 'pageUtils/post/theme';
+import { deserialize } from 'components/Editor/deserializeFromMarkdown';
 
 const Meta = styled.div`
   display: flex;
@@ -81,19 +84,23 @@ export default function PostPage() {
     replies: {},
     stars: [],
   });
+
   const [reply, setReply] = useState('');
 
   const [commentInputs, setCommentInputs] = useImmer({
     replies: {},
     edits: {},
   });
+
   const userContext = useUserContext();
+
   const [postDataResult, runPostDataQuery] = useQuery({
     query: postDataQuery,
     variables: {
       id: Number(router.query?.id),
     },
   });
+
   const {
     createdAt,
     title,
@@ -121,6 +128,22 @@ export default function PostPage() {
   const [updatePostResult, runUpdatePostMutation] = useMutation(
     updatePostMutation
   );
+
+  const [getAllUsersResult] = useQuery({
+    query: getAllUsers,
+  });
+
+  useEffect(() => {
+    if (getAllUsersResult.data?.slackMembers) {
+      const allUsers = getAllUsersResult.data?.slackMembers.map(member => ({
+        value: member.displayName,
+      }));
+
+      setPostEditState(draft => {
+        draft.allUsers = allUsers;
+      });
+    }
+  }, [getAllUsersResult.data?.slackMembers]);
 
   useEffect(() => {
     if (!postDataResult.fetching && !postDataResult.data?.post) {
@@ -443,9 +466,9 @@ export default function PostPage() {
     });
   };
 
-  const handlePostContentChange = getContent => {
+  const handlePostContentChange = content => {
     setPostEditState(draft => {
-      draft.content = getContent();
+      draft.content = content;
     });
   };
 
@@ -556,10 +579,12 @@ export default function PostPage() {
         <Content>
           {postEditState.isOpened ? (
             <>
-              <MarkdownEditor
-                content={postEditState.content}
-                handleContentChange={handlePostContentChange}
-              ></MarkdownEditor>
+              <SlateEditor
+                users={postEditState.allUsers}
+                onChange={handlePostContentChange}
+                readOnly={false}
+                defaultValue={deserialize(content).result}
+              ></SlateEditor>
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
@@ -570,7 +595,12 @@ export default function PostPage() {
               </ButtonMinor>
             </>
           ) : (
-            <MarkdownEditor content={content} readOnly={true}></MarkdownEditor>
+            <SlateEditor
+              users={postEditState.allUsers}
+              onChange={handlePostContentChange}
+              readOnly={true}
+              defaultValue={deserialize(content).result}
+            ></SlateEditor>
           )}
         </Content>
         <ActionBar>
