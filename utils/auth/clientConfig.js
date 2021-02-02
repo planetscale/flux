@@ -40,7 +40,7 @@ const logoutWithFirebase = () => {
 };
 
 const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
-  firebase.auth().onAuthStateChanged(function (user) {
+  firebase.auth().onIdTokenChanged(function (user) {
     if (!user) {
       noUserCallback?.();
     } else {
