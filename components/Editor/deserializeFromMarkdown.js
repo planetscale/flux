@@ -20,7 +20,8 @@ import {
 } from '@udecode/slate-plugins';
 
 export const deserialize = markdownContent => {
-  console.log(markdownContent);
+  console.log('input markdown:\n', markdownContent);
+
   var output = unified()
     .use(markdown)
     .use(slate, {
@@ -44,6 +45,6 @@ export const deserialize = markdownContent => {
       linkDestinationKey: ATTRIBUTE_LINK,
     })
     .processSync(markdownContent);
-  console.log(output.result);
+  console.log('output:\n', output.result);
   return output;
 };

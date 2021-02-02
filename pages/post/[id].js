@@ -41,6 +41,7 @@ import MarkdownEditor from 'components/MarkdownEditor';
 import { SlateEditor } from 'components/Editor';
 import { media } from 'pageUtils/post/theme';
 import { deserialize } from 'components/Editor/deserializeFromMarkdown';
+import { serialize } from 'components/Editor/serializeToMarkdown';
 
 const Meta = styled.div`
   display: flex;
@@ -179,7 +180,7 @@ export default function PostPage() {
   }, [postDataResult]);
 
   const handleReplyChange = content => {
-    setReply(content);
+    setReply(serialize(content[0]));
   };
 
   const handleCommentSubmit = async () => {
@@ -452,7 +453,7 @@ export default function PostPage() {
 
   const handlePostContentChange = content => {
     setPostEditState(draft => {
-      draft.content = content;
+      draft.content = serialize(content[0]);
     });
   };
 
@@ -493,6 +494,7 @@ export default function PostPage() {
   };
 
   const canSubmit = str => {
+    console.log(str);
     if (!str) return false;
     return str.trim().match(/[0-9a-zA-Z]+/);
   };
@@ -545,12 +547,16 @@ export default function PostPage() {
 
             {commentButtonState.editButtons[comment.id] ? (
               <Reply>
-                <MarkdownEditor
-                  content={commentInputs.edits[comment.id]}
-                  handleContentChange={getContent => {
-                    handleCommentEditsChange(getContent(), comment.id);
+                <SlateEditor
+                  users={postEditState.allUsers}
+                  onChange={content => {
+                    handleCommentEditsChange(serialize(content[0]), comment.id);
                   }}
-                ></MarkdownEditor>
+                  defaultValue={
+                    deserialize(commentInputs.edits[comment.id]).result
+                  }
+                  readOnly={false}
+                ></SlateEditor>
                 <ButtonMinor
                   data-comment-id={comment.id}
                   type="submit"
@@ -572,12 +578,19 @@ export default function PostPage() {
 
             {commentButtonState.replyButtons[comment.id] && (
               <Reply>
-                <MarkdownEditor
-                  content={commentInputs.replies[comment.id]}
-                  handleContentChange={getContent => {
-                    handleCommentRepliesChange(getContent(), comment.id);
+                <SlateEditor
+                  users={postEditState.allUsers}
+                  onChange={content => {
+                    handleCommentRepliesChange(
+                      serialize(content[0]),
+                      comment.id
+                    );
                   }}
-                ></MarkdownEditor>
+                  defaultValue={
+                    deserialize(commentInputs.replies[comment.id])?.result
+                  }
+                  readOnly={false}
+                ></SlateEditor>
                 <ButtonMinor
                   data-comment-id={comment.id}
                   type="submit"
@@ -680,10 +693,11 @@ export default function PostPage() {
       </CommentList>
 
       <Reply>
-        <MarkdownEditor
-          content={reply}
-          handleContentChange={handleReplyChange}
-        ></MarkdownEditor>
+        <SlateEditor
+          users={postEditState.allUsers}
+          onChange={handleReplyChange}
+          readOnly={false}
+        ></SlateEditor>
         <ButtonMinor
           type="submit"
           onClick={handleCommentSubmit}
