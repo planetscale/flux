@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "analyze": "ANALYZE=true npm run build",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "npm install outline-icons@1.23.0"
   },
   "dependencies": {
     "@emotion/react": "^11.1.1",
