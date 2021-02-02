@@ -78,7 +78,7 @@ export default function PostPage() {
     editButtons: {},
   });
   const [postEditState, setPostEditState] = useImmer({
-    content: '',
+    content: {},
     isEditing: false,
   });
 
@@ -642,19 +642,14 @@ export default function PostPage() {
         </PostMetadata>
 
         <Content>
-          <MarkdownEditor
-            content={content}
-            handleContentChange={handlePostContentChange}
+          <SlateEditor
+            users={postEditState.allUsers}
+            onChange={handlePostContentChange}
             readOnly={!postEditState.isEditing}
-          ></MarkdownEditor>
+            defaultValue={deserialize(content).result}
+          ></SlateEditor>
           {postEditState.isEditing && (
             <>
-              <SlateEditor
-                users={postEditState.allUsers}
-                onChange={handlePostContentChange}
-                readOnly={false}
-                defaultValue={deserialize(content).result}
-              ></SlateEditor>
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
@@ -664,13 +659,6 @@ export default function PostPage() {
                 Update
               </ButtonMinor>
             </>
-          ) : (
-            <SlateEditor
-              users={postEditState.allUsers}
-              onChange={handlePostContentChange}
-              readOnly={true}
-              defaultValue={deserialize(content).result}
-            ></SlateEditor>
           )}
         </Content>
         <ActionBar>
