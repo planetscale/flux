@@ -2,6 +2,12 @@ import styled from '@emotion/styled';
 import { ButtonMinor } from 'components/Button';
 import { media } from './theme';
 
+const CommentList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
 const PageWrapper = styled.div`
   padding: 42px 0;
   width: 80ch;
@@ -14,6 +20,11 @@ const PageWrapper = styled.div`
     padding: 42px;
     width: 100%;
   `}
+
+  > ${CommentList} {
+    margin: 0 0 0 -48px;
+    padding: 24px 0px;
+  }
 `;
 
 const PostMetadata = styled.div`
@@ -58,17 +69,12 @@ const Content = styled.div`
   }
 `;
 
-const CommentList = styled.ul`
-  padding: 24px 0;
-  margin: 0;
-  list-style: none;
+const CommentListItem = styled.li`
+  padding: 0px 24px;
 `;
 
-const CommentListItem = styled.li`
-  padding: 24px;
-  margin: 0 -24px;
+const CommentWrapper = styled.div`
   border-radius: 8px;
-
   &:hover {
     background-color: var(--accent2);
 
@@ -76,14 +82,7 @@ const CommentListItem = styled.li`
       opacity: 1;
     }
   }
-
-  &.leveltwo {
-    margin: 0;
-  }
-
-  &.levelthree {
-    margin: 0 24px;
-  }
+  padding: 24px;
 `;
 
 const Comment = styled.div`
@@ -91,15 +90,15 @@ const Comment = styled.div`
   padding: 0 24px;
   color: var(--text);
 
-  &.levelone {
+  &.level0 {
     border-left: 2px solid #9096ad;
   }
 
-  &.leveltwo {
+  &.level1 {
     border-left: 2px solid #fccada;
   }
 
-  &.levelthree {
+  &.level2 {
     border-left: 2px solid #d3f1d6;
   }
 `;
@@ -154,6 +153,7 @@ export {
   Content,
   CommentList,
   CommentListItem,
+  CommentWrapper,
   Comment,
   Reply,
   PostMetadata,

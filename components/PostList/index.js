@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
+import Link from 'next/link';
 
 const Wrapper = styled.div`
   width: 800px;
@@ -31,7 +32,8 @@ const PostContainer = styled.div`
   }
 `;
 
-const Post = styled.div`
+const Post = styled.a`
+  text-decoration: none;
   position: relative;
   box-sizing: border-box;
   display: flex;
@@ -211,10 +213,6 @@ export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
   const router = useRouter();
 
-  const handlePostClick = postId => {
-    router.push(`/post/${postId}`);
-  };
-
   const enumMonth = Object.freeze({
     0: 'January',
     1: 'February',
@@ -308,33 +306,31 @@ export default function PostList({ posts = [], handleTagClick }) {
                 {demarcationString}
               </DemarcationString>
             )}
-            <Post
-              onClick={() => {
-                handlePostClick(id);
-              }}
-            >
-              <PostWrapper>
-                <PostInfo>
-                  <MetaInformation>
-                    <MetaDate>
-                      {getLocaleDateTimeString(createdAt).toUpperCase()}
-                    </MetaDate>
-                    <span>&nbsp; &middot; &nbsp;</span>
-                    <MetaTag
-                      onClick={e => {
-                        handleTagClick(e, tag?.name);
-                      }}
-                    >
-                      #{tag?.name}
-                    </MetaTag>
-                    <span>&nbsp; &middot; &nbsp;</span>
-                    <span>{author?.displayName}</span>
-                  </MetaInformation>
-                  <PostTitle>{title}</PostTitle>
-                  <PostSubTitle>{summary}</PostSubTitle>
-                </PostInfo>
-              </PostWrapper>
-            </Post>
+            <Link href={`/post/${id}`} passHref>
+              <Post>
+                <PostWrapper>
+                  <PostInfo>
+                    <MetaInformation>
+                      <MetaDate>
+                        {getLocaleDateTimeString(createdAt).toUpperCase()}
+                      </MetaDate>
+                      <span>&nbsp; &middot; &nbsp;</span>
+                      <MetaTag
+                        onClick={e => {
+                          handleTagClick(e, tag?.name);
+                        }}
+                      >
+                        #{tag?.name}
+                      </MetaTag>
+                      <span>&nbsp; &middot; &nbsp;</span>
+                      <span>{author?.displayName}</span>
+                    </MetaInformation>
+                    <PostTitle>{title}</PostTitle>
+                    <PostSubTitle>{summary}</PostSubTitle>
+                  </PostInfo>
+                </PostWrapper>
+              </Post>
+            </Link>
           </PostContainer>
         );
       })}

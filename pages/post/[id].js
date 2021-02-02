@@ -1,3 +1,4 @@
+import React from 'react';
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
@@ -12,6 +13,7 @@ import {
   Content,
   CommentList,
   CommentListItem,
+  CommentWrapper,
   Comment,
   Reply,
   Post,
@@ -77,7 +79,7 @@ export default function PostPage() {
   });
   const [postEditState, setPostEditState] = useImmer({
     content: '',
-    isOpened: false,
+    isEditing: false,
   });
 
   const [postState, updatePostState] = useImmer({
@@ -193,13 +195,7 @@ export default function PostPage() {
       });
       if (res.data) {
         setReply('');
-        updatePostState(draft => {
-          draft.replies = updateReplyMap(
-            postState.replies,
-            res.data.createOneReply,
-            'insert'
-          );
-        });
+        updateReplyMap(res.data.createOneReply);
       } else {
         console.error(e);
       }
@@ -403,13 +399,7 @@ export default function PostPage() {
         replyId: Number(e.target.dataset.commentId),
       });
       if (res.data) {
-        updatePostState(draft => {
-          draft.replies = updateReplyMap(
-            postState.replies,
-            res.data.updateOneReply,
-            'update'
-          );
-        });
+        updateReplyMap(res.data.updateOneReply);
         setCommentInputs(draft => {
           draft.edits[e.target.dataset.commentId] = '';
         });
@@ -438,13 +428,7 @@ export default function PostPage() {
         parentId: Number(e.target.dataset.commentId),
       });
       if (res.data) {
-        updatePostState(draft => {
-          draft.replies = updateReplyMap(
-            postState.replies,
-            res.data.createOneReply,
-            'insert'
-          );
-        });
+        updateReplyMap(res.data.createOneReply);
         setCommentInputs(draft => {
           draft.replies[e.target.dataset.commentId] = '';
         });
@@ -462,7 +446,7 @@ export default function PostPage() {
 
   const togglePostEdit = () => {
     setPostEditState(draft => {
-      draft.isOpened = !postEditState.isOpened;
+      draft.isEditing = !postEditState.isEditing;
     });
   };
 
@@ -482,7 +466,7 @@ export default function PostPage() {
         console.error(e);
       } else {
         setPostEditState(draft => {
-          draft.isOpened = !postEditState.isOpened;
+          draft.isEditing = !postEditState.isEditing;
         });
       }
     } catch (e) {
@@ -490,54 +474,22 @@ export default function PostPage() {
     }
   };
 
-  const updateReplyMap = (replyMap, node, mode) => {
-    const newReplyMap = JSON.parse(JSON.stringify(replyMap));
-    const { author, content, createdAt, id, parentId } = node;
+  const updateReplyMap = node => {
+    const matchedNode = postState[node.id] || {};
 
-    // !parentId means it' a lvl 1 reply
-    if (!parentId && mode === 'insert') {
-      return {
-        ...newReplyMap,
-        [id]: {
-          author,
-          content,
-          createdAt,
-          replies: {},
-        },
+    updatePostState(draft => {
+      draft.replies[node.id] = {
+        replies: {},
+        stars: [],
+        children: [],
+        ...matchedNode,
+        ...node,
       };
-    }
 
-    const stack = [];
-    Object.entries(newReplyMap).forEach(item => {
-      stack.push(item);
-
-      while (stack.length) {
-        const currItem = stack.pop();
-
-        if (mode === 'insert') {
-          if (Number(currItem[0]) === parentId) {
-            currItem[1]['replies'][id] = {
-              author,
-              content,
-              createdAt,
-              replies: {},
-            };
-          }
-        }
-
-        if (mode === 'update') {
-          if (Number(currItem[0]) === id) {
-            currItem[1].content = content;
-            currItem[1].createdAt = createdAt;
-          }
-        }
-
-        Object.entries(currItem[1].replies).forEach(item => {
-          stack.push(item);
-        });
+      if (node.parentId) {
+        draft.replies[node.parentId].children.push(node.id);
       }
     });
-    return newReplyMap;
   };
 
   const canSubmit = str => {
@@ -549,6 +501,119 @@ export default function PostPage() {
   if (postDataResult.fetching) {
     return <></>;
   }
+
+  // Resursively render comments and their replies (and sub replies, etc)
+  const renderComment = (comment, level) => {
+    return (
+      <CommentListItem>
+        <CommentWrapper>
+          <Comment className={`level${level}`}>
+            <CommenterNameplateWrapper>
+              <CommenterNamePlate
+                displayName={comment.author?.displayName}
+                userHandle={comment.author?.username}
+                avatar={comment.author?.profile?.avatar}
+                date={getLocaleDateTimeString(comment.createdAt)}
+              />
+            </CommenterNameplateWrapper>
+            <CommentActionButtonGroup className="actions">
+              {level < 2 && (
+                <ButtonMinor
+                  data-comment-id={comment.id}
+                  type="submit"
+                  onClick={toggleCommentReply}
+                >
+                  {commentButtonState.replyButtons[comment.id]
+                    ? 'Cancel Reply'
+                    : 'Reply'}
+                </ButtonMinor>
+              )}
+              {userContext.user.id === comment.author?.id && (
+                <ButtonMinor
+                  data-comment-id={comment.id}
+                  type="submit"
+                  onClick={e => {
+                    toggleCommentEdit(e, comment.content);
+                  }}
+                >
+                  {commentButtonState.editButtons[comment.id]
+                    ? 'Cancel Edit'
+                    : 'Edit'}
+                </ButtonMinor>
+              )}
+            </CommentActionButtonGroup>
+
+            {commentButtonState.editButtons[comment.id] ? (
+              <Reply>
+                <MarkdownEditor
+                  content={commentInputs.edits[comment.id]}
+                  handleContentChange={getContent => {
+                    handleCommentEditsChange(getContent(), comment.id);
+                  }}
+                ></MarkdownEditor>
+                <ButtonMinor
+                  data-comment-id={comment.id}
+                  type="submit"
+                  onClick={handleCommentEditSubmit}
+                  disabled={!canSubmit(commentInputs.edits[comment.id])}
+                >
+                  <Icon className="icon-edit"></Icon>
+                  Update
+                </ButtonMinor>
+              </Reply>
+            ) : (
+              <CommentContent>
+                <MarkdownEditor
+                  content={comment.content}
+                  readOnly={true}
+                ></MarkdownEditor>
+              </CommentContent>
+            )}
+
+            {commentButtonState.replyButtons[comment.id] && (
+              <Reply>
+                <MarkdownEditor
+                  content={commentInputs.replies[comment.id]}
+                  handleContentChange={getContent => {
+                    handleCommentRepliesChange(getContent(), comment.id);
+                  }}
+                ></MarkdownEditor>
+                <ButtonMinor
+                  data-comment-id={comment.id}
+                  type="submit"
+                  onClick={handleCommentReplySubmit}
+                  disabled={!canSubmit(commentInputs.replies[comment.id])}
+                >
+                  <Icon className="icon-comment"></Icon>
+                  Reply
+                </ButtonMinor>
+              </Reply>
+            )}
+            <ActionBar>
+              <ButtonTertiary onClick={() => handleStarClick(comment.id)}>
+                <Icon className="icon-star"></Icon>
+                <div>{comment.stars.length}</div>
+              </ButtonTertiary>
+            </ActionBar>
+          </Comment>
+        </CommentWrapper>
+
+        {comment.children.length > 0 && (
+          <CommentList>
+            {comment.children.map(childId => {
+              const match = postState.replies[childId];
+              if (!match) return <></>;
+              return (
+                <React.Fragment key={match.id}>
+                  {renderComment(match, level + 1)}
+                </React.Fragment>
+              );
+            })}
+          </CommentList>
+        )}
+      </CommentListItem>
+    );
+  };
 
   return (
     <PageWrapper>
@@ -563,7 +628,7 @@ export default function PostPage() {
             <MetaActions>
               {userContext.user.id === author?.id && (
                 <ButtonMinor type="submit" onClick={togglePostEdit}>
-                  {postEditState.isOpened ? 'Cancel Edit' : 'Edit Post'}
+                  {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
                 </ButtonMinor>
               )}
             </MetaActions>
@@ -577,7 +642,12 @@ export default function PostPage() {
         </PostMetadata>
 
         <Content>
-          {postEditState.isOpened ? (
+          <MarkdownEditor
+            content={content}
+            handleContentChange={handlePostContentChange}
+            readOnly={!postEditState.isEditing}
+          ></MarkdownEditor>
+          {postEditState.isEditing && (
             <>
               <SlateEditor
                 users={postEditState.allUsers}
@@ -615,332 +685,12 @@ export default function PostPage() {
         {Object.values(postState.replies)
           .filter(r => !r.parentId)
           .map(firstLevelReply => (
-            <div key={firstLevelReply.id}>
-              <CommentListItem className="levelone">
-                <Comment className="levelone">
-                  <CommenterNameplateWrapper>
-                    <CommenterNamePlate
-                      displayName={firstLevelReply.author?.displayName}
-                      userHandle={firstLevelReply.author?.username}
-                      avatar={firstLevelReply.author?.profile?.avatar}
-                      date={getLocaleDateTimeString(firstLevelReply.createdAt)}
-                    />
-                  </CommenterNameplateWrapper>
-                  <CommentActionButtonGroup className="actions">
-                    <ButtonMinor
-                      data-comment-id={firstLevelReply.id}
-                      type="submit"
-                      onClick={toggleCommentReply}
-                    >
-                      {commentButtonState.replyButtons[firstLevelReply.id]
-                        ? 'Cancel Reply'
-                        : 'Reply'}
-                    </ButtonMinor>
-                    {userContext.user.id === firstLevelReply.author?.id && (
-                      <ButtonMinor
-                        data-comment-id={firstLevelReply.id}
-                        type="submit"
-                        onClick={e => {
-                          toggleCommentEdit(e, firstLevelReply.content);
-                        }}
-                      >
-                        {commentButtonState.editButtons[firstLevelReply.id]
-                          ? 'Cancel Edit'
-                          : 'Edit'}
-                      </ButtonMinor>
-                    )}
-                  </CommentActionButtonGroup>
-
-                  {commentButtonState.editButtons[firstLevelReply.id] ? (
-                    <Reply>
-                      <MarkdownEditor
-                        content={commentInputs.edits[firstLevelReply.id]}
-                        handleContentChange={getContent => {
-                          handleCommentEditsChange(
-                            getContent(),
-                            firstLevelReply.id
-                          );
-                        }}
-                      ></MarkdownEditor>
-                      <ButtonMinor
-                        data-comment-id={firstLevelReply.id}
-                        type="submit"
-                        onClick={handleCommentEditSubmit}
-                        disabled={
-                          !canSubmit(commentInputs.edits[firstLevelReply.id])
-                        }
-                      >
-                        <Icon className="icon-edit"></Icon>
-                        Update
-                      </ButtonMinor>
-                    </Reply>
-                  ) : (
-                    <CommentContent>
-                      <MarkdownEditor
-                        content={firstLevelReply.content}
-                        readOnly={true}
-                      ></MarkdownEditor>
-                    </CommentContent>
-                  )}
-
-                  {commentButtonState.replyButtons[firstLevelReply.id] && (
-                    <Reply>
-                      <MarkdownEditor
-                        content={commentInputs.replies[firstLevelReply.id]}
-                        handleContentChange={getContent => {
-                          handleCommentRepliesChange(
-                            getContent(),
-                            firstLevelReply.id
-                          );
-                        }}
-                      ></MarkdownEditor>
-                      <ButtonMinor
-                        data-comment-id={firstLevelReply.id}
-                        type="submit"
-                        onClick={handleCommentReplySubmit}
-                        disabled={
-                          !canSubmit(commentInputs.replies[firstLevelReply.id])
-                        }
-                      >
-                        <Icon className="icon-comment"></Icon>
-                        Reply
-                      </ButtonMinor>
-                    </Reply>
-                  )}
-                  <ActionBar>
-                    <ButtonTertiary
-                      onClick={() => handleStarClick(firstLevelReply.id)}
-                    >
-                      <Icon className="icon-star"></Icon>
-                      <div>{firstLevelReply.stars.length}</div>
-                    </ButtonTertiary>
-                  </ActionBar>
-                </Comment>
-              </CommentListItem>
-
-              {firstLevelReply.children.map(childId => {
-                const secondLevelReply = postState.replies[childId];
-                if (!secondLevelReply) return <></>;
-                return (
-                  <div key={secondLevelReply.id}>
-                    <CommentListItem className="leveltwo">
-                      <Comment className="leveltwo">
-                        <CommenterNameplateWrapper>
-                          <CommenterNamePlate
-                            displayName={secondLevelReply.author?.displayName}
-                            userHandle={secondLevelReply.author?.username}
-                            avatar={secondLevelReply.author?.profile?.avatar}
-                            date={getLocaleDateTimeString(
-                              secondLevelReply.createdAt
-                            )}
-                          />
-                        </CommenterNameplateWrapper>
-                        <CommentActionButtonGroup className="actions">
-                          <ButtonMinor
-                            data-comment-id={secondLevelReply.id}
-                            type="submit"
-                            onClick={toggleCommentReply}
-                          >
-                            {commentButtonState.replyButtons[
-                              secondLevelReply.id
-                            ]
-                              ? 'Cancel Reply'
-                              : 'Reply'}
-                          </ButtonMinor>
-                          {userContext.user.id ===
-                            secondLevelReply.author?.id && (
-                            <ButtonMinor
-                              data-comment-id={secondLevelReply.id}
-                              type="submit"
-                              onClick={e => {
-                                toggleCommentEdit(e, secondLevelReply.content);
-                              }}
-                            >
-                              {commentButtonState.editButtons[
-                                secondLevelReply.id
-                              ]
-                                ? 'Cancel Edit'
-                                : 'Edit'}
-                            </ButtonMinor>
-                          )}
-                        </CommentActionButtonGroup>
-
-                        {commentButtonState.editButtons[secondLevelReply.id] ? (
-                          <Reply>
-                            <MarkdownEditor
-                              content={commentInputs.edits[secondLevelReply.id]}
-                              handleContentChange={getContent => {
-                                handleCommentEditsChange(
-                                  getContent(),
-                                  secondLevelReply.id
-                                );
-                              }}
-                            ></MarkdownEditor>
-                            <ButtonMinor
-                              data-comment-id={secondLevelReply.id}
-                              type="submit"
-                              onClick={handleCommentEditSubmit}
-                              disabled={
-                                !canSubmit(
-                                  commentInputs.edits[secondLevelReply.id]
-                                )
-                              }
-                            >
-                              <Icon className="icon-edit"></Icon>
-                              Update
-                            </ButtonMinor>
-                          </Reply>
-                        ) : (
-                          <CommentContent>
-                            <MarkdownEditor
-                              content={secondLevelReply.content}
-                              readOnly={true}
-                            ></MarkdownEditor>
-                          </CommentContent>
-                        )}
-
-                        {commentButtonState.replyButtons[
-                          secondLevelReply.id
-                        ] && (
-                          <Reply>
-                            <MarkdownEditor
-                              content={
-                                commentInputs.replies[secondLevelReply.id]
-                              }
-                              handleContentChange={getContent => {
-                                handleCommentRepliesChange(
-                                  getContent(),
-                                  secondLevelReply.id
-                                );
-                              }}
-                            ></MarkdownEditor>
-                            <ButtonMinor
-                              data-comment-id={secondLevelReply.id}
-                              type="submit"
-                              onClick={handleCommentReplySubmit}
-                              disabled={
-                                !canSubmit(
-                                  commentInputs.replies[secondLevelReply.id]
-                                )
-                              }
-                            >
-                              <Icon className="icon-comment"></Icon>
-                              Reply
-                            </ButtonMinor>
-                          </Reply>
-                        )}
-                        <ActionBar>
-                          <ButtonTertiary
-                            onClick={() => handleStarClick(secondLevelReply.id)}
-                          >
-                            <Icon className="icon-star"></Icon>
-                            <div>{secondLevelReply.stars.length}</div>
-                          </ButtonTertiary>
-                        </ActionBar>
-                      </Comment>
-                    </CommentListItem>
-
-                    {secondLevelReply.children.map(childId => {
-                      const thirdLevelReply = postState.replies[childId];
-                      if (!thirdLevelReply) return <></>;
-                      return (
-                        <div key={thirdLevelReply.id}>
-                          <CommentListItem className="levelthree">
-                            <Comment className="levelthree">
-                              <CommenterNameplateWrapper>
-                                <CommenterNamePlate
-                                  displayName={
-                                    thirdLevelReply.author?.displayName
-                                  }
-                                  userHandle={thirdLevelReply.author?.username}
-                                  avatar={
-                                    thirdLevelReply.author?.profile?.avatar
-                                  }
-                                  date={getLocaleDateTimeString(
-                                    thirdLevelReply.createdAt
-                                  )}
-                                />
-                              </CommenterNameplateWrapper>
-                              <CommentActionButtonGroup className="actions">
-                                {userContext.user.id ===
-                                  thirdLevelReply.author?.id && (
-                                  <ButtonMinor
-                                    data-comment-id={thirdLevelReply.id}
-                                    type="submit"
-                                    onClick={e => {
-                                      toggleCommentEdit(
-                                        e,
-                                        thirdLevelReply.content
-                                      );
-                                    }}
-                                  >
-                                    {commentButtonState.editButtons[
-                                      thirdLevelReply.id
-                                    ]
-                                      ? 'Cancel Edit'
-                                      : 'Edit'}
-                                  </ButtonMinor>
-                                )}
-                              </CommentActionButtonGroup>
-
-                              {commentButtonState.editButtons[
-                                thirdLevelReply.id
-                              ] ? (
-                                <Reply>
-                                  <MarkdownEditor
-                                    content={
-                                      commentInputs.edits[thirdLevelReply.id]
-                                    }
-                                    handleContentChange={getContent => {
-                                      handleCommentEditsChange(
-                                        getContent(),
-                                        thirdLevelReply.id
-                                      );
-                                    }}
-                                  ></MarkdownEditor>
-                                  <ButtonMinor
-                                    data-comment-id={thirdLevelReply.id}
-                                    type="submit"
-                                    onClick={handleCommentEditSubmit}
-                                    disabled={
-                                      !canSubmit(
-                                        commentInputs.edits[thirdLevelReply.id]
-                                      )
-                                    }
-                                  >
-                                    <Icon className="icon-edit"></Icon>
-                                    Update
-                                  </ButtonMinor>
-                                </Reply>
-                              ) : (
-                                <CommentContent>
-                                  <MarkdownEditor
-                                    content={thirdLevelReply.content}
-                                    readOnly={true}
-                                  ></MarkdownEditor>
-                                </CommentContent>
-                              )}
-                              <ActionBar>
-                                <ButtonTertiary
-                                  onClick={() =>
-                                    handleStarClick(thirdLevelReply.id)
-                                  }
-                                >
-                                  <Icon className="icon-star"></Icon>
-                                  <div>{thirdLevelReply.stars.length}</div>
-                                </ButtonTertiary>
-                              </ActionBar>
-                            </Comment>
-                          </CommentListItem>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
+            <React.Fragment key={firstLevelReply.id}>
+              {renderComment(firstLevelReply, 0)}
+            </React.Fragment>
           ))}
       </CommentList>
+
       <Reply>
         <MarkdownEditor
           content={reply}
