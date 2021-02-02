@@ -18,7 +18,7 @@ const fetcher = async (url, auth, last, before, _) => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: defaultFetchHeaders.authorization,
+      Authorization: auth,
     },
   });
   return response.json();
