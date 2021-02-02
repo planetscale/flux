@@ -24,7 +24,9 @@ export default function AuthGuard({ token, children }) {
         prevPathRef.current === '/login' &&
         currPathRef.current === '/')
     ) {
-      getUser();
+      getUser({
+        email: authUser?.email,
+      });
     }
   }, [isAuthed, token, prevPathRef.current, currPathRef.current]);
 

@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
+import { useClient } from 'urql';
 import { useImmer } from 'use-immer';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { userOrgQuery } from './queries';
 
 const defaultContext = {
   user: null,
   loading: false,
   loaded: false,
+  error: null,
 };
 const UserContext = React.createContext();
 UserContext.displayName = 'User Context';
@@ -26,37 +28,25 @@ const useUserContext = () => {
 };
 
 const useUserActions = () => {
-  const [_, updateState] = useContext(UserContext);
+  const [state, updateState] = useContext(UserContext);
+  const client = useClient();
 
-  const getUser = async () => {
+  const getUser = async ({ email }) => {
     updateState(draft => {
       draft.loading = true;
     });
     try {
-      const response = await fetch('/api/get-user', {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-      });
-      const user = await response.json();
-      // FIXME: Refactor the app's user object to not have nested elements
-      const restructureUser = {
-        ...user,
-        profile: {
-          avatar: user.avatar,
-        },
-        org: {
-          id: user.orgId,
-          name: user.orgName,
-        },
-      };
+      const result = await client
+        .query(userOrgQuery, {
+          email,
+        })
+        .toPromise();
 
       updateState(draft => {
-        draft.user = restructureUser;
+        draft.user = result?.data?.user;
         draft.loading = false;
         draft.loaded = true;
+        draft.error = result?.error ? result.error : null;
       });
     } catch (e) {
       updateState(draft => {
