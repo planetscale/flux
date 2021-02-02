@@ -14,7 +14,6 @@
     "outline-icons": "1.23.0"
   },
   "dependencies": {
-    "outline-icons": "1.23.0",
     "@emotion/react": "^11.1.1",
     "@emotion/styled": "^11.0.0",
     "@next/bundle-analyzer": "^10.0.5",
@@ -43,6 +42,7 @@
     "next-pwa": "^5.0.4",
     "next-urql": "^2.1.1",
     "nexus-plugin-prisma": "^0.26.0",
+    "outline-icons": "1.23.0",
     "prosemirror-commands": "^1.1.5",
     "prosemirror-mentions": "^1.0.0",
     "prosemirror-schema-basic": "^1.1.2",
