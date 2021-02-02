@@ -16,6 +16,7 @@ import {
   getAllLenses,
   getAllChannels,
 } from 'pageUtils/post/queries';
+import { serialize } from 'components/Editor/serializeToMarkdown';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -193,7 +194,7 @@ export default function NewPost() {
       value: '',
       hasFocused: false,
     },
-    content: '',
+    content: {},
     selectedLens: '',
     selectedTag: null,
     tagOptions: [],
@@ -269,8 +270,7 @@ export default function NewPost() {
     return (
       state.title?.value.trim() &&
       state.subtitle?.value.trim() &&
-      state.content?.trim() &&
-      state.content?.trim().match(/[0-9a-zA-Z]+/) &&
+      state.content &&
       state.selectedLens &&
       state.selectedTag
     );
@@ -284,7 +284,7 @@ export default function NewPost() {
     try {
       const formData = new FormData();
       formData.append('title', state.title.value);
-      formData.append('content', state.content);
+      formData.append('content', serialize(state.content[0]));
       formData.append('summary', state.subtitle.value);
       formData.append('userId', userContext?.user?.id);
       formData.append('lensId', Number(state.selectedLens));
@@ -316,9 +316,9 @@ export default function NewPost() {
     router.push('/');
   };
 
-  const handleContentChange = getContent => {
+  const handleContentChange = content => {
     updateState(draft => {
-      draft.content = getContent();
+      draft.content = content;
     });
   };
 
@@ -400,7 +400,10 @@ export default function NewPost() {
           </div>
         </TitleInputWrapper>
         <EditorWrapper>
-          <SlateEditor users={state.allUsers}></SlateEditor>
+          <SlateEditor
+            users={state.allUsers}
+            onChange={handleContentChange}
+          ></SlateEditor>
         </EditorWrapper>
         <ActionItems>
           <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>

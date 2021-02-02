@@ -32,7 +32,7 @@ import {
   initialValueAutoformat,
 } from './initialValues';
 
-export const SlateEditor = ({ users }) => {
+export const SlateEditor = ({ users, onChange }) => {
   const plugins = [
     ParagraphPlugin(options),
     BoldPlugin(),
@@ -101,6 +101,7 @@ export const SlateEditor = ({ users }) => {
       value={value}
       onChange={newValue => {
         setValue(newValue);
+        onChange(newValue);
         userMention.onChangeMention(editor);
       }}
     >
