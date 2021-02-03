@@ -453,14 +453,14 @@ export default function PostPage() {
 
   const handlePostContentChange = content => {
     setPostEditState(draft => {
-      draft.content = serialize(content[0]);
+      draft.content = content;
     });
   };
 
   const handlePostEditSubmit = async () => {
     try {
       const res = await runUpdatePostMutation({
-        content: postEditState.content,
+        content: serialize(postEditState.content[0]),
         postId: Number(router.query?.id),
       });
       if (!res.data) {
@@ -493,10 +493,8 @@ export default function PostPage() {
     });
   };
 
-  const canSubmit = str => {
-    console.log(str);
-    if (!str) return false;
-    return str.trim().match(/[0-9a-zA-Z]+/);
+  const canSubmit = slateObject => {
+    return slateObject ? true : false;
   };
 
   // TODO: add better loading indicator, now there's literally none
@@ -659,7 +657,7 @@ export default function PostPage() {
             users={postEditState.allUsers}
             onChange={handlePostContentChange}
             readOnly={!postEditState.isEditing}
-            defaultValue={deserialize(content).result}
+            defaultValue={deserialize(content)}
           ></SlateEditor>
           {postEditState.isEditing && (
             <>

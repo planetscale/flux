@@ -88,7 +88,11 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
     withInlineVoid({ plugins }),
   ];
 
-  const [value, setValue] = useState(initialValueAutoformat);
+  if (defaultValue === undefined || defaultValue.length === 0) {
+    defaultValue = initialValueAutoformat;
+  }
+
+  const [value, setValue] = useState(defaultValue);
   const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
   const userMention = useMention(users, {
@@ -99,7 +103,7 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
   return (
     <Slate
       editor={editor}
-      value={defaultValue ? defaultValue : value}
+      value={value}
       onChange={newValue => {
         setValue(newValue);
         onChange(newValue);
