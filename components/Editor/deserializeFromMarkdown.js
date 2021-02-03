@@ -2,7 +2,7 @@ import { jsx } from 'slate-hyperscript';
 import unified from 'unified';
 import markdown from 'remark-parse';
 import slate from 'remark-slate';
-
+import { initialValueAutoformat } from './initialValues';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_BLOCKQUOTE,
@@ -44,10 +44,13 @@ export const deserialize = markdownContent => {
     })
     .processSync(markdownContent);
 
-  const slateWrapper = [
-    {
-      children: output.result,
-    },
-  ];
+  const slateWrapper = output.result.length
+    ? [
+        {
+          children: output.result,
+        },
+      ]
+    : initialValueAutoformat;
+
   return slateWrapper;
 };

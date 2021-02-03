@@ -33,7 +33,6 @@ import {
 } from './initialValues';
 
 export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
-  console.log('default Value:\n', defaultValue);
   const plugins = [
     ParagraphPlugin(options),
     BoldPlugin(),

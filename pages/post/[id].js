@@ -42,6 +42,7 @@ import { SlateEditor } from 'components/Editor';
 import { media } from 'pageUtils/post/theme';
 import { deserialize } from 'components/Editor/deserializeFromMarkdown';
 import { serialize } from 'components/Editor/serializeToMarkdown';
+import { initialValueAutoformat } from 'components/Editor/initialValues';
 
 const Meta = styled.div`
   display: flex;
@@ -88,7 +89,7 @@ export default function PostPage() {
     stars: [],
   });
 
-  const [reply, setReply] = useState('');
+  const [reply, setReply] = useState({});
 
   const [commentInputs, setCommentInputs] = useImmer({
     replies: {},
@@ -180,22 +181,23 @@ export default function PostPage() {
   }, [postDataResult]);
 
   const handleReplyChange = content => {
-    setReply(serialize(content[0]));
+    setReply(content);
   };
 
   const handleCommentSubmit = async () => {
-    if (!reply?.trim()) {
+    const serializedReply = reply[0] ? serialize(reply[0]) : undefined;
+    if (!serializedReply?.trim()) {
       return;
     }
 
     try {
       const res = await runCreateReplyMutation({
-        content: reply.trim(),
+        content: serializedReply.trim(),
         postId: Number(router.query?.id),
         userId: userContext.user.id,
       });
       if (res.data) {
-        setReply('');
+        setReply({});
         updateReplyMap(res.data.createOneReply);
       } else {
         console.error(e);
@@ -360,13 +362,13 @@ export default function PostPage() {
 
   const handleCommentEditsChange = (content, key) => {
     setCommentInputs(draft => {
-      draft.edits[key] = content;
+      draft.edits[key] = serialize(content[0])?.trim();
     });
   };
 
   const handleCommentRepliesChange = (content, key) => {
     setCommentInputs(draft => {
-      draft.replies[key] = content;
+      draft.replies[key] = serialize(content[0])?.trim();
     });
   };
 
@@ -390,13 +392,21 @@ export default function PostPage() {
   };
 
   const handleCommentEditSubmit = async e => {
-    if (!commentInputs.edits[e.target.dataset.commentId]?.trim()) {
+    let serializedCommentEdit;
+    if (commentInputs.edits[e.target.dataset.commentId]) {
+      serializedCommentEdit = commentInputs.edits[
+        e.target.dataset.commentId
+      ]?.trim();
+    }
+
+    if (!serializedCommentEdit) {
+      // TODO: add toast UI to show error message
       return;
     }
 
     try {
       const res = await runUpdateReplyMutation({
-        content: commentInputs.edits[e.target.dataset.commentId]?.trim(),
+        content: serializedCommentEdit,
         replyId: Number(e.target.dataset.commentId),
       });
       if (res.data) {
@@ -417,13 +427,20 @@ export default function PostPage() {
   };
 
   const handleCommentReplySubmit = async e => {
-    if (!commentInputs.replies[e.target.dataset.commentId]?.trim()) {
+    let serializedCommentReply;
+    if (commentInputs.replies[e.target.dataset.commentId]) {
+      serializedCommentReply = commentInputs.replies[
+        e.target.dataset.commentId
+      ]?.trim();
+    }
+
+    if (!serializedCommentReply) {
       return;
     }
 
     try {
       const res = await runCreateReplyMutation({
-        content: commentInputs.replies[e.target.dataset.commentId]?.trim(),
+        content: serializedCommentReply,
         postId: Number(router.query?.id),
         userId: userContext.user.id,
         parentId: Number(e.target.dataset.commentId),
@@ -494,7 +511,12 @@ export default function PostPage() {
   };
 
   const canSubmit = slateObject => {
-    return slateObject ? true : false;
+    console.log(slateObject);
+    return !(
+      !slateObject ||
+      Object.keys(slateObject).length === 0 ||
+      JSON.stringify(slateObject) === JSON.stringify(initialValueAutoformat)
+    );
   };
 
   // TODO: add better loading indicator, now there's literally none
@@ -548,11 +570,9 @@ export default function PostPage() {
                 <SlateEditor
                   users={postEditState.allUsers}
                   onChange={content => {
-                    handleCommentEditsChange(serialize(content[0]), comment.id);
+                    handleCommentEditsChange(content, comment.id);
                   }}
-                  defaultValue={
-                    deserialize(commentInputs.edits[comment.id]).result
-                  }
+                  defaultValue={deserialize(commentInputs.edits[comment.id])}
                   readOnly={false}
                 ></SlateEditor>
                 <ButtonMinor
@@ -579,14 +599,9 @@ export default function PostPage() {
                 <SlateEditor
                   users={postEditState.allUsers}
                   onChange={content => {
-                    handleCommentRepliesChange(
-                      serialize(content[0]),
-                      comment.id
-                    );
+                    handleCommentRepliesChange(content, comment.id);
                   }}
-                  defaultValue={
-                    deserialize(commentInputs.replies[comment.id])?.result
-                  }
+                  defaultValue={deserialize(commentInputs.replies[comment.id])}
                   readOnly={false}
                 ></SlateEditor>
                 <ButtonMinor
