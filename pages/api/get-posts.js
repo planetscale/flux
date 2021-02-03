@@ -37,5 +37,7 @@ module.exports = async (req, res) => {
   const [rows] = await connection.query(query);
   connection.end();
 
+  console.log('ROWS', rows);
+
   res.json(rows);
 };
