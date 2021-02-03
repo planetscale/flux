@@ -19,12 +19,6 @@ const Org = objectType({
     t.model.name();
     t.model.createdAt();
     t.model.users();
-    t.list.field('lenses', {
-      type: 'Lens',
-      resolve(_parent, _args, ctx) {
-        return ctx.prisma.lens.findMany({});
-      },
-    });
   },
 });
 
@@ -142,7 +136,6 @@ const Post = objectType({
     t.model.summary();
     t.model.published();
     t.model.author();
-    t.model.lens();
     t.model.replies();
     t.model.content();
     t.model.stars();
@@ -223,13 +216,6 @@ const Query = queryType({
     });
     t.crud.post();
     t.crud.posts();
-    t.crud.lens();
-    t.list.field('lenses', {
-      type: 'Lens',
-      resolve(_parent, _args, ctx) {
-        return ctx.prisma.lens.findMany({});
-      },
-    });
     t.list.field('channels', {
       type: 'Channel',
       async resolve(_parent, _args, _ctx) {
@@ -295,9 +281,6 @@ const Mutation = mutationType({
     t.crud.createOneOrg();
     t.crud.updateOneOrg();
     t.crud.deleteOneOrg();
-    t.crud.createOneLens();
-    t.crud.updateOneLens();
-    t.crud.deleteOneLens();
     // t.crud.createOnePost(); is replaced by postUpload().
     t.crud.updateOnePost();
     t.crud.deleteOnePost();
@@ -362,7 +345,6 @@ export const schema = makeSchema({
     User,
     Org,
     Profile,
-    Lens,
     Post,
     Reply,
     Query,

@@ -35,15 +35,6 @@ model Profile {
   userId         Int
 }
 
-model Lens {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  description String
-  org         Org     @relation(fields: [orgId], references: [id])
-  orgId       Int
-  posts       Post[]
-}
-
 model Post {
   id         Int         @id @default(autoincrement())
   createdAt  DateTime?   @default(now())
@@ -52,8 +43,6 @@ model Post {
   published  Boolean?    @default(false)
   author     User        @relation(fields: [authorId], references: [id])
   authorId   Int
-  lens       Lens        @relation(fields: [lensId], references: [id])
-  lensId     Int
   replies    Reply[]
   content    String
   stars      Star[]
