@@ -56,7 +56,6 @@ export default async (req, res) => {
   }
 
   // FIXME: Everything above can be made into resharable functions for all authenticated api requests.
-
   const connection = await mysql.createConnection(process.env.DATABASE_URL);
 
   const token = req.headers.authorization.split(' ')[1];
@@ -82,8 +81,8 @@ export default async (req, res) => {
     AND User.email = '${decodedToken.email}'
     LIMIT 1;`;
 
-  const [rows] = await connection.query(query);
+  const [[row]] = await connection.query(query);
   connection.end();
 
-  res.json(rows[0]);
+  res.json(row);
 };

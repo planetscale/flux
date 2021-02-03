@@ -272,30 +272,29 @@ export default function NewPost() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('title', state.title.value);
-      formData.append('content', state.content);
-      formData.append('summary', state.subtitle.value);
-      formData.append('userId', userContext?.user?.id);
-      formData.append('lensId', Number(state.selectedLens));
-      formData.append(
-        'userAvatar',
-        userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg'
-      );
-      formData.append('userDisplayName', userContext?.user?.displayName);
-      formData.append('domain', window.location.origin);
-      formData.append('tagName', state.selectedTag.value);
-      formData.append('tagChannelId', state.selectedTag.channelId);
-
-      const rawResp = await fetch('/api/upload/post', {
+      const rawResp = await fetch('/api/create-post', {
         method: 'POST',
-        headers: defaultFetchHeaders,
-        body: formData,
+        headers: {
+          Authorization: defaultFetchHeaders.authorization,
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+          title: state.title.value,
+          content: state.content,
+          summary: state.subtitle.value,
+          tagChannelId: state.selectedTag.channelId,
+          tagName: state.selectedTag.value,
+          userAvatar:
+            userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
+          userDisplayName: userContext?.user?.displayName,
+          domain: window.location.origin,
+          lensId: Number(state.selectedLens),
+        }),
       });
       const resp = await rawResp.json();
 
-      if (rawResp.status === 200 && resp.id) {
-        router.push(`/post/${resp.id}`);
+      if (!resp.error && resp.data.id) {
+        router.push(`/posttest/${resp.data.id}`);
       }
     } catch (e) {
       console.error(e);
