@@ -20,6 +20,8 @@ import {
   MentionSelect,
   useMention,
   withInlineVoid,
+  LinkPlugin,
+  withLink,
 } from '@udecode/slate-plugins';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -75,6 +77,7 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
       ],
     }),
     MentionPlugin(),
+    LinkPlugin(),
   ];
 
   const withPlugins = [
@@ -84,6 +87,7 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
     withAutoformat({
       rules: autoformatRules,
     }),
+    withLink(options),
     withInlineVoid({ plugins }),
   ];
 

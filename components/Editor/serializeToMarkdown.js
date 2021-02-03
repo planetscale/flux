@@ -19,13 +19,18 @@ export const serialize = node => {
     return text;
   }
 
+  switch (node.type) {
+    case 'a':
+      return `[${node.children[0].text}](${node.url})`;
+    case 'mention':
+      return `[@${node.value}](/user/${node.value})`;
+  }
+
   const children = node.children.map(n => serialize(n)).join('');
 
   switch (node.type) {
     case 'p':
-      return `${children}\n`;
-    case 'mention':
-      return `@${node.value}`;
+      return `${children}\n\n`;
     case 'h2':
       return `## ${children}\n`;
     case 'h3':

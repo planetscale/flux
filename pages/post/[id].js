@@ -511,7 +511,6 @@ export default function PostPage() {
   };
 
   const canSubmit = slateObject => {
-    console.log(slateObject);
     return !(
       !slateObject ||
       Object.keys(slateObject).length === 0 ||
