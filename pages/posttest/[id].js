@@ -5,7 +5,6 @@ import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useMutation } from 'urql';
 import { Icon } from 'pageUtils/post/atoms';
 import {
   PageWrapper,
@@ -24,11 +23,6 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import {
-  createReplyMutation,
-  updateReplyMutation,
-  updatePostMutation,
-} from 'pageUtils/post/queries';
 import { ButtonMinor, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';

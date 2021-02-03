@@ -12,7 +12,36 @@ export default async (req, res) => {
     return;
   }
 
+  const { userName, displayName, orgName, avatar, bio } = req.body;
+
   const connection = await mysql.createConnection(process.env.DATABASE_URL);
+
+  const userQuery = `
+    INSERT INTO
+    User
+        (email, username, displayName, role, orgId)
+    VALUES
+        (?, ?, ?, ?, (SELECT id FROM Org WHERE name = ? LIMIT 1))
+  `;
+  await connection.execute(userQuery, [
+    user.email,
+    userName,
+    displayName,
+    'USER',
+    orgName,
+  ]);
+
+  const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
+  const [[userId]] = await connection.query(idQuery);
+
+  const profileQuery = `
+    INSERT INTO
+    Profile
+        (bio, avatar, userId)
+    VALUES
+        (?, ?, ?)
+  `;
+  await connection.execute(profileQuery, [bio, avatar, userId.id]);
 
   const query = `
     SELECT
@@ -31,10 +60,11 @@ export default async (req, res) => {
     WHERE
       User.id = Profile.userId
     AND User.orgId = Org.id
-    AND User.email = ?
+    AND User.id = ?
     LIMIT 1;`;
 
-  const [[row]] = await connection.execute(query, [user.email]);
+  const [[row]] = await connection.execute(query, [userId.id]);
+
   connection.end();
 
   res.json({ error: false, data: row });

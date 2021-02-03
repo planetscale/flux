@@ -294,7 +294,7 @@ export default function NewPost() {
       const resp = await rawResp.json();
 
       if (!resp.error && resp.data.id) {
-        router.push(`/posttest/${resp.data.id}`);
+        router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
       console.error(e);
