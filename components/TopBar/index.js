@@ -4,6 +4,7 @@ import {
   ButtonSpecial,
   ButtonLink,
   ButtonTag,
+  ButtonComposite,
 } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
@@ -41,9 +42,8 @@ const BreadcrumbContainer = styled.div`
   align-items: center;
 `;
 
-const Logo = styled(ButtonLink)`
+const Logo = styled.div`
   font-size: 24px;
-  margin-right: 8px;
   border-radius: unset;
   padding: 0 4px;
   font-family: 'Raleway', sans-serif;
@@ -64,16 +64,15 @@ const Logo = styled(ButtonLink)`
 
 const ForwardSlash = styled.div`
   color: var(--accent);
+  margin: 0 0.5em;
 `;
+
+const Organization = styled.div``;
 
 const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 24px;
-
-  > ${ForwardSlash} {
-    margin: 0 0.5em;
-  }
 
   > ${ButtonLink} {
     border-radius: unset;
@@ -150,10 +149,12 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   return (
     <Wrapper>
       <BreadcrumbContainer>
-        <Logo onClick={redirectToHome}>flux</Logo>
-        <Breadcrumb>
+        <ButtonComposite onClick={redirectToHome}>
+          <Logo>flux</Logo>
           <ForwardSlash>/</ForwardSlash>
-          <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
+          <Organization>{header}</Organization>
+        </ButtonComposite>
+        <Breadcrumb>
           <ForwardSlash>/</ForwardSlash>
           <PageTitle>{subHeader}</PageTitle>
           {query !== '' && (
