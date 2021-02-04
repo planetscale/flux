@@ -45,18 +45,53 @@ const Logo = styled.div`
   text-transform: uppercase;
   font-style: italic;
   font-weight: 900;
-  background: linear-gradient(
-      90deg,
-      var(--highlight2) 0%,
-      var(--highlight) 100%
-    ),
+  background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
     var(--text);
   background-clip: text;
+  background-size: 200% 200%;
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;
+
+  -webkit-animation: AnimateLogoGradient 5s ease infinite;
+  -moz-animation: AnimateLogoGradient 5s ease infinite;
+  animation: AnimateLogoGradient 5s ease infinite;
+
+  @-webkit-keyframes AnimateLogoGradient {
+    0% {
+      background-position: 0% 90%;
+    }
+    50% {
+      background-position: 100% 11%;
+    }
+    100% {
+      background-position: 0% 90%;
+    }
+  }
+  @-moz-keyframes AnimateLogoGradient {
+    0% {
+      background-position: 0% 90%;
+    }
+    50% {
+      background-position: 100% 11%;
+    }
+    100% {
+      background-position: 0% 90%;
+    }
+  }
+  @keyframes AnimateLogoGradient {
+    0% {
+      background-position: 0% 90%;
+    }
+    50% {
+      background-position: 100% 11%;
+    }
+    100% {
+      background-position: 0% 90%;
+    }
+  }
 
   ${media.phone`
     font-size: 1em;
