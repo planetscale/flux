@@ -1,13 +1,28 @@
+import useSWR from 'swr';
+import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import PostList from 'components/PostList';
-import { useClient } from 'urql';
-import gql from 'graphql-tag';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
+
+const fetcher = async (url, auth, last, before, _) => {
+  const params = new URLSearchParams({
+    last,
+    before,
+  });
+  const response = await fetch(`${url}?${params}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: auth,
+    },
+  });
+  return response.json();
+};
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -17,50 +32,6 @@ const HomeWrapper = styled.div`
     width: 100%;
   `}
 `;
-
-// TODO: only get current org's data
-const postListQuery = gql`
-  query($id: Int!, $last: Int!, $before: Int, $tag: String) {
-    org(where: { id: $id }) {
-      lenses {
-        name
-        posts(last: $last, before: { id: $before }, tag: $tag) {
-          id
-          title
-          summary
-          tag {
-            name
-          }
-          author {
-            displayName
-          }
-          createdAt
-        }
-      }
-    }
-  }
-`;
-
-// TODO: replace this hack with backend implementation
-function getLensPosts(lenses, subHeader) {
-  if (!lenses || lenses.length === 0) {
-    return [];
-  }
-
-  if (subHeader.toLowerCase() === 'posts') {
-    return lenses.flatMap(lens => lens.posts);
-  }
-
-  const lens = lenses.find(lens => {
-    return lens.name !== undefined && lens.name === subHeader;
-  });
-
-  if (lens === undefined) {
-    return [];
-  }
-
-  return lens.posts;
-}
 
 const DEFAULT_PAGE_ADDEND = 10;
 
@@ -73,23 +44,39 @@ export default function Home({ href, ...props }) {
     before: -1,
     forceFetch: 0,
   });
+
+  const { data } = useSWR(
+    [
+      '/api/get-posts',
+      defaultFetchHeaders.authorization,
+      state.last,
+      state.before,
+      state.forceFetch,
+    ],
+    fetcher,
+    {
+      onSuccess: data => {
+        const mappedPosts = data.reduce((acc, curr) => {
+          // FIXME: Update when PostList is updated with new format
+          acc[curr.id] = {
+            ...curr,
+            tag: { name: curr.tagName },
+            author: { displayName: curr.authorName },
+          };
+          delete acc[curr.id].tagName;
+          delete acc[curr.id].authorName;
+          return acc;
+        }, {});
+
+        setState(draft => {
+          draft.postList = { ...state.postList, ...mappedPosts };
+        });
+      },
+    }
+  );
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
-  const { subHeader, selectedTag } = useTopBarContext();
-  const [isLoading, setLoading] = useState(false);
-  const client = useClient();
-
-  // We want to fetch new posts when:
-  // - The pagination (before) changes
-  // - The subheader changes
-  // - A force fetch has triggered. This is probably a useEffect anti-patern but a way to trigger fetches on our terms.
-  //   We don't want to listen for a selectedTag change here directly because we have another effect below that handles it
-  //   and we don't want to fire double queries.
-  useEffect(() => {
-    // Skip initial render for this effect, the selectTag effect will trigger this again.
-    if (state.forceFetch === 0) return;
-    fetchPost();
-  }, [state.forceFetch, state.before, subHeader]);
+  const { selectedTag } = useTopBarContext();
 
   useEffect(() => {
     if (user?.org?.name) {
@@ -101,7 +88,6 @@ export default function Home({ href, ...props }) {
 
   // This effect will handle triggering the fetchPost effect when the tag is changed.
   useEffect(() => {
-    setLoading(true);
     // The useBottomScrollListener will fire unecessarily if we are still scrolled to the bottom as we reset the post list.
     window.scrollTo(0, 0);
     setState(draft => {
@@ -114,7 +100,7 @@ export default function Home({ href, ...props }) {
   useBottomScrollListener(
     () => {
       const postLength = Object.keys(state.postList).length;
-      if (postLength && !isLoading) {
+      if (postLength && data) {
         setState(draft => {
           // We can garuntee the object is sorted by id ASC, so the oldest post is first element
           draft.before = Number(Object.keys(state.postList)[0]);
@@ -127,39 +113,6 @@ export default function Home({ href, ...props }) {
       DebounceOptions: { leading: false },
     }
   );
-
-  const fetchPost = async () => {
-    setLoading(true);
-    try {
-      const result = await client
-        .query(postListQuery, {
-          id: user?.org?.id,
-          last: state.last,
-          before: state.before,
-          tag: selectedTag,
-        })
-        .toPromise();
-
-      setState(draft => {
-        if (result.data?.org) {
-          const mappedPosts = getLensPosts(
-            result.data?.org?.lenses,
-            subHeader
-          ).reduce((acc, curr) => {
-            acc[curr.id] = { ...curr };
-            return acc;
-          }, {});
-
-          setState(draft => {
-            draft.postList = { ...state.postList, ...mappedPosts };
-          });
-        }
-        setLoading(false);
-      });
-    } catch (error) {
-      setLoading(false);
-    }
-  };
 
   const handleTagClick = (e, tagName) => {
     e.stopPropagation();
@@ -174,7 +127,7 @@ export default function Home({ href, ...props }) {
       <PostList
         posts={[
           ...Object.values(state.postList).reverse(),
-          ...(isLoading ? LOADING_POSTS : []),
+          ...(!data ? LOADING_POSTS : []),
         ]}
         handleTagClick={handleTagClick}
       />
