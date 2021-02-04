@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { cors, validateUser } from './_utils/middleware';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     cors(req, res);
     await validateUser(req);
@@ -36,8 +36,6 @@ module.exports = async (req, res) => {
 
   const [rows] = await connection.query(query);
   connection.end();
-
-  console.log('ROWS', rows);
 
   res.json(rows);
 };
