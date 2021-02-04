@@ -1,14 +1,12 @@
+import useSWR from 'swr';
+import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
-import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
-import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
@@ -111,24 +109,6 @@ const EditorWrapper = styled.div`
   border-top: 1px solid var(--accent2);
 `;
 
-const lensesQuery = gql`
-  query {
-    lenses {
-      id
-      name
-    }
-  }
-`;
-
-const channelsQuery = gql`
-  query {
-    channels {
-      id
-      name
-    }
-  }
-`;
-
 const customStyles = {
   container: provided => ({
     ...provided,
@@ -184,6 +164,17 @@ const dateTimeOptions = {
 
 const TITLE_MAX_LENGTH = 70;
 
+const fetcher = async (url, auth) => {
+  const response = await fetch(`${url}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: auth,
+    },
+  });
+  return response.json();
+};
+
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
@@ -201,51 +192,41 @@ export default function NewPost() {
       hasFocused: false,
     },
     content: '',
-    selectedLens: '',
     selectedTag: null,
     tagOptions: [],
   });
 
-  const [lensesResult, runLensesQuery] = useQuery({
-    query: lensesQuery,
-  });
+  const { data } = useSWR(
+    ['/api/get-tags', defaultFetchHeaders.authorization],
+    fetcher,
+    {
+      onSuccess: ({ data }) => {
+        const fluxSandboxChannel = {};
+        const tagMap = data.map(item => {
+          // assign dev default channel
+          if (item.name.toLowerCase() === 'flux-sandbox') {
+            fluxSandboxChannel['value'] = item.name;
+            fluxSandboxChannel['label'] = `#${item.name}`;
+            fluxSandboxChannel['channelId'] = item.id;
+          }
 
-  const [channelsResult, runChannelsQuery] = useQuery({
-    query: channelsQuery,
-  });
+          return {
+            value: item.name,
+            label: `#${item.name}`,
+            channelId: item.id,
+          };
+        });
 
-  useEffect(() => {
-    if (lensesResult.data?.lenses) {
-      updateState(draft => {
-        // TODO: remove concept of lens if backend ready
-        draft.selectedLens = lensesResult.data?.lenses?.[0].id;
-      });
+        updateState(draft => {
+          draft.tagOptions = tagMap;
+          draft.selectedTag =
+            process.env.NODE_ENV === 'development'
+              ? fluxSandboxChannel
+              : tagMap[0];
+        });
+      },
     }
-  }, [lensesResult.data?.lenses]);
-
-  useEffect(() => {
-    if (channelsResult.data?.channels) {
-      const fluxSandboxChannel = {};
-      const tagMap = channelsResult.data?.channels.map(item => {
-        // assign dev default channel
-        if (item.name.toLowerCase() === 'flux-sandbox') {
-          fluxSandboxChannel['value'] = item.name;
-          fluxSandboxChannel['label'] = `#${item.name}`;
-          fluxSandboxChannel['channelId'] = item.id;
-        }
-
-        return { value: item.name, label: `#${item.name}`, channelId: item.id };
-      });
-
-      updateState(draft => {
-        draft.tagOptions = tagMap;
-        draft.selectedTag =
-          process.env.NODE_ENV === 'development'
-            ? fluxSandboxChannel
-            : tagMap[0];
-      });
-    }
-  }, [channelsResult.data?.channels]);
+  );
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -261,7 +242,6 @@ export default function NewPost() {
       state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
-      state.selectedLens &&
       state.selectedTag
     );
   };
@@ -288,7 +268,7 @@ export default function NewPost() {
             userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
           userDisplayName: userContext?.user?.displayName,
           domain: window.location.origin,
-          lensId: Number(state.selectedLens),
+          lensId: 1, // hard coded. this should be removed soon
         }),
       });
       const resp = await rawResp.json();
