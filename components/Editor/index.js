@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import styled from '@emotion/styled';
 import {
   BlockquotePlugin,
   BoldPlugin,
@@ -22,6 +23,17 @@ import {
   withInlineVoid,
   LinkPlugin,
   withLink,
+  ImagePlugin,
+  withImageUpload,
+  withSelectOnBackspace,
+  HeadingToolbar,
+  ToolbarImage,
+  ToolbarMark,
+  MARK_BOLD,
+  MARK_ITALIC,
+  MARK_STRIKETHROUGH,
+  MARK_UNDERLINE,
+  MARK_HIGHLIGHT,
 } from '@udecode/slate-plugins';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -33,6 +45,24 @@ import {
   optionsResetBlockTypes,
   initialValueAutoformat,
 } from './initialValues';
+
+import {
+  Image,
+  FormatBold,
+  FormatItalic,
+  FormatUnderlined,
+  FormatStrikethrough,
+} from '@styled-icons/material-sharp';
+
+const EditorWrapper = styled.div`
+  > .slate-Toolbar {
+    margin: 0;
+    padding: 0 0.5em;
+    border: 0;
+    background-color: var(--accent3);
+    border-radius: 6px;
+  }
+`;
 
 export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
   const plugins = [
@@ -78,6 +108,7 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
     }),
     MentionPlugin(),
     LinkPlugin(),
+    ImagePlugin(options),
   ];
 
   const withPlugins = [
@@ -88,7 +119,9 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
       rules: autoformatRules,
     }),
     withLink(options),
+    withImageUpload(),
     withInlineVoid({ plugins }),
+    withSelectOnBackspace({ allow: [options.img.type] }),
   ];
 
   if (defaultValue === undefined || defaultValue.length === 0) {
@@ -104,35 +137,51 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
   });
 
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={newValue => {
-        setValue(newValue);
-        onChange(newValue);
-        userMention.onChangeMention(editor);
-      }}
-    >
-      <EditablePlugins
-        readOnly={readOnly || false}
-        plugins={plugins}
-        placeholder="Start writing!"
-        onKeyDown={[userMention.onKeyDownMention]}
-        onKeyDownDeps={[
-          userMention.index,
-          userMention.search,
-          userMention.target,
-        ]}
-        spellCheck
-        autoFocus
-      />
+    <EditorWrapper>
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={newValue => {
+          setValue(newValue);
+          onChange(newValue);
+          userMention.onChangeMention(editor);
+        }}
+      >
+        <EditablePlugins
+          readOnly={readOnly || false}
+          plugins={plugins}
+          placeholder="Start writing!"
+          onKeyDown={[userMention.onKeyDownMention]}
+          onKeyDownDeps={[
+            userMention.index,
+            userMention.search,
+            userMention.target,
+          ]}
+          spellCheck
+          autoFocus
+        />
 
-      <MentionSelect
-        at={userMention.target}
-        valueIndex={userMention.index}
-        options={userMention.values}
-        onClickMention={userMention.onAddMention}
-      />
-    </Slate>
+        <HeadingToolbar>
+          <ToolbarImage {...options} icon={<Image />} />
+          <ToolbarMark type={MARK_BOLD} icon={<FormatBold />}></ToolbarMark>
+          <ToolbarMark type={MARK_ITALIC} icon={<FormatItalic />}></ToolbarMark>
+          <ToolbarMark
+            type={MARK_STRIKETHROUGH}
+            icon={<FormatStrikethrough />}
+          ></ToolbarMark>
+          <ToolbarMark
+            type={MARK_UNDERLINE}
+            icon={<FormatUnderlined />}
+          ></ToolbarMark>
+        </HeadingToolbar>
+
+        <MentionSelect
+          at={userMention.target}
+          valueIndex={userMention.index}
+          options={userMention.values}
+          onClickMention={userMention.onAddMention}
+        />
+      </Slate>
+    </EditorWrapper>
   );
 };

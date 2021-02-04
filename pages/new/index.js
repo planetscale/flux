@@ -115,12 +115,6 @@ const EditorWrapper = styled.div`
   flex-direction: column;
   height: fit-content;
   border-top: 1px solid var(--accent2);
-
-  > .slate-Toolbar {
-    margin: 0;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--accent2);
-  }
 `;
 
 const customStyles = {
