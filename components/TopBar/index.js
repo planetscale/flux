@@ -45,8 +45,14 @@ const Logo = styled.div`
   text-transform: uppercase;
   font-style: italic;
   font-weight: 900;
-  background: linear-gradient(90deg, #5b71b3 0%, #c56a86 138.77%), #000000;
+  background: linear-gradient(
+      90deg,
+      var(--highlight2) 0%,
+      var(--highlight) 100%
+    ),
+    var(--text);
   background-clip: text;
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-background-clip: text;
