@@ -28,18 +28,13 @@ const Wrapper = styled.div`
   top: 0;
   z-index: 1;
   background-color: var(--background);
+  opacity: 0.95;
 
   ${media.phone`
     flex-direction: column;
     align-items: stretch;
     padding: 1em;
   `}
-`;
-
-const BreadcrumbContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `;
 
 const Logo = styled.div`
@@ -72,6 +67,7 @@ const Organization = styled.div``;
 const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   font-size: 24px;
 
   > ${ButtonLink} {
@@ -148,33 +144,33 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
   return (
     <Wrapper>
-      <BreadcrumbContainer>
+      <Breadcrumb>
         <ButtonComposite onClick={redirectToHome}>
           <Logo>flux</Logo>
           <ForwardSlash>/</ForwardSlash>
           <Organization>{header}</Organization>
         </ButtonComposite>
-        <Breadcrumb>
-          <ForwardSlash>/</ForwardSlash>
-          <PageTitle>{subHeader}</PageTitle>
-          {query !== '' && (
-            <>
-              <ForwardSlash>/</ForwardSlash>
-              <PageTitle>{query}</PageTitle>
-            </>
-          )}
-        </Breadcrumb>
-
-        {selectedTag && (
-          <ButtonTag
-            onClick={() => {
-              setTag(null);
-            }}
-          >
-            <span>#{selectedTag.toLowerCase()}</span>
-          </ButtonTag>
+        <ForwardSlash>/</ForwardSlash>
+        <PageTitle>{subHeader}</PageTitle>
+        {query !== '' && (
+          <>
+            <ForwardSlash>/</ForwardSlash>
+            <PageTitle>{query}</PageTitle>
+          </>
         )}
-      </BreadcrumbContainer>
+        {selectedTag && (
+          <>
+            <ForwardSlash>/</ForwardSlash>
+            <ButtonTag
+              onClick={() => {
+                setTag(null);
+              }}
+            >
+              <span>#{selectedTag.toLowerCase()}</span>
+            </ButtonTag>
+          </>
+        )}
+      </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
           <ButtonSpecial type="button" onClick={redirectToNew}>
