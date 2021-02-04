@@ -6,7 +6,6 @@ Please use Node v15 and above, run the following commands
 
 ```
 npm ci
-npx prisma generate
 ```
 
 ### Run dev server
@@ -32,9 +31,9 @@ Please add Dev Environment Variables to `.env.development.local` file.
 ## Deploy on Vercel
 
 ## Tech Debt
+We are in between db migration tools/strategies.
 
-Prisma currently does not support [native data types](https://github.com/prisma/prisma/issues/4713). Because of this, the following commands need to be ran against any new database that we set up against this project:
-
+Below are some migrations that have been run since the original db creation
 ```SQL
 ALTER TABLE Reply
 MODIFY COLUMN content TEXT;
@@ -47,5 +46,3 @@ ALTER TABLE Star ADD KEY `replyId` (`replyId`);
 ALTER TABLE Star ADD CONSTRAINT `Star_ibfk_3` FOREIGN KEY (`replyId`) REFERENCES `Reply` (`id`) ON DELETE CASCADE ON UPDATE
  CASCADE;
 ```
-
-We need to use `prisma db push` when setting m-n relationships because it sets up [two indexes](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#conventions-for-relation-tables-in-implicit-m-n-relations) behind the scenes that are required for the many to many relationship table to work properly.
