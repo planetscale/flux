@@ -452,7 +452,7 @@ export default function PostPage() {
   };
 
   const updateReplyMap = node => {
-    const matchedNode = postState[node.id] || {};
+    const matchedNode = postState.replies[node.id] || {};
 
     updatePostState(draft => {
       draft.replies[node.id] = {
@@ -463,7 +463,7 @@ export default function PostPage() {
         ...node,
       };
 
-      if (node.parentId) {
+      if (!matchedNode && node.parentId) {
         draft.replies[node.parentId].children.push(node.id);
       }
     });
