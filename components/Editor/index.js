@@ -161,19 +161,24 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
           autoFocus
         />
 
-        <HeadingToolbar>
-          <ToolbarImage {...options} icon={<Image />} />
-          <ToolbarMark type={MARK_BOLD} icon={<FormatBold />}></ToolbarMark>
-          <ToolbarMark type={MARK_ITALIC} icon={<FormatItalic />}></ToolbarMark>
-          <ToolbarMark
-            type={MARK_STRIKETHROUGH}
-            icon={<FormatStrikethrough />}
-          ></ToolbarMark>
-          <ToolbarMark
-            type={MARK_UNDERLINE}
-            icon={<FormatUnderlined />}
-          ></ToolbarMark>
-        </HeadingToolbar>
+        {!readOnly && (
+          <HeadingToolbar>
+            <ToolbarImage {...options} icon={<Image />} />
+            <ToolbarMark type={MARK_BOLD} icon={<FormatBold />}></ToolbarMark>
+            <ToolbarMark
+              type={MARK_ITALIC}
+              icon={<FormatItalic />}
+            ></ToolbarMark>
+            <ToolbarMark
+              type={MARK_STRIKETHROUGH}
+              icon={<FormatStrikethrough />}
+            ></ToolbarMark>
+            <ToolbarMark
+              type={MARK_UNDERLINE}
+              icon={<FormatUnderlined />}
+            ></ToolbarMark>
+          </HeadingToolbar>
+        )}
 
         <MentionSelect
           at={userMention.target}
