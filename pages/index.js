@@ -55,6 +55,13 @@ export default function Home({ href, ...props }) {
     ],
     fetcher,
     {
+      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: true,
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      refreshInterval: 0,
       onSuccess: data => {
         const mappedPosts = data.reduce((acc, curr) => {
           // FIXME: Update when PostList is updated with new format

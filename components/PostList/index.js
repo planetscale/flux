@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import Link from 'next/link';
@@ -210,7 +209,6 @@ const EmptySummary = styled.span`
 
 export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
-  const router = useRouter();
 
   const enumMonth = Object.freeze({
     0: 'January',
