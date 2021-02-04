@@ -529,7 +529,7 @@ export default function PostPage() {
         ...node,
       };
 
-      if (!matchedNode && node.parentId) {
+      if (Object.keys(matchedNode) == 0 && node.parentId) {
         draft.replies[node.parentId].children.push(node.id);
       }
     });
