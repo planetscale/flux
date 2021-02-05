@@ -9,11 +9,15 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
 
-const fetcher = async (url, auth, last, before, _) => {
+const fetcher = async (url, auth, last, before, selectedTag) => {
+  console.log('SELECTEDTAG', selectedTag);
   const params = new URLSearchParams({
     last,
     before,
   });
+  if (selectedTag) {
+    params.append('tag', selectedTag);
+  }
   const response = await fetch(`${url}?${params}`, {
     method: 'GET',
     headers: {
@@ -37,13 +41,32 @@ const DEFAULT_PAGE_ADDEND = 10;
 
 const LOADING_POSTS = Array(10).fill(null);
 
-export default function Home({ href, ...props }) {
+const formatPosts = posts => {
+  const mappedPosts = (posts || []).reduce((acc, curr) => {
+    // FIXME: Update when PostList is updated with new format
+    acc[curr.id] = {
+      ...curr,
+      tag: { name: curr.tagName },
+      author: { displayName: curr.authorName },
+    };
+    delete acc[curr.id].tagName;
+    delete acc[curr.id].authorName;
+    return acc;
+  }, {});
+
+  return mappedPosts;
+};
+
+export default function Home() {
   const [state, setState] = useImmer({
     postList: {},
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
-    forceFetch: 0,
   });
+
+  const { setHeaders, setTag } = useTopBarActions();
+  const { user } = useUserContext();
+  const { selectedTag } = useTopBarContext();
 
   const { data } = useSWR(
     [
@@ -51,7 +74,7 @@ export default function Home({ href, ...props }) {
       defaultFetchHeaders.authorization,
       state.last,
       state.before,
-      state.forceFetch,
+      selectedTag,
     ],
     fetcher,
     {
@@ -63,28 +86,18 @@ export default function Home({ href, ...props }) {
       refreshWhenHidden: false,
       refreshInterval: 0,
       onSuccess: data => {
-        const mappedPosts = data.reduce((acc, curr) => {
-          // FIXME: Update when PostList is updated with new format
-          acc[curr.id] = {
-            ...curr,
-            tag: { name: curr.tagName },
-            author: { displayName: curr.authorName },
-          };
-          delete acc[curr.id].tagName;
-          delete acc[curr.id].authorName;
-          return acc;
-        }, {});
-
         setState(draft => {
-          draft.postList = { ...state.postList, ...mappedPosts };
+          draft.postList = { ...state.postList, ...formatPosts(data) };
         });
       },
     }
   );
-  const { setHeaders, setTag } = useTopBarActions();
-  const { user } = useUserContext();
-  const { selectedTag } = useTopBarContext();
 
+  if (data && Object.values(state.postList).length === 0) {
+    setState(draft => {
+      draft.postList = formatPosts(data);
+    });
+  }
   useEffect(() => {
     if (user?.org?.name) {
       setHeaders({
@@ -100,7 +113,6 @@ export default function Home({ href, ...props }) {
     setState(draft => {
       draft.postList = {};
       draft.before = -1;
-      draft.forceFetch = draft.forceFetch + 1;
     });
   }, [selectedTag]);
 
@@ -129,13 +141,11 @@ export default function Home({ href, ...props }) {
     }
   };
 
+  const posts = Object.values(state.postList).reverse();
   return (
     <HomeWrapper>
       <PostList
-        posts={[
-          ...Object.values(state.postList).reverse(),
-          ...(!data ? LOADING_POSTS : []),
-        ]}
+        posts={[...posts, ...(!posts.length ? LOADING_POSTS : [])]}
         handleTagClick={handleTagClick}
       />
     </HomeWrapper>
