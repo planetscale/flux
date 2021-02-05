@@ -27,14 +27,13 @@ import {
   withImageUpload,
   withSelectOnBackspace,
   HeadingToolbar,
-  ToolbarImage,
   ToolbarMark,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-  MARK_HIGHLIGHT,
 } from '@udecode/slate-plugins';
+import { ToolbarUploadImage } from './uploadImageToolbarAction';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
@@ -60,6 +59,13 @@ const EditorWrapper = styled.div`
     padding: 0 0.5em;
     border: 0;
     background-color: var(--accent3);
+    border-radius: 6px;
+  }
+
+  img {
+    max-height: unset !important;
+    border: 1px solid var(--accent2);
+    padding: 0.5em;
     border-radius: 6px;
   }
 `;
@@ -163,7 +169,8 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
 
         {!readOnly && (
           <HeadingToolbar>
-            <ToolbarImage {...options} icon={<Image />} />
+            {/* <ToolbarImage {...options} icon={<Image />} /> */}
+            <ToolbarUploadImage icon={<Image />} />
             <ToolbarMark type={MARK_BOLD} icon={<FormatBold />}></ToolbarMark>
             <ToolbarMark
               type={MARK_ITALIC}

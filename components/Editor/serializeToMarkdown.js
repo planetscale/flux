@@ -1,6 +1,7 @@
 import { Text } from 'slate';
 
 export const serialize = node => {
+  console.log(node);
   if (Text.isText(node)) {
     var text = node.text;
 
@@ -24,6 +25,8 @@ export const serialize = node => {
       return `[${node.children[0].text}](${node.url})`;
     case 'mention':
       return `[@${node.value}](/user/${node.value})`;
+    case 'img':
+      return `![${node.children[0].url}](${node.url})\n`;
   }
 
   const children = node.children.map(n => serialize(n)).join('');

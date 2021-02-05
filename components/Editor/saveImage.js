@@ -1,4 +1,8 @@
-export const save = async function (data) {
+import { v4 as uuidv4 } from 'uuid';
+import { firebaseStorage } from 'utils/auth/clientConfig';
+import imageCompression from 'browser-image-compression';
+
+export const saveImage = async function (data) {
   const fileCompressionOptions = {
     maxSizeMB: 1, // (default: Number.POSITIVE_INFINITY),
     maxWidthOrHeight: 1280,
