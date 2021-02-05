@@ -10,7 +10,7 @@ export default async (req, res) => {
     return;
   }
 
-  const { before, last } = req.query;
+  const { before, last, tag } = req.query;
 
   const connection = await mysql.createConnection(process.env.DATABASE_URL);
 
@@ -29,12 +29,18 @@ export default async (req, res) => {
     WHERE
         Post.tagId = Tag.id
     AND Post.authorId = User.id
-    AND Post.id ${Number(before) === -1 ? '>' : '<'} ${before}
+    AND Post.id ${Number(before) === -1 ? '>' : '<'} ?
+    ${tag ? 'AND Tag.name = ?' : ''}
     ORDER BY createdAt DESC 
-    LIMIT ${last}
+    LIMIT ?
   `;
 
-  const [rows] = await connection.query(query);
+  const values = [Number(before)];
+  if (tag) {
+    values.push(tag);
+  }
+  values.push(Number(last));
+  const [rows] = await connection.execute(query, values);
   connection.end();
 
   res.json(rows);

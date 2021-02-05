@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from 'utils/auth/clientConfig';
-import { useClient } from 'urql';
-import gql from 'graphql-tag';
 import Editor from 'rich-markdown-editor';
 import imageCompression from 'browser-image-compression';
 import getPlugins from './plugins';
@@ -14,16 +12,6 @@ const Wrapper = styled.div`
   textarea {
     :focus {
       outline: none;
-    }
-  }
-`;
-
-const slackMembersQuery = gql`
-  query {
-    slackMembers {
-      id
-      realName
-      displayName
     }
   }
 `;
@@ -120,8 +108,6 @@ export default function MarkdownEditor({
   handleContentChange,
   readOnly,
 }) {
-  const client = useClient();
-
   const save = async function (data) {
     const fileCompressionOptions = {
       maxSizeMB: 1, // (default: Number.POSITIVE_INFINITY),
@@ -168,6 +154,7 @@ export default function MarkdownEditor({
     return imgUrl;
   };
 
+  /* TODO: I assume this is a WIP so commenting out.  We are no longer using gql so the query will need to be converted.
   const populateUsers = async text => {
     try {
       const result = await client.query(slackMembersQuery).toPromise();
@@ -195,6 +182,7 @@ export default function MarkdownEditor({
       return [];
     }
   };
+  */
 
   const valueProps = {
     defaultValue: !readOnly ? content : undefined,

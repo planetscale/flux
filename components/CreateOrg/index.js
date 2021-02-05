@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
-import { useClient } from 'urql';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
 import { useAuthActions } from 'state/auth';
@@ -91,7 +90,6 @@ const getOrgNameFromEmailDomain = email => {
 
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
-  const client = useClient();
   const { userLogout } = useAuthActions();
   const { createUser } = useUserActions();
   const [state, setState] = useImmer({

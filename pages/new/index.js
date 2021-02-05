@@ -200,6 +200,13 @@ export default function NewPost() {
     ['/api/get-tags', defaultFetchHeaders.authorization],
     fetcher,
     {
+      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: true,
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      refreshInterval: 0,
       onSuccess: ({ data }) => {
         const fluxSandboxChannel = {};
         const tagMap = data.map(item => {

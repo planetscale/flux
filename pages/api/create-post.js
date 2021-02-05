@@ -33,7 +33,7 @@ export default async (req, res) => {
     Post
         (title, summary, authorId, content, tagId, lensId)
     VALUES
-        (?, ?, ?, ?, (SELECT id FROM Tag WHERE channelId = ? LIMIT 1), ?)
+        (?, ?, ?, ?, ?, ?)
   `;
   await connection.execute(insertQuery, [
     title,
