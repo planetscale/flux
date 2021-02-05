@@ -107,6 +107,7 @@ export default function MarkdownEditor({
   content,
   handleContentChange,
   readOnly,
+  onKeyDown,
 }) {
   const save = async function (data) {
     const fileCompressionOptions = {
@@ -184,13 +185,8 @@ export default function MarkdownEditor({
   };
   */
 
-  const valueProps = {
-    defaultValue: !readOnly ? content : undefined,
-    value: readOnly ? content : undefined,
-  };
-
   return (
-    <Wrapper>
+    <Wrapper onKeyDown={onKeyDown}>
       <Editor
         placeholder="Start writing!"
         uploadImage={save}
