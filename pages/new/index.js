@@ -194,6 +194,7 @@ export default function NewPost() {
     content: '',
     selectedTag: null,
     tagOptions: [],
+    disableSubmit: false,
   });
 
   const { data } = useSWR(
@@ -249,7 +250,8 @@ export default function NewPost() {
       state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
-      state.selectedTag
+      state.selectedTag &&
+      !state.disableSubmit
     );
   };
 
@@ -259,6 +261,10 @@ export default function NewPost() {
     }
 
     try {
+      updateState(draft => {
+        draft.disableSubmit = true;
+      });
+
       const rawResp = await fetch('/api/create-post', {
         method: 'POST',
         headers: {

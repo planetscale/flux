@@ -76,6 +76,8 @@ const fetcher = async (url, auth, params) => {
 export default function PostPage() {
   const router = useRouter();
 
+  const [isLoading, setLoading] = useState(false);
+
   const [commentButtonState, setCommentButtonState] = useImmer({
     replyButtons: {},
     editButtons: {},
@@ -184,6 +186,7 @@ export default function PostPage() {
     }
 
     try {
+      setLoading(true);
       const res = await fetch('/api/post/create-reply', {
         method: 'POST',
         headers: {
@@ -196,6 +199,7 @@ export default function PostPage() {
         }),
       });
       const result = await res.json();
+      setLoading(false);
       if (result.data) {
         setReply('');
         updateReplyMap(result.data);
@@ -203,6 +207,7 @@ export default function PostPage() {
         console.error(e);
       }
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -276,6 +281,7 @@ export default function PostPage() {
       });
 
       try {
+        setLoading(true);
         const res = await fetch(`/api/post/add-star`, {
           method: 'POST',
           headers: {
@@ -288,6 +294,7 @@ export default function PostPage() {
           }),
         });
         const result = await res.json();
+        setLoading(false);
 
         if (result.error) {
           undoStarAdd();
@@ -318,6 +325,7 @@ export default function PostPage() {
           });
         }
       } catch (e) {
+        setLoading(false);
         console.error(e);
         undoStarAdd();
       }
@@ -355,6 +363,7 @@ export default function PostPage() {
       });
 
       try {
+        setLoading(true);
         const res = await fetch(`/api/post/remove-star`, {
           method: 'POST',
           headers: {
@@ -366,10 +375,12 @@ export default function PostPage() {
           }),
         });
         const result = await res.json();
+        setLoading(false);
         if (!result) {
           undoStarDelete(backupStars, replyId);
         }
       } catch (e) {
+        setLoading(false);
         console.error(e);
         undoStarDelete(backupStars, replyId);
       }
@@ -413,6 +424,7 @@ export default function PostPage() {
     }
 
     try {
+      setLoading(true);
       const res = await fetch('/api/post/update-reply', {
         method: 'POST',
         headers: {
@@ -425,6 +437,7 @@ export default function PostPage() {
         }),
       });
       const result = await res.json();
+      setLoading(false);
 
       if (result.data) {
         updateReplyMap(result.data);
@@ -439,6 +452,7 @@ export default function PostPage() {
         console.error(e);
       }
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -449,6 +463,7 @@ export default function PostPage() {
     }
 
     try {
+      setLoading(true);
       const res = await fetch('/api/post/create-reply', {
         method: 'POST',
         headers: {
@@ -462,6 +477,7 @@ export default function PostPage() {
         }),
       });
       const result = await res.json();
+      setLoading(false);
       if (result.data) {
         updateReplyMap(result.data);
         setCommentInputs(draft => {
@@ -475,6 +491,7 @@ export default function PostPage() {
         console.error(e);
       }
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -493,6 +510,7 @@ export default function PostPage() {
 
   const handlePostEditSubmit = async () => {
     try {
+      setLoading(true);
       const res = await fetch('/api/post/update-post', {
         method: 'POST',
         headers: {
@@ -505,6 +523,7 @@ export default function PostPage() {
         }),
       });
       const result = await res.json();
+      setLoading(false);
       if (!result) {
         console.error(e);
       } else {
@@ -513,6 +532,7 @@ export default function PostPage() {
         });
       }
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -536,7 +556,7 @@ export default function PostPage() {
   };
 
   const canSubmit = str => {
-    if (!str) return false;
+    if (!str || isLoading) return false;
     return str.trim().match(/[0-9a-zA-Z]+/);
   };
 
@@ -628,7 +648,10 @@ export default function PostPage() {
               </Reply>
             )}
             <ActionBar>
-              <ButtonTertiary onClick={() => handleStarClick(comment.id)}>
+              <ButtonTertiary
+                onClick={() => handleStarClick(comment.id)}
+                disabled={isLoading}
+              >
                 <Icon className="icon-star"></Icon>
                 <div>{comment.stars.length}</div>
               </ButtonTertiary>
@@ -708,7 +731,10 @@ export default function PostPage() {
           )}
         </Content>
         <ActionBar>
-          <ButtonTertiary onClick={() => handleStarClick()}>
+          <ButtonTertiary
+            onClick={() => handleStarClick()}
+            disabled={isLoading}
+          >
             <Icon className="icon-star"></Icon>
             <div>{postState.stars.length}</div>
           </ButtonTertiary>
