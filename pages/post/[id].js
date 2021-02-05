@@ -685,12 +685,7 @@ export default function PostPage() {
         </PostMetadata>
 
         <Content>
-          <MarkdownEditor
-            content={content}
-            handleContentChange={handlePostContentChange}
-            readOnly={!postEditState.isEditing}
-          ></MarkdownEditor>
-          {postEditState.isEditing && (
+          {postEditState.isEditing ? (
             <>
               <MarkdownEditor
                 content={postEditState.content}
@@ -705,6 +700,12 @@ export default function PostPage() {
                 Update
               </ButtonMinor>
             </>
+          ) : (
+            <MarkdownEditor
+              content={content}
+              handleContentChange={handlePostContentChange}
+              readOnly={!postEditState.isEditing}
+            ></MarkdownEditor>
           )}
         </Content>
         <ActionBar>

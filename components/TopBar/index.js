@@ -4,6 +4,7 @@ import {
   ButtonSpecial,
   ButtonLink,
   ButtonTag,
+  ButtonComposite,
 } from 'components/Button';
 import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
@@ -27,6 +28,7 @@ const Wrapper = styled.div`
   top: 0;
   z-index: 1;
   background-color: var(--background);
+  opacity: 0.95;
 
   ${media.phone`
     flex-direction: column;
@@ -35,15 +37,8 @@ const Wrapper = styled.div`
   `}
 `;
 
-const BreadcrumbContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const Logo = styled(ButtonLink)`
+const Logo = styled.div`
   font-size: 24px;
-  margin-right: 8px;
   border-radius: unset;
   padding: 0 4px;
   font-family: 'Raleway', sans-serif;
@@ -64,16 +59,16 @@ const Logo = styled(ButtonLink)`
 
 const ForwardSlash = styled.div`
   color: var(--accent);
+  margin: 0 0.5em;
 `;
+
+const Organization = styled.div``;
 
 const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   font-size: 24px;
-
-  > ${ForwardSlash} {
-    margin: 0 0.5em;
-  }
 
   > ${ButtonLink} {
     border-radius: unset;
@@ -149,31 +144,33 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
   return (
     <Wrapper>
-      <BreadcrumbContainer>
-        <Logo onClick={redirectToHome}>flux</Logo>
-        <Breadcrumb>
+      <Breadcrumb>
+        <ButtonComposite onClick={redirectToHome}>
+          <Logo>flux</Logo>
           <ForwardSlash>/</ForwardSlash>
-          <ButtonLink onClick={redirectToHome}>{header}</ButtonLink>
-          <ForwardSlash>/</ForwardSlash>
-          <PageTitle>{subHeader}</PageTitle>
-          {query !== '' && (
-            <>
-              <ForwardSlash>/</ForwardSlash>
-              <PageTitle>{query}</PageTitle>
-            </>
-          )}
-        </Breadcrumb>
-
-        {selectedTag && (
-          <ButtonTag
-            onClick={() => {
-              setTag(null);
-            }}
-          >
-            <span>#{selectedTag.toLowerCase()}</span>
-          </ButtonTag>
+          <Organization>{header}</Organization>
+        </ButtonComposite>
+        <ForwardSlash>/</ForwardSlash>
+        <PageTitle>{subHeader}</PageTitle>
+        {query !== '' && (
+          <>
+            <ForwardSlash>/</ForwardSlash>
+            <PageTitle>{query}</PageTitle>
+          </>
         )}
-      </BreadcrumbContainer>
+        {selectedTag && (
+          <>
+            <ForwardSlash>/</ForwardSlash>
+            <ButtonTag
+              onClick={() => {
+                setTag(null);
+              }}
+            >
+              <span>#{selectedTag.toLowerCase()}</span>
+            </ButtonTag>
+          </>
+        )}
+      </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
           <ButtonSpecial type="button" onClick={redirectToNew}>
