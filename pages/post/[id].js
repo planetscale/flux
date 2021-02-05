@@ -418,8 +418,9 @@ export default function PostPage() {
     });
   };
 
-  const handleCommentEditSubmit = async e => {
-    if (!commentInputs.edits[e.target.dataset.commentId]?.trim()) {
+  const handleCommentEditSubmit = async (e, commentId) => {
+    const id = commentId ? commentId : e.target.dataset.commentId;
+    if (!commentInputs.edits[id]?.trim()) {
       return;
     }
 
@@ -432,8 +433,8 @@ export default function PostPage() {
           Authorization: defaultFetchHeaders.authorization,
         },
         body: JSON.stringify({
-          content: commentInputs.edits[e.target.dataset.commentId]?.trim(),
-          replyId: Number(e.target.dataset.commentId),
+          content: commentInputs.edits[id]?.trim(),
+          replyId: Number(id),
         }),
       });
       const result = await res.json();
@@ -442,11 +443,10 @@ export default function PostPage() {
       if (result.data) {
         updateReplyMap(result.data);
         setCommentInputs(draft => {
-          draft.edits[e.target.dataset.commentId] = '';
+          draft.edits[id] = '';
         });
         setCommentButtonState(draft => {
-          draft.editButtons[e.target.dataset.commentId] = !commentButtonState
-            .editButtons[e.target.dataset.commentId];
+          draft.editButtons[id] = !commentButtonState.editButtons[id];
         });
       } else {
         console.error(e);
@@ -457,8 +457,9 @@ export default function PostPage() {
     }
   };
 
-  const handleCommentReplySubmit = async e => {
-    if (!commentInputs.replies[e.target.dataset.commentId]?.trim()) {
+  const handleCommentReplySubmit = async (e, commentId) => {
+    const id = commentId ? commentId : e.target.dataset.commentId;
+    if (!commentInputs.replies[id]?.trim()) {
       return;
     }
 
@@ -471,9 +472,9 @@ export default function PostPage() {
           Authorization: defaultFetchHeaders.authorization,
         },
         body: JSON.stringify({
-          content: commentInputs.replies[e.target.dataset.commentId]?.trim(),
+          content: commentInputs.replies[id]?.trim(),
           postId: Number(router.query.id),
-          parentId: Number(e.target.dataset.commentId),
+          parentId: Number(id),
         }),
       });
       const result = await res.json();
@@ -481,11 +482,10 @@ export default function PostPage() {
       if (result.data) {
         updateReplyMap(result.data);
         setCommentInputs(draft => {
-          draft.replies[e.target.dataset.commentId] = '';
+          draft.replies[id] = '';
         });
         setCommentButtonState(draft => {
-          draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
-            .replyButtons[e.target.dataset.commentId];
+          draft.replyButtons[id] = !commentButtonState.replyButtons[id];
         });
       } else {
         console.error(e);
@@ -560,6 +560,16 @@ export default function PostPage() {
     return str.trim().match(/[0-9a-zA-Z]+/);
   };
 
+  const handleKeyPressSubmit = (e, callback, canSubmit, commentId) => {
+    if (e.code === 'Enter' && e.metaKey && canSubmit) {
+      if (commentId) {
+        callback(e, commentId);
+      } else {
+        callback();
+      }
+    }
+  };
+
   // Resursively render comments and their replies (and sub replies, etc)
   const renderComment = (comment, level) => {
     return (
@@ -608,6 +618,14 @@ export default function PostPage() {
                   handleContentChange={getContent => {
                     handleCommentEditsChange(getContent(), comment.id);
                   }}
+                  onKeyDown={e => {
+                    handleKeyPressSubmit(
+                      e,
+                      handleCommentEditSubmit,
+                      canSubmit(commentInputs.edits[comment.id]),
+                      comment.id
+                    );
+                  }}
                 ></MarkdownEditor>
                 <ButtonMinor
                   data-comment-id={comment.id}
@@ -634,6 +652,14 @@ export default function PostPage() {
                   content={commentInputs.replies[comment.id]}
                   handleContentChange={getContent => {
                     handleCommentRepliesChange(getContent(), comment.id);
+                  }}
+                  onKeyDown={e => {
+                    handleKeyPressSubmit(
+                      e,
+                      handleCommentReplySubmit,
+                      canSubmit(commentInputs.replies[comment.id]),
+                      comment.id
+                    );
                   }}
                 ></MarkdownEditor>
                 <ButtonMinor
@@ -713,6 +739,13 @@ export default function PostPage() {
               <MarkdownEditor
                 content={postEditState.content}
                 handleContentChange={handlePostContentChange}
+                onKeyDown={e => {
+                  handleKeyPressSubmit(
+                    e,
+                    handlePostEditSubmit,
+                    canSubmit(postEditState.content)
+                  );
+                }}
               ></MarkdownEditor>
               <ButtonMinor
                 type="submit"
@@ -756,6 +789,9 @@ export default function PostPage() {
         <MarkdownEditor
           content={reply}
           handleContentChange={handleReplyChange}
+          onKeyDown={e => {
+            handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
+          }}
         ></MarkdownEditor>
         <ButtonMinor
           type="submit"

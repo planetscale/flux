@@ -322,6 +322,12 @@ export default function NewPost() {
     if (!title.value.length) return 'invalid';
   };
 
+  const handleKeyPressSubmit = (e, callback, canSubmit) => {
+    if (e.code === 'Enter' && e.metaKey && canSubmit) {
+      callback();
+    }
+  };
+
   return (
     <PageWrapper>
       <Post>
@@ -385,6 +391,9 @@ export default function NewPost() {
           <MarkdownEditor
             content={state.content}
             handleContentChange={handleContentChange}
+            onKeyDown={e => {
+              handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
+            }}
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>
