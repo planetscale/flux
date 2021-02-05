@@ -23,7 +23,6 @@ export default async (req, res) => {
     userAvatar,
     userDisplayName,
     domain,
-    lensId,
   } = req.body;
 
   const connection = await mysql.createConnection(process.env.DATABASE_URL);
@@ -31,7 +30,7 @@ export default async (req, res) => {
   const insertQuery = `
     INSERT INTO
     Post
-        (title, summary, authorId, content, tagId, lensId)
+        (title, summary, authorId, content, tagId)
     VALUES
         (?, ?, ?, ?, ?, ?)
   `;
@@ -41,7 +40,6 @@ export default async (req, res) => {
     user.id,
     content,
     tagChannelId,
-    lensId,
   ]);
 
   const idQuery = `SELECT id, createdAt FROM Post WHERE id = LAST_INSERT_ID()`;

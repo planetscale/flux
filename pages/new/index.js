@@ -281,7 +281,6 @@ export default function NewPost() {
             userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
           userDisplayName: userContext?.user?.displayName,
           domain: window.location.origin,
-          lensId: 1, // hard coded. this should be removed soon
         }),
       });
       const resp = await rawResp.json();
