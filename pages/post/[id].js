@@ -648,10 +648,10 @@ export default function PostPage() {
               </Reply>
             ) : (
               <CommentContent>
-                <MarkdownEditor
-                  content={comment.content}
+                <SlateEditor
+                  defaultValue={deserialize(comment.content)}
                   readOnly={true}
-                ></MarkdownEditor>
+                ></SlateEditor>
               </CommentContent>
             )}
 
@@ -750,7 +750,7 @@ export default function PostPage() {
             </>
           ) : (
             <SlateEditor
-              // users={postEditState.allUsers}
+              users={postEditState.allUsers}
               onChange={handlePostContentChange}
               readOnly={!postEditState.isEditing}
               defaultValue={deserialize(content)}

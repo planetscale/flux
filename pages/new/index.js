@@ -10,11 +10,6 @@ import Select from 'react-select';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
-import {
-  getAllUsers,
-  getAllLenses,
-  getAllChannels,
-} from 'pageUtils/post/queries';
 import { serialize } from 'components/Editor/serializeToMarkdown';
 
 const TimeAndTags = styled.div`

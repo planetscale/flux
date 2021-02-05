@@ -15,6 +15,6 @@ export const deserialize = markdownContent => {
   const newOutput = JSON.parse(
     JSON.stringify(slateWrapper).replace('"type":"image"', '"type":"img"')
   );
-  console.log(newOutput);
+
   return newOutput;
 };
