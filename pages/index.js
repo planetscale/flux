@@ -10,7 +10,6 @@ import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
 
 const fetcher = async (url, auth, last, before, selectedTag) => {
-  console.log('SELECTEDTAG', selectedTag);
   const params = new URLSearchParams({
     last,
     before,

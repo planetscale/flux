@@ -118,3 +118,19 @@ export const ButtonTag = styled(ButtonBase)`
   text-transform: lowercase;
   line-height: 14px;
 `;
+
+export const ButtonComposite = styled.a`
+  display: flex;
+  flex-direction: row;
+  font-size: 24px;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 150ms;
+
+  &:hover:not([disabled]) {
+    cursor: pointer;
+    background-color: var(--accent3);
+    transform: scale(0.97);
+  }
+`;
