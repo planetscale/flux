@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import Link from 'next/link';
@@ -110,7 +109,6 @@ const MetaDate = styled.span`
 
 const MetaTag = styled.span`
   color: var(--link);
-
   &:hover {
     color: var(--highlight);
   }
@@ -211,7 +209,6 @@ const EmptySummary = styled.span`
 
 export default function PostList({ posts = [], handleTagClick }) {
   let lastDate = null;
-  const router = useRouter();
 
   const enumMonth = Object.freeze({
     0: 'January',
@@ -290,6 +287,13 @@ export default function PostList({ posts = [], handleTagClick }) {
     );
   };
 
+  const handleClick = (e, tagName) => {
+    if (e.target.className.includes('MetaTag')) {
+      e.preventDefault();
+      handleTagClick(e, tagName);
+    }
+  };
+
   return (
     <Wrapper>
       {posts.map((post, index) => {
@@ -307,7 +311,7 @@ export default function PostList({ posts = [], handleTagClick }) {
               </DemarcationString>
             )}
             <Link href={`/post/${id}`} passHref>
-              <Post>
+              <Post onClick={e => handleClick(e, tag?.name)}>
                 <PostWrapper>
                   <PostInfo>
                     <MetaInformation>
@@ -315,13 +319,7 @@ export default function PostList({ posts = [], handleTagClick }) {
                         {getLocaleDateTimeString(createdAt).toUpperCase()}
                       </MetaDate>
                       <span>&nbsp; &middot; &nbsp;</span>
-                      <MetaTag
-                        onClick={e => {
-                          handleTagClick(e, tag?.name);
-                        }}
-                      >
-                        #{tag?.name}
-                      </MetaTag>
+                      <MetaTag>#{tag?.name}</MetaTag>
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
                     </MetaInformation>

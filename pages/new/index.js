@@ -1,13 +1,12 @@
+import useSWR from 'swr';
+import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import { SlateEditor } from 'components/Editor';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
-import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
@@ -172,6 +171,17 @@ const dateTimeOptions = {
 
 const TITLE_MAX_LENGTH = 70;
 
+const fetcher = async (url, auth) => {
+  const response = await fetch(`${url}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: auth,
+    },
+  });
+  return response.json();
+};
+
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
@@ -189,68 +199,49 @@ export default function NewPost() {
       hasFocused: false,
     },
     content: {},
-    selectedLens: '',
     selectedTag: null,
     tagOptions: [],
-    allUsers: [],
+    disableSubmit: false,
   });
 
-  const [lensesResult] = useQuery({
-    query: getAllLenses,
-  });
+  const { data } = useSWR(
+    ['/api/get-tags', defaultFetchHeaders.authorization],
+    fetcher,
+    {
+      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: true,
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      refreshInterval: 0,
+      onSuccess: ({ data }) => {
+        const fluxSandboxChannel = {};
+        const tagMap = data.map(item => {
+          // assign dev default channel
+          if (item.name.toLowerCase() === 'flux-sandbox') {
+            fluxSandboxChannel['value'] = item.name;
+            fluxSandboxChannel['label'] = `#${item.name}`;
+            fluxSandboxChannel['channelId'] = item.id;
+          }
 
-  const [channelsResult] = useQuery({
-    query: getAllChannels,
-  });
+          return {
+            value: item.name,
+            label: `#${item.name}`,
+            channelId: item.id,
+          };
+        });
 
-  const [getAllUsersResult] = useQuery({
-    query: getAllUsers,
-  });
-
-  useEffect(() => {
-    if (getAllUsersResult.data?.slackMembers) {
-      const allUsers = getAllUsersResult.data?.slackMembers.map(member => ({
-        value: member.displayName,
-      }));
-
-      updateState(draft => {
-        draft.allUsers = allUsers;
-      });
+        updateState(draft => {
+          draft.tagOptions = tagMap;
+          draft.selectedTag =
+            process.env.NODE_ENV === 'development'
+              ? fluxSandboxChannel
+              : tagMap[0];
+        });
+      },
     }
-  }, [getAllUsersResult.data?.slackMembers]);
-
-  useEffect(() => {
-    if (lensesResult.data?.lenses) {
-      updateState(draft => {
-        // TODO: remove concept of lens if backend ready
-        draft.selectedLens = lensesResult.data?.lenses?.[0].id;
-      });
-    }
-  }, [lensesResult.data?.lenses]);
-
-  useEffect(() => {
-    if (channelsResult.data?.channels) {
-      const fluxSandboxChannel = {};
-      const tagMap = channelsResult.data?.channels.map(item => {
-        // assign dev default channel
-        if (item.name.toLowerCase() === 'flux-sandbox') {
-          fluxSandboxChannel['value'] = item.name;
-          fluxSandboxChannel['label'] = `#${item.name}`;
-          fluxSandboxChannel['channelId'] = item.id;
-        }
-
-        return { value: item.name, label: `#${item.name}`, channelId: item.id };
-      });
-
-      updateState(draft => {
-        draft.tagOptions = tagMap;
-        draft.selectedTag =
-          process.env.NODE_ENV === 'development'
-            ? fluxSandboxChannel
-            : tagMap[0];
-      });
-    }
-  }, [channelsResult.data?.channels]);
+  );
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -265,8 +256,8 @@ export default function NewPost() {
       state.title?.value.trim() &&
       state.subtitle?.value.trim() &&
       state.content &&
-      state.selectedLens &&
-      state.selectedTag
+      state.selectedTag &&
+      !state.disableSubmit
     );
   };
 
@@ -276,30 +267,33 @@ export default function NewPost() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('title', state.title.value);
-      formData.append('content', serialize(state.content[0]));
-      formData.append('summary', state.subtitle.value);
-      formData.append('userId', userContext?.user?.id);
-      formData.append('lensId', Number(state.selectedLens));
-      formData.append(
-        'userAvatar',
-        userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg'
-      );
-      formData.append('userDisplayName', userContext?.user?.displayName);
-      formData.append('domain', window.location.origin);
-      formData.append('tagName', state.selectedTag.value);
-      formData.append('tagChannelId', state.selectedTag.channelId);
+      updateState(draft => {
+        draft.disableSubmit = true;
+      });
 
-      const rawResp = await fetch('/api/upload/post', {
+      const rawResp = await fetch('/api/create-post', {
         method: 'POST',
-        headers: defaultFetchHeaders,
-        body: formData,
+        headers: {
+          Authorization: defaultFetchHeaders.authorization,
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+          title: state.title.value,
+          content: serialize(state.content[0]),
+          summary: state.subtitle.value,
+          tagChannelId: state.selectedTag.channelId,
+          tagName: state.selectedTag.value,
+          userAvatar:
+            userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
+          userDisplayName: userContext?.user?.displayName,
+          domain: window.location.origin,
+          lensId: 1, // hard coded. this should be removed soon
+        }),
       });
       const resp = await rawResp.json();
 
-      if (rawResp.status === 200 && resp.id) {
-        router.push(`/post/${resp.id}`);
+      if (!resp.error && resp.data.id) {
+        router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
       console.error(e);
@@ -395,7 +389,7 @@ export default function NewPost() {
         </TitleInputWrapper>
         <EditorWrapper>
           <SlateEditor
-            users={state.allUsers}
+            // users={state.allUsers}
             onChange={handleContentChange}
             readOnly={false}
           ></SlateEditor>

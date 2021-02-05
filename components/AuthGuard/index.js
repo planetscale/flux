@@ -17,16 +17,8 @@ export default function AuthGuard({ token, children }) {
   });
 
   useEffect(() => {
-    if (
-      (isAuthed && token) ||
-      (isAuthed &&
-        token &&
-        prevPathRef.current === '/login' &&
-        currPathRef.current === '/')
-    ) {
-      getUser({
-        email: authUser?.email,
-      });
+    if (isAuthed && token && !user) {
+      getUser();
     }
   }, [isAuthed, token, prevPathRef.current, currPathRef.current]);
 
