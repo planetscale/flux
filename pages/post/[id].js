@@ -29,7 +29,6 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
 import { original } from 'immer';
 import styled from '@emotion/styled';
-import MarkdownEditor from 'components/MarkdownEditor';
 import { SlateEditor } from 'components/Editor';
 import { media } from 'pageUtils/post/theme';
 import { deserialize } from 'components/Editor/deserializeFromMarkdown';
@@ -86,6 +85,7 @@ export default function PostPage() {
     replyButtons: {},
     editButtons: {},
   });
+
   const [postEditState, setPostEditState] = useImmer({
     content: {},
     isEditing: false,
@@ -95,6 +95,8 @@ export default function PostPage() {
     replies: {},
     stars: [],
   });
+
+  const [postMeta, updatePostMeta] = useState({});
 
   const [reply, setReply] = useState({});
 
@@ -124,6 +126,7 @@ export default function PostPage() {
         setPostEditState(draft => {
           draft.content = data.content;
         });
+        updatePostMeta(data);
         updatePostState(draft => {
           draft.stars = data.stars.map(s => ({
             id: s.starId,
@@ -170,17 +173,6 @@ export default function PostPage() {
       },
     }
   );
-
-  const {
-    authorId,
-    authorName,
-    authorUsername,
-    avatar,
-    tagName,
-    content,
-    createdAt,
-    title,
-  } = postData?.data || {};
 
   const handleReplyChange = content => {
     setReply(content);
@@ -706,9 +698,9 @@ export default function PostPage() {
   };
 
   // TODO: add better loading indicator, now there's literally none
-  if (!postData) {
-    return <></>;
-  }
+  // if (!postData) {
+  //   return <></>;
+  // }
 
   return (
     <PageWrapper>
@@ -716,29 +708,35 @@ export default function PostPage() {
         <PostMetadata>
           <Meta>
             <MetaData>
-              <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+              <DateTime>{getLocaleDateTimeString(postMeta.createdAt)}</DateTime>
               <div>&nbsp; &middot; &nbsp;</div>
-              <div>#{tagName}</div>
+              <div>#{postMeta.tagName}</div>
             </MetaData>
             <MetaActions>
-              {userContext.user.id === authorId && (
+              {userContext.user.id === postMeta.authorId && (
                 <ButtonMinor type="submit" onClick={togglePostEdit}>
                   {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
                 </ButtonMinor>
               )}
             </MetaActions>
           </Meta>
-          <Title>{title}</Title>
+          <Title>{postMeta.title}</Title>
           <AuthorNamePlate
-            displayName={authorName}
-            userHandle={authorUsername}
-            avatar={avatar}
+            displayName={postMeta.authorName}
+            userHandle={postMeta.authorUsername}
+            avatar={postMeta.avatar}
           />
         </PostMetadata>
 
         <Content>
           {postEditState.isEditing ? (
             <>
+              <SlateEditor
+                users={postEditState.allUsers}
+                onChange={handlePostContentChange}
+                readOnly={!postEditState.isEditing}
+                defaultValue={deserialize(postMeta.content)}
+              ></SlateEditor>
               <ButtonMinor
                 type="submit"
                 onClick={handlePostEditSubmit}
@@ -753,7 +751,7 @@ export default function PostPage() {
               users={postEditState.allUsers}
               onChange={handlePostContentChange}
               readOnly={!postEditState.isEditing}
-              defaultValue={deserialize(content)}
+              defaultValue={deserialize(postMeta.content)}
             ></SlateEditor>
           )}
         </Content>
