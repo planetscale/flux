@@ -1,31 +1,22 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useAuthContext } from 'state/auth';
 import { useUserActions, useUserContext } from 'state/user';
 
-export default function AuthGuard({ token, children }) {
+export default function AuthGuard({ children }) {
   const router = useRouter();
-  const { isAuthed, authChecked, user: authUser } = useAuthContext();
+  const { isAuthed, authChecked } = useAuthContext();
   const { user, loaded } = useUserContext();
   const { getUser } = useUserActions();
-  const prevPathRef = useRef(null);
-  const currPathRef = useRef(null);
 
   useEffect(() => {
-    prevPathRef.current = currPathRef.current;
-    currPathRef.current = router.pathname;
-  });
-
-  useEffect(() => {
-    if (isAuthed && token && !user) {
+    if (isAuthed && !user && !loaded) {
       getUser();
     }
-  }, [isAuthed, token, prevPathRef.current, currPathRef.current]);
+  }, [isAuthed]);
 
   useEffect(() => {
-    if (isAuthed && loaded && user && router.pathname === '/login') {
-      router.push('/');
-    } else if (
+    if (
       (!isAuthed && authChecked) ||
       (isAuthed && authChecked && loaded && !user)
     ) {
@@ -33,5 +24,5 @@ export default function AuthGuard({ token, children }) {
     }
   }, [isAuthed, user, loaded, authChecked]);
 
-  return <>{children}</>;
+  return user ? <>{children}</> : null;
 }

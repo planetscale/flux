@@ -2,7 +2,9 @@ import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
 import { useAuthActions, useAuthContext } from 'state/auth';
 import CreateOrg from 'components/CreateOrg';
-import { useUserContext } from 'state/user';
+import { useUserContext, useUserActions } from 'state/user';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const Wrapper = styled.div`
   display: flex;
@@ -83,10 +85,24 @@ const AuthButton = styled.button`
   }
 `;
 
-export default function Login() {
+export default function Login({ token }) {
   const { userLogin } = useAuthActions();
-  const authContext = useAuthContext();
-  const userContext = useUserContext();
+  const { user, loaded, isLoading } = useUserContext();
+  const { isAuthed, authChecked, user: authUser } = useAuthContext();
+  const { getUser } = useUserActions();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthed && token && user?.org) {
+      router.push('/');
+    }
+  }, [isAuthed, token, user]);
+
+  useEffect(() => {
+    if (isAuthed && token && !isLoading) {
+      getUser();
+    }
+  }, [token]);
 
   const handleLogin = () => {
     userLogin();
@@ -98,7 +114,7 @@ export default function Login() {
         <LogoContainer>
           <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
         </LogoContainer>
-        {!authContext.isAuthed && authContext.authChecked && (
+        {!isAuthed && authChecked && (
           <AuthButtonContainer>
             <AuthButton onClick={handleLogin}>
               <Logo
@@ -111,15 +127,13 @@ export default function Login() {
             </AuthButton>
           </AuthButtonContainer>
         )}
-        {authContext.isAuthed &&
-          userContext.loaded &&
-          !userContext.user?.org && (
-            <CreateOrg
-              name={authContext?.user?.displayName}
-              email={authContext?.user?.email}
-              avatar={authContext?.user?.photoURL ?? ''}
-            />
-          )}
+        {isAuthed && loaded && !user?.org && (
+          <CreateOrg
+            name={authUser?.displayName}
+            email={authUser?.email}
+            avatar={authUser?.photoURL ?? ''}
+          />
+        )}
       </ContentContainer>
     </Wrapper>
   );

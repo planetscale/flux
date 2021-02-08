@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserContextProvider } from 'state/user';
 import useSWR from 'swr';
 import {
@@ -64,15 +64,15 @@ function AppContainer({ children }) {
 
   return (
     <UserContextProvider>
-      <AuthGuard token={token}>
-        <TopBarContextProvider>
-          {isLoginPage() ? (
-            <>{children}</>
-          ) : (
+      <TopBarContextProvider>
+        {isLoginPage() ? (
+          React.cloneElement(children, { token })
+        ) : (
+          <AuthGuard>
             <AppContentWrapper token={token}>{children}</AppContentWrapper>
-          )}
-        </TopBarContextProvider>
-      </AuthGuard>
+          </AuthGuard>
+        )}
+      </TopBarContextProvider>
     </UserContextProvider>
   );
 }
