@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserContextProvider } from 'state/user';
-import {
-  setDefaultFetchHeaders,
-  setFireAuthObserver,
-} from 'utils/auth/clientConfig';
+import { setFireAuthObserver, getToken } from 'utils/auth/clientConfig';
 import AuthGuard from 'components/AuthGuard';
 import { useAuthActions } from 'state/auth';
 import AppContentWrapper from './AppContentWrapper';
@@ -29,24 +26,14 @@ function AppContainer({ children }) {
     if (user && !isValidUser(user)) {
       return userLogout();
     }
-    updateToken(user);
     rehydrateUser(user);
+    getToken().then(token => {
+      setToken(token);
+    });
   };
 
   const onAuthUserFailed = () => {
     setUserAuthChecked();
-  };
-
-  const updateToken = async user => {
-    try {
-      const jwt = await user.getIdToken(true);
-      setToken(jwt);
-      setDefaultFetchHeaders({
-        authorization: jwt ? `Bearer ${jwt}` : '',
-      });
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   const isLoginPage = () => {
@@ -55,15 +42,15 @@ function AppContainer({ children }) {
 
   return (
     <UserContextProvider>
-      <AuthGuard token={token}>
-        <TopBarContextProvider>
-          {isLoginPage() ? (
-            <>{children}</>
-          ) : (
+      <TopBarContextProvider>
+        {isLoginPage() ? (
+          React.cloneElement(children, { token })
+        ) : (
+          <AuthGuard>
             <AppContentWrapper token={token}>{children}</AppContentWrapper>
-          )}
-        </TopBarContextProvider>
-      </AuthGuard>
+          </AuthGuard>
+        )}
+      </TopBarContextProvider>
     </UserContextProvider>
   );
 }
