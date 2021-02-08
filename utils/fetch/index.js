@@ -1,0 +1,43 @@
+import {
+  defaultFetchHeaders,
+  logoutWithFirebase,
+} from 'utils/auth/clientConfig';
+
+export const fetcher = async (
+  method,
+  url,
+  params = {},
+  overrideHeaders = {}
+) => {
+  const headers = {
+    ...defaultFetchHeaders,
+    ...overrideHeaders,
+  };
+
+  let response;
+  if (method === 'GET') {
+    const searchParams = new URLSearchParams(params);
+    response = await fetch(`${url}?${searchParams}`, {
+      method: 'GET',
+      headers,
+    });
+  } else if (method === 'POST') {
+    response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(params),
+    });
+  } else {
+    return;
+  }
+
+  // There has been an unauthorized request. Either the user has gotten access to something they aren't allowed to or their auth token
+  // is bad or expired. Log them out and kick them back to login screen.
+  if (response.status === 401) {
+    // TODO: Notify the user in someway that they have been logged out for inactivity.
+    await logoutWithFirebase();
+    return;
+  }
+
+  return await response.json();
+};
