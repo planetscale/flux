@@ -1,6 +1,5 @@
 import React from 'react';
 import useSWR from 'swr';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
@@ -31,6 +30,7 @@ import { original } from 'immer';
 import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { media } from 'pageUtils/post/theme';
+import { fetcher } from 'utils/fetch';
 
 const Meta = styled.div`
   display: flex;
@@ -61,18 +61,6 @@ const MetaActions = styled.div`
   `}
 `;
 
-const fetcher = async (url, auth, params) => {
-  const searchParams = new URLSearchParams(params);
-  const response = await fetch(`${url}?${searchParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: auth,
-    },
-  });
-  return response.json();
-};
-
 export default function PostPage() {
   const router = useRouter();
 
@@ -100,20 +88,9 @@ export default function PostPage() {
   const userContext = useUserContext();
 
   const { data: postData } = useSWR(
-    [
-      '/api/post/get-post',
-      defaultFetchHeaders.authorization,
-      Number(router.query?.id),
-    ],
-    (url, auth, id) => fetcher(url, auth, { id }),
+    ['/api/post/get-post', Number(router.query?.id)],
+    (url, id) => fetcher('GET', url, { id }),
     {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
       onSuccess: ({ data }) => {
         setPostEditState(draft => {
           draft.content = data.content;
@@ -131,20 +108,9 @@ export default function PostPage() {
   );
 
   useSWR(
-    [
-      '/api/post/get-replies',
-      defaultFetchHeaders.authorization,
-      Number(router.query?.id),
-    ],
-    (url, auth, postId) => fetcher(url, auth, { postId }),
+    ['/api/post/get-replies', Number(router.query?.id)],
+    (url, postId) => fetcher('GET', url, { postId }),
     {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
       onSuccess: ({ data }) => {
         // Replies come back in a flat array.  We want a flat map so we can do quick look ups and mutations. Each reply also contains a
         // 'children' property which holds the ids of all direct children of the reply.
@@ -187,18 +153,10 @@ export default function PostPage() {
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/create-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: reply.trim(),
-          postId: Number(router.query.id),
-        }),
+      const result = await fetcher('POST', '/api/post/create-reply', {
+        content: reply.trim(),
+        postId: Number(router.query.id),
       });
-      const result = await res.json();
       setLoading(false);
       if (result.data) {
         setReply('');
@@ -282,18 +240,10 @@ export default function PostPage() {
 
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/add-star`, {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            Authorization: defaultFetchHeaders.authorization,
-          },
-          body: JSON.stringify({
-            postId: Number(router.query?.id),
-            replyId: Number(replyId) || undefined,
-          }),
+        const result = await fetcher('POST', `/api/post/add-star`, {
+          postId: Number(router.query?.id),
+          replyId: Number(replyId) || undefined,
         });
-        const result = await res.json();
         setLoading(false);
 
         if (result.error) {
@@ -364,17 +314,9 @@ export default function PostPage() {
 
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/remove-star`, {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            Authorization: defaultFetchHeaders.authorization,
-          },
-          body: JSON.stringify({
-            id: match.id,
-          }),
+        const result = await fetcher('POST', `/api/post/remove-star`, {
+          id: match.id,
         });
-        const result = await res.json();
         setLoading(false);
         if (!result) {
           undoStarDelete(backupStars, replyId);
@@ -426,18 +368,10 @@ export default function PostPage() {
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/update-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: commentInputs.edits[id]?.trim(),
-          replyId: Number(id),
-        }),
+      const result = await fetcher('POST', '/api/post/update-reply', {
+        content: commentInputs.edits[id]?.trim(),
+        replyId: Number(id),
       });
-      const result = await res.json();
       setLoading(false);
 
       if (result.data) {
@@ -465,19 +399,11 @@ export default function PostPage() {
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/create-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: commentInputs.replies[id]?.trim(),
-          postId: Number(router.query.id),
-          parentId: Number(id),
-        }),
+      const result = await fetcher('POST', '/api/post/create-reply', {
+        content: commentInputs.replies[id]?.trim(),
+        postId: Number(router.query.id),
+        parentId: Number(id),
       });
-      const result = await res.json();
       setLoading(false);
       if (result.data) {
         updateReplyMap(result.data);
@@ -511,18 +437,10 @@ export default function PostPage() {
   const handlePostEditSubmit = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/post/update-post', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: postEditState.content,
-          postId: Number(router.query.id),
-        }),
+      const result = await fetcher('POST', '/api/post/update-post', {
+        content: postEditState.content,
+        postId: Number(router.query.id),
       });
-      const result = await res.json();
       setLoading(false);
       if (!result) {
         console.error(e);

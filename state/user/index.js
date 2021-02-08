@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useImmer } from 'use-immer';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { fetcher } from 'utils/fetch';
 
 const defaultContext = {
   user: null,
@@ -33,14 +33,7 @@ const useUserActions = () => {
       draft.loading = true;
     });
     try {
-      const response = await fetch('/api/get-user', {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-      });
-      const { data: user } = await response.json();
+      const { data: user } = await fetcher('GET', '/api/get-user');
       // FIXME: Refactor the app's user object to not have nested elements
       const restructureUser = user
         ? {
@@ -70,15 +63,11 @@ const useUserActions = () => {
   };
 
   const createUser = async params => {
-    const res = await fetch(`/api/create-user`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        Authorization: defaultFetchHeaders.authorization,
-      },
-      body: JSON.stringify(params),
-    });
-    const { data: user, error } = await res.json();
+    const { data: user, error } = await fetcher(
+      'POST',
+      `/api/create-user`,
+      params
+    );
     if (!error) {
       // FIXME: Refactor the app's user object to not have nested elements
       const restructureUser = user

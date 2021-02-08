@@ -40,7 +40,7 @@ const logoutWithFirebase = () => {
 };
 
 const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
-  firebase.auth().onIdTokenChanged(function (user) {
+  firebase.auth().onAuthStateChanged(function (user) {
     if (!user) {
       noUserCallback?.();
     } else {
@@ -49,7 +49,9 @@ const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
   });
 };
 
-let defaultFetchHeaders = {};
+let defaultFetchHeaders = {
+  'Content-type': 'application/json; charset=UTF-8',
+};
 
 const setDefaultFetchHeaders = headersOverwrite => {
   defaultFetchHeaders = {
