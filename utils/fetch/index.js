@@ -1,5 +1,6 @@
 import {
   defaultFetchHeaders,
+  getToken,
   logoutWithFirebase,
 } from 'utils/auth/clientConfig';
 
@@ -9,8 +10,10 @@ export const fetcher = async (
   params = {},
   overrideHeaders = {}
 ) => {
+  const token = await getToken();
   const headers = {
     ...defaultFetchHeaders,
+    authorization: token ? `Bearer ${token}` : '',
     ...overrideHeaders,
   };
 

@@ -6,14 +6,14 @@ import { useUserActions, useUserContext } from 'state/user';
 export default function AuthGuard({ children }) {
   const router = useRouter();
   const { isAuthed, authChecked } = useAuthContext();
-  const { user, loaded } = useUserContext();
+  const { user, loaded, isLoading } = useUserContext();
   const { getUser } = useUserActions();
 
   useEffect(() => {
-    if (isAuthed && !user && !loaded) {
+    if (isAuthed && !isLoading && !loaded) {
       getUser();
     }
-  }, [isAuthed]);
+  }, [isAuthed, user]);
 
   useEffect(() => {
     if (

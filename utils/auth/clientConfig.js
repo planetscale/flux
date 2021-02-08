@@ -49,6 +49,10 @@ const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
   });
 };
 
+const getToken = (forceRefetch = false) => {
+  return firebase.auth().currentUser?.getIdToken(forceRefetch);
+};
+
 let defaultFetchHeaders = {
   'Content-type': 'application/json; charset=UTF-8',
 };
@@ -67,4 +71,5 @@ export {
   defaultFetchHeaders,
   setDefaultFetchHeaders,
   firebaseStorage,
+  getToken,
 };
