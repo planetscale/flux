@@ -5,7 +5,10 @@ class AppDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="Flux" content="black-translucent"></meta>
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+          ></meta>
           <link rel="icon" href="/favicon.svg" />
           <link
             rel="preconnect"
