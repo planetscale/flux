@@ -1,5 +1,5 @@
-import mysql from 'mysql2/promise';
 import { cors, validateUser } from './_utils/middleware';
+import { createConnection } from './_utils/connection';
 
 export default async (req, res) => {
   try {
@@ -12,7 +12,7 @@ export default async (req, res) => {
 
   const { before, last, tag } = req.query;
 
-  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  const connection = await createConnection();
 
   const query = `
     SELECT

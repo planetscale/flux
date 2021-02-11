@@ -30,19 +30,12 @@ Please add Dev Environment Variables to `.env.development.local` file.
 
 ## Deploy on Vercel
 
-## Tech Debt
-We are in between db migration tools/strategies.
+## DB Migration
 
-Below are some migrations that have been run since the original db creation
-```SQL
-ALTER TABLE Reply
-MODIFY COLUMN content TEXT;
+This project uses [db-migrate](https://github.com/db-migrate/node-db-migrate) to manage database migrations. You can find the docs [here](https://db-migrate.readthedocs.io/en/latest).
 
-ALTER TABLE Post
-MODIFY COLUMN content TEXT;
+**To create a new migration**
+`npm run migrate create {MIGRATION_NAME} --sql-file`
 
-ALTER TABLE Star ADD COLUMN replyId INT;
-ALTER TABLE Star ADD KEY `replyId` (`replyId`);
-ALTER TABLE Star ADD CONSTRAINT `Star_ibfk_3` FOREIGN KEY (`replyId`) REFERENCES `Reply` (`id`) ON DELETE CASCADE ON UPDATE
- CASCADE;
-```
+**To run migrations**
+`npm run migration up`
