@@ -225,7 +225,6 @@ export default function NewPost() {
   const canSubmitPost = () => {
     return (
       state.title?.value.trim() &&
-      state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
       state.selectedTag &&
