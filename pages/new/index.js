@@ -225,7 +225,6 @@ export default function NewPost() {
   const canSubmitPost = () => {
     return (
       state.title?.value.trim() &&
-      state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
       state.selectedTag &&
@@ -246,7 +245,7 @@ export default function NewPost() {
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
         content: state.content,
-        summary: state.subtitle.value,
+        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
         tagChannelId: state.selectedTag.channelId,
         tagName: state.selectedTag.value,
         userAvatar:
@@ -342,10 +341,7 @@ export default function NewPost() {
             {TITLE_MAX_LENGTH - state.title.value.length}
           </div>
         </TitleInputWrapper>
-        <TitleInputWrapper
-          className={`${getTitleClasses(state.subtitle)}`}
-          onBlur={() => handleBlur('subtitle')}
-        >
+        <TitleInputWrapper>
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"
