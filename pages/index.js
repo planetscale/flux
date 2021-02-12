@@ -38,6 +38,10 @@ const formatPosts = posts => {
   return mappedPosts;
 };
 
+export const config = {
+  unstable_runtimeJS: false,
+};
+
 export default function Home() {
   const [state, setState] = useImmer({
     postList: {},
