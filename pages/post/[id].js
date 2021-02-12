@@ -532,6 +532,7 @@ export default function PostPage() {
             {commentButtonState.editButtons[comment.id] ? (
               <Reply>
                 <MarkdownEditor
+                  placeholder="Comment"
                   content={commentInputs.edits[comment.id]}
                   handleContentChange={getContent => {
                     handleCommentEditsChange(getContent(), comment.id);
@@ -558,6 +559,7 @@ export default function PostPage() {
             ) : (
               <CommentContent>
                 <MarkdownEditor
+                  placeholder="Comment"
                   content={comment.content}
                   readOnly={true}
                 ></MarkdownEditor>
@@ -567,6 +569,7 @@ export default function PostPage() {
             {commentButtonState.replyButtons[comment.id] && (
               <Reply>
                 <MarkdownEditor
+                  placeholder="Comment"
                   content={commentInputs.replies[comment.id]}
                   handleContentChange={getContent => {
                     handleCommentRepliesChange(getContent(), comment.id);
@@ -705,6 +708,7 @@ export default function PostPage() {
 
       <Reply>
         <MarkdownEditor
+          placeholder="Comment"
           content={reply}
           handleContentChange={handleReplyChange}
           onKeyDown={e => {
