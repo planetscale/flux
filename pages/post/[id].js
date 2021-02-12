@@ -61,6 +61,10 @@ const MetaActions = styled.div`
   `}
 `;
 
+export const config = {
+  unstable_runtimeJS: false,
+};
+
 export default function PostPage() {
   const router = useRouter();
 

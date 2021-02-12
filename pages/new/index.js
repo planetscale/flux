@@ -164,6 +164,10 @@ const dateTimeOptions = {
 
 const TITLE_MAX_LENGTH = 70;
 
+export const config = {
+  unstable_runtimeJS: false,
+};
+
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
