@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import { useImmer } from 'use-immer';
-import { useClient } from 'urql';
-import { tagsOrgQuery } from './queries';
 
 const defaultContext = {
   header: null,
@@ -30,7 +28,6 @@ const useTopBarContext = () => {
 
 const useTopBarActions = () => {
   const [state, updateState] = useContext(TopBarContext);
-  const client = useClient();
 
   const setHeaders = ({ header, subHeader, query }) => {
     if (header || subHeader || query) {
@@ -70,26 +67,7 @@ const useTopBarActions = () => {
     }
   };
 
-  const fetchTags = async () => {
-    try {
-      const result = await client.query(tagsOrgQuery).toPromise();
-      if (result.data?.tags) {
-        updateState(draft => {
-          draft.filterTagList = result.data.tags;
-        });
-      } else if (result.error) {
-        console.error(result.error);
-      }
-    } catch (e) {
-      updateState(draft => {
-        draft.loading = false;
-        draft.errors = e;
-      });
-      console.error(e);
-    }
-  };
-
-  return { setHeaders, setTag, fetchTags };
+  return { setHeaders, setTag };
 };
 
 export { TopBarContextProvider, useTopBarContext, useTopBarActions };

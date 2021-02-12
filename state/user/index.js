@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
-import { useClient } from 'urql';
 import { useImmer } from 'use-immer';
-import { userOrgQuery } from './queries';
+import { fetcher } from 'utils/fetch';
 
 const defaultContext = {
   user: null,
   loading: false,
   loaded: false,
-  error: null,
 };
 const UserContext = React.createContext();
 UserContext.displayName = 'User Context';
@@ -28,25 +26,32 @@ const useUserContext = () => {
 };
 
 const useUserActions = () => {
-  const [state, updateState] = useContext(UserContext);
-  const client = useClient();
+  const [_, updateState] = useContext(UserContext);
 
-  const getUser = async ({ email }) => {
+  const getUser = async () => {
     updateState(draft => {
       draft.loading = true;
     });
     try {
-      const result = await client
-        .query(userOrgQuery, {
-          email,
-        })
-        .toPromise();
+      const { data: user } = await fetcher('GET', '/api/get-user');
+      // FIXME: Refactor the app's user object to not have nested elements
+      const restructureUser = user
+        ? {
+            ...user,
+            profile: {
+              avatar: user.avatar,
+            },
+            org: {
+              id: user.orgId,
+              name: user.orgName,
+            },
+          }
+        : null;
 
       updateState(draft => {
-        draft.user = result?.data?.user;
+        draft.user = restructureUser;
         draft.loading = false;
         draft.loaded = true;
-        draft.error = result?.error ? result.error : null;
       });
     } catch (e) {
       updateState(draft => {
@@ -57,7 +62,37 @@ const useUserActions = () => {
     }
   };
 
-  return { getUser };
+  const createUser = async params => {
+    const { data: user, error } = await fetcher(
+      'POST',
+      `/api/create-user`,
+      params
+    );
+    if (!error) {
+      // FIXME: Refactor the app's user object to not have nested elements
+      const restructureUser = user
+        ? {
+            ...user,
+            profile: {
+              avatar: user.avatar,
+            },
+            org: {
+              id: user.orgId,
+              name: user.orgName,
+            },
+          }
+        : null;
+      updateState(draft => {
+        draft.user = restructureUser;
+        draft.loading = false;
+        draft.loaded = true;
+      });
+    } else {
+      console.error(e);
+    }
+  };
+
+  return { getUser, createUser };
 };
 
 export { UserContextProvider, useUserContext, useUserActions };

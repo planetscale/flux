@@ -123,7 +123,6 @@ export const ButtonComposite = styled.a`
   display: flex;
   flex-direction: row;
   font-size: 24px;
-  text-transform: uppercase;
   padding: 4px 8px;
   border-radius: 6px;
   transition: all 150ms;

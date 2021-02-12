@@ -1,14 +1,11 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
-import gql from 'graphql-tag';
-import { useClient, useMutation } from 'urql';
 import { useImmer } from 'use-immer';
-import debounce from 'lodash/debounce';
-import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuthActions } from 'state/auth';
 import { ButtonMinor } from 'components/Button';
+import { useUserActions } from 'state/user';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -87,91 +84,19 @@ const ButtonWrapper = styled.div`
   `}
 `;
 
-const orgQuery = gql`
-  query($name: String!) {
-    org(where: { name: $name }) {
-      name
-    }
-  }
-`;
-
-const createUserWithOrgMutation = gql`
-  mutation(
-    $email: String!
-    $userName: String!
-    $displayName: String!
-    $orgName: String!
-    $avatar: String!
-    $bio: String!
-  ) {
-    createOneUser(
-      data: {
-        email: $email
-        username: $userName
-        displayName: $displayName
-        profile: { create: { bio: $bio, avatar: $avatar } }
-        org: {
-          connectOrCreate: {
-            where: { name: $orgName }
-            create: { name: $orgName }
-          }
-        }
-      }
-    ) {
-      email
-    }
-  }
-`;
-
-const getOrg = async (urqlClient, { name }) => {
-  return urqlClient
-    .query(orgQuery, {
-      name,
-    })
-    .toPromise();
-};
-
 const getOrgNameFromEmailDomain = email => {
   return email?.split('@').pop().split('.')[0] ?? '';
 };
 
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
-  const client = useClient();
   const { userLogout } = useAuthActions();
+  const { createUser } = useUserActions();
   const [state, setState] = useImmer({
     orgName: getOrgNameFromEmailDomain(email),
     userName: '',
     name: name ? name : '',
-    isOrgExisted: false,
   });
-  const debouncedOrgNameCheck = useCallback(
-    debounce(checkOrgExistence, 300, {
-      leading: true,
-      trailing: true,
-    }),
-    []
-  );
-  const [createOrgResult, createUserWithOrg] = useMutation(
-    createUserWithOrgMutation
-  );
-
-  useEffect(() => {
-    debouncedOrgNameCheck(state.orgName);
-  }, [state.orgName]);
-
-  // lodash debounce need normal func to work, it doesn't work with arrow func
-  function checkOrgExistence(orgName) {
-    getOrg(client, { name: orgName })
-      .then(res => {
-        setState(draft => {
-          draft.isOrgExisted = !!res?.data?.org;
-        });
-      })
-      .catch(e => {
-        console.error(e);
-      });
-  }
 
   const handleNameChange = e => {
     let target = e.target;
@@ -203,7 +128,7 @@ export default function CreateOrg({ name, email, avatar }) {
     }
   };
 
-  const handleNextClick = e => {
+  const handleNextClick = async e => {
     e.preventDefault();
 
     if (
@@ -217,24 +142,18 @@ export default function CreateOrg({ name, email, avatar }) {
       userLogout();
     }
 
-    createUserWithOrg({
-      email,
-      userName: state.userName,
-      displayName: state.name,
-      orgName: state.orgName,
-      avatar,
-      bio: '',
-    })
-      .then(res => {
-        if (res.data) {
-          router.push('/');
-        } else if (res.error) {
-          console.error(e);
-        }
-      })
-      .catch(e => {
-        console.error(e);
+    try {
+      await createUser({
+        userName: state.userName,
+        displayName: state.name,
+        orgName: state.orgName,
+        avatar,
+        bio: '',
       });
+      router.push('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const onInputWrapperClick = e => {

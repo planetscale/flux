@@ -1,17 +1,15 @@
+import useSWR from 'swr';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
-import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
-import { useQuery } from 'urql';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
+import { fetcher } from 'utils/fetch';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -111,24 +109,6 @@ const EditorWrapper = styled.div`
   border-top: 1px solid var(--accent2);
 `;
 
-const lensesQuery = gql`
-  query {
-    lenses {
-      id
-      name
-    }
-  }
-`;
-
-const channelsQuery = gql`
-  query {
-    channels {
-      id
-      name
-    }
-  }
-`;
-
 const customStyles = {
   container: provided => ({
     ...provided,
@@ -201,32 +181,15 @@ export default function NewPost() {
       hasFocused: false,
     },
     content: '',
-    selectedLens: '',
     selectedTag: null,
     tagOptions: [],
+    disableSubmit: false,
   });
 
-  const [lensesResult, runLensesQuery] = useQuery({
-    query: lensesQuery,
-  });
-
-  const [channelsResult, runChannelsQuery] = useQuery({
-    query: channelsQuery,
-  });
-
-  useEffect(() => {
-    if (lensesResult.data?.lenses) {
-      updateState(draft => {
-        // TODO: remove concept of lens if backend ready
-        draft.selectedLens = lensesResult.data?.lenses?.[0].id;
-      });
-    }
-  }, [lensesResult.data?.lenses]);
-
-  useEffect(() => {
-    if (channelsResult.data?.channels) {
+  useSWR(['GET', '/api/get-tags'], fetcher, {
+    onSuccess: ({ data }) => {
       const fluxSandboxChannel = {};
-      const tagMap = channelsResult.data?.channels.map(item => {
+      const tagMap = data.map(item => {
         // assign dev default channel
         if (item.name.toLowerCase() === 'flux-sandbox') {
           fluxSandboxChannel['value'] = item.name;
@@ -234,7 +197,11 @@ export default function NewPost() {
           fluxSandboxChannel['channelId'] = item.id;
         }
 
-        return { value: item.name, label: `#${item.name}`, channelId: item.id };
+        return {
+          value: item.name,
+          label: `#${item.name}`,
+          channelId: item.id,
+        };
       });
 
       updateState(draft => {
@@ -244,8 +211,8 @@ export default function NewPost() {
             ? fluxSandboxChannel
             : tagMap[0];
       });
-    }
-  }, [channelsResult.data?.channels]);
+    },
+  });
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -258,11 +225,10 @@ export default function NewPost() {
   const canSubmitPost = () => {
     return (
       state.title?.value.trim() &&
-      state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
-      state.selectedLens &&
-      state.selectedTag
+      state.selectedTag &&
+      !state.disableSubmit
     );
   };
 
@@ -272,30 +238,25 @@ export default function NewPost() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('title', state.title.value);
-      formData.append('content', state.content);
-      formData.append('summary', state.subtitle.value);
-      formData.append('userId', userContext?.user?.id);
-      formData.append('lensId', Number(state.selectedLens));
-      formData.append(
-        'userAvatar',
-        userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg'
-      );
-      formData.append('userDisplayName', userContext?.user?.displayName);
-      formData.append('domain', window.location.origin);
-      formData.append('tagName', state.selectedTag.value);
-      formData.append('tagChannelId', state.selectedTag.channelId);
-
-      const rawResp = await fetch('/api/upload/post', {
-        method: 'POST',
-        headers: defaultFetchHeaders,
-        body: formData,
+      updateState(draft => {
+        draft.disableSubmit = true;
       });
-      const resp = await rawResp.json();
 
-      if (rawResp.status === 200 && resp.id) {
-        router.push(`/post/${resp.id}`);
+      const resp = await fetcher('POST', '/api/create-post', {
+        title: state.title.value,
+        content: state.content,
+        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
+        tagChannelId: state.selectedTag.channelId,
+        tagName: state.selectedTag.value,
+        userAvatar:
+          userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
+        userDisplayName: userContext?.user?.displayName,
+        domain: window.location.origin,
+        lensId: 1, // hard coded. this should be removed soon
+      });
+
+      if (!resp.error && resp.data.id) {
+        router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
       console.error(e);
@@ -328,6 +289,12 @@ export default function NewPost() {
     if (title.value.length) return 'valid';
     if (!title.hasFocused) return '';
     if (!title.value.length) return 'invalid';
+  };
+
+  const handleKeyPressSubmit = (e, callback, canSubmit) => {
+    if (e.code === 'Enter' && e.metaKey && canSubmit) {
+      callback();
+    }
   };
 
   return (
@@ -374,10 +341,7 @@ export default function NewPost() {
             {TITLE_MAX_LENGTH - state.title.value.length}
           </div>
         </TitleInputWrapper>
-        <TitleInputWrapper
-          className={`${getTitleClasses(state.subtitle)}`}
-          onBlur={() => handleBlur('subtitle')}
-        >
+        <TitleInputWrapper>
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"
@@ -393,6 +357,9 @@ export default function NewPost() {
           <MarkdownEditor
             content={state.content}
             handleContentChange={handleContentChange}
+            onKeyDown={e => {
+              handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
+            }}
           ></MarkdownEditor>
         </EditorWrapper>
         <ActionItems>

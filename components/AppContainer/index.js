@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserContextProvider } from 'state/user';
-import {
-  setDefaultFetchHeaders,
-  setFireAuthObserver,
-} from 'utils/auth/clientConfig';
-import { createClient, Provider, fetchExchange, cacheExchange } from 'urql';
-import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
+import { setFireAuthObserver, getToken } from 'utils/auth/clientConfig';
 import AuthGuard from 'components/AuthGuard';
 import { useAuthActions } from 'state/auth';
 import AppContentWrapper from './AppContentWrapper';
 import { useRouter } from 'next/router';
 import { TopBarContextProvider } from 'state/topBar';
-
-const GRAPHQL_ENDPOINT = `/api/graphql`;
 
 function AppContainer({ children }) {
   const router = useRouter();
@@ -33,38 +26,14 @@ function AppContainer({ children }) {
     if (user && !isValidUser(user)) {
       return userLogout();
     }
-    updateToken(user);
     rehydrateUser(user);
+    getToken().then(token => {
+      setToken(token);
+    });
   };
 
   const onAuthUserFailed = () => {
     setUserAuthChecked();
-  };
-
-  const updateToken = async user => {
-    try {
-      const jwt = await user.getIdToken(true);
-      setToken(jwt);
-      setDefaultFetchHeaders({
-        authorization: jwt ? `Bearer ${jwt}` : '',
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const createUrqlClient = token => {
-    return createClient({
-      url: GRAPHQL_ENDPOINT,
-      fetchOptions: () => {
-        return {
-          headers: { authorization: token ? `Bearer ${token}` : '' },
-        };
-      },
-      // TODO: add dedupExchange to this array and check cache before fire api request
-      // cacheExchange, dedupExchange, multipartFetchExchange
-      exchanges: [multipartFetchExchange],
-    });
   };
 
   const isLoginPage = () => {
@@ -72,19 +41,17 @@ function AppContainer({ children }) {
   };
 
   return (
-    <Provider value={createUrqlClient(token)}>
-      <UserContextProvider>
-        <AuthGuard token={token}>
-          <TopBarContextProvider>
-            {isLoginPage() ? (
-              <>{children}</>
-            ) : (
-              <AppContentWrapper token={token}>{children}</AppContentWrapper>
-            )}
-          </TopBarContextProvider>
-        </AuthGuard>
-      </UserContextProvider>
-    </Provider>
+    <UserContextProvider>
+      <TopBarContextProvider>
+        {isLoginPage() ? (
+          React.cloneElement(children, { token })
+        ) : (
+          <AuthGuard>
+            <AppContentWrapper token={token}>{children}</AppContentWrapper>
+          </AuthGuard>
+        )}
+      </TopBarContextProvider>
+    </UserContextProvider>
   );
 }
 
