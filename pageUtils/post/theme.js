@@ -18,8 +18,8 @@ const theme = {
       text: 'rgb(60, 66, 87)',
       shadow:
         '0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08)',
-      highlight: '#e715eb',
-      highlight2: '#1591eb',
+      highlight: '#FA52A0',
+      highlight2: '#00A3FF',
     },
     dark: {
       background: '#131516',
@@ -31,8 +31,8 @@ const theme = {
       text: '#ccc',
       shadow:
         '0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);',
-      highlight: '#e715eb',
-      highlight2: '#1591eb',
+      highlight: '#FA52A0',
+      highlight2: '#FA52A0',
     },
   },
 };

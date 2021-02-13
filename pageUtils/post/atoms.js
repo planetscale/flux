@@ -38,6 +38,10 @@ const Icon = styled.span`
   &.icon-edit {
     mask: url('/icon_edit.svg');
   }
+
+  &.icon-google {
+    mask: url('/logo_google.svg');
+  }
 `;
 
 export { Icon };

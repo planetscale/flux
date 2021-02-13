@@ -7,8 +7,8 @@
   --accent2: #eee;
   --accent3: #f7f7f7;
   --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
-  --highlight: #e715eb;
-  --highlight2: #1591eb;
+  --highlight: #fa52a0;
+  --highlight2: #00a3ff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,8 +21,8 @@
     --accent2: #1e1e1e;
     --accent3: #0c0c0c;
     --shadow: 0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);
-    --highlight: #e715eb;
-    --highlight2: #1591eb;
+    --highlight: #fa52a0;
+    --highlight2: #00a3ff;
   }
 }
 
