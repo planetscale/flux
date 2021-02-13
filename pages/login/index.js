@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background: url('/bg_starfield.png');
+  background: url('/bg_starfield.png') #131516;
 `;
 
 const ContentContainer = styled.div`
@@ -46,7 +46,7 @@ const AuthButton = styled.button`
   flex-direction: row;
   align-items: center;
   border: 1px solid white;
-  background-color: black;
+  background-color: #060a0c;
   border-radius: 99px;
   padding: 16px;
   outline: unset;
@@ -60,6 +60,10 @@ const AuthButton = styled.button`
 
   &:active {
     transform: scale(0.97);
+  }
+
+  > ${Icon} {
+    background: white;
   }
 
   > span {

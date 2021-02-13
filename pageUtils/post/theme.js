@@ -32,7 +32,7 @@ const theme = {
       shadow:
         '0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);',
       highlight: '#FA52A0',
-      highlight2: '#FA52A0',
+      highlight2: '#00A3FF',
     },
   },
 };
