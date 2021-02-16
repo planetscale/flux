@@ -3,24 +3,17 @@ import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Content, Group, Item } from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
 
-const UserSettingsWrapper = styled(DropdownMenu.Content)`
+const UserSettingsWrapper = styled(Content)`
   width: 360px;
-  background: var(--accent3);
-  border-radius: 4px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow);
-  padding: 0 0 8px;
 `;
 
-const UserInfo = styled.div`
+const UserInfo = styled(Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 24px;
 
   > img {
     width: 42px;
@@ -45,26 +38,20 @@ const UserNickname = styled.p`
   color: #666;
 `;
 
-const MenuItemContainer = styled(DropdownMenu.Group)`
-  border-bottom: 1px solid var(--accent2);
-`;
-
-const MenuItem = styled.div`
+const MenuItem = styled(Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   color: var(--foreground);
-  padding: 24px;
 `;
 
-const MenuAction = styled.a`
+const MenuAction = styled(Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   color: var(--foreground);
-  padding: 24px;
 
   &:hover {
     cursor: pointer;
@@ -138,15 +125,15 @@ export default function UserSettings({
 
   return (
     <UserSettingsWrapper sideOffset={42}>
-      <MenuItemContainer>
+      <Group>
         <UserInfo>
           <UserNameContainer>
             <UserName>{displayName}</UserName>
             <UserNickname>@{userHandle}</UserNickname>
           </UserNameContainer>
         </UserInfo>
-      </MenuItemContainer>
-      <MenuItemContainer>
+      </Group>
+      <Group>
         <MenuItem>
           <div>Mood</div>
           <StyledRadioGroup
@@ -167,12 +154,12 @@ export default function UserSettings({
             </StyledRadio>
           </StyledRadioGroup>
         </MenuItem>
-      </MenuItemContainer>
-      <MenuItemContainer>
-        <MenuAction type="button" onClick={handleLogout}>
+      </Group>
+      <Group>
+        <MenuAction type="button" as="a" onClick={handleLogout}>
           Log Out
         </MenuAction>
-      </MenuItemContainer>
+      </Group>
     </UserSettingsWrapper>
   );
 }
