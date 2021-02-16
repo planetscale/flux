@@ -34,7 +34,7 @@ export default async (req, res) => {
     Post.tagId = Tag.id
     AND Post.authorId = User.id
     AND (
-      PostView.userId = 15
+      PostView.userId = ?
       OR PostView.id IS Null
     )
   GROUP BY

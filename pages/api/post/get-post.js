@@ -57,14 +57,6 @@ export default async (req, res) => {
   `;
   const [postStarRows] = await connection.execute(postStarQuery, [id]);
 
-  res.json({
-    data: {
-      ...postRow,
-      stars: postStarRows,
-    },
-    error: false,
-  });
-
   // When reading a post, mark that post as read by that user or update their last view time to now
   const markAsReadQuery = `
     INSERT INTO
@@ -78,4 +70,12 @@ export default async (req, res) => {
   await connection.execute(markAsReadQuery, [id, user.id]);
 
   connection.end();
+
+  res.json({
+    data: {
+      ...postRow,
+      stars: postStarRows,
+    },
+    error: false,
+  });
 };

@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import Link from 'next/link';
+import useSWR from 'swr';
 
 const Wrapper = styled.div`
   width: 80ch;
@@ -101,6 +102,11 @@ const MetaInformation = styled.div`
   font-size: 12px;
   line-height: 15px;
   color: #666666;
+
+  .notification {
+    color: var(--highlight);
+    font-weight: bold;
+  }
 `;
 
 const MetaDate = styled.span`
@@ -225,6 +231,17 @@ export default function PostList({ posts = [], handleTagClick }) {
     11: 'December',
   });
 
+  const { data: notifications } = useSWR(['/api/get-notifications'], url =>
+    fetcher('GET', url)
+  );
+  let notificationLookup = {};
+  if (notifications) {
+    notificationLookup = notifications.reduce((accumulator, current) => {
+      accumulator[current.id] = current;
+      return accumulator;
+    }, {});
+  }
+
   // TODO: rename timeUTC param name, it's not UTC time after converting by getLocaleDateTimeString util func
   const getTimeDemarcatorString = timeUTC => {
     const postDate = new Date(`${timeUTC}`);
@@ -322,6 +339,22 @@ export default function PostList({ posts = [], handleTagClick }) {
                       <MetaTag>#{tag?.name}</MetaTag>
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
+                      {notificationLookup[id] && (
+                        <>
+                          <span>&nbsp; &middot; &nbsp;</span>
+                          <div className="notification">
+                            {notificationLookup[id].isNewPost
+                              ? 'New!'
+                              : `${
+                                  notificationLookup[id].numNewReplies
+                                } new comment${
+                                  notificationLookup[id].numNewReplies > 1
+                                    ? 's'
+                                    : ''
+                                }!`}
+                          </div>
+                        </>
+                      )}
                     </MetaInformation>
                     <PostTitle>{title}</PostTitle>
                     <PostSubTitle>{summary}</PostSubTitle>

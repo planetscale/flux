@@ -17,7 +17,7 @@ export const ButtonBase = styled.button`
   height: fit-content;
 
   ${Icon} {
-    margin-right: 8px;
+    margin: auto;
   }
 
   &:hover:not([disabled]) {

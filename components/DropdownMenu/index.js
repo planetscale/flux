@@ -12,7 +12,6 @@ const Content = styled(DropdownMenu.Content)`
   padding: 0 0 8px;
 `;
 
-// Remember for all styled components you can use the `as` prop to change the underlying element
 const Item = styled.div`
   padding: 24px;
 `;
