@@ -14,7 +14,8 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Root, Trigger } from 'components/DropdownMenu';
+import Notifications from 'components/Notifications';
 
 const Wrapper = styled.div`
   display: flex;
@@ -215,18 +216,21 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
-          <ButtonSpecial type="button" onClick={redirectToNew}>
-            <Icon className="icon-plus"></Icon>
-            <span>Add Update</span>
-          </ButtonSpecial>
+          <>
+            <ButtonSpecial type="button" onClick={redirectToNew}>
+              <Icon className="icon-plus"></Icon>
+              <span>Add Update</span>
+            </ButtonSpecial>
+            <Notifications />
+          </>
         )}
 
-        <DropdownMenu.Root>
-          <ButtonImage as={DropdownMenu.Trigger}>
+        <Root>
+          <ButtonImage as={Trigger}>
             <UserIcon src={profileImg} alt="Image of user" />
           </ButtonImage>
           <UserSettings displayName={userDisplayName} userHandle={userHandle} />
-        </DropdownMenu.Root>
+        </Root>
       </ActionsWrapper>
     </Wrapper>
   );
