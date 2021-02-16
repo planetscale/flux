@@ -45,6 +45,8 @@ export default function Home() {
     before: -1,
   });
 
+  const [notifications, setNotifications] = useImmer({});
+
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
   const { selectedTag } = useTopBarContext();

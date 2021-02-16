@@ -4,7 +4,18 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Content } from 'components/DropdownMenu';
 import useSWR from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonMinor } from 'components/Button';
+import { ButtonTertiary } from 'components/Button';
+import { Icon } from 'pageUtils/post/atoms';
+import Link from 'next/link';
+
+const NotificationButton = styled(ButtonImage)`
+  border-radius: 50%;
+  background-color: #e55e31;
+
+  ${Icon} {
+    background: white;
+  }
+`;
 
 const NotificationHeader = styled(DropdownMenu.Item)`
   display: flex;
@@ -15,7 +26,7 @@ const NotificationHeader = styled(DropdownMenu.Item)`
 `;
 
 const NotificationContent = styled(Content)`
-  width: 600px;
+  width: 500px;
 `;
 
 const NotificationItem = styled(DropdownMenu.Item)`
@@ -27,69 +38,90 @@ const NotificationItem = styled(DropdownMenu.Item)`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--highlight);
+    background-color: var(--accent2);
     color: white;
   }
 
   .label {
     font-style: italic;
+    padding-bottom: 4px;
+    font-size: 14px;
   }
   .title {
     font-weight: bold;
+    font-size: 18px;
   }
 `;
 
 export default function Notifications() {
   const { data } = useSWR(['/api/get-notifications'], url =>
-    fetcher('GET', url, {}, notifications => {
-      let newPosts = [];
-      let newComments = [];
-      notifications.forEach(notif => {
-        if (notif.isNewPost) {
-          newPosts.push(notif);
-        } else {
-          newComments.push(notif);
-        }
-      });
-      return { newPosts, newComments };
-    })
+    fetcher('GET', url)
   );
-
   if (!data) {
-    return null;
+    return (
+      <NotificationButton>
+        <Icon className="icon-notification" />
+      </NotificationButton>
+    );
   }
 
-  const { newPosts, newComments } = data;
+  let newPosts = [];
+  let newComments = [];
+  data.forEach(notif => {
+    if (notif.isNewPost) {
+      newPosts.push(notif);
+    } else {
+      newComments.push(notif);
+    }
+  });
+
+  const totalNotifications = newPosts.length + newComments.length;
 
   return (
     <DropdownMenu.Root>
-      <ButtonImage as={DropdownMenu.Trigger}>
-        <img src="/icon_notifications.svg" alt="View notifications." />
-      </ButtonImage>
+      <NotificationButton as={DropdownMenu.Trigger}>
+        <Icon className="icon-notification" />
+      </NotificationButton>
       <NotificationContent sideOffset={42}>
         <DropdownMenu.Group>
           <NotificationHeader>
-            <h3>Notications</h3>
-            <ButtonMinor>Clear all</ButtonMinor>
+            <h3>Notifications ({totalNotifications})</h3>
+            <ButtonTertiary disabled={!totalNotifications}>
+              Clear all notifications
+            </ButtonTertiary>
           </NotificationHeader>
         </DropdownMenu.Group>
+        {totalNotifications === 0 && (
+          <DropdownMenu.Group>
+            <NotificationItem>
+              You have no unread posts or comments.
+            </NotificationItem>
+          </DropdownMenu.Group>
+        )}
         <DropdownMenu.Group>
           {newPosts.map(post => {
             return (
-              <NotificationItem as="a" key={post.id} href={`/post/${post.id}`}>
-                <div className="title">{post.title}</div>
-                <div className="label">New Post</div>
-              </NotificationItem>
+              <Link key={post.id} href={`/post/${post.id}`} passHref>
+                <NotificationItem as="a">
+                  <div className="label">New Post</div>
+                  <div className="title">{post.title}</div>
+                </NotificationItem>
+              </Link>
             );
           })}
         </DropdownMenu.Group>
         <DropdownMenu.Group>
           {newComments.map(post => {
             return (
-              <NotificationItem as="a" key={post.id} href={`/post/${post.id}`}>
-                <div className="title">{post.title}</div>
-                <div className="label">{post.numNewReplies} new comments</div>
-              </NotificationItem>
+              <Link key={post.id} href={`/post/${post.id}`} passHref>
+                <NotificationItem as="a">
+                  <div className="label">
+                    {post.numNewReplies} New Comment
+                    {post.numNewReplies > 1 ? 's' : ''}
+                  </div>
+                  <div className="title">{post.title}</div>
+                </NotificationItem>
+              </Link>
             );
           })}
         </DropdownMenu.Group>

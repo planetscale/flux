@@ -100,7 +100,7 @@ const ActionsWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
 
-  ${ButtonSpecial} {
+  > *:not(:last-of-type) {
     margin: 0 12px 0 0;
   }
 
@@ -174,14 +174,13 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
-          <>
-            <ButtonSpecial type="button" onClick={redirectToNew}>
-              <Icon className="icon-plus"></Icon>
-              <span>Add Update</span>
-            </ButtonSpecial>
-            <Notifications />
-          </>
+          <ButtonSpecial type="button" onClick={redirectToNew}>
+            <Icon className="icon-plus"></Icon>
+            <span>Add Update</span>
+          </ButtonSpecial>
         )}
+
+        <Notifications />
 
         <Root>
           <ButtonImage as={Trigger}>

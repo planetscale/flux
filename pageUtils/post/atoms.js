@@ -5,38 +5,43 @@ const Icon = styled.span`
   width: 24px;
   height: 24px;
   background: var(--foreground);
-  mask-size: cover;
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
 
   &.icon-system {
-    mask: url('/icon_system.svg');
+    mask-image: url('/icon_system.svg');
   }
 
   &.icon-light {
-    mask: url('/icon_light.svg');
+    mask-image: url('/icon_light.svg');
   }
 
   &.icon-dark {
-    mask: url('/icon_dark.svg');
+    mask-image: url('/icon_dark.svg');
   }
 
   &.icon-plus {
-    mask: url('/icon_plus.svg');
+    mask-image: url('/icon_plus.svg');
   }
 
   &.icon-comment {
-    mask: url('/icon_comment.svg');
+    mask-image: url('/icon_comment.svg');
   }
 
   &.icon-post {
-    mask: url('/icon_post.svg');
+    mask-image: url('/icon_post.svg');
   }
 
   &.icon-star {
-    mask: url('/icon_star.svg');
+    mask-image: url('/icon_star.svg');
   }
 
   &.icon-edit {
-    mask: url('/icon_edit.svg');
+    mask-image: url('/icon_edit.svg');
+  }
+
+  &.icon-notification {
+    mask-image: url('/icon_notifications.svg');
   }
 `;
 
