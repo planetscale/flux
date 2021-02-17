@@ -16,16 +16,14 @@ class AppDocument extends Document {
             crossOrigin="true"
           />
           <link rel="manifest" href="/manifest.json"></link>
+          <link rel="preconnect" href="https://fonts.gstatic.com"></link>
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap"
-            rel="preload"
-            as="style"
+            href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,900&display=swap"
+            rel="stylesheet"
           ></link>
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Raleway:ital,wght@1,900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
             rel="stylesheet"
-            media="print"
-            onLoad="this.media='all'"
           ></link>
         </Head>
         <body>
