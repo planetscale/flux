@@ -1,7 +1,6 @@
 import { cors, validateUser } from './_utils/middleware';
-const { WebClient } = require('@slack/web-api');
-import { getLocaleDateTimeString } from '../../utils/dateTime';
 import { createConnection } from './_utils/connection';
+import slackNotification from './_utils/notifications/slack';
 
 // This is a simple database connection test to prove you can connect to a persistent store for your application.
 export default async (req, res) => {
@@ -51,59 +50,7 @@ export default async (req, res) => {
   res.json({ error: false, data: { id: newPost.id } });
 
   // Fire off slack notification of successfully created post
-  const timeOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  };
-
-  const postTime = getLocaleDateTimeString(newPost.createdAt, timeOptions);
-  const token = process.env.SLACK_API_TOKEN;
-  const client = new WebClient(token);
-
-  await client.chat.postMessage({
-    channel: `#${tagName}`,
-    attachments: [
-      {
-        color: '#D491A5',
-        blocks: [
-          {
-            type: 'context',
-            elements: [
-              {
-                type: 'image',
-                image_url: userAvatar,
-                alt_text: 'cute cat',
-              },
-              {
-                type: 'mrkdwn',
-                text: `*${userDisplayName}* shared a new update.`,
-              },
-            ],
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `*<${domain}/post/${newPost.id}|${title}>*
-${summary}`,
-            },
-          },
-          {
-            type: 'divider',
-          },
-          {
-            type: 'context',
-            elements: [
-              {
-                type: 'plain_text',
-                text: `posted on ${postTime}`,
-                emoji: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  });
+  if (process.env.SLACK_API_TOKEN) {
+    slackNotification(tagName, userAvatar, userDisplayName, domain);
+  }
 };
