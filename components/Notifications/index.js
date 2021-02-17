@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { ButtonImage } from 'components/Button';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Content, Item } from 'components/DropdownMenu';
+import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
 import { ButtonTertiary } from 'components/Button';
@@ -17,7 +16,7 @@ const NotificationButton = styled(ButtonImage)`
   }
 `;
 
-const NotificationHeader = styled(Item)`
+const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
   padding: 0px 24px;
@@ -25,7 +24,7 @@ const NotificationHeader = styled(Item)`
   justify-content: space-between;
 `;
 
-const NotificationContent = styled(Content)`
+const NotificationContent = styled(DropdownMenu.Content)`
   width: 500px;
 `;
 
@@ -57,7 +56,7 @@ const NotificationItem = styled(DropdownMenu.Item)`
   }
 `;
 
-const EmptyNotificationItem = styled(Item)`
+const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   height: 150px;
   display: flex;
   justify-content: center;
@@ -149,12 +148,8 @@ export default function Notifications() {
         <DropdownMenu.Group>
           {newPosts.map(notification => {
             return (
-              <NotificationWrapper>
-                <Link
-                  key={notification.postId}
-                  href={`/post/${notification.postId}`}
-                  passHref
-                >
+              <NotificationWrapper key={notification.postId}>
+                <Link href={`/post/${notification.postId}`} passHref>
                   <NotificationItem as="a">
                     <div className="label">New Post</div>
                     <div className="title">{notification.postTitle}</div>
@@ -171,12 +166,8 @@ export default function Notifications() {
         <DropdownMenu.Group>
           {newComments.map(notification => {
             return (
-              <NotificationWrapper>
-                <Link
-                  key={notification.postId}
-                  href={`/post/${notification.postId}`}
-                  passHref
-                >
+              <NotificationWrapper key={notification.postId}>
+                <Link href={`/post/${notification.postId}`} passHref>
                   <NotificationItem as="a">
                     <div className="label">
                       {notification.numNewReplies} New Comment

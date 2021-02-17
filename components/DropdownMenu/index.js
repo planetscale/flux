@@ -12,7 +12,7 @@ const Content = styled(DropdownMenu.Content)`
   padding: 0 0 8px;
 `;
 
-const Item = styled.div`
+const SimpleItem = styled.div`
   padding: 24px;
 `;
 
@@ -20,7 +20,23 @@ const Group = styled(DropdownMenu.Group)`
   border-bottom: 1px solid var(--accent2);
 `;
 
-const Root = DropdownMenu.Root;
-const Trigger = DropdownMenu.Trigger;
+const {
+  Root,
+  Trigger,
+  RadioGroup,
+  RadioItem,
+  ItemIndicator,
+  Item,
+} = DropdownMenu;
 
-export { Content, Group, Root, Trigger, Item };
+export {
+  Content,
+  Group,
+  Root,
+  Trigger,
+  Item,
+  SimpleItem,
+  RadioGroup,
+  RadioItem,
+  ItemIndicator,
+};

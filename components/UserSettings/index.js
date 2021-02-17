@@ -2,15 +2,14 @@ import styled from '@emotion/styled';
 import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Content, Group, Item } from 'components/DropdownMenu';
+import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
 
-const UserSettingsWrapper = styled(Content)`
+const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
 `;
 
-const UserInfo = styled(Item)`
+const UserInfo = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,7 +37,7 @@ const UserNickname = styled.p`
   color: #666;
 `;
 
-const MenuItem = styled(Item)`
+const MenuItem = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -46,7 +45,7 @@ const MenuItem = styled(Item)`
   color: var(--foreground);
 `;
 
-const MenuAction = styled(Item)`
+const MenuAction = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -125,15 +124,15 @@ export default function UserSettings({
 
   return (
     <UserSettingsWrapper sideOffset={42}>
-      <Group>
+      <DropdownMenu.Group>
         <UserInfo>
           <UserNameContainer>
             <UserName>{displayName}</UserName>
             <UserNickname>@{userHandle}</UserNickname>
           </UserNameContainer>
         </UserInfo>
-      </Group>
-      <Group>
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
         <MenuItem>
           <div>Mood</div>
           <StyledRadioGroup
@@ -154,12 +153,12 @@ export default function UserSettings({
             </StyledRadio>
           </StyledRadioGroup>
         </MenuItem>
-      </Group>
-      <Group>
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
         <MenuAction type="button" as="a" onClick={handleLogout}>
           Log Out
         </MenuAction>
-      </Group>
+      </DropdownMenu.Group>
     </UserSettingsWrapper>
   );
 }
