@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, summary, content, tagChannelId, lensId } = req.body;
+  const { title, summary, content, tagChannelId } = req.body;
 
   const connection = await createConnection();
 
