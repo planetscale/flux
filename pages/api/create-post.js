@@ -50,6 +50,8 @@ module.exports = async (req, res) => {
   const [[newPost]] = await connection.query(idQuery);
   connection.end();
 
+  res.json({ error: false, data: { id: newPost.id } });
+
   try {
     // Fire off slack notification of successfully created post
     if (process.env.SLACK_API_TOKEN) {
@@ -58,9 +60,6 @@ module.exports = async (req, res) => {
       });
     }
   } catch (e) {
-    res.status(400).json({ error: e.toString() });
-    return;
+    console.error(e.toString());
   }
-
-  res.json({ error: false, data: { id: newPost.id } });
 };
