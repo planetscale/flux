@@ -47,6 +47,10 @@ const Icon = styled.span`
   &.icon-google {
     mask: url('/logo_google.svg');
   }
+
+  &.icon-cancel {
+    mask: url('/icon_cancel.svg');
+  }
 `;
 
 export { Icon };

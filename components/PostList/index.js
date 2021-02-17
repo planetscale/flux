@@ -237,7 +237,7 @@ export default function PostList({ posts = [], handleTagClick }) {
   let notificationLookup = {};
   if (notifications) {
     notificationLookup = notifications.reduce((accumulator, current) => {
-      accumulator[current.id] = current;
+      accumulator[current.postId] = current;
       return accumulator;
     }, {});
   }
@@ -344,14 +344,14 @@ export default function PostList({ posts = [], handleTagClick }) {
                           <span>&nbsp; &middot; &nbsp;</span>
                           <div className="notification">
                             {notificationLookup[id].isNewPost
-                              ? 'New!'
+                              ? 'New'
                               : `${
                                   notificationLookup[id].numNewReplies
-                                } new comment${
+                                } New Comment${
                                   notificationLookup[id].numNewReplies > 1
                                     ? 's'
                                     : ''
-                                }!`}
+                                }`}
                           </div>
                         </>
                       )}

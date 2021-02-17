@@ -16,9 +16,9 @@ export default async (req, res) => {
   // Retrieve all unread posts and posts with unread comments in a single query.
   const newPostsQuery = `
   SELECT
-    Post.id,
-    Post.title,
-    Post.createdAt,
+    Post.id as postId,
+    Post.title as postTitle,
+    Post.createdAt as postCreatedAt,
     Tag.name as tagName,
     User.displayName as authorName,
     (PostView.id IS NULL) AS isNewPost,

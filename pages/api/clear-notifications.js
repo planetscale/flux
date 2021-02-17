@@ -49,7 +49,6 @@ export default async (req, res) => {
     lastViewed=CURRENT_TIMESTAMP(3)
   `;
 
-  console.log('QUERY', clearNotificationsQuery);
   await connection.execute(clearNotificationsQuery, [user.id, user.id]);
   connection.end();
 
