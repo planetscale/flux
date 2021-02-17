@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ButtonImage } from 'components/Button';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Content } from 'components/DropdownMenu';
+import { Content, Item } from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
 import { ButtonTertiary } from 'components/Button';
@@ -17,7 +17,7 @@ const NotificationButton = styled(ButtonImage)`
   }
 `;
 
-const NotificationHeader = styled(DropdownMenu.Item)`
+const NotificationHeader = styled(Item)`
   display: flex;
   align-items: center;
   padding: 0px 24px;
@@ -27,6 +27,10 @@ const NotificationHeader = styled(DropdownMenu.Item)`
 
 const NotificationContent = styled(Content)`
   width: 500px;
+`;
+
+const NotificationWrapper = styled.div`
+  position: relative;
 `;
 
 const NotificationItem = styled(DropdownMenu.Item)`
@@ -53,12 +57,24 @@ const NotificationItem = styled(DropdownMenu.Item)`
   }
 `;
 
-const EmptyNotificationItem = styled(DropdownMenu.Item)`
+const EmptyNotificationItem = styled(Item)`
   height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-style: italic;
+  outline: none;
+`;
+
+const HoverIcon = styled(Icon)`
+  position: absolute;
+  top: calc(50% - 12px);
+  right: 24px;
+  transition: all 150ms;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+  }
 `;
 
 export default function Notifications() {
@@ -84,11 +100,29 @@ export default function Notifications() {
   });
 
   const clearAllNotifications = async () => {
+    mutate(['/api/get-notifications'], [], false);
     await fetcher('POST', '/api/clear-notifications');
-    mutate(['/api/get-notifications'], []);
+    mutate(['/api/get-notifications']);
   };
 
   const totalNotifications = newPosts.length + newComments.length;
+
+  const clearNotification = async notification => {
+    // Optimistically clear the notification from cache, clear the notification, and resync cache with server after
+    mutate(
+      ['/api/get-notifications'],
+      async notifications => {
+        return notifications.filter(
+          notif => notif.postId !== notification.postId
+        );
+      },
+      false
+    );
+    await fetcher('POST', '/api/clear-notification', {
+      postId: notification.postId,
+    });
+    mutate(['/api/get-notifications']);
+  };
 
   return (
     <DropdownMenu.Root>
@@ -113,29 +147,49 @@ export default function Notifications() {
           </DropdownMenu.Group>
         )}
         <DropdownMenu.Group>
-          {newPosts.map(post => {
+          {newPosts.map(notification => {
             return (
-              <Link key={post.id} href={`/post/${post.id}`} passHref>
-                <NotificationItem as="a">
-                  <div className="label">New Post</div>
-                  <div className="title">{post.title}</div>
-                </NotificationItem>
-              </Link>
+              <NotificationWrapper>
+                <Link
+                  key={notification.postId}
+                  href={`/post/${notification.postId}`}
+                  passHref
+                >
+                  <NotificationItem as="a">
+                    <div className="label">New Post</div>
+                    <div className="title">{notification.postTitle}</div>
+                  </NotificationItem>
+                </Link>
+                <HoverIcon
+                  className="icon-cancel"
+                  onClick={() => clearNotification(notification)}
+                ></HoverIcon>
+              </NotificationWrapper>
             );
           })}
         </DropdownMenu.Group>
         <DropdownMenu.Group>
-          {newComments.map(post => {
+          {newComments.map(notification => {
             return (
-              <Link key={post.id} href={`/post/${post.id}`} passHref>
-                <NotificationItem as="a">
-                  <div className="label">
-                    {post.numNewReplies} New Comment
-                    {post.numNewReplies > 1 ? 's' : ''}
-                  </div>
-                  <div className="title">{post.title}</div>
-                </NotificationItem>
-              </Link>
+              <NotificationWrapper>
+                <Link
+                  key={notification.postId}
+                  href={`/post/${notification.postId}`}
+                  passHref
+                >
+                  <NotificationItem as="a">
+                    <div className="label">
+                      {notification.numNewReplies} New Comment
+                      {notification.numNewReplies > 1 ? 's' : ''}
+                    </div>
+                    <div className="title">{notification.postTitle}</div>
+                  </NotificationItem>
+                </Link>
+                <HoverIcon
+                  className="icon-cancel"
+                  onClick={() => clearNotification(notification)}
+                ></HoverIcon>
+              </NotificationWrapper>
             );
           })}
         </DropdownMenu.Group>
