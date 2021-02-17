@@ -57,4 +57,21 @@ const getUserId = async userEmail => {
   return row.id;
 };
 
-export { cors, validateUser, getUserId };
+function runMiddleware(req, res, fn, params) {
+  return new Promise((resolve, reject) => {
+    fn(
+      req,
+      res,
+      result => {
+        if (result instanceof Error) {
+          return reject(result);
+        }
+
+        return resolve(result);
+      },
+      params
+    );
+  });
+}
+
+export { cors, validateUser, getUserId, runMiddleware };

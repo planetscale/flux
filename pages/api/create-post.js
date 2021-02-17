@@ -1,4 +1,4 @@
-import { cors, validateUser } from './_utils/middleware';
+import { cors, runMiddleware, validateUser } from './_utils/middleware';
 import { createConnection } from './_utils/connection';
 import slackNotification from './_utils/notifications/slack';
 
@@ -13,17 +13,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const {
-    title,
-    summary,
-    content,
-    tagChannelId,
-    tagName,
-    userAvatar,
-    userDisplayName,
-    domain,
-    lensId,
-  } = req.body;
+  const { title, summary, content, tagChannelId, lensId } = req.body;
 
   const connection = await createConnection();
 
@@ -47,18 +37,17 @@ module.exports = async (req, res) => {
   const [[newPost]] = await connection.query(idQuery);
   connection.end();
 
-  res.json({ error: false, data: { id: newPost.id } });
-
-  // Fire off slack notification of successfully created post
-  if (process.env.SLACK_API_TOKEN) {
-    slackNotification(
-      tagName,
-      userAvatar,
-      userDisplayName,
-      domain,
-      summary,
-      title,
-      newPost
-    );
+  try {
+    // Fire off slack notification of successfully created post
+    if (process.env.SLACK_API_TOKEN) {
+      await runMiddleware(req, res, slackNotification, {
+        newPost,
+      });
+    }
+  } catch (e) {
+    res.status(400).json({ error: e.toString() });
+    return;
   }
+
+  res.json({ error: false, data: { id: newPost.id } });
 };
