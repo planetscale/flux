@@ -3,7 +3,7 @@ import { createConnection } from './_utils/connection';
 import slackNotification from './_utils/notifications/slack';
 
 // This is a simple database connection test to prove you can connect to a persistent store for your application.
-export default async (req, res) => {
+module.exports = async (req, res) => {
   let user;
   try {
     cors(req, res);
