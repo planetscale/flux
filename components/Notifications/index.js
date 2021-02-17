@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ButtonImage } from 'components/Button';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Content } from 'components/DropdownMenu';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
 import { ButtonTertiary } from 'components/Button';
 import { Icon } from 'pageUtils/post/atoms';
@@ -53,6 +53,14 @@ const NotificationItem = styled(DropdownMenu.Item)`
   }
 `;
 
+const EmptyNotificationItem = styled(DropdownMenu.Item)`
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+`;
+
 export default function Notifications() {
   const { data } = useSWR(['/api/get-notifications'], url =>
     fetcher('GET', url)
@@ -75,6 +83,11 @@ export default function Notifications() {
     }
   });
 
+  const clearAllNotifications = async () => {
+    await fetcher('POST', '/api/clear-notifications');
+    mutate(['/api/get-notifications'], []);
+  };
+
   const totalNotifications = newPosts.length + newComments.length;
 
   return (
@@ -86,16 +99,17 @@ export default function Notifications() {
         <DropdownMenu.Group>
           <NotificationHeader>
             <h3>Notifications ({totalNotifications})</h3>
-            <ButtonTertiary disabled={!totalNotifications}>
+            <ButtonTertiary
+              disabled={!totalNotifications}
+              onClick={clearAllNotifications}
+            >
               Clear all notifications
             </ButtonTertiary>
           </NotificationHeader>
         </DropdownMenu.Group>
         {totalNotifications === 0 && (
           <DropdownMenu.Group>
-            <NotificationItem>
-              You have no unread posts or comments.
-            </NotificationItem>
+            <EmptyNotificationItem>No new notifications</EmptyNotificationItem>
           </DropdownMenu.Group>
         )}
         <DropdownMenu.Group>

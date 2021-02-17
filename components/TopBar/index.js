@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
-import { Root, Trigger } from 'components/DropdownMenu';
+import * as DropdownMenu from 'components/DropdownMenu';
 import Notifications from 'components/Notifications';
 
 const Wrapper = styled.div`
@@ -182,12 +182,12 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
         <Notifications />
 
-        <Root>
-          <ButtonImage as={Trigger}>
+        <DropdownMenu.Root>
+          <ButtonImage as={DropdownMenu.Trigger}>
             <UserIcon src={profileImg} alt="Image of user" />
           </ButtonImage>
           <UserSettings displayName={userDisplayName} userHandle={userHandle} />
-        </Root>
+        </DropdownMenu.Root>
       </ActionsWrapper>
     </Wrapper>
   );
