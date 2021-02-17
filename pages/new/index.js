@@ -1,5 +1,4 @@
 import useSWR from 'swr';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
@@ -10,6 +9,7 @@ import Select from 'react-select';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
+import { fetcher } from 'utils/fetch';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -164,17 +164,6 @@ const dateTimeOptions = {
 
 const TITLE_MAX_LENGTH = 70;
 
-const fetcher = async (url, auth) => {
-  const response = await fetch(`${url}`, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: auth,
-    },
-  });
-  return response.json();
-};
-
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
@@ -197,44 +186,33 @@ export default function NewPost() {
     disableSubmit: false,
   });
 
-  const { data } = useSWR(
-    ['/api/get-tags', defaultFetchHeaders.authorization],
-    fetcher,
-    {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
-      onSuccess: ({ data }) => {
-        const fluxSandboxChannel = {};
-        const tagMap = data.map(item => {
-          // assign dev default channel
-          if (item.name.toLowerCase() === 'flux-sandbox') {
-            fluxSandboxChannel['value'] = item.name;
-            fluxSandboxChannel['label'] = `#${item.name}`;
-            fluxSandboxChannel['channelId'] = item.id;
-          }
+  useSWR(['GET', '/api/get-tags'], fetcher, {
+    onSuccess: ({ data }) => {
+      const fluxSandboxChannel = {};
+      const tagMap = data.map(item => {
+        // assign dev default channel
+        if (item.name.toLowerCase() === 'flux-sandbox') {
+          fluxSandboxChannel['value'] = item.name;
+          fluxSandboxChannel['label'] = `#${item.name}`;
+          fluxSandboxChannel['channelId'] = item.id;
+        }
 
-          return {
-            value: item.name,
-            label: `#${item.name}`,
-            channelId: item.id,
-          };
-        });
+        return {
+          value: item.name,
+          label: `#${item.name}`,
+          channelId: item.id,
+        };
+      });
 
-        updateState(draft => {
-          draft.tagOptions = tagMap;
-          draft.selectedTag =
-            process.env.NODE_ENV === 'development'
-              ? fluxSandboxChannel
-              : tagMap[0];
-        });
-      },
-    }
-  );
+      updateState(draft => {
+        draft.tagOptions = tagMap;
+        draft.selectedTag =
+          process.env.NODE_ENV === 'development'
+            ? fluxSandboxChannel
+            : tagMap[0];
+      });
+    },
+  });
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -247,7 +225,6 @@ export default function NewPost() {
   const canSubmitPost = () => {
     return (
       state.title?.value.trim() &&
-      state.subtitle?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
       state.selectedTag &&
@@ -265,27 +242,19 @@ export default function NewPost() {
         draft.disableSubmit = true;
       });
 
-      const rawResp = await fetch('/api/create-post', {
-        method: 'POST',
-        headers: {
-          Authorization: defaultFetchHeaders.authorization,
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          title: state.title.value,
-          content: state.content,
-          summary: state.subtitle.value,
-          tagChannelId: state.selectedTag.channelId,
-          tagName: state.selectedTag.value,
-          userAvatar:
-            userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
-          userDisplayName: userContext?.user?.displayName,
-          domain: window.location.origin,
-        }),
+      const resp = await fetcher('POST', '/api/create-post', {
+        title: state.title.value,
+        content: state.content,
+        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
+        tagChannelId: state.selectedTag.channelId,
+        tagName: state.selectedTag.value,
+        userAvatar:
+          userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
+        userDisplayName: userContext?.user?.displayName,
+        domain: window.location.origin,
       });
-      const resp = await rawResp.json();
 
-      if (!resp.error && resp.data.id) {
+      if (!resp?.error && resp?.data.id) {
         router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
@@ -371,10 +340,7 @@ export default function NewPost() {
             {TITLE_MAX_LENGTH - state.title.value.length}
           </div>
         </TitleInputWrapper>
-        <TitleInputWrapper
-          className={`${getTitleClasses(state.subtitle)}`}
-          onBlur={() => handleBlur('subtitle')}
-        >
+        <TitleInputWrapper>
           <SubtitleInput
             placeholder="Enter Subtitle"
             rows="1"

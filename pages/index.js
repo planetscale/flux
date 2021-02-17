@@ -1,5 +1,4 @@
 import useSWR from 'swr';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import PostList from 'components/PostList';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useEffect } from 'react';
@@ -8,24 +7,7 @@ import styled from '@emotion/styled';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
-
-const fetcher = async (url, auth, last, before, selectedTag) => {
-  const params = new URLSearchParams({
-    last,
-    before,
-  });
-  if (selectedTag) {
-    params.append('tag', selectedTag);
-  }
-  const response = await fetch(`${url}?${params}`, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: auth,
-    },
-  });
-  return response.json();
-};
+import { fetcher } from 'utils/fetch';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -68,22 +50,10 @@ export default function Home() {
   const { selectedTag } = useTopBarContext();
 
   const { data } = useSWR(
-    [
-      '/api/get-posts',
-      defaultFetchHeaders.authorization,
-      state.last,
-      state.before,
-      selectedTag,
-    ],
-    fetcher,
+    ['/api/get-posts', state.last, state.before, selectedTag || undefined],
+    (url, last, before, selectedTag) =>
+      fetcher('GET', url, { last, before, selectedTag }),
     {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
       onSuccess: data => {
         setState(draft => {
           draft.postList = { ...state.postList, ...formatPosts(data) };

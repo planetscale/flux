@@ -40,7 +40,7 @@ const logoutWithFirebase = () => {
 };
 
 const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
-  firebase.auth().onIdTokenChanged(function (user) {
+  firebase.auth().onAuthStateChanged(function (user) {
     if (!user) {
       noUserCallback?.();
     } else {
@@ -49,7 +49,13 @@ const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
   });
 };
 
-let defaultFetchHeaders = {};
+const getToken = (forceRefetch = false) => {
+  return firebase.auth().currentUser?.getIdToken(forceRefetch);
+};
+
+let defaultFetchHeaders = {
+  'Content-type': 'application/json; charset=UTF-8',
+};
 
 const setDefaultFetchHeaders = headersOverwrite => {
   defaultFetchHeaders = {
@@ -65,4 +71,5 @@ export {
   defaultFetchHeaders,
   setDefaultFetchHeaders,
   firebaseStorage,
+  getToken,
 };
