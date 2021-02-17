@@ -104,7 +104,7 @@ const MetaInformation = styled.div`
   color: #666666;
 
   .notification {
-    color: var(--highlight);
+    color: #e55e31;
     font-weight: bold;
   }
 `;
