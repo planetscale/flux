@@ -255,7 +255,7 @@ export default function NewPost() {
         lensId: 1, // hard coded. this should be removed soon
       });
 
-      if (!resp.error && resp.data.id) {
+      if (!resp?.error && resp?.data.id) {
         router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
