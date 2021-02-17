@@ -1,7 +1,15 @@
 const { WebClient } = require('@slack/web-api');
 import { getLocaleDateTimeString } from 'utils/dateTime';
 
-export default async (tagName, userAvatar, userDisplayName, domain) => {
+export default async (
+  tagName,
+  userAvatar,
+  userDisplayName,
+  domain,
+  summary,
+  title,
+  newPost
+) => {
   const timeOptions = {
     year: 'numeric',
     month: 'short',

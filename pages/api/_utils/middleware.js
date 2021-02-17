@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import { createConnection } from './connection';
 import Cors from 'cors';
 import { decodeToken } from 'utils/auth/serverConfig';
 
@@ -46,12 +46,11 @@ const validateUser = async (req, fetchUserId = false) => {
       throw e;
     }
   }
-
   throw Error;
 };
 
 const getUserId = async userEmail => {
-  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  const connection = await createConnection();
   const query = 'SELECT id FROM User WHERE email = ?';
   const [[row]] = await connection.execute(query, [userEmail]);
   connection.close();

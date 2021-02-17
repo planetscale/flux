@@ -51,6 +51,14 @@ module.exports = async (req, res) => {
 
   // Fire off slack notification of successfully created post
   if (process.env.SLACK_API_TOKEN) {
-    slackNotification(tagName, userAvatar, userDisplayName, domain);
+    slackNotification(
+      tagName,
+      userAvatar,
+      userDisplayName,
+      domain,
+      summary,
+      title,
+      newPost
+    );
   }
 };
