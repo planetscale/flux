@@ -5,6 +5,7 @@ import CreateOrg from 'components/CreateOrg';
 import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Icon } from 'pageUtils/post/atoms';
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,33 +14,21 @@ const Wrapper = styled.div`
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg, #353e58 0%, #c56a86 100%), #ffffff;
-
-  > img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 20px 0 0 25px;
-  }
+  background: url('/bg_starfield.png') #131516;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  width: 90ch;
 
   ${media.phone`
-    flex-direction: column;
     width: 100%;
   `}
 `;
 
 const LogoContainer = styled.div`
-  ${media.phone`
-    margin-bottom: 4em;
-  `}
+  margin-bottom: 2em;
 `;
 
 const Logo = styled.img``;
@@ -56,13 +45,14 @@ const AuthButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: none;
-  background-color: white;
+  border: 1px solid white;
+  background-color: #060a0c;
   border-radius: 99px;
   padding: 16px;
   outline: unset;
   box-shadow: var(--shadow);
   transition: all 300ms;
+  color: white;
 
   &:hover {
     transform: scale(0.99);
@@ -72,13 +62,12 @@ const AuthButton = styled.button`
     transform: scale(0.97);
   }
 
-  > img {
-    width: 21px;
-    height: auto;
+  > ${Icon} {
+    background: white;
   }
 
   > span {
-    border-left: 1px solid #7d546f;
+    border-left: 1px solid var(--accent);
     padding: 0 8px;
     margin-left: 8px;
     text-transform: uppercase;
@@ -112,17 +101,12 @@ export default function Login({ token }) {
     <Wrapper>
       <ContentContainer>
         <LogoContainer>
-          <Logo src="/logo_white.svg" alt="Flux logo"></Logo>
+          <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
         </LogoContainer>
         {!isAuthed && authChecked && (
           <AuthButtonContainer>
             <AuthButton onClick={handleLogin}>
-              <Logo
-                src="/logo_google.svg"
-                alt="login button"
-                width={54}
-                height={54}
-              ></Logo>
+              <Icon className="icon-google"></Icon>
               <span>Login With Google</span>
             </AuthButton>
           </AuthButtonContainer>

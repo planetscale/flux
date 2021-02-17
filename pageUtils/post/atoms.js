@@ -43,6 +43,10 @@ const Icon = styled.span`
   &.icon-notification {
     mask-image: url('/icon_notifications.svg');
   }
+
+  &.icon-google {
+    mask: url('/logo_google.svg');
+  }
 `;
 
 export { Icon };
