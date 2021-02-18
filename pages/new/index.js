@@ -245,7 +245,7 @@ export default function NewPost() {
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
         content: state.content,
-        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
+        summary: state.subtitle.value,
         tagChannelId: state.selectedTag.channelId,
         tagName: state.selectedTag.value,
         userAvatar:
