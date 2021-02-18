@@ -68,8 +68,7 @@ const MenuAction = styled.a`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--highlight);
-    color: white;
+    background-color: var(--accent2);
   }
 `;
 

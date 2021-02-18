@@ -246,7 +246,7 @@ export default function NewPost() {
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
         content: state.content,
-        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
+        summary: state.subtitle.value,
         tagChannelId: state.selectedTag.channelId,
         tagName: state.selectedTag.value,
         userAvatar:
@@ -256,7 +256,7 @@ export default function NewPost() {
         lensId: 1, // hard coded. this should be removed soon
       });
 
-      if (!resp.error && resp.data.id) {
+      if (!resp?.error && resp?.data.id) {
         router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
