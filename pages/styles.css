@@ -26,6 +26,38 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: unset;
+  width: 100vw;
+  overflow: auto;
+  background: var(--background);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input,
+select,
+textarea,
+button {
+  font: unset;
+  font-family: 'Inter', sans-serif;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+a:visited {
+  color: var(--link);
+}
+
 /* Hack editor's css for user-tagging feature, tried other ways couldn't apply styles*/
 .suggestion-item {
   padding: 5px;
