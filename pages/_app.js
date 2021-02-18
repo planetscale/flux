@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
-import { Global, css } from '@emotion/react';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
-import Head from 'next/head';
 import { initTheme } from 'pageUtils/post/theme';
+import Head from 'next/head';
 import './styles.css';
 
 const initContextDevTools = () => {
@@ -25,40 +24,28 @@ function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Flux</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        ></meta>
+        <link rel="icon" href="/favicon.svg" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
+        <link rel="manifest" href="/manifest.json"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,900&display=swap"
+          rel="stylesheet"
+        ></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
-      <Global
-        styles={css`
-          * {
-            box-sizing: border-box;
-          }
-
-          body {
-            font-family: 'Inter', sans-serif;
-            margin: unset;
-            width: 100vw;
-            overflow: auto;
-            background: var(--background);
-            color: var(--text);
-          }
-
-          input,
-          select,
-          textarea,
-          button {
-            font: unset;
-            font-family: 'Inter', sans-serif;
-          }
-
-          p {
-            overflow-wrap: break-word;
-          }
-
-          a:visited {
-            color: var(--link);
-          }
-        `}
-      />
       <AuthContextProvider>
         <AppContainer>
           <Component {...pageProps} />

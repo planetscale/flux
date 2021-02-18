@@ -31,6 +31,7 @@ import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
+import CustomLayout from 'components/CustomLayout';
 
 const Meta = styled.div`
   display: flex;
@@ -629,101 +630,103 @@ export default function PostPage() {
   }
 
   return (
-    <PageWrapper>
-      <Post>
-        <PostMetadata>
-          <Meta>
-            <MetaData>
-              <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
-              <div>&nbsp; &middot; &nbsp;</div>
-              <div>#{tagName}</div>
-            </MetaData>
-            <MetaActions>
-              {userContext.user.id === authorId && (
-                <ButtonMinor type="submit" onClick={togglePostEdit}>
-                  {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
+    <CustomLayout title={title}>
+      <PageWrapper>
+        <Post>
+          <PostMetadata>
+            <Meta>
+              <MetaData>
+                <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
+                <div>&nbsp; &middot; &nbsp;</div>
+                <div>#{tagName}</div>
+              </MetaData>
+              <MetaActions>
+                {userContext.user.id === authorId && (
+                  <ButtonMinor type="submit" onClick={togglePostEdit}>
+                    {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
+                  </ButtonMinor>
+                )}
+              </MetaActions>
+            </Meta>
+            <Title>{title}</Title>
+            <AuthorNamePlate
+              displayName={authorName}
+              userHandle={authorUsername}
+              avatar={avatar}
+            />
+          </PostMetadata>
+
+          <Content>
+            {postEditState.isEditing ? (
+              <>
+                <MarkdownEditor
+                  content={postEditState.content}
+                  handleContentChange={handlePostContentChange}
+                  onKeyDown={e => {
+                    handleKeyPressSubmit(
+                      e,
+                      handlePostEditSubmit,
+                      canSubmit(postEditState.content)
+                    );
+                  }}
+                ></MarkdownEditor>
+                <ButtonMinor
+                  type="submit"
+                  onClick={handlePostEditSubmit}
+                  disabled={!canSubmit(postEditState.content)}
+                >
+                  <Icon className="icon-edit"></Icon>
+                  Update
                 </ButtonMinor>
-              )}
-            </MetaActions>
-          </Meta>
-          <Title>{title}</Title>
-          <AuthorNamePlate
-            displayName={authorName}
-            userHandle={authorUsername}
-            avatar={avatar}
-          />
-        </PostMetadata>
-
-        <Content>
-          {postEditState.isEditing ? (
-            <>
+              </>
+            ) : (
               <MarkdownEditor
-                content={postEditState.content}
+                content={content}
                 handleContentChange={handlePostContentChange}
-                onKeyDown={e => {
-                  handleKeyPressSubmit(
-                    e,
-                    handlePostEditSubmit,
-                    canSubmit(postEditState.content)
-                  );
-                }}
+                readOnly={!postEditState.isEditing}
               ></MarkdownEditor>
-              <ButtonMinor
-                type="submit"
-                onClick={handlePostEditSubmit}
-                disabled={!canSubmit(postEditState.content)}
-              >
-                <Icon className="icon-edit"></Icon>
-                Update
-              </ButtonMinor>
-            </>
-          ) : (
-            <MarkdownEditor
-              content={content}
-              handleContentChange={handlePostContentChange}
-              readOnly={!postEditState.isEditing}
-            ></MarkdownEditor>
-          )}
-        </Content>
-        <ActionBar>
-          <ButtonTertiary
-            onClick={() => handleStarClick()}
-            disabled={isLoading}
+            )}
+          </Content>
+          <ActionBar>
+            <ButtonTertiary
+              onClick={() => handleStarClick()}
+              disabled={isLoading}
+            >
+              <Icon className="icon-star"></Icon>
+              <div>{postState.stars.length}</div>
+            </ButtonTertiary>
+          </ActionBar>
+        </Post>
+
+        <CommentList>
+          {Object.values(postState.replies)
+            .filter(r => !r.parentId)
+            .map(firstLevelReply => (
+              <React.Fragment key={firstLevelReply.id}>
+                {renderComment(firstLevelReply, 0)}
+              </React.Fragment>
+            ))}
+        </CommentList>
+
+        <Reply>
+          <MarkdownEditor
+            placeholder="Comment"
+            content={reply}
+            handleContentChange={handleReplyChange}
+            onKeyDown={e => {
+              handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
+            }}
+          ></MarkdownEditor>
+          <ButtonMinor
+            type="submit"
+            onClick={handleCommentSubmit}
+            disabled={!canSubmit(reply)}
           >
-            <Icon className="icon-star"></Icon>
-            <div>{postState.stars.length}</div>
-          </ButtonTertiary>
-        </ActionBar>
-      </Post>
-
-      <CommentList>
-        {Object.values(postState.replies)
-          .filter(r => !r.parentId)
-          .map(firstLevelReply => (
-            <React.Fragment key={firstLevelReply.id}>
-              {renderComment(firstLevelReply, 0)}
-            </React.Fragment>
-          ))}
-      </CommentList>
-
-      <Reply>
-        <MarkdownEditor
-          placeholder="Comment"
-          content={reply}
-          handleContentChange={handleReplyChange}
-          onKeyDown={e => {
-            handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
-          }}
-        ></MarkdownEditor>
-        <ButtonMinor
-          type="submit"
-          onClick={handleCommentSubmit}
-          disabled={!canSubmit(reply)}
-        >
-          <Icon className="icon-comment"></Icon>
-          Reply
-        </ButtonMinor>
-      </Reply>
-    </PageWrapper>
+            <Icon className="icon-comment"></Icon>
+            Reply
+          </ButtonMinor>
+        </Reply>
+      </PageWrapper>
+    </CustomLayout>
   );
 }

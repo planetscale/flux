@@ -6,6 +6,7 @@ import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
+import CustomLayout from 'components/CustomLayout';
 
 const Wrapper = styled.div`
   display: flex;
@@ -98,27 +99,29 @@ export default function Login({ token }) {
   };
 
   return (
-    <Wrapper>
-      <ContentContainer>
-        <LogoContainer>
-          <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
-        </LogoContainer>
-        {!isAuthed && authChecked && (
-          <AuthButtonContainer>
-            <AuthButton onClick={handleLogin}>
-              <Icon className="icon-google"></Icon>
-              <span>Login With Google</span>
-            </AuthButton>
-          </AuthButtonContainer>
-        )}
-        {isAuthed && loaded && !user?.org && (
-          <CreateOrg
-            name={authUser?.displayName}
-            email={authUser?.email}
-            avatar={authUser?.photoURL ?? ''}
-          />
-        )}
-      </ContentContainer>
-    </Wrapper>
+    <CustomLayout>
+      <Wrapper>
+        <ContentContainer>
+          <LogoContainer>
+            <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
+          </LogoContainer>
+          {!isAuthed && authChecked && (
+            <AuthButtonContainer>
+              <AuthButton onClick={handleLogin}>
+                <Icon className="icon-google"></Icon>
+                <span>Login With Google</span>
+              </AuthButton>
+            </AuthButtonContainer>
+          )}
+          {isAuthed && loaded && !user?.org && (
+            <CreateOrg
+              name={authUser?.displayName}
+              email={authUser?.email}
+              avatar={authUser?.photoURL ?? ''}
+            />
+          )}
+        </ContentContainer>
+      </Wrapper>
+    </CustomLayout>
   );
 }

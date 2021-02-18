@@ -1,16 +1,9 @@
-import styled from '@emotion/styled';
 import TopBar from 'components/TopBar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuthContext } from 'state/auth';
 import { useTopBarActions } from 'state/topBar';
 import { useUserContext } from 'state/user';
-
-const CenterWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 export default function AppContentWrapper({ token, children }) {
   const router = useRouter();
@@ -41,17 +34,17 @@ export default function AppContentWrapper({ token, children }) {
   }, [router.pathname]);
 
   return (
-    <main>
+    <>
       {authContext.isAuthed && token && user && (
-        <CenterWrapper>
+        <>
           <TopBar
             profileImg={user?.profile?.avatar ?? '/user_profile_icon.svg'}
             userDisplayName={user?.displayName}
             userHandle={user?.username}
           />
           {children}
-        </CenterWrapper>
+        </>
       )}
-    </main>
+    </>
   );
 }
