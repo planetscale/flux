@@ -43,6 +43,7 @@ const Logo = styled.div`
   border-radius: unset;
   padding: 0 4px;
   font-family: 'Raleway', sans-serif;
+  font-feature-settings: 'liga';
   font-style: italic;
   font-weight: 900;
   background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
