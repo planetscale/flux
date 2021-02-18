@@ -22,7 +22,7 @@ export default async (req, res, handler, params) => {
       params.newPost.createdAt,
       timeOptions
     );
-    const client = new WebClient(token);
+    const client = new WebClient(process.env.SLACK_API_TOKEN);
 
     const resp = await client.chat.postMessage({
       channel: `#${tagName}`,

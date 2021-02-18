@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     Post
         (title, summary, authorId, content, tagId)
     VALUES
-        (?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?)
   `;
   await connection.execute(insertQuery, [
     title,
