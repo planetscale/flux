@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Head from 'next/head';
+import CustomLayout from 'components/CustomLayout';
 
 const EnjoyFlux = styled.div`
   position: fixed;
@@ -16,18 +16,10 @@ const EnjoyFluxImage = styled.img``;
 
 export default function Custom404() {
   return (
-    <>
-      <Head>
-        <title>Flux - PlanetScale - 404</title>
-        <meta
-          property="og:title"
-          content="Flux - PlanetScale - 404"
-          key="title"
-        />
-      </Head>
+    <CustomLayout title="404">
       <EnjoyFlux>
         <EnjoyFluxImage src="/404.png"></EnjoyFluxImage>
       </EnjoyFlux>
-    </>
+    </CustomLayout>
   );
 }

@@ -8,7 +8,7 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
-import Head from 'next/head';
+import CustomLayout from 'components/CustomLayout';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -113,21 +113,13 @@ export default function Home() {
 
   const posts = Object.values(state.postList).reverse();
   return (
-    <>
-      <Head>
-        <title>Flux - {user.org.name} - Posts</title>
-        <meta
-          property="og:title"
-          content="Flux - {user.org.name} - Posts"
-          key="title"
-        />
-      </Head>
+    <CustomLayout title="Posts">
       <HomeWrapper>
         <PostList
           posts={[...posts, ...(!posts.length ? LOADING_POSTS : [])]}
           handleTagClick={handleTagClick}
         />
       </HomeWrapper>
-    </>
+    </CustomLayout>
   );
 }

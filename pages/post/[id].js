@@ -31,7 +31,7 @@ import styled from '@emotion/styled';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
-import Head from 'next/head';
+import CustomLayout from 'components/CustomLayout';
 
 const Meta = styled.div`
   display: flex;
@@ -630,11 +630,7 @@ export default function PostPage() {
   }
 
   return (
-    <>
-      <Head>
-        <title>Flux - PlanetScale - {title}</title>
-        <meta property="og:title" content="{title}" key="title" />
-      </Head>
+    <CustomLayout title={title}>
       <PageWrapper>
         <Post>
           <PostMetadata>
@@ -731,6 +727,6 @@ export default function PostPage() {
           </ButtonMinor>
         </Reply>
       </PageWrapper>
-    </>
+    </CustomLayout>
   );
 }

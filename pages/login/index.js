@@ -6,7 +6,7 @@ import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
-import Head from 'next/head';
+import CustomLayout from 'components/CustomLayout';
 
 const Wrapper = styled.div`
   display: flex;
@@ -99,11 +99,7 @@ export default function Login({ token }) {
   };
 
   return (
-    <>
-      <Head>
-        <title>Flux - PlanetScale</title>
-        <meta property="og:title" content="Flux - PlanetScale" key="title" />
-      </Head>
+    <CustomLayout>
       <Wrapper>
         <ContentContainer>
           <LogoContainer>
@@ -126,6 +122,6 @@ export default function Login({ token }) {
           )}
         </ContentContainer>
       </Wrapper>
-    </>
+    </CustomLayout>
   );
 }
