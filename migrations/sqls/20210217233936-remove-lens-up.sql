@@ -1,0 +1,3 @@
+ALTER TABLE Post DROP FOREIGN KEY `Post_ibfk_2`, DROP COLUMN lensId;
+
+DROP TABLE Lens;
