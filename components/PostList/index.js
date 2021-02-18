@@ -4,7 +4,7 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 import Link from 'next/link';
 
 const Wrapper = styled.div`
-  width: 800px;
+  width: 80ch;
   padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid var(--accent2);
