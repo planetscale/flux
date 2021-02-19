@@ -13,26 +13,22 @@ export default async (req, res) => {
 
   const { email, pwd } = req.body;
 
-  const passwordHashed = await argon2.hash(pwd);
-
   const connection = await createConnection();
 
-  const idQuery = `SELECT id FROM User WHERE email = ${email}`;
-  const [[userId]] = await connection.query(idQuery);
+  const idQuery = `SELECT password FROM User WHERE email = ${email}`;
+  const [[password]] = await connection.query(idQuery);
 
-  if (userId) {
-    res.json({ error: `Email ${email} has been used.` });
+  if (!password) {
+    res.json({ error: `User not found` });
     return;
   }
 
-  const userSignUpQuery = `
-    INSERT INTO
-    User
-        (email, password)
-    VALUES
-        (?, ?)
-  `;
-  await connection.execute(userSignUpQuery, [email, passwordHashed]);
+  const correctPassword = await argon2.verify(password, pwd);
+
+  if (!correctPassword) {
+    res.json({ error: `Incorrect password` });
+    return;
+  }
 
   connection.end();
 

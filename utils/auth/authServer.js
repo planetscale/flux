@@ -10,4 +10,18 @@ function generateToken(user) {
   return jwt.sign({ data }, signature, { expiresIn: expiration });
 }
 
-export { generateToken };
+function verifyToken(token) {
+  let decoded;
+  const signature = 'MySuP3R_z3kr3t';
+
+  try {
+    decoded = jwt.verify(token, signature);
+  } catch (err) {
+    throw err;
+  }
+
+  if (decoded) return true;
+  return false;
+}
+
+export { generateToken, verifyToken };
