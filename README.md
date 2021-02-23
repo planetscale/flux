@@ -21,4 +21,4 @@ This project uses [db-migrate](https://github.com/db-migrate/node-db-migrate) to
 **To create a new migration**
 `npm run migrate create {MIGRATION_NAME} -- --sql-file`
 
-**To run migrations** `npm run migration up`
+**To run migrations** `npm run migrate up`

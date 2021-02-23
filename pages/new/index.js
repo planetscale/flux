@@ -1,4 +1,3 @@
-import useSWR from 'swr';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
@@ -10,6 +9,8 @@ import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
+import CustomLayout from 'components/CustomLayout';
+import { useEffect } from 'react';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -186,10 +187,11 @@ export default function NewPost() {
     disableSubmit: false,
   });
 
-  useSWR(['GET', '/api/get-tags'], fetcher, {
-    onSuccess: ({ data }) => {
+  useEffect(async () => {
+    try {
+      const resp = await fetcher('GET', '/api/get-tags');
       const fluxSandboxChannel = {};
-      const tagMap = data.map(item => {
+      const tagMap = resp.data.map(item => {
         // assign dev default channel
         if (item.name.toLowerCase() === 'flux-sandbox') {
           fluxSandboxChannel['value'] = item.name;
@@ -211,8 +213,10 @@ export default function NewPost() {
             ? fluxSandboxChannel
             : tagMap[0];
       });
-    },
-  });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -245,17 +249,16 @@ export default function NewPost() {
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
         content: state.content,
-        summary: state.subtitle.value || `${state.content.substr(0, 60)}...`,
+        summary: state.subtitle.value,
         tagChannelId: state.selectedTag.channelId,
         tagName: state.selectedTag.value,
         userAvatar:
           userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
         userDisplayName: userContext?.user?.displayName,
         domain: window.location.origin,
-        lensId: 1, // hard coded. this should be removed soon
       });
 
-      if (!resp.error && resp.data.id) {
+      if (!resp?.error && resp?.data.id) {
         router.push(`/post/${resp.data.id}`);
       }
     } catch (e) {
@@ -298,78 +301,83 @@ export default function NewPost() {
   };
 
   return (
-    <PageWrapper>
-      <Post>
-        <TimeAndTags>
-          <MetaTime>{state.dateTime}</MetaTime>
-          <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
-          <div>
-            <Select
-              isClearable={true}
-              isSearchable={true}
-              styles={customStyles}
-              value={state.selectedTag}
-              onChange={handleTagChange}
-              options={state.tagOptions}
-              defaultValue={state.selectedTag}
-              placeholder="Select a tag"
-              theme={theme => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary25: 'var(--highlight)',
-                  primary50: 'var(--highlight)',
-                  primary75: 'var(--highlight)',
-                  primary: 'var(--highlight)',
-                },
-              })}
-            />
-          </div>
-        </TimeAndTags>
-        <TitleInputWrapper
-          className={`${getTitleClasses(state.title)}`}
-          onBlur={() => handleBlur('title')}
-        >
-          <TitleInput
-            placeholder="Enter Title"
-            rows="1"
-            maxLength={TITLE_MAX_LENGTH}
-            value={state.title.value}
-            onChange={e => handleTitleChange(e, 'title')}
-          ></TitleInput>
-          <div className="chars-left">
-            {TITLE_MAX_LENGTH - state.title.value.length}
-          </div>
-        </TitleInputWrapper>
-        <TitleInputWrapper>
-          <SubtitleInput
-            placeholder="Enter Subtitle"
-            rows="1"
-            maxLength={TITLE_MAX_LENGTH}
-            value={state.subtitle.value}
-            onChange={e => handleTitleChange(e, 'subtitle')}
-          ></SubtitleInput>
-          <div className="chars-left">
-            {TITLE_MAX_LENGTH - state.subtitle.value.length}
-          </div>
-        </TitleInputWrapper>
-        <EditorWrapper>
-          <MarkdownEditor
-            content={state.content}
-            handleContentChange={handleContentChange}
-            onKeyDown={e => {
-              handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
-            }}
-          ></MarkdownEditor>
-        </EditorWrapper>
-        <ActionItems>
-          <ButtonSpecial onClick={handlePostSubmit} disabled={!canSubmitPost()}>
-            <Icon className="icon-post"></Icon>
-            Post
-          </ButtonSpecial>
-          <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
-        </ActionItems>
-      </Post>
-    </PageWrapper>
+    <CustomLayout title="Create New Post">
+      <PageWrapper>
+        <Post>
+          <TimeAndTags>
+            <MetaTime>{state.dateTime}</MetaTime>
+            <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
+            <div>
+              <Select
+                isClearable={true}
+                isSearchable={true}
+                styles={customStyles}
+                value={state.selectedTag}
+                onChange={handleTagChange}
+                options={state.tagOptions}
+                defaultValue={state.selectedTag}
+                placeholder="Select a tag"
+                theme={theme => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary25: 'var(--highlight)',
+                    primary50: 'var(--highlight)',
+                    primary75: 'var(--highlight)',
+                    primary: 'var(--highlight)',
+                  },
+                })}
+              />
+            </div>
+          </TimeAndTags>
+          <TitleInputWrapper
+            className={`${getTitleClasses(state.title)}`}
+            onBlur={() => handleBlur('title')}
+          >
+            <TitleInput
+              placeholder="Enter Title"
+              rows="1"
+              maxLength={TITLE_MAX_LENGTH}
+              value={state.title.value}
+              onChange={e => handleTitleChange(e, 'title')}
+            ></TitleInput>
+            <div className="chars-left">
+              {TITLE_MAX_LENGTH - state.title.value.length}
+            </div>
+          </TitleInputWrapper>
+          <TitleInputWrapper>
+            <SubtitleInput
+              placeholder="Enter Subtitle"
+              rows="1"
+              maxLength={TITLE_MAX_LENGTH}
+              value={state.subtitle.value}
+              onChange={e => handleTitleChange(e, 'subtitle')}
+            ></SubtitleInput>
+            <div className="chars-left">
+              {TITLE_MAX_LENGTH - state.subtitle.value.length}
+            </div>
+          </TitleInputWrapper>
+          <EditorWrapper>
+            <MarkdownEditor
+              content={state.content}
+              handleContentChange={handleContentChange}
+              onKeyDown={e => {
+                handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
+              }}
+            ></MarkdownEditor>
+          </EditorWrapper>
+          <ActionItems>
+            <ButtonSpecial
+              onClick={handlePostSubmit}
+              disabled={!canSubmitPost()}
+            >
+              <Icon className="icon-post"></Icon>
+              Post
+            </ButtonSpecial>
+            <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
+          </ActionItems>
+        </Post>
+      </PageWrapper>
+    </CustomLayout>
   );
 }

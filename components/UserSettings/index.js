@@ -54,8 +54,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--highlight);
-    color: white;
+    background-color: var(--accent2);
   }
 `;
 

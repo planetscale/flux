@@ -8,6 +8,7 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useImmer } from 'use-immer';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
+import CustomLayout from 'components/CustomLayout';
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -114,11 +115,13 @@ export default function Home() {
 
   const posts = Object.values(state.postList).reverse();
   return (
-    <HomeWrapper>
-      <PostList
-        posts={[...posts, ...(!posts.length ? LOADING_POSTS : [])]}
-        handleTagClick={handleTagClick}
-      />
-    </HomeWrapper>
+    <CustomLayout title="Posts">
+      <HomeWrapper>
+        <PostList
+          posts={[...posts, ...(!posts.length ? LOADING_POSTS : [])]}
+          handleTagClick={handleTagClick}
+        />
+      </HomeWrapper>
+    </CustomLayout>
   );
 }

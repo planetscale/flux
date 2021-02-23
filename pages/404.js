@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import CustomLayout from 'components/CustomLayout';
 
 const EnjoyFlux = styled.div`
   position: fixed;
@@ -15,8 +16,10 @@ const EnjoyFluxImage = styled.img``;
 
 export default function Custom404() {
   return (
-    <EnjoyFlux>
-      <EnjoyFluxImage src="/404.png"></EnjoyFluxImage>
-    </EnjoyFlux>
+    <CustomLayout title="404">
+      <EnjoyFlux>
+        <EnjoyFluxImage src="/404.png"></EnjoyFluxImage>
+      </EnjoyFlux>
+    </CustomLayout>
   );
 }

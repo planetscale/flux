@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 const Wrapper = styled.div`
-  width: 800px;
+  width: 80ch;
   padding: 48px 16px;
   box-sizing: border-box;
   border-left: 1px solid var(--accent2);

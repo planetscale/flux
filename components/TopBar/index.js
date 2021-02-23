@@ -39,10 +39,12 @@ const Wrapper = styled.div`
 `;
 
 const Logo = styled.div`
+  letter-spacing: -1px;
   font-size: 24px;
   border-radius: unset;
   padding: 0 4px;
   font-family: 'Raleway', sans-serif;
+  font-feature-settings: 'liga';
   font-style: italic;
   font-weight: 900;
   background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
