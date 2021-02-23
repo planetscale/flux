@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import { createConnection } from './connection';
 import Cors from 'cors';
 import { decodeToken } from 'utils/auth/serverConfig';
 
@@ -46,16 +46,32 @@ const validateUser = async (req, fetchUserId = false) => {
       throw e;
     }
   }
-
   throw Error;
 };
 
 const getUserId = async userEmail => {
-  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  const connection = await createConnection();
   const query = 'SELECT id FROM User WHERE email = ?';
   const [[row]] = await connection.execute(query, [userEmail]);
   connection.close();
   return row.id;
 };
 
-export { cors, validateUser, getUserId };
+function runMiddleware(req, res, fn, params) {
+  return new Promise((resolve, reject) => {
+    fn(
+      req,
+      res,
+      result => {
+        if (result instanceof Error) {
+          return reject(result);
+        }
+
+        return resolve(result);
+      },
+      params
+    );
+  });
+}
+
+export { cors, validateUser, getUserId, runMiddleware };

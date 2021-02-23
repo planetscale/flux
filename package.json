@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run migrate up",
     "start": "next start",
     "analyze": "ANALYZE=true npm run build",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "node_modules/db-migrate/bin/db-migrate"
   },
   "peerDependencies": {
     "outline-icons": "1.23.0"
@@ -61,6 +62,8 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "babel-jest": "^26.6.3",
+    "db-migrate": "^0.11.12",
+    "db-migrate-mysql": "^2.1.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "prettier": "2.2.1"

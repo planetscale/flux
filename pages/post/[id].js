@@ -1,6 +1,5 @@
 import React from 'react';
 import useSWR from 'swr';
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
@@ -34,6 +33,8 @@ import { media } from 'pageUtils/post/theme';
 import { deserialize } from 'components/Editor/deserializeFromMarkdown';
 import { serialize } from 'components/Editor/serializeToMarkdown';
 import { initialValueAutoformat } from 'components/Editor/initialValues';
+import { fetcher } from 'utils/fetch';
+import CustomLayout from 'components/CustomLayout';
 
 const Meta = styled.div`
   display: flex;
@@ -63,18 +64,6 @@ const MetaActions = styled.div`
     margin-bottom: 2em;
   `}
 `;
-
-const fetcher = async (url, auth, params) => {
-  const searchParams = new URLSearchParams(params);
-  const response = await fetch(`${url}?${searchParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: auth,
-    },
-  });
-  return response.json();
-};
 
 export default function PostPage() {
   const router = useRouter();
@@ -108,20 +97,9 @@ export default function PostPage() {
   const userContext = useUserContext();
 
   const { data: postData } = useSWR(
-    [
-      '/api/post/get-post',
-      defaultFetchHeaders.authorization,
-      Number(router.query?.id),
-    ],
-    (url, auth, id) => fetcher(url, auth, { id }),
+    ['/api/post/get-post', Number(router.query?.id)],
+    (url, id) => fetcher('GET', url, { id }),
     {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
       onSuccess: ({ data }) => {
         setPostEditState(draft => {
           draft.content = data.content;
@@ -140,20 +118,9 @@ export default function PostPage() {
   );
 
   useSWR(
-    [
-      '/api/post/get-replies',
-      defaultFetchHeaders.authorization,
-      Number(router.query?.id),
-    ],
-    (url, auth, postId) => fetcher(url, auth, { postId }),
+    ['/api/post/get-replies', Number(router.query?.id)],
+    (url, postId) => fetcher('GET', url, { postId }),
     {
-      // FIXME: Review these settings, having swr refresh on it's own was interfering with our predictive state management for likes
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: true,
-      refreshWhenOffline: false,
-      refreshWhenHidden: false,
-      refreshInterval: 0,
       onSuccess: ({ data }) => {
         // Replies come back in a flat array.  We want a flat map so we can do quick look ups and mutations. Each reply also contains a
         // 'children' property which holds the ids of all direct children of the reply.
@@ -186,18 +153,10 @@ export default function PostPage() {
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/create-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: serializedReply.trim(),
-          postId: Number(router.query.id),
-        }),
+      const result = await fetcher('POST', '/api/post/create-reply', {
+        content: reply.trim(),
+        postId: Number(router.query.id),
       });
-      const result = await res.json();
       setLoading(false);
       if (result.data) {
         setReply({});
@@ -281,18 +240,10 @@ export default function PostPage() {
 
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/add-star`, {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            Authorization: defaultFetchHeaders.authorization,
-          },
-          body: JSON.stringify({
-            postId: Number(router.query?.id),
-            replyId: Number(replyId) || undefined,
-          }),
+        const result = await fetcher('POST', `/api/post/add-star`, {
+          postId: Number(router.query?.id),
+          replyId: Number(replyId) || undefined,
         });
-        const result = await res.json();
         setLoading(false);
 
         if (result.error) {
@@ -363,17 +314,9 @@ export default function PostPage() {
 
       try {
         setLoading(true);
-        const res = await fetch(`/api/post/remove-star`, {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            Authorization: defaultFetchHeaders.authorization,
-          },
-          body: JSON.stringify({
-            id: match.id,
-          }),
+        const result = await fetcher('POST', `/api/post/remove-star`, {
+          id: match.id,
         });
-        const result = await res.json();
         setLoading(false);
         if (!result) {
           undoStarDelete(backupStars, replyId);
@@ -417,43 +360,27 @@ export default function PostPage() {
     });
   };
 
-  const handleCommentEditSubmit = async e => {
-    let serializedCommentEdit;
-    if (commentInputs.edits[e.target.dataset.commentId]) {
-      serializedCommentEdit = commentInputs.edits[
-        e.target.dataset.commentId
-      ]?.trim();
-    }
-
-    if (!serializedCommentEdit) {
-      // TODO: add toast UI to show error message
+  const handleCommentEditSubmit = async (e, commentId) => {
+    const id = commentId ? commentId : e.target.dataset.commentId;
+    if (!commentInputs.edits[id]?.trim()) {
       return;
     }
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/update-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: serializedCommentEdit,
-          replyId: Number(e.target.dataset.commentId),
-        }),
+      const result = await fetcher('POST', '/api/post/update-reply', {
+        content: commentInputs.edits[id]?.trim(),
+        replyId: Number(id),
       });
-      const result = await res.json();
       setLoading(false);
 
       if (result.data) {
         updateReplyMap(result.data);
         setCommentInputs(draft => {
-          draft.edits[e.target.dataset.commentId] = '';
+          draft.edits[id] = '';
         });
         setCommentButtonState(draft => {
-          draft.editButtons[e.target.dataset.commentId] = !commentButtonState
-            .editButtons[e.target.dataset.commentId];
+          draft.editButtons[id] = !commentButtonState.editButtons[id];
         });
       } else {
         console.error(e);
@@ -464,42 +391,27 @@ export default function PostPage() {
     }
   };
 
-  const handleCommentReplySubmit = async e => {
-    let serializedCommentReply;
-    if (commentInputs.replies[e.target.dataset.commentId]) {
-      serializedCommentReply = commentInputs.replies[
-        e.target.dataset.commentId
-      ]?.trim();
-    }
-
-    if (!serializedCommentReply) {
+  const handleCommentReplySubmit = async (e, commentId) => {
+    const id = commentId ? commentId : e.target.dataset.commentId;
+    if (!commentInputs.replies[id]?.trim()) {
       return;
     }
 
     try {
       setLoading(true);
-      const res = await fetch('/api/post/create-reply', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: serializedCommentReply,
-          postId: Number(router.query.id),
-          parentId: Number(e.target.dataset.commentId),
-        }),
+      const result = await fetcher('POST', '/api/post/create-reply', {
+        content: commentInputs.replies[id]?.trim(),
+        postId: Number(router.query.id),
+        parentId: Number(id),
       });
-      const result = await res.json();
       setLoading(false);
       if (result.data) {
         updateReplyMap(result.data);
         setCommentInputs(draft => {
-          draft.replies[e.target.dataset.commentId] = '';
+          draft.replies[id] = '';
         });
         setCommentButtonState(draft => {
-          draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
-            .replyButtons[e.target.dataset.commentId];
+          draft.replyButtons[id] = !commentButtonState.replyButtons[id];
         });
       } else {
         console.error(e);
@@ -525,18 +437,10 @@ export default function PostPage() {
   const handlePostEditSubmit = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/post/update-post', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Authorization: defaultFetchHeaders.authorization,
-        },
-        body: JSON.stringify({
-          content: serialize(postEditState.content[0]),
-          postId: Number(router.query.id),
-        }),
+      const result = await fetcher('POST', '/api/post/update-post', {
+        content: postEditState.content,
+        postId: Number(router.query.id),
       });
-      const result = await res.json();
       setLoading(false);
       if (!result) {
         console.error(e);
@@ -575,6 +479,16 @@ export default function PostPage() {
       Object.keys(slateObject).length === 0 ||
       JSON.stringify(slateObject) === JSON.stringify(initialValueAutoformat)
     );
+  };
+
+  const handleKeyPressSubmit = (e, callback, canSubmit, commentId) => {
+    if (e.code === 'Enter' && e.metaKey && canSubmit) {
+      if (commentId) {
+        callback(e, commentId);
+      } else {
+        callback();
+      }
+    }
   };
 
   // Resursively render comments and their replies (and sub replies, etc)
@@ -697,100 +611,99 @@ export default function PostPage() {
     );
   };
 
-  // TODO: add better loading indicator, now there's literally none
-  // if (!postData) {
-  //   return <></>;
-  // }
-
   return (
-    <PageWrapper>
-      <Post>
-        <PostMetadata>
-          <Meta>
-            <MetaData>
-              <DateTime>{getLocaleDateTimeString(postMeta.createdAt)}</DateTime>
-              <div>&nbsp; &middot; &nbsp;</div>
-              <div>#{postMeta.tagName}</div>
-            </MetaData>
-            <MetaActions>
-              {userContext.user.id === postMeta.authorId && (
-                <ButtonMinor type="submit" onClick={togglePostEdit}>
-                  {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                </ButtonMinor>
-              )}
-            </MetaActions>
-          </Meta>
-          <Title>{postMeta.title}</Title>
-          <AuthorNamePlate
-            displayName={postMeta.authorName}
-            userHandle={postMeta.authorUsername}
-            avatar={postMeta.avatar}
-          />
-        </PostMetadata>
+    <CustomLayout title={postMeta.title}>
+      <PageWrapper>
+        <Post>
+          <PostMetadata>
+            <Meta>
+              <MetaData>
+                <DateTime>
+                  {getLocaleDateTimeString(postMeta.createdAt)}
+                </DateTime>
+                <div>&nbsp; &middot; &nbsp;</div>
+                <div>#{postMeta.tagName}</div>
+              </MetaData>
+              <MetaActions>
+                {userContext.user.id === postMeta.authorId && (
+                  <ButtonMinor type="submit" onClick={togglePostEdit}>
+                    {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
+                  </ButtonMinor>
+                )}
+              </MetaActions>
+            </Meta>
+            <Title>{postMeta.title}</Title>
+            <AuthorNamePlate
+              displayName={postMeta.authorName}
+              userHandle={postMeta.authorUsername}
+              avatar={postMeta.avatar}
+            />
+          </PostMetadata>
 
-        <Content>
-          {postEditState.isEditing ? (
-            <>
+          <Content>
+            {postEditState.isEditing ? (
+              <>
+                <SlateEditor
+                  users={postEditState.allUsers}
+                  onChange={handlePostContentChange}
+                  readOnly={!postEditState.isEditing}
+                  defaultValue={deserialize(postMeta.content)}
+                ></SlateEditor>
+                <ButtonMinor
+                  type="submit"
+                  onClick={handlePostEditSubmit}
+                  disabled={!canSubmit(postEditState.content)}
+                >
+                  <Icon className="icon-edit"></Icon>
+                  Update
+                </ButtonMinor>
+              </>
+            ) : (
               <SlateEditor
                 users={postEditState.allUsers}
                 onChange={handlePostContentChange}
                 readOnly={!postEditState.isEditing}
                 defaultValue={deserialize(postMeta.content)}
               ></SlateEditor>
-              <ButtonMinor
-                type="submit"
-                onClick={handlePostEditSubmit}
-                disabled={!canSubmit(postEditState.content)}
-              >
-                <Icon className="icon-edit"></Icon>
-                Update
-              </ButtonMinor>
-            </>
-          ) : (
-            <SlateEditor
-              users={postEditState.allUsers}
-              onChange={handlePostContentChange}
-              readOnly={!postEditState.isEditing}
-              defaultValue={deserialize(postMeta.content)}
-            ></SlateEditor>
-          )}
-        </Content>
-        <ActionBar>
-          <ButtonTertiary
-            onClick={() => handleStarClick()}
-            disabled={isLoading}
+            )}
+          </Content>
+          <ActionBar>
+            <ButtonTertiary
+              onClick={() => handleStarClick()}
+              disabled={isLoading}
+            >
+              <Icon className="icon-star"></Icon>
+              <div>{postState.stars.length}</div>
+            </ButtonTertiary>
+          </ActionBar>
+        </Post>
+
+        <CommentList>
+          {Object.values(postState.replies)
+            .filter(r => !r.parentId)
+            .map(firstLevelReply => (
+              <React.Fragment key={firstLevelReply.id}>
+                {renderComment(firstLevelReply, 0)}
+              </React.Fragment>
+            ))}
+        </CommentList>
+
+        <Reply>
+          <SlateEditor
+            users={postEditState.allUsers}
+            onChange={handleReplyChange}
+            readOnly={false}
+          ></SlateEditor>
+          <ButtonMinor
+            type="submit"
+            onClick={handleCommentSubmit}
+            disabled={!canSubmit(reply)}
           >
-            <Icon className="icon-star"></Icon>
-            <div>{postState.stars.length}</div>
-          </ButtonTertiary>
-        </ActionBar>
-      </Post>
-
-      <CommentList>
-        {Object.values(postState.replies)
-          .filter(r => !r.parentId)
-          .map(firstLevelReply => (
-            <React.Fragment key={firstLevelReply.id}>
-              {renderComment(firstLevelReply, 0)}
-            </React.Fragment>
-          ))}
-      </CommentList>
-
-      <Reply>
-        <SlateEditor
-          users={postEditState.allUsers}
-          onChange={handleReplyChange}
-          readOnly={false}
-        ></SlateEditor>
-        <ButtonMinor
-          type="submit"
-          onClick={handleCommentSubmit}
-          disabled={!canSubmit(reply)}
-        >
-          <Icon className="icon-comment"></Icon>
-          Reply
-        </ButtonMinor>
-      </Reply>
-    </PageWrapper>
+            <Icon className="icon-comment"></Icon>
+            Reply
+          </ButtonMinor>
+        </Reply>
+      </PageWrapper>
+    </CustomLayout>
   );
 }

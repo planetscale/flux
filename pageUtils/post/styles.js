@@ -14,7 +14,7 @@ const PageWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  margin: 0 auto;
 
   ${media.phone`
     padding: 42px;
