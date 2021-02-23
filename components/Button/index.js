@@ -79,6 +79,15 @@ export const ButtonTertiary = styled(ButtonBase)`
   &:active:not([disabled]) {
     transform: scale(0.75);
   }
+
+  &.selected {
+    color: var(--highlight);
+    border-color: var(--highlight);
+
+    ${Icon} {
+      background: var(--highlight);
+    }
+  }
 `;
 
 export const ButtonSpecial = styled(ButtonBase)`
