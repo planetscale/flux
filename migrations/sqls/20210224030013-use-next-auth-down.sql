@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS accounts, users, verification_requests;

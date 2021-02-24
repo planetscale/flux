@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Provider } from 'next-auth/client';
 import { debugContextDevtool } from 'react-context-devtool';
 import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
@@ -47,9 +48,11 @@ function App({ Component, pageProps }) {
         ></link>
       </Head>
       <AuthContextProvider>
-        <AppContainer>
-          <Component {...pageProps} />
-        </AppContainer>
+        <Provider session={pageProps.session}>
+          <AppContainer>
+            <Component {...pageProps} />
+          </AppContainer>
+        </Provider>
       </AuthContextProvider>
     </>
   );
