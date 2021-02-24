@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
 import CustomLayout from 'components/CustomLayout';
+import { signIn } from 'next-auth/client';
 
 const Wrapper = styled.div`
   display: flex;
@@ -95,7 +96,8 @@ export default function Login({ token }) {
   }, [token]);
 
   const handleLogin = () => {
-    userLogin();
+    // userLogin();
+    signIn('google', { callbackUrl: '/' });
   };
 
   return (
