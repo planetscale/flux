@@ -9,10 +9,22 @@ import Link from 'next/link';
 
 const NotificationButton = styled(ButtonImage)`
   border-radius: 50%;
-  background-color: #e55e31;
+  background-color: var(--background);
+  border: 2px solid var(--foreground);
 
-  ${Icon} {
-    background: white;
+  &.has-notifications {
+    background-color: #e55e31;
+    border: none;
+
+    ${Icon} {
+      background-color: var(--background);
+    }
+  }
+
+  &:not(.has-notifications) {
+    ${Icon} {
+      background-color: var(--foreground);
+    }
   }
 `;
 
@@ -125,7 +137,10 @@ export default function Notifications() {
 
   return (
     <DropdownMenu.Root>
-      <NotificationButton as={DropdownMenu.Trigger}>
+      <NotificationButton
+        as={DropdownMenu.Trigger}
+        className={totalNotifications > 0 ? 'has-notifications' : ''}
+      >
         <Icon className="icon-notification" />
       </NotificationButton>
       <NotificationContent sideOffset={42}>
