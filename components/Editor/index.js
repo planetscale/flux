@@ -14,7 +14,6 @@ import {
   pipe,
   ResetBlockTypePlugin,
   SoftBreakPlugin,
-  StrikethroughPlugin,
   withAutoformat,
   withList,
   MentionPlugin,
@@ -30,7 +29,6 @@ import {
   ToolbarMark,
   MARK_BOLD,
   MARK_ITALIC,
-  MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
 } from '@udecode/slate-plugins';
 import { ToolbarUploadImage } from './uploadImageToolbarAction';
@@ -50,7 +48,6 @@ import {
   FormatBold,
   FormatItalic,
   FormatUnderlined,
-  FormatStrikethrough,
 } from '@styled-icons/material-sharp';
 
 const EditorWrapper = styled.div`
@@ -76,7 +73,6 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
     BoldPlugin(),
     ItalicPlugin(),
     CodePlugin(),
-    StrikethroughPlugin(),
     BlockquotePlugin(options),
     ListPlugin(options),
     HeadingPlugin(options),
@@ -169,16 +165,11 @@ export const SlateEditor = ({ users, onChange, readOnly, defaultValue }) => {
 
         {!readOnly && (
           <HeadingToolbar>
-            {/* <ToolbarImage {...options} icon={<Image />} /> */}
             <ToolbarUploadImage icon={<Image />} />
             <ToolbarMark type={MARK_BOLD} icon={<FormatBold />}></ToolbarMark>
             <ToolbarMark
               type={MARK_ITALIC}
               icon={<FormatItalic />}
-            ></ToolbarMark>
-            <ToolbarMark
-              type={MARK_STRIKETHROUGH}
-              icon={<FormatStrikethrough />}
             ></ToolbarMark>
             <ToolbarMark
               type={MARK_UNDERLINE}

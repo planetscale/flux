@@ -5,13 +5,12 @@ import { SlateEditor } from 'components/Editor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
-import Select from 'react-select';
 import { Icon } from 'pageUtils/post/atoms';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
-import { serialize } from 'components/Editor/serializeToMarkdown';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
+import TagSelector from 'components/TagSelector';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -110,54 +109,8 @@ const EditorWrapper = styled.div`
   flex-direction: column;
   height: fit-content;
   border-top: 1px solid var(--accent2);
+  padding: 1em 0;
 `;
-
-const customStyles = {
-  container: provided => ({
-    ...provided,
-    width: '200px',
-  }),
-  control: provided => ({
-    ...provided,
-    borderColor: 'unset',
-    borderRadius: 'unset',
-    borderStyle: 'unset',
-    borderWidth: 'unset',
-    boxShadow: 'unset',
-    backgroundColor: 'var(--accent3)',
-    borderRadius: '5px',
-  }),
-  indicatorSeparator: provided => ({
-    ...provided,
-    backgroundColor: 'var(--background)',
-    marginBottom: '0',
-    marginTop: '0',
-  }),
-  indicatorContainer: provided => ({
-    ...provided,
-    color: 'var(--foreground)',
-  }),
-  option: provided => ({
-    ...provided,
-    whiteSpace: 'nowrap',
-    color: 'var(--text)',
-    ':hover': {
-      backgroundColor: 'var(--accent)',
-    },
-  }),
-  singleValue: provided => ({
-    ...provided,
-    color: 'var(--text)',
-  }),
-  menu: provided => ({
-    ...provided,
-    backgroundColor: 'var(--background)',
-    border: '1px solid var(--accent)',
-    borderRadius: '8px',
-    boxShadow: 'var(--shadow)',
-    width: 'unset',
-  }),
-};
 
 const dateTimeOptions = {
   year: 'numeric',
@@ -228,8 +181,7 @@ export default function NewPost() {
   const canSubmitPost = () => {
     return (
       state.title?.value.trim() &&
-      state.content?.trim() &&
-      state.content?.trim().match(/[0-9a-zA-Z]+/) &&
+      state.content &&
       state.selectedTag &&
       !state.disableSubmit
     );
@@ -306,28 +258,11 @@ export default function NewPost() {
           <TimeAndTags>
             <MetaTime>{state.dateTime}</MetaTime>
             <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
-            <div>
-              <Select
-                isClearable={true}
-                isSearchable={true}
-                styles={customStyles}
-                value={state.selectedTag}
-                onChange={handleTagChange}
-                options={state.tagOptions}
-                defaultValue={state.selectedTag}
-                placeholder="Select a tag"
-                theme={theme => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: 'var(--highlight)',
-                    primary50: 'var(--highlight)',
-                    primary75: 'var(--highlight)',
-                    primary: 'var(--highlight)',
-                  },
-                })}
-              />
-            </div>
+            <TagSelector
+              tagOptions={state.tagOptions}
+              selectedTag={state.selectedTag}
+              tagChangeCallback={handleTagChange}
+            ></TagSelector>
           </TimeAndTags>
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
@@ -349,7 +284,7 @@ export default function NewPost() {
             onBlur={() => handleBlur('subtitle')}
           >
             <SubtitleInput
-              placeholder="Enter Subtitle"
+              placeholder="Enter Subtitle (optional)"
               rows="1"
               maxLength={TITLE_MAX_LENGTH}
               value={state.subtitle.value}
