@@ -1,4 +1,3 @@
-import useSWR from 'swr';
 import styled from '@emotion/styled';
 import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import { SlateEditor } from 'components/Editor';
@@ -11,6 +10,7 @@ import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 import TagSelector from 'components/TagSelector';
+import { useEffect } from 'react';
 
 const TimeAndTags = styled.div`
   color: var(--text);
@@ -142,10 +142,11 @@ export default function NewPost() {
     disableSubmit: false,
   });
 
-  useSWR(['GET', '/api/get-tags'], fetcher, {
-    onSuccess: ({ data }) => {
+  useEffect(async () => {
+    try {
+      const resp = await fetcher('GET', '/api/get-tags');
       const fluxSandboxChannel = {};
-      const tagMap = data.map(item => {
+      const tagMap = resp.data.map(item => {
         // assign dev default channel
         if (item.name.toLowerCase() === 'flux-sandbox') {
           fluxSandboxChannel['value'] = item.name;
@@ -167,8 +168,10 @@ export default function NewPost() {
             ? fluxSandboxChannel
             : tagMap[0];
       });
-    },
-  });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
