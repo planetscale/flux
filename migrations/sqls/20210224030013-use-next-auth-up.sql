@@ -14,6 +14,18 @@ CREATE TABLE accounts
     PRIMARY KEY (id)
   );
 
+CREATE TABLE sessions
+  (
+    id            INT NOT NULL AUTO_INCREMENT,
+    user_id       INTEGER NOT NULL,
+    expires       TIMESTAMP(6) NOT NULL,
+    session_token VARCHAR(255) NOT NULL,
+    access_token  VARCHAR(255) NOT NULL,
+    created_at    TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at    TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    PRIMARY KEY (id)
+  );
+
 CREATE TABLE users
   (
     id             INT NOT NULL AUTO_INCREMENT,
@@ -48,6 +60,12 @@ CREATE INDEX provider_id
 
 CREATE INDEX user_id
   ON accounts(user_id);
+
+CREATE UNIQUE INDEX session_token
+  ON sessions(session_token);
+
+CREATE UNIQUE INDEX access_token
+  ON sessions(access_token);
 
 CREATE UNIQUE INDEX email
   ON users(email);

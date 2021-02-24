@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS accounts, users, verification_requests;
+DROP TABLE IF EXISTS accounts, users, sessions, verification_requests;
