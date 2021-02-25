@@ -16,7 +16,12 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
-
+  session: {
+    jwt: true,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
   // A database is optional, but required to persist accounts in a database
-  // database: process.env.DATABASE_URL,
+  database: 'mysql://admin:12341234@34.83.19.255/testdb1',
 });

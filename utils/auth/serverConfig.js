@@ -9,16 +9,3 @@ if (!admin.apps.length) {
     console.error('Error initializing Firebase Admin: ', e);
   }
 }
-
-// idToken comes from the client app
-const decodeToken = async idToken => {
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    return decodedToken;
-  } catch (e) {
-    console.error(e);
-    throw Error(e);
-  }
-};
-
-export { decodeToken };

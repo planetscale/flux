@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
-import { useAuthActions, useAuthContext } from 'state/auth';
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
 import CustomLayout from 'components/CustomLayout';
-import { signIn } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/client';
 
 const Wrapper = styled.div`
   display: flex;
@@ -77,26 +76,25 @@ const AuthButton = styled.button`
 `;
 
 export default function Login({ token }) {
-  const { userLogin } = useAuthActions();
   const { user, loaded, isLoading } = useUserContext();
-  const { isAuthed, authChecked, user: authUser } = useAuthContext();
+
   const { getUser } = useUserActions();
   const router = useRouter();
+  const [session, loading] = useSession();
 
   useEffect(() => {
-    if (isAuthed && token && user?.org) {
+    if (user?.org) {
       router.push('/');
     }
-  }, [isAuthed, token, user]);
+  }, [user]);
 
   useEffect(() => {
-    if (isAuthed && token && !isLoading) {
+    if (session && !loading && !isLoading) {
       getUser();
     }
-  }, [token]);
+  }, [session]);
 
   const handleLogin = () => {
-    // userLogin();
     signIn('google', { callbackUrl: '/' });
   };
 
@@ -107,7 +105,7 @@ export default function Login({ token }) {
           <LogoContainer>
             <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
           </LogoContainer>
-          {!isAuthed && authChecked && (
+          {!session && (
             <AuthButtonContainer>
               <AuthButton onClick={handleLogin}>
                 <Icon className="icon-google"></Icon>
@@ -115,11 +113,11 @@ export default function Login({ token }) {
               </AuthButton>
             </AuthButtonContainer>
           )}
-          {isAuthed && loaded && !user?.org && (
+          {session && !loading && loaded && !user?.org && (
             <CreateOrg
-              name={authUser?.displayName}
-              email={authUser?.email}
-              avatar={authUser?.photoURL ?? ''}
+              name={session?.user?.name}
+              email={session?.user?.email}
+              avatar={session?.user?.image ?? ''}
             />
           )}
         </ContentContainer>

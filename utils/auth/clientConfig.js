@@ -11,7 +11,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIRE_APP_ID,
 };
 
-const googleProvider = new firebase.auth.GoogleAuthProvider();
 let firebaseStorage;
 
 if (!firebase.apps.length) {
@@ -22,36 +21,6 @@ if (!firebase.apps.length) {
     console.error('Error initializing Firebase: ', e);
   }
 }
-
-const loginWithFirebase = async () => {
-  return firebase
-    .auth()
-    .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-    .then(() => {
-      return firebase.auth().signInWithPopup(googleProvider);
-    })
-    .catch(e => {
-      console.error(e);
-    });
-};
-
-const logoutWithFirebase = () => {
-  return firebase.auth().signOut();
-};
-
-const setFireAuthObserver = (noUserCallback, hasUserCallback) => {
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (!user) {
-      noUserCallback?.();
-    } else {
-      hasUserCallback?.(user);
-    }
-  });
-};
-
-const getToken = (forceRefetch = false) => {
-  return firebase.auth().currentUser?.getIdToken(forceRefetch);
-};
 
 let defaultFetchHeaders = {
   'Content-type': 'application/json; charset=UTF-8',
@@ -64,12 +33,4 @@ const setDefaultFetchHeaders = headersOverwrite => {
   };
 };
 
-export {
-  loginWithFirebase,
-  logoutWithFirebase,
-  setFireAuthObserver,
-  defaultFetchHeaders,
-  setDefaultFetchHeaders,
-  firebaseStorage,
-  getToken,
-};
+export { defaultFetchHeaders, setDefaultFetchHeaders, firebaseStorage };

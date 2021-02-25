@@ -1,8 +1,5 @@
-import {
-  defaultFetchHeaders,
-  getToken,
-  logoutWithFirebase,
-} from 'utils/auth/clientConfig';
+import { defaultFetchHeaders } from 'utils/auth/clientConfig';
+import { signOut } from 'next-auth/client';
 
 export const fetcher = async (
   method,
@@ -10,10 +7,8 @@ export const fetcher = async (
   params = {},
   overrideHeaders = {}
 ) => {
-  const token = await getToken();
   const headers = {
     ...defaultFetchHeaders,
-    authorization: token ? `Bearer ${token}` : '',
     ...overrideHeaders,
   };
 
@@ -38,7 +33,7 @@ export const fetcher = async (
   // is bad or expired. Log them out and kick them back to login screen.
   if (response.status === 401) {
     // TODO: Notify the user in someway that they have been logged out for inactivity.
-    await logoutWithFirebase();
+    signOut();
     return;
   }
 
