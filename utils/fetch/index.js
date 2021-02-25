@@ -1,5 +1,8 @@
-import { defaultFetchHeaders } from 'utils/auth/clientConfig';
 import { signOut } from 'next-auth/client';
+
+let defaultFetchHeaders = {
+  'Content-type': 'application/json; charset=UTF-8',
+};
 
 export const fetcher = async (
   method,
