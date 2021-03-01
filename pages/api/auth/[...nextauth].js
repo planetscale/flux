@@ -5,14 +5,8 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     Providers.Google({
-      clientId:
-        '456840210561-jofnfkvqhjuqghukltmknsf6gsne74ft.apps.googleusercontent.com',
-      clientSecret: 'wDprrRAfuJeUld6ezUb-vawv',
-    }),
-    Providers.GitHub({
-      clientId:
-        '456840210561-jofnfkvqhjuqghukltmknsf6gsne74ft.apps.googleusercontent.com',
-      clientSecret: 'wDprrRAfuJeUld6ezUb-vawv',
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     // ...add more providers here
   ],
@@ -22,6 +16,5 @@ export default NextAuth({
   jwt: {
     secret: process.env.JWT_SECRET,
   },
-  // A database is optional, but required to persist accounts in a database
-  database: 'mysql://admin:12341234@34.83.19.255/testdb1',
+  database: `mysql://${process.env.DB_CONN_USER}:${process.env.DB_CONN_PASSWORD}@${process.env.DB_CONN_HOST}/${process.env.DB_CONN_DB}`,
 });

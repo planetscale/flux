@@ -75,7 +75,7 @@ const AuthButton = styled.button`
   }
 `;
 
-export default function Login({ token }) {
+export default function Login() {
   const { user, loaded, isLoading } = useUserContext();
 
   const { getUser } = useUserActions();
