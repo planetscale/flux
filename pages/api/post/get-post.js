@@ -46,7 +46,8 @@ export default async (req, res) => {
   const postStarQuery = `
     SELECT
       Star.id as starId,
-      User.id as userId
+      User.id as userId,
+      User.username
     FROM
       Star,
       User
