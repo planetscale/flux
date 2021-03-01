@@ -36,9 +36,12 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+  max-width: 260px;
+`;
 
 const AuthButtonContainer = styled.div`
   display: flex;
