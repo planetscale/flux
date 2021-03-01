@@ -14,7 +14,8 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import * as DropdownMenu from 'components/DropdownMenu';
+import Notifications from 'components/Notifications';
 
 const Wrapper = styled.div`
   display: flex;
@@ -141,7 +142,7 @@ const ActionsWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
 
-  ${ButtonSpecial} {
+  > *:not(:last-of-type) {
     margin: 0 12px 0 0;
   }
 
@@ -220,6 +221,8 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
             <span>Add Update</span>
           </ButtonSpecial>
         )}
+
+        <Notifications />
 
         <DropdownMenu.Root>
           <ButtonImage as={DropdownMenu.Trigger}>
