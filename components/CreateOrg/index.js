@@ -19,6 +19,25 @@ const Wrapper = styled.div`
   `}
 `;
 
+const FormLabel = styled.div`
+  padding: 2em;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--accent2);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  color: var(--accent);
+`;
+
+const FormLabelIdentifier = styled.div`
+  margin-bottom: 0.5em;
+`;
+
+const FormLabelOrganization = styled.div`
+  font-weight: 900;
+`;
+
 const InputWrapper = styled.div`
   position: relative;
   background-color: var(--background);
@@ -43,8 +62,6 @@ const InputWrapper = styled.div`
 
   &.disabled {
     cursor: default;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
     background-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.4);
 
@@ -171,9 +188,10 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
-      <InputWrapper className="disabled">
-        <Input label="Organization Name" value={state.orgName} disabled />
-      </InputWrapper>
+      <FormLabel>
+        <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
+        <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
+      </FormLabel>
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
           label="Your Username"
