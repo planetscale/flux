@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `Lens` (
     UNIQUE KEY `Lens.name_unique` (`name`),
     KEY `orgId` (`orgId`),
     CONSTRAINT `Lens_ibfk_1` FOREIGN KEY (`orgId`) REFERENCES `Org` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `Org` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `Org` (
     `createdAt` datetime(3) DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`),
     UNIQUE KEY `Org.name_unique` (`name`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `Post` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
     CONSTRAINT `Post_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `Post_ibfk_2` FOREIGN KEY (`lensId`) REFERENCES `Lens` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `Post_ibfk_3` FOREIGN KEY (`tagId`) REFERENCES `Tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `Profile` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `Profile` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `Profile_userId_unique` (`userId`),
     CONSTRAINT `Profile_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `Star` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `Star` (
     CONSTRAINT `Star_ibfk_1` FOREIGN KEY (`postId`) REFERENCES `Post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `Star_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `Star_ibfk_3` FOREIGN KEY (`replyId`) REFERENCES `Reply` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 904 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `Tag` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `Tag` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `Tag.name_unique` (`name`),
     UNIQUE KEY `Tag.channelId_unique` (`channelId`)
-) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `User` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -83,4 +83,4 @@ CREATE TABLE IF NOT EXISTS `User` (
     UNIQUE KEY `User.username_unique` (`username`),
     KEY `orgId` (`orgId`),
     CONSTRAINT `User_ibfk_1` FOREIGN KEY (`orgId`) REFERENCES `Org` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

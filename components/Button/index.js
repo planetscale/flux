@@ -14,9 +14,10 @@ export const ButtonBase = styled.button`
   border: 2px solid var(--foreground);
   transition: all 150ms;
   font-size: 14px;
+  height: fit-content;
 
   ${Icon} {
-    margin-right: 8px;
+    margin: auto;
   }
 
   &:hover:not([disabled]) {
@@ -77,6 +78,15 @@ export const ButtonTertiary = styled(ButtonBase)`
 
   &:active:not([disabled]) {
     transform: scale(0.75);
+  }
+
+  &.selected {
+    color: var(--highlight);
+    border-color: var(--highlight);
+
+    ${Icon} {
+      background: var(--highlight);
+    }
   }
 `;
 

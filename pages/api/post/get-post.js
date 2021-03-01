@@ -3,9 +3,10 @@ import { createConnection } from '../_utils/connection';
 
 // This is a simple database connection test to prove you can connect to a persistent store for your application.
 export default async (req, res) => {
+  let user;
   try {
     cors(req, res);
-    await validateUser(req);
+    user = await validateUser(req, true);
   } catch (e) {
     res.status(401).json({ error: e.toString() });
     return;
@@ -45,7 +46,8 @@ export default async (req, res) => {
   const postStarQuery = `
     SELECT
       Star.id as starId,
-      User.id as userId
+      User.id as userId,
+      User.username
     FROM
       Star,
       User
@@ -55,6 +57,18 @@ export default async (req, res) => {
     AND Star.postId = ?
   `;
   const [postStarRows] = await connection.execute(postStarQuery, [id]);
+
+  // When reading a post, mark that post as read by that user or update their last view time to now
+  const markAsReadQuery = `
+    INSERT INTO
+    PostView
+      (postId, userId)
+    VALUES
+      (?, ?)
+    ON DUPLICATE KEY UPDATE
+      lastViewed=CURRENT_TIMESTAMP(3)
+  `;
+  await connection.execute(markAsReadQuery, [id, user.id]);
 
   connection.end();
 
