@@ -14,9 +14,10 @@ export const ButtonBase = styled.button`
   border: 2px solid var(--foreground);
   transition: all 150ms;
   font-size: 14px;
+  height: fit-content;
 
   ${Icon} {
-    margin-right: 8px;
+    margin: auto;
   }
 
   &:hover:not([disabled]) {

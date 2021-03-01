@@ -8,6 +8,7 @@ export const fetcher = async (
   method,
   url,
   params = {},
+  mutator,
   overrideHeaders = {}
 ) => {
   const token = await getToken();
@@ -42,5 +43,7 @@ export const fetcher = async (
     return;
   }
 
-  return await response.json();
+  const resp = await response.json();
+
+  return mutator ? mutator(resp) : resp;
 };

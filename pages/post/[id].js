@@ -1,5 +1,5 @@
 import React from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
@@ -93,6 +93,7 @@ export default function PostPage() {
     (url, id) => fetcher('GET', url, { id }),
     {
       onSuccess: ({ data }) => {
+        mutate(['/api/get-notifications']);
         setPostEditState(draft => {
           draft.content = data.content;
         });
