@@ -30,9 +30,18 @@ const ContentContainer = styled.div`
 
 const LogoContainer = styled.div`
   margin-bottom: 2em;
+  background: url('/bg_chaos_attractor_snapshot.png');
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+  max-width: 260px;
+`;
 
 const AuthButtonContainer = styled.div`
   display: flex;
@@ -40,6 +49,7 @@ const AuthButtonContainer = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 480px;
+  margin-top: 2em;
 `;
 
 const AuthButton = styled.button`
@@ -102,16 +112,16 @@ export default function Login() {
     <CustomLayout>
       <Wrapper>
         <ContentContainer>
-          <LogoContainer>
-            <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
-          </LogoContainer>
           {!session && (
-            <AuthButtonContainer>
-              <AuthButton onClick={handleLogin}>
-                <Icon className="icon-google"></Icon>
-                <span>Login With Google</span>
-              </AuthButton>
-            </AuthButtonContainer>
+            <LogoContainer>
+              <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
+              <AuthButtonContainer>
+                <AuthButton onClick={handleLogin}>
+                  <Icon className="icon-google"></Icon>
+                  <span>Login With Google</span>
+                </AuthButton>
+              </AuthButtonContainer>
+            </LogoContainer>
           )}
           {session && !loading && loaded && !user?.org && (
             <CreateOrg
