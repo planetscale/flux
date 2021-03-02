@@ -16,5 +16,6 @@ export default NextAuth({
   jwt: {
     secret: process.env.JWT_SECRET,
   },
+  debug: true,
   database: `mysql://${process.env.DB_CONN_USER}:${process.env.DB_CONN_PASSWORD}@${process.env.DB_CONN_HOST}/${process.env.DB_CONN_DB}`,
 });
