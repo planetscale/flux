@@ -13,6 +13,7 @@ export default NextAuth({
   session: {
     jwt: true,
   },
+  state: false,
   jwt: {
     secret: process.env.JWT_SECRET,
   },
