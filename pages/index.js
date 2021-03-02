@@ -54,23 +54,8 @@ export default function Home() {
 
   const { data } = useSWR(
     ['/api/get-posts', state.last, state.before, selectedTag || undefined],
-    (url, last, before, selectedTag) => {
-      return fetcher(
-        'GET',
-        url,
-        selectedTag
-          ? {
-              last,
-              before,
-              selectedTag,
-            }
-          : {
-              last,
-              before,
-            }
-      );
-    },
-
+    (url, last, before, selectedTag) =>
+      fetcher('GET', url, { last, before, selectedTag }),
     {
       onSuccess: data => {
         setState(draft => {

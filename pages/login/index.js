@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
+import { useAuthActions, useAuthContext } from 'state/auth';
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
 import CustomLayout from 'components/CustomLayout';
-import { signIn, useSession } from 'next-auth/client';
 
 const Wrapper = styled.div`
   display: flex;
@@ -85,34 +85,34 @@ const AuthButton = styled.button`
   }
 `;
 
-export default function Login() {
+export default function Login({ token }) {
+  const { userLogin } = useAuthActions();
   const { user, loaded, isLoading } = useUserContext();
-
+  const { isAuthed, authChecked, user: authUser } = useAuthContext();
   const { getUser } = useUserActions();
   const router = useRouter();
-  const [session, loading] = useSession();
 
   useEffect(() => {
-    if (user?.org) {
+    if (isAuthed && token && user?.org) {
       router.push('/');
     }
-  }, [user]);
+  }, [isAuthed, token, user]);
 
   useEffect(() => {
-    if (session && !loading && !isLoading) {
+    if (isAuthed && token && !isLoading) {
       getUser();
     }
-  }, [session]);
+  }, [token]);
 
   const handleLogin = () => {
-    signIn('google', { callbackUrl: '/' });
+    userLogin();
   };
 
   return (
     <CustomLayout>
       <Wrapper>
         <ContentContainer>
-          {!session && (
+          {!isAuthed && authChecked && (
             <LogoContainer>
               <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
               <AuthButtonContainer>
@@ -123,11 +123,12 @@ export default function Login() {
               </AuthButtonContainer>
             </LogoContainer>
           )}
-          {session && !loading && loaded && !user?.org && (
+
+          {isAuthed && loaded && !user?.org && (
             <CreateOrg
-              name={session?.user?.name}
-              email={session?.user?.email}
-              avatar={session?.user?.image ?? ''}
+              name={authUser?.displayName}
+              email={authUser?.email}
+              avatar={authUser?.photoURL ?? ''}
             />
           )}
         </ContentContainer>

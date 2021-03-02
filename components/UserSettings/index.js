@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
+import { useAuthActions } from 'state/auth';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
-import { signOut } from 'next-auth/client';
 
 const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
@@ -104,8 +104,10 @@ export default function UserSettings({
     currentTheme: getTheme(),
   });
 
+  const { userLogout } = useAuthActions();
+
   const handleLogout = () => {
-    signOut();
+    userLogout();
   };
 
   const handleThemeChange = value => {

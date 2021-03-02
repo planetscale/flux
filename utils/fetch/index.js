@@ -1,8 +1,8 @@
-import { signOut } from 'next-auth/client';
-
-let defaultFetchHeaders = {
-  'Content-type': 'application/json; charset=UTF-8',
-};
+import {
+  defaultFetchHeaders,
+  getToken,
+  logoutWithFirebase,
+} from 'utils/auth/clientConfig';
 
 export const fetcher = async (
   method,
@@ -11,8 +11,10 @@ export const fetcher = async (
   mutator,
   overrideHeaders = {}
 ) => {
+  const token = await getToken();
   const headers = {
     ...defaultFetchHeaders,
+    authorization: token ? `Bearer ${token}` : '',
     ...overrideHeaders,
   };
 
@@ -37,7 +39,7 @@ export const fetcher = async (
   // is bad or expired. Log them out and kick them back to login screen.
   if (response.status === 401) {
     // TODO: Notify the user in someway that they have been logged out for inactivity.
-    signOut();
+    await logoutWithFirebase();
     return;
   }
 
