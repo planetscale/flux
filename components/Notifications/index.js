@@ -38,6 +38,8 @@ const NotificationHeader = styled(DropdownMenu.SimpleItem)`
 
 const NotificationContent = styled(DropdownMenu.Content)`
   width: 500px;
+  height: 80vh;
+  overflow: auto;
 `;
 
 const NotificationWrapper = styled.div`
