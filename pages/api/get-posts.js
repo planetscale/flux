@@ -10,7 +10,7 @@ export default async (req, res) => {
     return;
   }
 
-  const { before, last, tag } = req.query;
+  const { before, last, selectedTag } = req.query;
 
   const connection = await createConnection();
 
@@ -30,16 +30,17 @@ export default async (req, res) => {
         Post.tagId = Tag.id
     AND Post.authorId = User.id
     AND Post.id ${Number(before) === -1 ? '>' : '<'} ?
-    ${tag ? 'AND Tag.name = ?' : ''}
+    ${selectedTag ? 'AND Tag.name = ?' : ''}
     ORDER BY createdAt DESC 
     LIMIT ?
   `;
 
   const values = [Number(before)];
-  if (tag) {
-    values.push(tag);
+  if (selectedTag) {
+    values.push(selectedTag);
   }
   values.push(Number(last));
+
   const [rows] = await connection.execute(query, values);
   connection.end();
 
