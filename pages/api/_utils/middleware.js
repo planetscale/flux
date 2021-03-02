@@ -15,6 +15,9 @@ const validateUser = async (req, fetchUserId = false) => {
       req,
       secret: process.env.JWT_SECRET,
     });
+    console.log('-0-0-0-0');
+    console.log(req);
+    console.log(process.env.JWT_SECRET);
     console.log(decodedToken);
     if (
       Boolean(
