@@ -3,9 +3,9 @@ import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
+import { useAuthActions } from 'state/auth';
 import { ButtonMinor } from 'components/Button';
 import { useUserActions } from 'state/user';
-import { signOut } from 'next-auth/client';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -107,6 +107,7 @@ const getOrgNameFromEmailDomain = email => {
 
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
+  const { userLogout } = useAuthActions();
   const { createUser } = useUserActions();
   const [state, setState] = useImmer({
     orgName: getOrgNameFromEmailDomain(email),
@@ -155,7 +156,7 @@ export default function CreateOrg({ name, email, avatar }) {
 
     // TODO: better handle org name different from email domain.
     if (state.orgName.trim() !== getOrgNameFromEmailDomain(email)) {
-      signOut();
+      userLogout();
     }
 
     try {

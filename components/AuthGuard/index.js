@@ -1,29 +1,28 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/client';
+import { useAuthContext } from 'state/auth';
 import { useUserActions, useUserContext } from 'state/user';
 
 export default function AuthGuard({ children }) {
   const router = useRouter();
-  const {
-    user,
-    loaded: userLoaded,
-    isLoading: isUserLoading,
-  } = useUserContext();
+  const { isAuthed, authChecked } = useAuthContext();
+  const { user, loaded, isLoading } = useUserContext();
   const { getUser } = useUserActions();
-  const [session, loading] = useSession();
 
   useEffect(() => {
-    if (session && !loading && !isUserLoading && !userLoaded) {
+    if (isAuthed && !isLoading && !loaded) {
       getUser();
     }
-  }, [session, loading, userLoaded]);
+  }, [isAuthed, user]);
 
   useEffect(() => {
-    if (!loading && (!session || (session && userLoaded && !user))) {
+    if (
+      (!isAuthed && authChecked) ||
+      (isAuthed && authChecked && loaded && !user)
+    ) {
       router.push('/login');
     }
-  }, [session, loading, user, userLoaded]);
+  }, [isAuthed, user, loaded, authChecked]);
 
   return user ? <>{children}</> : null;
 }
