@@ -7,13 +7,13 @@ export default NextAuth({
     Providers.Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      state: false,
     }),
     // ...add more providers here
   ],
   session: {
     jwt: true,
   },
-  state: false,
   jwt: {
     secret: process.env.JWT_SECRET,
   },
