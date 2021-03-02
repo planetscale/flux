@@ -11,7 +11,7 @@ export default NextAuth({
     // ...add more providers here
   ],
   session: {
-    jwt: true,
+    jwt: false,
   },
   jwt: {
     secret: process.env.JWT_SECRET,
