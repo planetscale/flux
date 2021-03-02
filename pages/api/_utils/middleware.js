@@ -1,6 +1,6 @@
 import { createConnection } from './connection';
 import Cors from 'cors';
-import { decodeToken } from 'utils/auth/serverConfig';
+import jwt from 'next-auth/jwt';
 
 const cors = (req, res) =>
   Cors(req, res, {
@@ -9,44 +9,37 @@ const cors = (req, res) =>
 
 // Only set `fetchUserId` to true if you need the user's id as it incurs an additional db request.
 const validateUser = async (req, fetchUserId = false) => {
-  const authHeader = req.headers.authorization;
-  let token = '';
-  let decodedToken = '';
+  try {
+    // TODO: move secret to env var
+    const decodedToken = await jwt.getToken({
+      req,
+      secret: process.env.JWT_SECRET,
+    });
 
-  if (authHeader?.startsWith('Bearer ')) {
-    const tokenArray = authHeader.split(' ');
-    // extract the JWT, tokenArray[0] is 'Bearer '
-    token = tokenArray[1];
-
-    try {
-      decodedToken = await decodeToken(token);
-      if (
-        Boolean(decodedToken.uid) &&
-        Boolean(
-          decodedToken.email.match(
-            new RegExp(process.env.NEXT_PUBLIC_ALLOWED_EMAIL_REGEX)
-          )
+    if (
+      Boolean(
+        decodedToken.email.match(
+          new RegExp(process.env.NEXT_PUBLIC_ALLOWED_EMAIL_REGEX)
         )
-      ) {
-        const user = {
-          email: decodedToken.email,
-        };
-        if (fetchUserId) {
-          try {
-            const userId = await getUserId(decodedToken.email);
-            user.id = userId;
-          } catch (e) {
-            throw e;
-          }
+      )
+    ) {
+      const user = {
+        email: decodedToken.email,
+      };
+      if (fetchUserId) {
+        try {
+          const userId = await getUserId(decodedToken.email);
+          user.id = userId;
+        } catch (e) {
+          throw e;
         }
-        return user;
       }
-      throw Error;
-    } catch (e) {
-      throw e;
+      return user;
     }
+    throw Error;
+  } catch (e) {
+    throw e;
   }
-  throw Error;
 };
 
 const getUserId = async userEmail => {

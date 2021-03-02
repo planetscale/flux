@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import { v4 as uuidv4 } from 'uuid';
-import { firebaseStorage } from 'utils/auth/clientConfig';
 import Editor from 'rich-markdown-editor';
 import imageCompression from 'browser-image-compression';
 import getPlugins from './plugins';
@@ -116,44 +114,15 @@ export default function MarkdownEditor({
       maxWidthOrHeight: 1280,
     };
     const compressedFile = await imageCompression(data, fileCompressionOptions);
-    const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
+    let formData = new FormData();
+    formData.append('blob', compressedFile, data.name);
 
-    try {
-      await storagePath.put(compressedFile);
-    } catch (error) {
-      console.error(error);
-      // TODO: handle errors
-      // A full list of error codes is available at
-      // https://firebase.google.com/docs/storage/web/handle-errors
-      switch (error.code) {
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-        case 'storage/unknown':
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-    }
+    const result = await fetch('/api/post/upload-image', {
+      method: 'POST',
+      body: formData,
+    });
 
-    let imgUrl = '';
-    try {
-      imgUrl = await storagePath.getDownloadURL();
-    } catch (error) {
-      console.error(error);
-      // TODO: handle errors
-      switch (error.code) {
-        case 'storage/object-not-found':
-          // File doesn't exist
-          break;
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-        case 'storage/unknown':
-          // Unknown error occurred, inspect the server response
-          break;
-      }
-    }
-    return imgUrl;
+    return (await result.json()).url;
   };
 
   /* TODO: I assume this is a WIP so commenting out.  We are no longer using gql so the query will need to be converted.
