@@ -42,7 +42,7 @@ const Logo = styled.div`
   letter-spacing: -1px;
   font-size: 24px;
   border-radius: unset;
-  padding: 0 4px;
+  padding: 0 8px;
   font-family: 'Raleway', sans-serif;
   font-feature-settings: 'liga';
   font-style: italic;
