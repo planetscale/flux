@@ -13,11 +13,13 @@ export const ButtonBase = styled.button`
   color: var(--text);
   border: 2px solid var(--foreground);
   transition: all 150ms;
-  font-size: 14px;
+  font-size: 1em;
   height: fit-content;
 
   ${Icon} {
-    margin: auto;
+    width: 20px;
+    height: 20px;
+    margin: 0 0.5em 0 0;
   }
 
   &:hover:not([disabled]) {
