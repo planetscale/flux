@@ -1,24 +1,21 @@
 import styled from '@emotion/styled';
-import { ButtonImage } from 'components/Button';
 import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonTertiary } from 'components/Button';
+import { ButtonSpecial, ButtonTertiary } from 'components/Button';
 import { Icon } from 'pageUtils/post/atoms';
 import Link from 'next/link';
 
-const NotificationButton = styled(ButtonImage)`
-  border-radius: 50%;
+const NotificationButton = styled(ButtonSpecial)`
   background-color: var(--background);
-  border: 2px solid var(--foreground);
+
+  ${Icon} {
+    margin: 0;
+  }
 
   &.has-notifications {
     background-color: #e55e31;
-    border: none;
-
-    ${Icon} {
-      background-color: var(--background);
-    }
+    border-color: #e55e31;
   }
 
   &:not(.has-notifications) {
