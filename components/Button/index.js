@@ -36,24 +36,6 @@ export const ButtonBase = styled.button`
   }
 `;
 
-export const ButtonMajor = styled(ButtonBase)`
-  background-color: var(--foreground);
-  color: var(--background);
-
-  ${Icon} {
-    background: var(--background);
-  }
-
-  &:hover:not([disabled]) {
-    background-color: var(--background);
-    color: var(--foreground);
-
-    ${Icon} {
-      background: var(--foreground);
-    }
-  }
-`;
-
 export const ButtonMinor = styled(ButtonBase)`
   &:hover:not([disabled]) {
     background-color: var(--foreground);
