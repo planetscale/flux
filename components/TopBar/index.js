@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import {
   ButtonImage,
-  ButtonMinor,
+  ButtonWireframe,
   ButtonLink,
   ButtonTag,
   ButtonComposite,
@@ -216,10 +216,10 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
-          <ButtonMinor type="button" onClick={redirectToNew}>
+          <ButtonWireframe type="button" onClick={redirectToNew}>
             <Icon className="icon-plus"></Icon>
             <span>Add Update</span>
-          </ButtonMinor>
+          </ButtonWireframe>
         )}
 
         <Notifications />

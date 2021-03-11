@@ -22,7 +22,7 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import { ButtonMinor, ButtonTertiary } from 'components/Button';
+import { ButtonWireframe, ButtonTertiary } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -527,7 +527,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -535,10 +535,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonMinor>
+                </ButtonWireframe>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -548,7 +548,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonMinor>
+                </ButtonWireframe>
               )}
             </CommentActionButtonGroup>
 
@@ -569,7 +569,7 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentEditSubmit}
@@ -577,7 +577,7 @@ export default function PostPage() {
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             ) : (
               <CommentContent>
@@ -606,7 +606,7 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentReplySubmit}
@@ -614,10 +614,10 @@ export default function PostPage() {
                 >
                   <Icon className="icon-comment"></Icon>
                   Reply
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             )}
-            <ActionBar style={{ width: 'fit-content' }}>
+            <ActionBar comment>
               <Tooltip.Root>
                 <Tooltip.Trigger as="div">
                   <ButtonTertiary
@@ -681,9 +681,9 @@ export default function PostPage() {
               </MetaData>
               <MetaActions>
                 {userContext.user.id === authorId && (
-                  <ButtonMinor type="submit" onClick={togglePostEdit}>
+                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
                     {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonMinor>
+                  </ButtonWireframe>
                 )}
               </MetaActions>
             </Meta>
@@ -709,14 +709,14 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   type="submit"
                   onClick={handlePostEditSubmit}
                   disabled={!canSubmit(postEditState.content)}
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </>
             ) : (
               <MarkdownEditor
@@ -726,7 +726,7 @@ export default function PostPage() {
               ></MarkdownEditor>
             )}
           </Content>
-          <ActionBar style={{ width: 'fit-content' }}>
+          <ActionBar>
             <Tooltip.Root>
               <Tooltip.Trigger as="div">
                 <ButtonTertiary
@@ -750,7 +750,7 @@ export default function PostPage() {
           </ActionBar>
         </Post>
 
-        <CommentList>
+        <CommentList main>
           {Object.values(postState.replies)
             .filter(r => !r.parentId)
             .map(firstLevelReply => (
@@ -769,14 +769,14 @@ export default function PostPage() {
               handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
             }}
           ></MarkdownEditor>
-          <ButtonMinor
+          <ButtonWireframe
             type="submit"
             onClick={handleCommentSubmit}
             disabled={!canSubmit(reply)}
           >
             <Icon className="icon-comment"></Icon>
             Reply
-          </ButtonMinor>
+          </ButtonWireframe>
         </Reply>
       </PageWrapper>
     </CustomLayout>

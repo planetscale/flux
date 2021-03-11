@@ -3,7 +3,7 @@ import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
-import { ButtonMinor } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { useUserActions } from 'state/user';
 import { signOut } from 'next-auth/client';
 
@@ -206,7 +206,7 @@ export default function CreateOrg({ name, email, avatar }) {
         />
       </InputWrapper>
       <ButtonWrapper>
-        <ButtonMinor
+        <ButtonWireframe
           type="submit"
           onClick={
             state.orgName && state.name && state.userName
@@ -216,7 +216,7 @@ export default function CreateOrg({ name, email, avatar }) {
           disabled={!(state.orgName && state.name && state.userName)}
         >
           Next
-        </ButtonMinor>
+        </ButtonWireframe>
       </ButtonWrapper>
     </Wrapper>
   );

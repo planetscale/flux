@@ -3,6 +3,7 @@ import { media } from '../../pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
+  box-sizing: content-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -36,7 +37,7 @@ export const ButtonBase = styled.button`
   }
 `;
 
-export const ButtonMinor = styled(ButtonBase)`
+export const ButtonWireframe = styled(ButtonBase)`
   &:hover:not([disabled]) {
     background-color: var(--foreground);
     color: var(--background);
