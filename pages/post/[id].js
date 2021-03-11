@@ -22,7 +22,11 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import { ButtonMinor, ButtonTertiary } from 'components/Button';
+import {
+  ButtonWireframe,
+  ButtonTertiary,
+  ButtonSquished,
+} from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -527,7 +531,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonMinor
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -535,10 +539,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonMinor>
+                </ButtonSquished>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonMinor
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -548,7 +552,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonMinor>
+                </ButtonSquished>
               )}
             </CommentActionButtonGroup>
 
@@ -569,7 +573,7 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentEditSubmit}
@@ -577,7 +581,7 @@ export default function PostPage() {
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             ) : (
               <CommentContent>
@@ -606,7 +610,7 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentReplySubmit}
@@ -614,23 +618,21 @@ export default function PostPage() {
                 >
                   <Icon className="icon-comment"></Icon>
                   Reply
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             )}
-            <ActionBar style={{ width: 'fit-content' }}>
+            <ActionBar comment>
               <Tooltip.Root>
                 <Tooltip.Trigger as="div">
-                  <ButtonTertiary
+                  <ButtonWireframe
+                    color="var(--accent)"
                     onClick={() => handleStarClick(comment.id)}
                     disabled={isLoading}
                     className={hasStarred ? 'selected' : ''}
                   >
-                    <Icon
-                      className="icon-star"
-                      style={{ marginRight: '0.5em' }}
-                    ></Icon>
+                    <Icon className="icon-star"></Icon>
                     <div>{comment.stars.length}</div>
-                  </ButtonTertiary>
+                  </ButtonWireframe>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
@@ -684,9 +686,9 @@ export default function PostPage() {
               </MetaData>
               <MetaActions>
                 {userContext.user.id === authorId && (
-                  <ButtonMinor type="submit" onClick={togglePostEdit}>
+                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
                     {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonMinor>
+                  </ButtonWireframe>
                 )}
               </MetaActions>
             </Meta>
@@ -712,14 +714,14 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   type="submit"
                   onClick={handlePostEditSubmit}
                   disabled={!canSubmit(postEditState.content)}
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </>
             ) : (
               <MarkdownEditor
@@ -729,20 +731,18 @@ export default function PostPage() {
               ></MarkdownEditor>
             )}
           </Content>
-          <ActionBar style={{ width: 'fit-content' }}>
+          <ActionBar>
             <Tooltip.Root>
               <Tooltip.Trigger as="div">
-                <ButtonTertiary
+                <ButtonWireframe
+                  color="var(--accent)"
                   onClick={() => handleStarClick()}
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
                 >
-                  <Icon
-                    className="icon-star"
-                    style={{ marginRight: '0.5em' }}
-                  ></Icon>
+                  <Icon className="icon-star"></Icon>
                   <div>{postState.stars.length}</div>
-                </ButtonTertiary>
+                </ButtonWireframe>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
@@ -756,7 +756,7 @@ export default function PostPage() {
           </ActionBar>
         </Post>
 
-        <CommentList>
+        <CommentList main>
           {Object.values(postState.replies)
             .filter(r => !r.parentId)
             .map(firstLevelReply => (
@@ -775,14 +775,14 @@ export default function PostPage() {
               handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
             }}
           ></MarkdownEditor>
-          <ButtonMinor
+          <ButtonWireframe
             type="submit"
             onClick={handleCommentSubmit}
             disabled={!canSubmit(reply)}
           >
             <Icon className="icon-comment"></Icon>
             Reply
-          </ButtonMinor>
+          </ButtonWireframe>
         </Reply>
       </PageWrapper>
     </CustomLayout>

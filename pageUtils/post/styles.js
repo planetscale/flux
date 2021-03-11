@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
-import { ButtonMinor } from 'components/Button';
+import { ButtonSquished, ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
 const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: ${props => (props.main ? '1px solid var(--accent2)' : 'none')};
 `;
 
 const PageWrapper = styled.div`
@@ -64,7 +65,7 @@ const Content = styled.div`
   border-bottom: 1px solid var(--accent2);
   padding: 32px 0;
 
-  ${ButtonMinor} {
+  ${ButtonWireframe} {
     margin: 32px 0 0 0;
   }
 `;
@@ -104,7 +105,7 @@ const Comment = styled.div`
 `;
 
 const Reply = styled.div`
-  margin: 42px 0;
+  margin: 0 0 42px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -112,7 +113,7 @@ const Reply = styled.div`
   padding: 1em 0;
   border-top: 1px solid var(--accent2);
 
-  ${ButtonMinor} {
+  ${ButtonWireframe} {
     margin: 24px 0 0 0;
   }
 `;
@@ -127,8 +128,7 @@ const CommentContent = styled.div`
 const Post = styled.div``;
 
 const ActionBar = styled.div`
-  border-bottom: 1px solid var(--accent2);
-  padding: 16px 0;
+  padding: 16px 0 ${props => (props.comment ? '0' : '16px')};
 `;
 
 const CommenterNameplateWrapper = styled.div`
@@ -143,8 +143,8 @@ const CommentActionButtonGroup = styled.div`
   right: 0;
   display: flex;
 
-  ${ButtonMinor}:nth-of-type(2) {
-    margin: 0 0 0 8px;
+  ${ButtonSquished}:nth-of-type(2) {
+    margin-left: 8px;
   }
 `;
 

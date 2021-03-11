@@ -1,23 +1,21 @@
 import styled from '@emotion/styled';
-import { ButtonImage } from 'components/Button';
 import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonTertiary } from 'components/Button';
+import { ButtonBase, ButtonSquished, ButtonTertiary } from 'components/Button';
 import { Icon } from 'pageUtils/post/atoms';
 import Link from 'next/link';
 
-const NotificationButton = styled(ButtonImage)`
-  border-radius: 50%;
-  background-color: var(--background);
-  border: 2px solid var(--foreground);
+const NotificationButton = styled(ButtonBase)`
+  ${Icon} {
+    margin: 0;
+  }
 
   &.has-notifications {
-    background-color: #e55e31;
-    border: none;
-
+    background: var(--highlight);
+    border-color: var(--highlight);
     ${Icon} {
-      background-color: var(--background);
+      background-color: white;
     }
   }
 
@@ -31,7 +29,7 @@ const NotificationButton = styled(ButtonImage)`
 const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
-  padding: 0px 24px;
+  padding: 1em 24px;
   outline: none;
   justify-content: space-between;
 `;
@@ -149,12 +147,12 @@ export default function Notifications() {
         <DropdownMenu.Group>
           <NotificationHeader>
             <h3>Notifications ({totalNotifications})</h3>
-            <ButtonTertiary
+            <ButtonSquished
               disabled={!totalNotifications}
               onClick={clearAllNotifications}
             >
               Clear all notifications
-            </ButtonTertiary>
+            </ButtonSquished>
           </NotificationHeader>
         </DropdownMenu.Group>
         {totalNotifications === 0 && (

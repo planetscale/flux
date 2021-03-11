@@ -3,6 +3,7 @@ import { media } from '../../pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
+  box-sizing: content-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -36,33 +37,35 @@ export const ButtonBase = styled.button`
   }
 `;
 
-export const ButtonMajor = styled(ButtonBase)`
-  background-color: var(--foreground);
-  color: var(--background);
-
-  ${Icon} {
-    background: var(--background);
-  }
+export const ButtonWireframe = styled(ButtonBase)`
+  border-color: ${props => props.color || 'var(--foreground)'};
 
   &:hover:not([disabled]) {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: ${props => props.color || 'var(--foreground)'};
+    color: white;
 
     ${Icon} {
-      background: var(--foreground);
+      background: white;
+    }
+  }
+
+  &.selected {
+    color: var(--highlight);
+    border-color: var(--highlight);
+
+    ${Icon} {
+      background: var(--highlight);
+    }
+
+    &:hover:not([disabled]) {
+      background-color: var(--highlight);
     }
   }
 `;
 
-export const ButtonMinor = styled(ButtonBase)`
-  &:hover:not([disabled]) {
-    background-color: var(--foreground);
-    color: var(--background);
-
-    ${Icon} {
-      background: var(--background);
-    }
-  }
+export const ButtonSquished = styled(ButtonWireframe)`
+  padding: 4px 16px;
+  font-size: 0.9em;
 `;
 
 export const ButtonTertiary = styled(ButtonBase)`
@@ -80,15 +83,6 @@ export const ButtonTertiary = styled(ButtonBase)`
 
   &:active:not([disabled]) {
     transform: scale(0.75);
-  }
-
-  &.selected {
-    color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--highlight);
-    }
   }
 `;
 
