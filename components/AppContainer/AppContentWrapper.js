@@ -1,15 +1,15 @@
 import TopBar from 'components/TopBar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useAuthContext } from 'state/auth';
+import { useSession } from 'next-auth/client';
 import { useTopBarActions } from 'state/topBar';
 import { useUserContext } from 'state/user';
 
-export default function AppContentWrapper({ token, children }) {
+export default function AppContentWrapper({ children }) {
   const router = useRouter();
-  const authContext = useAuthContext();
   const { user } = useUserContext();
   const { setHeaders, setTag } = useTopBarActions();
+  const [session, loading] = useSession();
 
   useEffect(() => {
     if (router.pathname === '/new') {
@@ -35,7 +35,7 @@ export default function AppContentWrapper({ token, children }) {
 
   return (
     <>
-      {authContext.isAuthed && token && user && (
+      {session && !loading && user && (
         <>
           <TopBar
             profileImg={user?.profile?.avatar ?? '/user_profile_icon.svg'}

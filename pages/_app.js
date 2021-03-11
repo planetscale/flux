@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
+import { Provider } from 'next-auth/client';
 import { debugContextDevtool } from 'react-context-devtool';
-import { AuthContextProvider } from 'state/auth';
 import AppContainer from 'components/AppContainer';
 import { initTheme } from 'pageUtils/post/theme';
 import Head from 'next/head';
@@ -36,7 +36,6 @@ function App({ Component, pageProps }) {
           href="https://fonts.gstatic.com"
           crossOrigin="true"
         />
-        <link rel="manifest" href="/manifest.json"></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,900&display=swap"
           rel="stylesheet"
@@ -46,11 +45,11 @@ function App({ Component, pageProps }) {
           rel="stylesheet"
         ></link>
       </Head>
-      <AuthContextProvider>
+      <Provider session={pageProps.session}>
         <AppContainer>
           <Component {...pageProps} />
         </AppContainer>
-      </AuthContextProvider>
+      </Provider>
     </>
   );
 }

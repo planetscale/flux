@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { ButtonMinor, ButtonSpecial } from 'components/Button';
 import { SlateEditor } from 'components/Editor';
+import { ButtonWireframe, ButtonSpecial } from 'components/Button';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
@@ -312,7 +312,7 @@ export default function NewPost() {
               <Icon className="icon-post"></Icon>
               Post
             </ButtonSpecial>
-            <ButtonMinor onClick={handleCancel}>Cancel</ButtonMinor>
+            <ButtonWireframe onClick={handleCancel}>Cancel</ButtonWireframe>
           </ActionItems>
         </Post>
       </PageWrapper>

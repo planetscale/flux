@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
-import { useAuthActions, useAuthContext } from 'state/auth';
 import CreateOrg from 'components/CreateOrg';
 import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from 'pageUtils/post/atoms';
 import CustomLayout from 'components/CustomLayout';
+import { signIn, useSession } from 'next-auth/client';
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,9 +30,18 @@ const ContentContainer = styled.div`
 
 const LogoContainer = styled.div`
   margin-bottom: 2em;
+  background: url('/bg_chaos_attractor_snapshot.png');
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+  max-width: 260px;
+`;
 
 const AuthButtonContainer = styled.div`
   display: flex;
@@ -40,6 +49,7 @@ const AuthButtonContainer = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 480px;
+  margin-top: 2em;
 `;
 
 const AuthButton = styled.button`
@@ -75,49 +85,49 @@ const AuthButton = styled.button`
   }
 `;
 
-export default function Login({ token }) {
-  const { userLogin } = useAuthActions();
+export default function Login() {
   const { user, loaded, isLoading } = useUserContext();
-  const { isAuthed, authChecked, user: authUser } = useAuthContext();
+
   const { getUser } = useUserActions();
   const router = useRouter();
+  const [session, loading] = useSession();
 
   useEffect(() => {
-    if (isAuthed && token && user?.org) {
+    if (user?.org) {
       router.push('/');
     }
-  }, [isAuthed, token, user]);
+  }, [user]);
 
   useEffect(() => {
-    if (isAuthed && token && !isLoading) {
+    if (session && !loading && !isLoading) {
       getUser();
     }
-  }, [token]);
+  }, [session]);
 
   const handleLogin = () => {
-    userLogin();
+    signIn('google', { callbackUrl: '/' });
   };
 
   return (
     <CustomLayout>
       <Wrapper>
         <ContentContainer>
-          <LogoContainer>
-            <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
-          </LogoContainer>
-          {!isAuthed && authChecked && (
-            <AuthButtonContainer>
-              <AuthButton onClick={handleLogin}>
-                <Icon className="icon-google"></Icon>
-                <span>Login With Google</span>
-              </AuthButton>
-            </AuthButtonContainer>
+          {!session && (
+            <LogoContainer>
+              <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
+              <AuthButtonContainer>
+                <AuthButton onClick={handleLogin}>
+                  <Icon className="icon-google"></Icon>
+                  <span>Login With Google</span>
+                </AuthButton>
+              </AuthButtonContainer>
+            </LogoContainer>
           )}
-          {isAuthed && loaded && !user?.org && (
+          {session && !loading && loaded && !user?.org && (
             <CreateOrg
-              name={authUser?.displayName}
-              email={authUser?.email}
-              avatar={authUser?.photoURL ?? ''}
+              name={session?.user?.name}
+              email={session?.user?.email}
+              avatar={session?.user?.image ?? ''}
             />
           )}
         </ContentContainer>

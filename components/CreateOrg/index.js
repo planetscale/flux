@@ -3,9 +3,9 @@ import { media } from 'pageUtils/post/theme';
 import Input from 'components/Input';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
-import { useAuthActions } from 'state/auth';
-import { ButtonMinor } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { useUserActions } from 'state/user';
+import { signOut } from 'next-auth/client';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -17,6 +17,25 @@ const Wrapper = styled.div`
   ${media.phone`
     border-radius: 0;
   `}
+`;
+
+const FormLabel = styled.div`
+  padding: 2em;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--accent2);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  color: var(--accent);
+`;
+
+const FormLabelIdentifier = styled.div`
+  margin-bottom: 0.5em;
+`;
+
+const FormLabelOrganization = styled.div`
+  font-weight: 900;
 `;
 
 const InputWrapper = styled.div`
@@ -43,8 +62,6 @@ const InputWrapper = styled.div`
 
   &.disabled {
     cursor: default;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
     background-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.4);
 
@@ -90,7 +107,6 @@ const getOrgNameFromEmailDomain = email => {
 
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
-  const { userLogout } = useAuthActions();
   const { createUser } = useUserActions();
   const [state, setState] = useImmer({
     orgName: getOrgNameFromEmailDomain(email),
@@ -139,7 +155,7 @@ export default function CreateOrg({ name, email, avatar }) {
 
     // TODO: better handle org name different from email domain.
     if (state.orgName.trim() !== getOrgNameFromEmailDomain(email)) {
-      userLogout();
+      signOut();
     }
 
     try {
@@ -171,9 +187,10 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
-      <InputWrapper className="disabled">
-        <Input label="Organization Name" value={state.orgName} disabled />
-      </InputWrapper>
+      <FormLabel>
+        <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
+        <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
+      </FormLabel>
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
           label="Your Username"
@@ -189,7 +206,7 @@ export default function CreateOrg({ name, email, avatar }) {
         />
       </InputWrapper>
       <ButtonWrapper>
-        <ButtonMinor
+        <ButtonWireframe
           type="submit"
           onClick={
             state.orgName && state.name && state.userName
@@ -199,7 +216,7 @@ export default function CreateOrg({ name, email, avatar }) {
           disabled={!(state.orgName && state.name && state.userName)}
         >
           Next
-        </ButtonMinor>
+        </ButtonWireframe>
       </ButtonWrapper>
     </Wrapper>
   );

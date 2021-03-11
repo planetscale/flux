@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import {
   ButtonImage,
-  ButtonSpecial,
+  ButtonWireframe,
   ButtonLink,
   ButtonTag,
   ButtonComposite,
@@ -14,7 +14,8 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Icon } from 'pageUtils/post/atoms';
 import { media } from '../../pageUtils/post/theme';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import * as DropdownMenu from 'components/DropdownMenu';
+import Notifications from 'components/Notifications';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const Logo = styled.div`
   letter-spacing: -1px;
   font-size: 24px;
   border-radius: unset;
-  padding: 0 4px;
+  padding: 0 8px;
   font-family: 'Raleway', sans-serif;
   font-feature-settings: 'liga';
   font-style: italic;
@@ -141,7 +142,7 @@ const ActionsWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
 
-  ${ButtonSpecial} {
+  > *:not(:last-of-type) {
     margin: 0 12px 0 0;
   }
 
@@ -215,11 +216,13 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       </Breadcrumb>
       <ActionsWrapper>
         {notNewPostPage() && (
-          <ButtonSpecial type="button" onClick={redirectToNew}>
+          <ButtonWireframe type="button" onClick={redirectToNew}>
             <Icon className="icon-plus"></Icon>
             <span>Add Update</span>
-          </ButtonSpecial>
+          </ButtonWireframe>
         )}
+
+        <Notifications />
 
         <DropdownMenu.Root>
           <ButtonImage as={DropdownMenu.Trigger}>

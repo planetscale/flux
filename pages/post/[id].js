@@ -1,5 +1,5 @@
 import React from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
@@ -22,7 +22,11 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import { ButtonMinor, ButtonTertiary } from 'components/Button';
+import {
+  ButtonWireframe,
+  ButtonTertiary,
+  ButtonSquished,
+} from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -35,6 +39,7 @@ import { serialize } from 'components/Editor/serializeToMarkdown';
 import { initialValueAutoformat } from 'components/Editor/initialValues';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
+import * as Tooltip from '@radix-ui/react-tooltip';
 
 const Meta = styled.div`
   display: flex;
@@ -63,6 +68,20 @@ const MetaActions = styled.div`
   ${media.phone`
     margin-bottom: 2em;
   `}
+`;
+
+const StyledContent = styled(Tooltip.Content)`
+  padding: 10px;
+  margin: 0;
+  list-style-type: none;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: var(--foreground);
+  color: var(--background);
+`;
+
+const StyledArrow = styled(Tooltip.Arrow)`
+  fill: var(--foreground);
 `;
 
 export default function PostPage() {
@@ -101,6 +120,7 @@ export default function PostPage() {
     (url, id) => fetcher('GET', url, { id }),
     {
       onSuccess: ({ data }) => {
+        mutate(['/api/get-notifications']);
         setPostEditState(draft => {
           draft.content = data.content;
         });
@@ -110,6 +130,7 @@ export default function PostPage() {
             id: s.starId,
             user: {
               id: s.userId,
+              username: s.username,
             },
           }));
         });
@@ -174,6 +195,7 @@ export default function PostPage() {
     // We will optimistically update the UI star state before the request finishes for better UX.
     // If the request fails we can revert the change to state.
     const userId = userContext.user.id;
+    const username = userContext.user.username;
     let matchIndex;
 
     if (replyId) {
@@ -226,14 +248,14 @@ export default function PostPage() {
               ...postState.replies[replyId],
               stars: [
                 ...postState.replies[replyId].stars,
-                { id: null, user: { id: userId } },
+                { id: null, user: { id: userId, username } },
               ],
             },
           };
         } else {
           draft.stars = [
             ...postState.stars,
-            { id: null, user: { id: userId } },
+            { id: null, user: { id: userId, username } },
           ];
         }
       });
@@ -493,6 +515,10 @@ export default function PostPage() {
 
   // Resursively render comments and their replies (and sub replies, etc)
   const renderComment = (comment, level) => {
+    const hasStarred =
+      comment.stars.findIndex(star => star.user.id === userContext.user.id) >=
+      0;
+
     return (
       <CommentListItem>
         <CommentWrapper>
@@ -507,7 +533,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonMinor
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -515,10 +541,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonMinor>
+                </ButtonSquished>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonMinor
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -528,7 +554,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonMinor>
+                </ButtonSquished>
               )}
             </CommentActionButtonGroup>
 
@@ -550,7 +576,7 @@ export default function PostPage() {
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             ) : (
               <CommentContent>
@@ -571,7 +597,7 @@ export default function PostPage() {
                   defaultValue={deserialize(commentInputs.replies[comment.id])}
                   readOnly={false}
                 ></SlateEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentReplySubmit}
@@ -579,17 +605,31 @@ export default function PostPage() {
                 >
                   <Icon className="icon-comment"></Icon>
                   Reply
-                </ButtonMinor>
+                </ButtonWireframe>
               </Reply>
             )}
-            <ActionBar>
-              <ButtonTertiary
-                onClick={() => handleStarClick(comment.id)}
-                disabled={isLoading}
-              >
-                <Icon className="icon-star"></Icon>
-                <div>{comment.stars.length}</div>
-              </ButtonTertiary>
+            <ActionBar comment>
+              <Tooltip.Root>
+                <Tooltip.Trigger as="div">
+                  <ButtonWireframe
+                    color="var(--accent)"
+                    onClick={() => handleStarClick(comment.id)}
+                    disabled={isLoading}
+                    className={hasStarred ? 'selected' : ''}
+                  >
+                    <Icon className="icon-star"></Icon>
+                    <div>{comment.stars.length}</div>
+                  </ButtonWireframe>
+                </Tooltip.Trigger>
+                {comment.stars.length > 0 && (
+                  <StyledContent as="ul">
+                    {comment.stars.map(star => (
+                      <li key={star.user.id}>{star.user.username}</li>
+                    ))}
+                    <StyledArrow />
+                  </StyledContent>
+                )}
+              </Tooltip.Root>
             </ActionBar>
           </Comment>
         </CommentWrapper>
@@ -611,6 +651,15 @@ export default function PostPage() {
     );
   };
 
+  // TODO: add better loading indicator, now there's literally none
+  if (!postData) {
+    return <></>;
+  }
+
+  const hasStarred =
+    postState.stars.findIndex(star => star.user.id === userContext.user.id) >=
+    0;
+
   return (
     <CustomLayout title={postMeta.title}>
       <PageWrapper>
@@ -625,10 +674,10 @@ export default function PostPage() {
                 <div>#{postMeta.tagName}</div>
               </MetaData>
               <MetaActions>
-                {userContext.user.id === postMeta.authorId && (
-                  <ButtonMinor type="submit" onClick={togglePostEdit}>
+                {userContext.user.id === authorId && (
+                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
                     {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonMinor>
+                  </ButtonWireframe>
                 )}
               </MetaActions>
             </Meta>
@@ -656,7 +705,7 @@ export default function PostPage() {
                 >
                   <Icon className="icon-edit"></Icon>
                   Update
-                </ButtonMinor>
+                </ButtonWireframe>
               </>
             ) : (
               <SlateEditor
@@ -668,17 +717,31 @@ export default function PostPage() {
             )}
           </Content>
           <ActionBar>
-            <ButtonTertiary
-              onClick={() => handleStarClick()}
-              disabled={isLoading}
-            >
-              <Icon className="icon-star"></Icon>
-              <div>{postState.stars.length}</div>
-            </ButtonTertiary>
+            <Tooltip.Root>
+              <Tooltip.Trigger as="div">
+                <ButtonWireframe
+                  color="var(--accent)"
+                  onClick={() => handleStarClick()}
+                  disabled={isLoading}
+                  className={hasStarred ? 'selected' : ''}
+                >
+                  <Icon className="icon-star"></Icon>
+                  <div>{postState.stars.length}</div>
+                </ButtonWireframe>
+              </Tooltip.Trigger>
+              {postState.stars.length > 0 && (
+                <StyledContent as="ul">
+                  {postState.stars.map(star => (
+                    <li key={star.user.id}>{star.user.username}</li>
+                  ))}
+                  <StyledArrow />
+                </StyledContent>
+              )}
+            </Tooltip.Root>
           </ActionBar>
         </Post>
 
-        <CommentList>
+        <CommentList main>
           {Object.values(postState.replies)
             .filter(r => !r.parentId)
             .map(firstLevelReply => (
@@ -694,14 +757,14 @@ export default function PostPage() {
             onChange={handleReplyChange}
             readOnly={false}
           ></SlateEditor>
-          <ButtonMinor
+          <ButtonWireframe
             type="submit"
             onClick={handleCommentSubmit}
             disabled={!canSubmit(reply)}
           >
             <Icon className="icon-comment"></Icon>
             Reply
-          </ButtonMinor>
+          </ButtonWireframe>
         </Reply>
       </PageWrapper>
     </CustomLayout>

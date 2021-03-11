@@ -46,14 +46,31 @@ export default function Home() {
     before: -1,
   });
 
+  const [notifications, setNotifications] = useImmer({});
+
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
   const { selectedTag } = useTopBarContext();
 
   const { data } = useSWR(
     ['/api/get-posts', state.last, state.before, selectedTag || undefined],
-    (url, last, before, selectedTag) =>
-      fetcher('GET', url, { last, before, selectedTag }),
+    (url, last, before, selectedTag) => {
+      return fetcher(
+        'GET',
+        url,
+        selectedTag
+          ? {
+              last,
+              before,
+              selectedTag,
+            }
+          : {
+              last,
+              before,
+            }
+      );
+    },
+
     {
       onSuccess: data => {
         setState(draft => {
