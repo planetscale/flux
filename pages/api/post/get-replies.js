@@ -26,7 +26,7 @@ export default async (req, res) => {
         r_user.username as replyAuthorUsername,
         Star.id as starId,
         s_user.id as starUserId,
-        s_user.username as starUsername
+        s_user.displayName as starDisplayName
     FROM
         Profile,
         Reply
@@ -65,7 +65,7 @@ export default async (req, res) => {
     if (row.starId) {
       star = {
         id: row.starId,
-        user: { id: row.starUserId, username: row.starUsername },
+        user: { id: row.starUserId, displayName: row.starDisplayName },
       };
     }
 
