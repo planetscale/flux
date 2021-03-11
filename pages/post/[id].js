@@ -630,10 +630,7 @@ export default function PostPage() {
                     disabled={isLoading}
                     className={hasStarred ? 'selected' : ''}
                   >
-                    <Icon
-                      className="icon-star"
-                      style={{ marginRight: '0.5em' }}
-                    ></Icon>
+                    <Icon className="icon-star"></Icon>
                     <div>{comment.stars.length}</div>
                   </ButtonWireframe>
                 </Tooltip.Trigger>
@@ -743,10 +740,7 @@ export default function PostPage() {
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
                 >
-                  <Icon
-                    className="icon-star"
-                    style={{ marginRight: '0.5em' }}
-                  ></Icon>
+                  <Icon className="icon-star"></Icon>
                   <div>{postState.stars.length}</div>
                 </ButtonWireframe>
               </Tooltip.Trigger>
