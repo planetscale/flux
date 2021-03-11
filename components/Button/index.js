@@ -38,12 +38,23 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
+  border-color: ${props => props.color || 'var(--foreground)'};
+
   &:hover:not([disabled]) {
     background-color: var(--foreground);
-    color: var(--background);
+    color: ${props => props.color || 'var(--background)'};
 
     ${Icon} {
-      background: var(--background);
+      background: ${props => props.color || 'var(--background)'};
+    }
+  }
+
+  &.selected {
+    color: var(--highlight);
+    border-color: var(--highlight);
+
+    ${Icon} {
+      background: var(--highlight);
     }
   }
 `;
@@ -63,15 +74,6 @@ export const ButtonTertiary = styled(ButtonBase)`
 
   &:active:not([disabled]) {
     transform: scale(0.75);
-  }
-
-  &.selected {
-    color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--highlight);
-    }
   }
 `;
 

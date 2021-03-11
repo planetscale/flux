@@ -128,7 +128,7 @@ const CommentContent = styled.div`
 const Post = styled.div``;
 
 const ActionBar = styled.div`
-  padding: 16px 0;
+  padding: 16px 0 ${props => (props.comment ? '0' : '16px')};
 `;
 
 const CommenterNameplateWrapper = styled.div`

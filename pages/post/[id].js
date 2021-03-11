@@ -620,14 +620,15 @@ export default function PostPage() {
             <ActionBar comment>
               <Tooltip.Root>
                 <Tooltip.Trigger as="div">
-                  <ButtonTertiary
+                  <ButtonWireframe
+                    color="var(--accent)"
                     onClick={() => handleStarClick(comment.id)}
                     disabled={isLoading}
                     className={hasStarred ? 'selected' : ''}
                   >
                     <Icon className="icon-star"></Icon>
                     <div>{comment.stars.length}</div>
-                  </ButtonTertiary>
+                  </ButtonWireframe>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
@@ -729,14 +730,15 @@ export default function PostPage() {
           <ActionBar>
             <Tooltip.Root>
               <Tooltip.Trigger as="div">
-                <ButtonTertiary
+                <ButtonWireframe
+                  color="var(--accent)"
                   onClick={() => handleStarClick()}
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
                 >
                   <Icon className="icon-star"></Icon>
                   <div>{postState.stars.length}</div>
-                </ButtonTertiary>
+                </ButtonWireframe>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
