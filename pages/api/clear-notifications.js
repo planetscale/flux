@@ -23,7 +23,7 @@ export default async (req, res) => {
       FROM
         User,
         Post
-        LEFT JOIN PostView ON Post.id = PostView.postId
+        LEFT JOIN PostView ON Post.id = PostView.postId AND PostView.userId = ?
         LEFT JOIN Reply ON Reply.postId = Post.id
           AND Reply.createdAt > PostView.lastViewed
       WHERE
@@ -49,7 +49,11 @@ export default async (req, res) => {
     lastViewed=CURRENT_TIMESTAMP(3)
   `;
 
-  await connection.execute(clearNotificationsQuery, [user.id, user.id]);
+  await connection.execute(clearNotificationsQuery, [
+    user.id,
+    user.id,
+    user.id,
+  ]);
   connection.end();
 
   res.json({ error: false });
