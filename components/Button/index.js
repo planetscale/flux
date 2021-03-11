@@ -19,7 +19,7 @@ export const ButtonBase = styled.button`
   ${Icon} {
     width: 20px;
     height: 20px;
-    margin: auto;
+    margin: 0 0.5em 0 0;
   }
 
   &:hover:not([disabled]) {
