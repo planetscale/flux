@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ButtonWireframe } from 'components/Button';
+import { ButtonSquished, ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
 const CommentList = styled.ul`
@@ -143,8 +143,8 @@ const CommentActionButtonGroup = styled.div`
   right: 0;
   display: flex;
 
-  ${ButtonWireframe}:nth-of-type(2) {
-    margin: 0 0 0 8px;
+  ${ButtonSquished}:nth-of-type(2) {
+    margin-left: 8px;
   }
 `;
 

@@ -22,7 +22,11 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import { ButtonWireframe, ButtonTertiary } from 'components/Button';
+import {
+  ButtonWireframe,
+  ButtonTertiary,
+  ButtonSquished,
+} from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -527,7 +531,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonWireframe
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -535,10 +539,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonWireframe>
+                </ButtonSquished>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonWireframe
+                <ButtonSquished
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -548,7 +552,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonWireframe>
+                </ButtonSquished>
               )}
             </CommentActionButtonGroup>
 

@@ -41,11 +41,11 @@ export const ButtonWireframe = styled(ButtonBase)`
   border-color: ${props => props.color || 'var(--foreground)'};
 
   &:hover:not([disabled]) {
-    background-color: var(--foreground);
-    color: ${props => props.color || 'var(--background)'};
+    background-color: ${props => props.color || 'var(--foreground)'};
+    color: white;
 
     ${Icon} {
-      background: ${props => props.color || 'var(--background)'};
+      background: white;
     }
   }
 
@@ -56,7 +56,16 @@ export const ButtonWireframe = styled(ButtonBase)`
     ${Icon} {
       background: var(--highlight);
     }
+
+    &:hover:not([disabled]) {
+      background-color: var(--highlight);
+    }
   }
+`;
+
+export const ButtonSquished = styled(ButtonWireframe)`
+  padding: 4px 16px;
+  font-size: 0.9em;
 `;
 
 export const ButtonTertiary = styled(ButtonBase)`

@@ -29,7 +29,7 @@ const NotificationButton = styled(ButtonBase)`
 const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
-  padding: 0px 24px;
+  padding: 1em 24px;
   outline: none;
   justify-content: space-between;
 `;
