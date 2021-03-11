@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonBase, ButtonTertiary } from 'components/Button';
+import { ButtonBase, ButtonSquished, ButtonTertiary } from 'components/Button';
 import { Icon } from 'pageUtils/post/atoms';
 import Link from 'next/link';
 
@@ -147,12 +147,12 @@ export default function Notifications() {
         <DropdownMenu.Group>
           <NotificationHeader>
             <h3>Notifications ({totalNotifications})</h3>
-            <ButtonTertiary
+            <ButtonSquished
               disabled={!totalNotifications}
               onClick={clearAllNotifications}
             >
               Clear all notifications
-            </ButtonTertiary>
+            </ButtonSquished>
           </NotificationHeader>
         </DropdownMenu.Group>
         {totalNotifications === 0 && (
