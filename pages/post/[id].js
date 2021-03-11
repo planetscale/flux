@@ -117,13 +117,7 @@ export default function PostPage() {
           draft.content = data.content;
         });
         updatePostState(draft => {
-          draft.stars = data.stars.map(s => ({
-            id: s.starId,
-            user: {
-              id: s.userId,
-              username: s.username,
-            },
-          }));
+          draft.stars = data.stars;
         });
       },
     }
@@ -196,7 +190,7 @@ export default function PostPage() {
     // We will optimistically update the UI star state before the request finishes for better UX.
     // If the request fails we can revert the change to state.
     const userId = userContext.user.id;
-    const username = userContext.user.username;
+    const displayName = userContext.user.displayName;
     let matchIndex;
 
     if (replyId) {
@@ -249,14 +243,14 @@ export default function PostPage() {
               ...postState.replies[replyId],
               stars: [
                 ...postState.replies[replyId].stars,
-                { id: null, user: { id: userId, username } },
+                { id: null, user: { id: userId, displayName } },
               ],
             },
           };
         } else {
           draft.stars = [
             ...postState.stars,
-            { id: null, user: { id: userId, username } },
+            { id: null, user: { id: userId, displayName } },
           ];
         }
       });
@@ -637,7 +631,7 @@ export default function PostPage() {
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
                     {comment.stars.map(star => (
-                      <li key={star.user.id}>{star.user.username}</li>
+                      <li key={star.user.id}>{star.user.displayName}</li>
                     ))}
                     <StyledArrow />
                   </StyledContent>
@@ -747,7 +741,7 @@ export default function PostPage() {
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
                   {postState.stars.map(star => (
-                    <li key={star.user.id}>{star.user.username}</li>
+                    <li key={star.user.id}>{star.user.displayName}</li>
                   ))}
                   <StyledArrow />
                 </StyledContent>
