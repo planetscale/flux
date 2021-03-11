@@ -47,7 +47,7 @@ export default async (req, res) => {
     SELECT
       Star.id as starId,
       User.id as userId,
-      User.username
+      User.displayName
     FROM
       Star,
       User
@@ -75,7 +75,13 @@ export default async (req, res) => {
   res.json({
     data: {
       ...postRow,
-      stars: postStarRows,
+      stars: postStarRows.map(star => ({
+        id: star.starId,
+        user: {
+          id: star.userId,
+          displayName: star.displayName,
+        },
+      })),
     },
     error: false,
   });
