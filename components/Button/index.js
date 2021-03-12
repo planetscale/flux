@@ -42,10 +42,10 @@ export const ButtonWireframe = styled(ButtonBase)`
 
   &:hover:not([disabled]) {
     background-color: ${props => props.color || 'var(--foreground)'};
-    color: white;
+    color: ${props => props.textColor || 'var(--background)'};
 
     ${Icon} {
-      background: white;
+      background: ${props => props.textColor || 'var(--background)'};
     }
   }
 

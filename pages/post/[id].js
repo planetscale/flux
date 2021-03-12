@@ -620,6 +620,7 @@ export default function PostPage() {
                 <Tooltip.Trigger as="div">
                   <ButtonWireframe
                     color="var(--accent)"
+                    textColor="white"
                     onClick={() => handleStarClick(comment.id)}
                     disabled={isLoading}
                     className={hasStarred ? 'selected' : ''}
@@ -730,6 +731,7 @@ export default function PostPage() {
               <Tooltip.Trigger as="div">
                 <ButtonWireframe
                   color="var(--accent)"
+                  textColor="white"
                   onClick={() => handleStarClick()}
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
