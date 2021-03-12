@@ -7,7 +7,7 @@ export const saveImage = async function (data) {
     maxWidthOrHeight: 1280,
   };
   const compressedFile = await imageCompression(data, fileCompressionOptions);
-  const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
+  // const storagePath = firebaseStorage.ref().child(`/img/${uuidv4()}.jpg`);
 
   try {
     await storagePath.put(compressedFile);
