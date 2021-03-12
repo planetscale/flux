@@ -617,16 +617,16 @@ export default function PostPage() {
             )}
             <ActionBar comment>
               <Tooltip.Root>
-                <Tooltip.Trigger as="div">
-                  <ButtonWireframe
-                    color="var(--accent)"
-                    onClick={() => handleStarClick(comment.id)}
-                    disabled={isLoading}
-                    className={hasStarred ? 'selected' : ''}
-                  >
-                    <Icon className="icon-star"></Icon>
-                    <div>{comment.stars.length}</div>
-                  </ButtonWireframe>
+                <Tooltip.Trigger
+                  as={ButtonWireframe}
+                  color="var(--accent)"
+                  textColor="white"
+                  onClick={() => handleStarClick(comment.id)}
+                  disabled={isLoading}
+                  className={hasStarred ? 'selected' : ''}
+                >
+                  <Icon className="icon-star"></Icon>
+                  <div>{comment.stars.length}</div>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
@@ -727,16 +727,16 @@ export default function PostPage() {
           </Content>
           <ActionBar>
             <Tooltip.Root>
-              <Tooltip.Trigger as="div">
-                <ButtonWireframe
-                  color="var(--accent)"
-                  onClick={() => handleStarClick()}
-                  disabled={isLoading}
-                  className={hasStarred ? 'selected' : ''}
-                >
-                  <Icon className="icon-star"></Icon>
-                  <div>{postState.stars.length}</div>
-                </ButtonWireframe>
+              <Tooltip.Trigger
+                as={ButtonWireframe}
+                color="var(--accent)"
+                textColor="white"
+                onClick={() => handleStarClick()}
+                disabled={isLoading}
+                className={hasStarred ? 'selected' : ''}
+              >
+                <Icon className="icon-star"></Icon>
+                <div>{postState.stars.length}</div>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
