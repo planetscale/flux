@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { firebaseStorage } from 'utils/auth/clientConfig';
 import imageCompression from 'browser-image-compression';
 
 export const saveImage = async function (data) {
