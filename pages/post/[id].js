@@ -562,7 +562,7 @@ export default function PostPage() {
                   defaultValue={deserialize(commentInputs.edits[comment.id])}
                   readOnly={false}
                 ></SlateEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={handleCommentEditSubmit}
@@ -692,7 +692,7 @@ export default function PostPage() {
                   readOnly={!postEditState.isEditing}
                   defaultValue={deserialize(postMeta.content)}
                 ></SlateEditor>
-                <ButtonMinor
+                <ButtonWireframe
                   type="submit"
                   onClick={handlePostEditSubmit}
                   disabled={!canSubmit(postEditState.content)}
