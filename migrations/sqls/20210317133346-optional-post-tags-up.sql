@@ -1,0 +1,1 @@
+ALTER TABLE Post MODIFY tagId int;

@@ -101,15 +101,12 @@ const ButtonWrapper = styled.div`
   `}
 `;
 
-const getOrgNameFromEmailDomain = email => {
-  return email?.split('@').pop().split('.')[0] ?? '';
-};
-
 export default function CreateOrg({ name, email, avatar }) {
   const router = useRouter();
   const { createUser } = useUserActions();
   const [state, setState] = useImmer({
-    orgName: getOrgNameFromEmailDomain(email),
+    // TODO: Allow first user to set an organization name for the instance
+    orgName: '',
     userName: '',
     name: name ? name : '',
   });
@@ -147,15 +144,8 @@ export default function CreateOrg({ name, email, avatar }) {
   const handleNextClick = async e => {
     e.preventDefault();
 
-    if (
-      !(state.userName?.trim() && state.name?.trim() && state.orgName?.trim())
-    ) {
+    if (!(state.userName?.trim() && state.name?.trim())) {
       return;
-    }
-
-    // TODO: better handle org name different from email domain.
-    if (state.orgName.trim() !== getOrgNameFromEmailDomain(email)) {
-      signOut();
     }
 
     try {
@@ -187,10 +177,12 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
-      <FormLabel>
-        <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
-        <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
-      </FormLabel>
+      {state.orgName && (
+        <FormLabel>
+          <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
+          <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
+        </FormLabel>
+      )}
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
           label="Your Username"
@@ -208,12 +200,8 @@ export default function CreateOrg({ name, email, avatar }) {
       <ButtonWrapper>
         <ButtonWireframe
           type="submit"
-          onClick={
-            state.orgName && state.name && state.userName
-              ? handleNextClick
-              : null
-          }
-          disabled={!(state.orgName && state.name && state.userName)}
+          onClick={state.name && state.userName ? handleNextClick : null}
+          disabled={!(state.name && state.userName)}
         >
           Next
         </ButtonWireframe>

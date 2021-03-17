@@ -23,12 +23,11 @@ export default async (req, res) => {
         Tag.name as tagName,
         User.displayName as authorName
     FROM
-        Post,
-        Tag,
+        Post
+        LEFT JOIN Tag ON Post.tagId = Tag.id,
         User
     WHERE
-        Post.tagId = Tag.id
-    AND Post.authorId = User.id
+      Post.authorId = User.id
     AND Post.id ${Number(before) === -1 ? '>' : '<'} ?
     ${selectedTag ? 'AND Tag.name = ?' : ''}
     ORDER BY createdAt DESC 

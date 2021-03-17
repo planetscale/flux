@@ -335,8 +335,12 @@ export default function PostList({ posts = [], handleTagClick }) {
                       <MetaDate>
                         {getLocaleDateTimeString(createdAt).toUpperCase()}
                       </MetaDate>
-                      <span>&nbsp; &middot; &nbsp;</span>
-                      <MetaTag>#{tag?.name}</MetaTag>
+                      {tag?.name && (
+                        <>
+                          <span>&nbsp; &middot; &nbsp;</span>
+                          <MetaTag>#{tag?.name}</MetaTag>
+                        </>
+                      )}
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
                       {notificationLookup[id] && (

@@ -306,29 +306,33 @@ export default function NewPost() {
         <Post>
           <TimeAndTags>
             <MetaTime>{state.dateTime}</MetaTime>
-            <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
-            <div>
-              <Select
-                isClearable={true}
-                isSearchable={true}
-                styles={customStyles}
-                value={state.selectedTag}
-                onChange={handleTagChange}
-                options={state.tagOptions}
-                defaultValue={state.selectedTag}
-                placeholder="Select a tag"
-                theme={theme => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: 'var(--highlight)',
-                    primary50: 'var(--highlight)',
-                    primary75: 'var(--highlight)',
-                    primary: 'var(--highlight)',
-                  },
-                })}
-              />
-            </div>
+            {state.tagOptions.length && (
+              <>
+                <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
+                <div>
+                  <Select
+                    isClearable={true}
+                    isSearchable={true}
+                    styles={customStyles}
+                    value={state.selectedTag}
+                    onChange={handleTagChange}
+                    options={state.tagOptions}
+                    defaultValue={state.selectedTag}
+                    placeholder="Select a tag"
+                    theme={theme => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary25: 'var(--highlight)',
+                        primary50: 'var(--highlight)',
+                        primary75: 'var(--highlight)',
+                        primary: 'var(--highlight)',
+                      },
+                    })}
+                  />
+                </div>
+              </>
+            )}
           </TimeAndTags>
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
