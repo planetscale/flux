@@ -41,6 +41,7 @@ const formatPosts = posts => {
 
 export default function Home() {
   const [state, setState] = useImmer({
+    postsLoading: false,
     postList: {},
     last: DEFAULT_PAGE_ADDEND,
     before: -1,
@@ -55,6 +56,9 @@ export default function Home() {
   const { data } = useSWR(
     ['/api/get-posts', state.last, state.before, selectedTag || undefined],
     (url, last, before, selectedTag) => {
+      setState(draft => {
+        draft.postsLoading = true;
+      });
       return fetcher(
         'GET',
         url,
@@ -75,12 +79,13 @@ export default function Home() {
       onSuccess: data => {
         setState(draft => {
           draft.postList = { ...state.postList, ...formatPosts(data) };
+          draft.postsLoading = false;
         });
       },
     }
   );
 
-  if (data && Object.values(state.postList).length === 0) {
+  if (data && data.length && Object.values(state.postList).length === 0) {
     setState(draft => {
       draft.postList = formatPosts(data);
     });
@@ -133,7 +138,7 @@ export default function Home() {
     <CustomLayout title="Posts">
       <HomeWrapper>
         <PostList
-          posts={[...posts, ...(!posts.length ? LOADING_POSTS : [])]}
+          posts={[...posts, ...(state.postsLoading ? LOADING_POSTS : [])]}
           handleTagClick={handleTagClick}
         />
       </HomeWrapper>

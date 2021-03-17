@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
     summary,
     user.id,
     content,
-    tagChannelId,
+    tagChannelId || null,
   ]);
 
   const idQuery = `SELECT id, createdAt FROM Post WHERE id = LAST_INSERT_ID()`;

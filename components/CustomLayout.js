@@ -3,14 +3,15 @@ import { useUserContext } from 'state/user';
 
 export default function CustomLayout({ children, title }) {
   const { user } = useUserContext();
+  const orgPart = user?.org.name ? ` - ${user.org.name}` : '';
 
   return (
     <>
       <Head>
         <title>
-          Flux{' '}
+          Flux
           {user && title
-            ? `- ${user.org.name} -
+            ? `${orgPart} -
           ${title.charAt(0).toUpperCase() + title.slice(1)}`
             : '- Login'}
         </title>

@@ -30,13 +30,12 @@ export default async (req, res) => {
       User.username as authorUsername,
       Profile.avatar
     FROM
-      Post,
-      Tag,
+      Post
+      LEFT JOIN Tag ON Tag.id = Post.tagId,
       User,
       Profile
     WHERE
       User.id = Profile.userId
-    AND Tag.id = Post.tagId
     AND User.id = Post.authorId
     AND Post.id = ?
     LIMIT 1

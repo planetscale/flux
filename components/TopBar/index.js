@@ -190,8 +190,9 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       <Breadcrumb>
         <ButtonComposite onClick={redirectToHome}>
           <Logo>flux</Logo>
+          {header && <>
           <ForwardSlash>/</ForwardSlash>
-          <Organization>{header}</Organization>
+          <Organization>{header}</Organization></>}
         </ButtonComposite>
         <ForwardSlash>/</ForwardSlash>
         <PageTitle>{subHeader}</PageTitle>

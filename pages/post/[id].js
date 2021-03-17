@@ -675,8 +675,12 @@ export default function PostPage() {
             <Meta>
               <MetaData>
                 <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
-                <div>&nbsp; &middot; &nbsp;</div>
-                <div>#{tagName}</div>
+                {tagName && (
+                  <>
+                    <div>&nbsp; &middot; &nbsp;</div>
+                    <div>#{tagName}</div>
+                  </>
+                )}
               </MetaData>
               <MetaActions>
                 {userContext.user.id === authorId && (
