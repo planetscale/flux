@@ -1,3 +1,20 @@
+## Flux Private Fork
+
+This is a private fork of https://github.com/planetscale/flux.
+
+### Update repo from upstream
+```bash
+git fetch upstream
+git merge upstream/main
+git push
+```
+
+It may be worth looking into https://github.com/repo-sync/repo-sync as an automated way of keeping our private repo current.
+
+### Push changed to upstream
+
+This has not been investigated. Perhaps we can include this in our normal workflow. We need to be careful never to leak anything. Currently this process is not prohibited.
+
 ## Getting Started
 
 ### Install dependencies
