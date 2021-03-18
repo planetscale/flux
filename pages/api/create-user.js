@@ -21,14 +21,14 @@ export default async (req, res) => {
     User
         (email, username, displayName, role, orgId)
     VALUES
-        (?, ?, ?, ?, (SELECT id FROM Org WHERE name = ? LIMIT 1))
+        (?, ?, ?, ?, ?)
   `;
   await connection.execute(userQuery, [
     user.email,
     userName,
     displayName,
     'USER',
-    orgName,
+    1, // TODO: There is only one org so hard coding it as the org id when creating users
   ]);
 
   const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
