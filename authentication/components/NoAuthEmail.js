@@ -25,6 +25,7 @@ const FormWrapper = styled.div`
     text-align: center;
     text-transform: uppercase;
   }
+
   div.info {
     margin-top: 16px;
     font-size: 0.75rem;
