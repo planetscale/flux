@@ -4,9 +4,9 @@ import CreateOrg from 'components/CreateOrg';
 import { useUserContext, useUserActions } from 'state/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Icon } from 'pageUtils/post/atoms';
 import CustomLayout from 'components/CustomLayout';
-import { signIn, useSession } from 'next-auth/client';
+import { providers, useSession } from 'next-auth/client';
+import * as AuthProviderLogins from 'authentication/components/';
 
 const Wrapper = styled.div`
   display: flex;
@@ -43,49 +43,7 @@ const Logo = styled.img`
   max-width: 260px;
 `;
 
-const AuthButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  max-width: 480px;
-  margin-top: 2em;
-`;
-
-const AuthButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border: 1px solid white;
-  background-color: #060a0c;
-  border-radius: 99px;
-  padding: 16px;
-  outline: unset;
-  box-shadow: var(--shadow);
-  transition: all 300ms;
-  color: white;
-
-  &:hover {
-    transform: scale(0.99);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  > ${Icon} {
-    background: white;
-  }
-
-  > span {
-    border-left: 1px solid var(--accent);
-    padding: 0 8px;
-    margin-left: 8px;
-    text-transform: uppercase;
-  }
-`;
-
-export default function Login() {
+export default function Login({ providers }) {
   const { user, loaded, isLoading } = useUserContext();
 
   const { getUser } = useUserActions();
@@ -102,11 +60,7 @@ export default function Login() {
     if (session && !loading && !isLoading) {
       getUser();
     }
-  }, [session]);
-
-  const handleLogin = () => {
-    signIn('google', { callbackUrl: '/' });
-  };
+  }, [session, loading]);
 
   return (
     <CustomLayout>
@@ -115,12 +69,10 @@ export default function Login() {
           {!session && (
             <LogoContainer>
               <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
-              <AuthButtonContainer>
-                <AuthButton onClick={handleLogin}>
-                  <Icon className="icon-google"></Icon>
-                  <span>Login With Google</span>
-                </AuthButton>
-              </AuthButtonContainer>
+              {Object.values(providers).map(provider => {
+                const AuthLogin = AuthProviderLogins[provider.name];
+                return <AuthLogin key={provider.name} />;
+              })}
             </LogoContainer>
           )}
           {session && !loading && loaded && !user?.org && (
@@ -135,3 +87,9 @@ export default function Login() {
     </CustomLayout>
   );
 }
+
+Login.getInitialProps = async () => {
+  return {
+    providers: await providers(),
+  };
+};
