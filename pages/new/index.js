@@ -231,7 +231,6 @@ export default function NewPost() {
       state.title?.value.trim() &&
       state.content?.trim() &&
       state.content?.trim().match(/[0-9a-zA-Z]+/) &&
-      state.selectedTag &&
       !state.disableSubmit
     );
   };
