@@ -249,8 +249,8 @@ export default function NewPost() {
         title: state.title.value,
         content: state.content,
         summary: state.subtitle.value,
-        tagChannelId: state.selectedTag.channelId,
-        tagName: state.selectedTag.value,
+        tagChannelId: state.selectedTag?.channelId,
+        tagName: state.selectedTag?.value,
         userAvatar:
           userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
         userDisplayName: userContext?.user?.displayName,
