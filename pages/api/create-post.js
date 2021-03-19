@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
 
   try {
     // Fire off slack notification of successfully created post
-    if (process.env.SLACK_API_TOKEN) {
+    if (process.env.SLACK_API_TOKEN && tagChannelId) {
       await runMiddleware(req, res, slackNotification, {
         newPost,
       });

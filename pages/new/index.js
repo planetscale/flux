@@ -305,7 +305,7 @@ export default function NewPost() {
         <Post>
           <TimeAndTags>
             <MetaTime>{state.dateTime}</MetaTime>
-            {state.tagOptions.length && (
+            {state.tagOptions.length > 0 && (
               <>
                 <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
                 <div>
