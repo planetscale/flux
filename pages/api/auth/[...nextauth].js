@@ -2,7 +2,8 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
 export default NextAuth({
-  // Configure one or more authentication providers
+  // Configure one or more authentication providers here.
+  // See https://github.com/planetscale/flux/blob/main/authentication/README.md for more details.
   providers: [
     Providers.Credentials({
       name: 'NoAuthEmail',
@@ -13,7 +14,6 @@ export default NextAuth({
         return credentials.email ? { email: credentials.email } : null;
       },
     }),
-    // ...add more providers here
   ],
   pages: {
     signIn: '/',
