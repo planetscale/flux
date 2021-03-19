@@ -13,15 +13,6 @@ export default NextAuth({
         signOut: '/',
       },
     }),
-    Providers.Credentials({
-      name: 'NoAuthEmail',
-      credentials: {
-        username: { label: 'Email', type: 'text', placeholder: 'jsmith' },
-      },
-      async authorize(credentials) {
-        return credentials.email ? { email: credentials.email } : null;
-      },
-    }),
     // ...add more providers here
   ],
   pages: {
