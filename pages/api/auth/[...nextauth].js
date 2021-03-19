@@ -8,9 +8,26 @@ export default NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       state: false,
+      pages: {
+        signIn: '/',
+        signOut: '/',
+      },
+    }),
+    Providers.Credentials({
+      name: 'NoAuthEmail',
+      credentials: {
+        username: { label: 'Email', type: 'text', placeholder: 'jsmith' },
+      },
+      async authorize(credentials) {
+        return credentials.email ? { email: credentials.email } : null;
+      },
     }),
     // ...add more providers here
   ],
+  pages: {
+    signIn: '/',
+    signOut: '/',
+  },
   session: {
     jwt: true,
   },

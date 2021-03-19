@@ -5,7 +5,6 @@ import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
 import { ButtonWireframe } from 'components/Button';
 import { useUserActions } from 'state/user';
-import { signOut } from 'next-auth/client';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -13,15 +12,21 @@ const Wrapper = styled.div`
   height: fit-content;
   border-radius: 4px;
   box-shadow: var(--shadow);
+  background-color: var(--background);
 
   ${media.phone`
     border-radius: 0;
   `}
+
+  .profile-header {
+    padding: 32px;
+    font-weight: bold;
+    font-size: 2rem;
+  }
 `;
 
 const FormLabel = styled.div`
   padding: 2em;
-  background-color: var(--background);
   border-bottom: 1px solid var(--accent2);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -40,7 +45,6 @@ const FormLabelOrganization = styled.div`
 
 const InputWrapper = styled.div`
   position: relative;
-  background-color: var(--background);
   color: var(--text);
   border-bottom: 1px solid var(--accent2);
   padding: 32px;
@@ -91,7 +95,6 @@ const InputWrapper = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  background-color: var(--background);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   padding: 32px;
@@ -177,6 +180,7 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
+      <div className="profile-header">User Profile</div>
       {state.orgName && (
         <FormLabel>
           <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
