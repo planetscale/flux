@@ -70,7 +70,7 @@
   --text-blue: rgb(var(--blue-600));
   --text-purple: rgb(var(--purple-600));
 
-  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --layer-shadow: 1px 1px 6px -2px var(--gray-300);
 
   --logo: url('/logo-docs_light.svg');
   --logoCompany: url('/logo_planetscale_light.svg');
@@ -89,6 +89,9 @@
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));
+
+  --layer-shadow: 1px 1px 6px -2px var(--black);
+
   --logo: url('/logo-docs_dark.svg');
   --logoCompany: url('/logo_planetscale_dark.svg');
 }
