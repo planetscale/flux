@@ -3,7 +3,6 @@ import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
 import { ButtonWireframe, ButtonSquished } from 'components/Button';
-import { Icon } from 'pageUtils/post/atoms';
 import { Notification2, Close } from '@styled-icons/remix-line';
 import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';

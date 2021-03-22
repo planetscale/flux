@@ -4,7 +4,6 @@ import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Icon } from 'pageUtils/post/atoms';
 import {
   Star as RemixLineStar,
   Chat1 as Chat,

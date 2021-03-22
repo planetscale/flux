@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
-import { Icon } from 'pageUtils/post/atoms';
 import { Settings, Moon, Sun } from '@styled-icons/remix-line';
 import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
@@ -84,10 +83,6 @@ const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   width: 100%;
   height: 100%;
   background-color: var(--highlight);
-
-  & ~ ${Icon} {
-    background: white;
-  }
 `;
 
 export default function UserSettings({

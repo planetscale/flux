@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { media } from '../../pageUtils/post/theme';
-import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
   display: flex;
@@ -20,12 +19,6 @@ export const ButtonBase = styled.button`
 
   span:nth-child(2) {
     margin-left: 8px;
-  }
-
-  ${Icon} {
-    width: 20px;
-    height: 20px;
-    margin: 0 0.5em 0 0;
   }
 
   &:hover:not([disabled]) {
