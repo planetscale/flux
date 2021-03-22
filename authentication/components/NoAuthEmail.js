@@ -7,19 +7,11 @@ const AuthContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  max-width: 480px;
-  margin-top: 2em;
 `;
 
 const FormWrapper = styled.div`
-  align-items: center;
-  border: 1px solid white;
-  background-color: #060a0c;
-  border-radius: 16px;
-  padding: 16px;
   outline: unset;
-  box-shadow: var(--shadow);
-  color: white;
+  color: var(--text-primary);
 
   div.title {
     text-align: center;

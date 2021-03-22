@@ -10,27 +10,37 @@ import * as AuthProviderLogins from 'authentication/components/';
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100vw;
   height: 100vh;
   justify-content: center;
-  align-items: center;
-  background: url('/bg_starfield.png') #131516;
+  align-items: stretch;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
+  width: 60%;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   ${media.phone`
     width: 100%;
   `}
 `;
 
+const LogoColumn = styled.div`
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url('/bg_starfield.png') var(--bg-primary);
+  border-left: 1px solid var(--border-primary);
+`;
+
 const LogoContainer = styled.div`
   margin-bottom: 2em;
-  background: url('/bg_chaos_attractor_snapshot.png');
   width: 400px;
   height: 400px;
   display: flex;
@@ -68,14 +78,14 @@ export default function Login({ providers }) {
         <ContentContainer>
           {!session && (
             <LogoContainer>
-              <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
               {Object.values(providers).map(provider => {
                 const AuthLogin = AuthProviderLogins[provider.name];
                 return <AuthLogin key={provider.name} />;
               })}
             </LogoContainer>
           )}
-          {session && !loading && loaded && !user?.org && (
+          {/* {!session && !loading && loaded && !user?.org && ( */}
+          {session && (
             <CreateOrg
               name={session?.user?.name}
               email={session?.user?.email}
@@ -83,6 +93,9 @@ export default function Login({ providers }) {
             />
           )}
         </ContentContainer>
+        <LogoColumn>
+          <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
+        </LogoColumn>
       </Wrapper>
     </CustomLayout>
   );

@@ -11,8 +11,8 @@ const Wrapper = styled.div`
   max-width: 480px;
   height: fit-content;
   border-radius: 4px;
-  box-shadow: var(--shadow);
-  background-color: var(--bg-primary);
+  box-shadow: var(--tw-shadow);
+  background-color: var(--bg-secondary);
 
   ${media.phone`
     border-radius: 0;
@@ -27,12 +27,12 @@ const Wrapper = styled.div`
 
 const FormLabel = styled.div`
   padding: 2em;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-secondary);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: flex;
   flex-direction: column;
-  color: var(--accent);
+  color: var(--text-primary);
 `;
 
 const FormLabelIdentifier = styled.div`
@@ -46,21 +46,21 @@ const FormLabelOrganization = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   color: var(--text-primary);
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-secondary);
   padding: 32px;
 
   input {
     background-color: unset;
     color: var(--text-primary);
-    border-bottom: 1px solid var(--bg-primary);
+    border-bottom: 1px solid var(--bg-secondary);
   }
 
   &:hover {
     cursor: pointer;
-    background-color: var(--accent2);
+    background-color: var(--bg-secondary);
 
     input {
-      background-color: var(--accent2);
+      background-color: var(--bg-secondary);
     }
   }
 
@@ -180,7 +180,7 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
-      <div className="profile-header">User Profile</div>
+      <div className="profile-header">Create user profile</div>
       {state.orgName && (
         <FormLabel>
           <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
