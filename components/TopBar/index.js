@@ -41,7 +41,7 @@ const Logo = styled.div`
   letter-spacing: -1px;
   font-size: 1em;
   border-radius: unset;
-  padding: 0 8px;
+  padding: 0 4px;
   font-family: 'Raleway', sans-serif;
   font-feature-settings: 'liga';
   font-style: italic;
@@ -100,7 +100,7 @@ const Logo = styled.div`
 `;
 
 const ForwardSlash = styled.div`
-  color: var(--accent);
+  color: var(--border-primary);
   margin: 0 0.5em;
 `;
 

@@ -375,7 +375,7 @@ export default function NewPost() {
               disabled={!canSubmitPost()}
             >
               <Article />
-              Post
+              <span>Post</span>
             </ButtonWireframe>
             <ButtonWireframe onClick={handleCancel}>Cancel</ButtonWireframe>
           </ActionItems>

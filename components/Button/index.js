@@ -10,12 +10,16 @@ export const ButtonBase = styled.button`
   border-radius: var(--border-radius);
   color: var(--text-secondary);
   border: unset;
-  font-size: 1em;
+  font-size: 14px;
   height: 36px;
 
   svg {
     width: 1em;
     height: 1em;
+  }
+
+  span:nth-child(2) {
+    margin-left: 8px;
   }
 
   ${Icon} {
