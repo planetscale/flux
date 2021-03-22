@@ -63,24 +63,6 @@ export const ButtonSquished = styled(ButtonWireframe)`
   font-size: 0.9em;
 `;
 
-export const ButtonTertiary = styled(ButtonBase)`
-  border: 1px solid var(--accent);
-
-  &:hover:not([disabled]) {
-    color: var(--bg-primary);
-    background-color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--bg-primary);
-    }
-  }
-
-  &:active:not([disabled]) {
-    transform: scale(0.75);
-  }
-`;
-
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;

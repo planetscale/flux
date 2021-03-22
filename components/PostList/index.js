@@ -150,14 +150,14 @@ const DemarcationString = styled.div`
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
-  color: var(--accent);
+  color: var(--border-primary);
 
   &:before {
     content: ' ';
     position: absolute;
     width: 10px;
-    height: 2px;
-    background-color: var(--accent2);
+    height: 1px;
+    background-color: var(--border-primary);
     left: -1em;
     top: 1.1em;
   }
@@ -171,8 +171,8 @@ const EmptyDemarcationString = styled.div`
   margin-bottom: 2em;
 
   > div {
-    color: var(--accent);
-    background-color: var(--accent);
+    color: var(--border-primary);
+    background-color: var(--border-primary);
     width: 100%;
     border-radius: 8px;
   }
@@ -182,7 +182,7 @@ const EmptyDemarcationString = styled.div`
     position: absolute;
     width: 10px;
     height: 2px;
-    background-color: var(--accent2);
+    background-color: var(--border-primary);
     left: -1em;
     top: 1.1em;
   }
@@ -190,7 +190,7 @@ const EmptyDemarcationString = styled.div`
 
 const EmptyMeta = styled.div`
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
   width: 78px;
   height: 15px;
 
@@ -203,7 +203,7 @@ const EmptyPostTitle = styled.div`
   width: 75%;
   height: 39px;
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
 `;
 
 const EmptySummary = styled.span`
@@ -212,7 +212,7 @@ const EmptySummary = styled.span`
   width: 75%;
   height: 20px;
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
 `;
 
 export default function PostList({ posts = [], handleTagClick }) {

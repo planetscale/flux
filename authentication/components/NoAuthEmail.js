@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/client';
 import styled from '@emotion/styled';
-import { ButtonTertiary } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 
 const AuthContainer = styled.div`
   display: flex;
@@ -62,7 +62,7 @@ export default function NoAuthEmail() {
         </div>
         <form onSubmit={handleLogin}>
           <input id="email" type="email" required placeholder="Email" />
-          <ButtonTertiary type="submit">Login/Sign Up</ButtonTertiary>
+          <ButtonWireframe type="submit">Login/Sign Up</ButtonWireframe>
         </form>
         <div className="info">
           Please note this login process does not perform any authentication or
