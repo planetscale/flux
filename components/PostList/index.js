@@ -41,12 +41,17 @@ const Post = styled.a`
   justify-content: space-between;
   color: var(--text-primary);
 
+  > div {
+    border: 1px solid var(--bg-primary);
+  }
+
   margin: 0 0 30px 0;
 
   :hover:not(.loading) {
     cursor: pointer;
 
     > div {
+      border-color: var(--border-primary);
       background-color: var(--bg-secondary);
       box-shadow: var(--layer-shadow);
     }
