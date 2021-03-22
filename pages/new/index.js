@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { ButtonWireframe, ButtonSpecial } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { Icon } from 'pageUtils/post/atoms';
+import { Article } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
@@ -370,13 +370,13 @@ export default function NewPost() {
             ></MarkdownEditor>
           </EditorWrapper>
           <ActionItems>
-            <ButtonSpecial
+            <ButtonWireframe
               onClick={handlePostSubmit}
               disabled={!canSubmitPost()}
             >
-              <Icon className="icon-post"></Icon>
+              <Article />
               Post
-            </ButtonSpecial>
+            </ButtonWireframe>
             <ButtonWireframe onClick={handleCancel}>Cancel</ButtonWireframe>
           </ActionItems>
         </Post>

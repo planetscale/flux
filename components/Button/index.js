@@ -11,12 +11,11 @@ export const ButtonBase = styled.button`
   color: var(--text-secondary);
   border: unset;
   font-size: 1em;
-  height: fit-content;
+  height: 36px;
 
   svg {
     width: 1em;
     height: 1em;
-    margin-right: 0.5em;
   }
 
   ${Icon} {
@@ -86,13 +85,6 @@ export const ButtonSpecial = styled(ButtonBase)`
   ${Icon} {
     background: white;
   }
-`;
-
-export const ButtonLink = styled(ButtonBase)`
-  border: 0;
-  padding: 0;
-  color: var(--text-primary);
-  background-color: unset;
 `;
 
 export const ButtonImage = styled(ButtonBase)`

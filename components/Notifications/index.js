@@ -9,17 +9,10 @@ import Link from 'next/link';
 
 const NotificationButton = styled(ButtonWireframe)`
   &.has-notifications {
-    background: var(--highlight);
-    border-color: var(--highlight);
-    ${Icon} {
-      background-color: white;
-    }
+    background-color: rgb(var(--pink-500));
   }
 
   &:not(.has-notifications) {
-    ${Icon} {
-      background-color: var(--text-primary-primary);
-    }
   }
 `;
 

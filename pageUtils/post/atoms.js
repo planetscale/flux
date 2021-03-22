@@ -8,18 +8,6 @@ const Icon = styled.span`
   -webkit-mask-size: cover;
   -webkit-mask-repeat: no-repeat;
 
-  &.icon-system {
-    mask-image: url('/icon_system.svg');
-  }
-
-  &.icon-light {
-    mask-image: url('/icon_light.svg');
-  }
-
-  &.icon-dark {
-    mask-image: url('/icon_dark.svg');
-  }
-
   &.icon-plus {
     mask-image: url('/icon_plus.svg');
   }
@@ -30,10 +18,6 @@ const Icon = styled.span`
 
   &.icon-post {
     mask-image: url('/icon_post.svg');
-  }
-
-  &.icon-star {
-    mask-image: url('/icon_star.svg');
   }
 
   &.icon-edit {

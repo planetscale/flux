@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
+import { Settings, Moon, Sun } from '@styled-icons/remix-line';
 import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
 import { signOut } from 'next-auth/client';
@@ -42,7 +43,7 @@ const MenuItem = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-primary-primary);
+  color: var(--text-primary);
 `;
 
 const MenuAction = styled(DropdownMenu.SimpleItem)`
@@ -50,7 +51,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-primary-primary);
+  color: var(--text-primary);
 
   &:hover {
     cursor: pointer;
@@ -59,12 +60,12 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
 `;
 
 const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
-  border: 1px solid var(--accent3);
+  border: 1px solid var(--border-primary);
 `;
 
 const StyledRadio = styled(DropdownMenu.RadioItem)`
   appearance: none;
-  background-color: var(--accent2);
+  background-color: var(--border-secondary);
   border: none;
   padding: 8px;
   position: relative;
@@ -73,9 +74,10 @@ const StyledRadio = styled(DropdownMenu.RadioItem)`
   justify-content: center;
   vertical-align: middle;
   outline: 0;
+  color: var(--text-primary);
 
   & ~ & {
-    border-left: 1px solid var(--accent3);
+    border-left: 1px solid var(--border-primary);
   }
 
   &:focus {
@@ -138,15 +140,15 @@ export default function UserSettings({
           >
             <StyledRadio value="system" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-system"></Icon>
+              <Settings />
             </StyledRadio>
             <StyledRadio value="light" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-light"></Icon>
+              <Moon />
             </StyledRadio>
             <StyledRadio value="dark" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-dark"></Icon>
+              <Sun />
             </StyledRadio>
           </StyledRadioGroup>
         </MenuItem>

@@ -22,12 +22,12 @@ export default function AppContentWrapper({ children }) {
       });
     } else if (router.pathname.startsWith('/post')) {
       setHeaders({
-        subHeader: `Posts`,
+        subHeader: `posts`,
         query: `${router.query.id}`,
       });
     } else {
       setHeaders({
-        subHeader: 'Posts',
+        subHeader: 'posts',
       });
     }
     setTag(null);
