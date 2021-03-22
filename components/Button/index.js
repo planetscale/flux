@@ -77,16 +77,6 @@ export const ButtonTertiary = styled(ButtonBase)`
   }
 `;
 
-export const ButtonSpecial = styled(ButtonBase)`
-  background-color: var(--highlight);
-  border-color: var(--highlight);
-  color: var(--pink-500);
-
-  ${Icon} {
-    background: white;
-  }
-`;
-
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
@@ -102,11 +92,6 @@ export const ButtonImage = styled(ButtonBase)`
     width: 32px;
     height: 32px;
   `}
-`;
-
-export const ButtonTag = styled(ButtonBase)`
-  text-transform: lowercase;
-  line-height: 14px;
 `;
 
 export const ButtonComposite = styled.a`

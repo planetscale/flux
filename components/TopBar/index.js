@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import {
   ButtonImage,
   ButtonWireframe,
-  ButtonTag,
+  ButtonSquished,
   ButtonComposite,
 } from 'components/Button';
 import UserIcon from '../UserIcon';
@@ -11,8 +11,7 @@ import { useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
-import { Icon } from 'pageUtils/post/atoms';
-
+import { Add } from '@styled-icons/remix-line';
 import { media } from '../../pageUtils/post/theme';
 import * as DropdownMenu from 'components/DropdownMenu';
 import Notifications from 'components/Notifications';
@@ -191,20 +190,20 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           {selectedTag && (
             <>
               <ForwardSlash>/</ForwardSlash>
-              <ButtonTag
+              <ButtonSquished
                 onClick={() => {
                   setTag(null);
                 }}
               >
                 <span>#{selectedTag.toLowerCase()}</span>
-              </ButtonTag>
+              </ButtonSquished>
             </>
           )}
         </Breadcrumb>
         <ActionsWrapper>
           {notNewPostPage() && (
             <ButtonWireframe type="button" onClick={redirectToNew}>
-              <Icon className="icon-plus"></Icon>
+              <Add />
               <span>Add Post</span>
             </ButtonWireframe>
           )}
