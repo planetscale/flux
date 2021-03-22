@@ -110,7 +110,7 @@ const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 1em;
+  font-size: 20px;
 `;
 
 const PageTitle = styled.div`
