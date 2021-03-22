@@ -10,7 +10,7 @@ const CommentList = styled.ul`
 `;
 
 const PageWrapper = styled.div`
-  padding: 42px 0;
+  padding: 5em 0;
   width: 80ch;
   box-sizing: border-box;
   display: flex;

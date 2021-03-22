@@ -1,33 +1,5 @@
 @import './theme.css';
 
-/* :root {
-  --bg-primary: #fff;
-  --text-primary-primary: #000;
-  --text-primary-blue: #007bc7;
-  --text-primary: rgb(60, 66, 87);
-  --accent: #ccc;
-  --accent2: #eee;
-  --accent3: #f7f7f7;
-  --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
-  --highlight: #fa52a0;
-  --highlight2: #00a3ff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: var(--bg-primary);
-    --text-primary-primary: var(--bg-secondary);
-    --text-primary-blue: var(--text-primary-blue);
-    --text-primary: var(--text-primary-primary);
-    --accent: var(--border-primary);
-    --accent2: var(--border-secondary);
-    --accent3: #0c0c0c;
-    --shadow: 0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);
-    --highlight: #fa52a0;
-    --highlight2: #00a3ff;
-  }
-} */
-
 * {
   box-sizing: border-box;
 }
@@ -57,7 +29,7 @@ p {
 }
 
 a:visited {
-  color: var(--text-primary-blue);
+  color: var(--text-blue);
 }
 
 /* Hack editor's css for user-tagging feature, tried other ways couldn't apply styles*/
@@ -67,7 +39,7 @@ a:visited {
 
 .suggestion-item-active {
   background: var(--highlight);
-  color: var(--text-primary-primary);
+  color: var(--text-primary);
 }
 
 .suggestion-item-list {
@@ -76,7 +48,7 @@ a:visited {
 }
 
 .prosemirror-mention-node {
-  color: var(--text-primary-blue);
+  color: var(--text-blue);
 }
 
 .prosemirror-suggestion {

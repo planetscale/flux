@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 const colors = {
   almostBlack: 'var(--bg-primary)',
   lightBlack: '#2F3336',
-  almostWhite: 'var(--text-primary-primary)',
+  almostWhite: 'var(--text-primary)',
   white: 'var(--bg-primary)',
   white10: 'rgba(255, 255, 255, 0.1)',
   black: '#000',

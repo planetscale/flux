@@ -133,7 +133,7 @@ const customStyles = {
   }),
   indicatorContainer: provided => ({
     ...provided,
-    color: 'var(--text-primary-primary)',
+    color: 'var(--text-primary)',
   }),
   option: provided => ({
     ...provided,

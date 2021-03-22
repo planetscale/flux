@@ -116,7 +116,7 @@ const MetaDate = styled.span`
 `;
 
 const MetaTag = styled.span`
-  color: var(--text-primary-blue);
+  color: var(--text-blue);
   &:hover {
     color: var(--highlight);
   }
@@ -195,7 +195,7 @@ const EmptyMeta = styled.div`
   height: 15px;
 
   &.link {
-    background-color: var(--text-primary-blue);
+    background-color: var(--text-blue);
   }
 `;
 

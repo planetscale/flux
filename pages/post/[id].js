@@ -41,7 +41,7 @@ const Meta = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 
   ${media.phone`
     flex-direction: column-reverse;
@@ -71,12 +71,12 @@ const StyledContent = styled(Tooltip.Content)`
   list-style-type: none;
   border-radius: 10px;
   font-size: 14px;
-  background-color: var(--text-primary-primary);
+  background-color: var(--text-primary);
   color: var(--bg-primary);
 `;
 
 const StyledArrow = styled(Tooltip.Arrow)`
-  fill: var(--text-primary-primary);
+  fill: var(--text-primary);
 `;
 
 export default function PostPage() {

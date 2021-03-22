@@ -55,11 +55,11 @@ export function setTheme(themeName) {
 
   if (themeName === 'system') {
     root.style.removeProperty('--bg-primary');
-    root.style.removeProperty('--text-primary-primary');
+    root.style.removeProperty('--text-primary');
     root.style.removeProperty('--accent');
     root.style.removeProperty('--accent2');
     root.style.removeProperty('--accent3');
-    root.style.removeProperty('--text-primary-blue');
+    root.style.removeProperty('--text-blue');
     root.style.removeProperty('--text-primary');
     root.style.removeProperty('--shadow');
     root.style.removeProperty('--highlight');
@@ -69,16 +69,13 @@ export function setTheme(themeName) {
       theme.colorMode[themeName].background
     );
     root.style.setProperty(
-      '--text-primary-primary',
+      '--text-primary',
       theme.colorMode[themeName].foreground
     );
     root.style.setProperty('--accent', theme.colorMode[themeName].accent);
     root.style.setProperty('--accent2', theme.colorMode[themeName].accent2);
     root.style.setProperty('--accent3', theme.colorMode[themeName].accent3);
-    root.style.setProperty(
-      '--text-primary-blue',
-      theme.colorMode[themeName].link
-    );
+    root.style.setProperty('--text-blue', theme.colorMode[themeName].link);
     root.style.setProperty('--text-primary', theme.colorMode[themeName].text);
     root.style.setProperty('--shadow', theme.colorMode[themeName].shadow);
     root.style.setProperty('--highlight', theme.colorMode[themeName].highlight);
