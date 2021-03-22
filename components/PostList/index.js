@@ -48,6 +48,7 @@ const Post = styled.a`
 
     > div {
       background-color: var(--bg-secondary);
+      box-shadow: var(--tw-shadow);
     }
 
     &:before {
