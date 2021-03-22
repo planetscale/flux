@@ -624,7 +624,7 @@ export default function PostPage() {
                   className={hasStarred ? 'selected' : ''}
                 >
                   {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
-                  <div>{comment.stars.length}</div>
+                  <span>{comment.stars.length}</span>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
@@ -736,7 +736,7 @@ export default function PostPage() {
                 className={hasStarred ? 'selected' : ''}
               >
                 {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
-                <div>{postState.stars.length}</div>
+                <span>{postState.stars.length}</span>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
