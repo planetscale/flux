@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import {
   ButtonImage,
   ButtonWireframe,
-  ButtonLink,
   ButtonTag,
   ButtonComposite,
 } from 'components/Button';
