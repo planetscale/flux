@@ -24,11 +24,7 @@ import {
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
 } from 'pageUtils/post/styles';
-import {
-  ButtonWireframe,
-  ButtonTertiary,
-  ButtonSquished,
-} from 'components/Button';
+import { ButtonWireframe, ButtonSquished } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';

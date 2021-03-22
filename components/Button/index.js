@@ -120,8 +120,6 @@ export const ButtonTag = styled(ButtonBase)`
 export const ButtonComposite = styled.a`
   display: flex;
   flex-direction: row;
-  font-size: 24px;
-  padding: 4px 8px;
   border-radius: 6px;
 
   &:hover:not([disabled]) {
