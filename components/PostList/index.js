@@ -103,10 +103,10 @@ const MetaInformation = styled.div`
   align-items: center;
   font-size: 12px;
   line-height: 15px;
-  color: #666666;
+  color: var(--text-secondary);
 
   .notification {
-    color: #e55e31;
+    color: rgb(var(--green-500));
     font-weight: bold;
   }
 `;
