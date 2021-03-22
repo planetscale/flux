@@ -43,7 +43,7 @@ const TitleInputWrapper = styled.div`
   display: flex;
   margin: 2em 0;
   padding: 8px 0;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
 
   &.invalid {
     border-color: red;
@@ -59,7 +59,7 @@ const TitleInputWrapper = styled.div`
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
       monospace;
     align-items: flex-end;
-    color: var(--accent);
+    color: var(--text-secondary);
     font-size: 12px;
   }
 `;
@@ -74,7 +74,7 @@ const TitleInputBase = `
   color: var(--text-primary);
 
   ::placeholder {
-    color: var(--accent);
+    color: var(--bg-tertiary);
   }
 `;
 
@@ -104,10 +104,9 @@ const ActionItems = styled.div`
 `;
 
 const EditorWrapper = styled.div`
-  margin: 32px 0 0 0;
+  /* margin: 32px 0 0 0; */
   padding: 2em 0;
   height: fit-content;
-  border-top: 1px solid var(--accent2);
 `;
 
 const customStyles = {
@@ -122,8 +121,8 @@ const customStyles = {
     borderStyle: 'unset',
     borderWidth: 'unset',
     boxShadow: 'unset',
-    backgroundColor: 'var(--accent3)',
-    borderRadius: '5px',
+    backgroundColor: 'var(--bg-secondary)',
+    borderRadius: '6px',
   }),
   indicatorSeparator: provided => ({
     ...provided,
@@ -140,7 +139,7 @@ const customStyles = {
     whiteSpace: 'nowrap',
     color: 'var(--text-primary)',
     ':hover': {
-      backgroundColor: 'var(--accent)',
+      backgroundColor: 'var(--bg-tertiary)',
     },
   }),
   singleValue: provided => ({
@@ -150,7 +149,7 @@ const customStyles = {
   menu: provided => ({
     ...provided,
     backgroundColor: 'var(--bg-primary)',
-    border: '1px solid var(--accent)',
+    border: '1px solid var(--bg-tertiary)',
     borderRadius: '8px',
     boxShadow: 'var(--shadow)',
     width: 'unset',
@@ -322,10 +321,10 @@ export default function NewPost() {
                       ...theme,
                       colors: {
                         ...theme.colors,
-                        primary25: 'var(--highlight)',
-                        primary50: 'var(--highlight)',
-                        primary75: 'var(--highlight)',
-                        primary: 'var(--highlight)',
+                        primary25: 'var(--bg-tertiary)',
+                        primary50: 'var(--bg-tertiary)',
+                        primary75: 'var(--bg-tertiary)',
+                        primary: 'var(--bg-tertiary)',
                       },
                     })}
                   />

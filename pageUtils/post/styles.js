@@ -6,7 +6,8 @@ const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: ${props => (props.main ? '1px solid var(--accent2)' : 'none')};
+  border-top: ${props =>
+    props.main ? '1px solid var(--border-primary)' : 'none'};
 `;
 
 const PageWrapper = styled.div`
@@ -30,7 +31,7 @@ const PageWrapper = styled.div`
 
 const PostMetadata = styled.div`
   padding: 0 0 32px 0;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-primary);
 `;
 
 const DateTime = styled.div`
@@ -62,7 +63,7 @@ const Content = styled.div`
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-primary);
   padding: 32px 0;
 
   ${ButtonWireframe} {
@@ -77,7 +78,7 @@ const CommentListItem = styled.li`
 const CommentWrapper = styled.div`
   border-radius: 8px;
   &:hover {
-    background-color: var(--accent2);
+    background-color: var(--border-primary);
 
     .actions {
       opacity: 1;
@@ -125,7 +126,10 @@ const CommentContent = styled.div`
   line-height: 22px;
 `;
 
-const Post = styled.div``;
+const Post = styled.div`
+  position: flex;
+  flex-direction: column;
+`;
 
 const ActionBar = styled.div`
   padding: 16px 0 ${props => (props.comment ? '0' : '16px')};
