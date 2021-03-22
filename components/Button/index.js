@@ -14,8 +14,9 @@ export const ButtonBase = styled.button`
   height: fit-content;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.5em;
   }
 
   ${Icon} {
@@ -45,12 +46,8 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.selected {
-    color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--highlight);
-    }
+    color: rgb(var(--blue-500));
+    background-color: rgb(var(--blue-100));
 
     &:hover:not([disabled]) {
       background-color: var(--highlight);
@@ -84,7 +81,7 @@ export const ButtonTertiary = styled(ButtonBase)`
 export const ButtonSpecial = styled(ButtonBase)`
   background-color: var(--highlight);
   border-color: var(--highlight);
-  color: white;
+  color: var(--pink-500);
 
   ${Icon} {
     background: white;
@@ -126,11 +123,8 @@ export const ButtonComposite = styled.a`
   font-size: 24px;
   padding: 4px 8px;
   border-radius: 6px;
-  transition: all 150ms;
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    background-color: var(--accent3);
-    transform: scale(0.97);
   }
 `;

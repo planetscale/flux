@@ -47,7 +47,7 @@ const Logo = styled.div`
   font-feature-settings: 'liga';
   font-style: italic;
   font-weight: 900;
-  background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
+  background: linear-gradient(90deg, rgb(var(--pink-500)), rgb(var(--blue-500))),
     var(--text-primary);
   background-clip: text;
   background-size: 200% 200%;

@@ -5,6 +5,8 @@ import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Icon } from 'pageUtils/post/atoms';
+import { Star as RemixLineStar } from '@styled-icons/remix-line';
+import { Star as RemixFillStar } from '@styled-icons/remix-fill';
 import {
   PageWrapper,
   PostMetadata,
@@ -625,7 +627,7 @@ export default function PostPage() {
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
                 >
-                  <Icon className="icon-star"></Icon>
+                  {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
                   <div>{comment.stars.length}</div>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
@@ -733,13 +735,11 @@ export default function PostPage() {
             <Tooltip.Root>
               <Tooltip.Trigger
                 as={ButtonWireframe}
-                color="var(--accent)"
-                textColor="white"
                 onClick={() => handleStarClick()}
                 disabled={isLoading}
                 className={hasStarred ? 'selected' : ''}
               >
-                <Icon className="icon-star"></Icon>
+                {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
                 <div>{postState.stars.length}</div>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
