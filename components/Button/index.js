@@ -49,8 +49,8 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.selected {
-    color: rgb(var(--blue-500));
-    background-color: rgb(var(--blue-100));
+    color: rgb(var(--blue-600));
+    background-color: rgb(var(--blue-200));
 
     &:hover:not([disabled]) {
       background-color: var(--highlight);
