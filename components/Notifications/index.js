@@ -2,15 +2,12 @@ import styled from '@emotion/styled';
 import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonBase, ButtonSquished, ButtonTertiary } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { Icon } from 'pageUtils/post/atoms';
+import { Notification2 } from '@styled-icons/remix-line';
 import Link from 'next/link';
 
-const NotificationButton = styled(ButtonBase)`
-  ${Icon} {
-    margin: 0;
-  }
-
+const NotificationButton = styled(ButtonWireframe)`
   &.has-notifications {
     background: var(--highlight);
     border-color: var(--highlight);
@@ -21,7 +18,7 @@ const NotificationButton = styled(ButtonBase)`
 
   &:not(.has-notifications) {
     ${Icon} {
-      background-color: var(--foreground);
+      background-color: var(--text-primary-primary);
     }
   }
 `;
@@ -141,18 +138,18 @@ export default function Notifications() {
         as={DropdownMenu.Trigger}
         className={totalNotifications > 0 ? 'has-notifications' : ''}
       >
-        <Icon className="icon-notification" />
+        <Notification2 />
       </NotificationButton>
       <NotificationContent sideOffset={42}>
         <DropdownMenu.Group>
           <NotificationHeader>
             <h3>Notifications ({totalNotifications})</h3>
-            <ButtonSquished
+            {/* <ButtonSquished
               disabled={!totalNotifications}
               onClick={clearAllNotifications}
             >
               Clear all notifications
-            </ButtonSquished>
+            </ButtonSquished> */}
           </NotificationHeader>
         </DropdownMenu.Group>
         {totalNotifications === 0 && (

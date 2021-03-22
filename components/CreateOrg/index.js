@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   height: fit-content;
   border-radius: 4px;
   box-shadow: var(--shadow);
-  background-color: var(--background);
+  background-color: var(--bg-primary);
 
   ${media.phone`
     border-radius: 0;
@@ -45,14 +45,14 @@ const FormLabelOrganization = styled.div`
 
 const InputWrapper = styled.div`
   position: relative;
-  color: var(--text);
+  color: var(--text-primary);
   border-bottom: 1px solid var(--accent2);
   padding: 32px;
 
   input {
     background-color: unset;
-    color: var(--text);
-    border-bottom: 1px solid var(--background);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--bg-primary);
   }
 
   &:hover {

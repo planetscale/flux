@@ -13,7 +13,7 @@ import CustomLayout from 'components/CustomLayout';
 import { useEffect } from 'react';
 
 const TimeAndTags = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   margin-bottom: 1em;
@@ -43,14 +43,14 @@ const TitleInputWrapper = styled.div`
   display: flex;
   margin: 2em 0;
   padding: 8px 0;
-  border-bottom: 1px solid var(--background);
+  border-bottom: 1px solid var(--bg-primary);
 
   &.invalid {
     border-color: red;
   }
 
   &.valid {
-    border-color: var(--background);
+    border-color: var(--bg-primary);
   }
 
   .chars-left {
@@ -71,7 +71,7 @@ const TitleInputBase = `
   word-break: break-word;
   overflow: hidden;
   width: 100%;
-  color: var(--text);
+  color: var(--text-primary);
 
   ::placeholder {
     color: var(--accent);
@@ -91,7 +91,7 @@ const SubtitleInput = styled.textarea`
   font-size: 18px;
   line-height: 22px;
   word-break: break-word;
-  background-color: var(--background);
+  background-color: var(--bg-primary);
 `;
 
 const ActionItems = styled.div`
@@ -127,29 +127,29 @@ const customStyles = {
   }),
   indicatorSeparator: provided => ({
     ...provided,
-    backgroundColor: 'var(--background)',
+    backgroundColor: 'var(--bg-primary)',
     marginBottom: '0',
     marginTop: '0',
   }),
   indicatorContainer: provided => ({
     ...provided,
-    color: 'var(--foreground)',
+    color: 'var(--text-primary-primary)',
   }),
   option: provided => ({
     ...provided,
     whiteSpace: 'nowrap',
-    color: 'var(--text)',
+    color: 'var(--text-primary)',
     ':hover': {
       backgroundColor: 'var(--accent)',
     },
   }),
   singleValue: provided => ({
     ...provided,
-    color: 'var(--text)',
+    color: 'var(--text-primary)',
   }),
   menu: provided => ({
     ...provided,
-    backgroundColor: 'var(--background)',
+    backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--accent)',
     borderRadius: '8px',
     boxShadow: 'var(--shadow)',

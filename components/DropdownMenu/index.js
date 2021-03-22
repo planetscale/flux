@@ -3,7 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const Content = styled(DropdownMenu.Content)`
   background: var(--accent3);
-  color: var(--text);
+  color: var(--text-primary);
   border-radius: 4px;
   box-sizing: border-box;
   display: flex;

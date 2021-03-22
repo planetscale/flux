@@ -4,7 +4,7 @@ const Icon = styled.span`
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: var(--foreground);
+  background: var(--text-primary);
   -webkit-mask-size: cover;
   -webkit-mask-repeat: no-repeat;
 

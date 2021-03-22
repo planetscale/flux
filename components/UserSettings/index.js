@@ -29,7 +29,7 @@ const UserNameContainer = styled.div`
 const UserName = styled.p`
   margin: 0;
   font-size: 24px;
-  color: var(--text);
+  color: var(--text-primary);
 `;
 
 const UserNickname = styled.p`
@@ -42,7 +42,7 @@ const MenuItem = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--foreground);
+  color: var(--text-primary-primary);
 `;
 
 const MenuAction = styled(DropdownMenu.SimpleItem)`
@@ -50,7 +50,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--foreground);
+  color: var(--text-primary-primary);
 
   &:hover {
     cursor: pointer;

@@ -3,19 +3,20 @@ import { media } from '../../pageUtils/post/theme';
 import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
-  box-sizing: content-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 8px 16px;
-  text-transform: capitalize;
-  border-radius: 99px;
-  background-color: var(--background);
-  color: var(--text);
-  border: 2px solid var(--foreground);
-  transition: all 150ms;
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  border: unset;
   font-size: 1em;
   height: fit-content;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 
   ${Icon} {
     width: 20px;
@@ -25,7 +26,6 @@ export const ButtonBase = styled.button`
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    transform: scale(0.97);
   }
 
   &:focus {
@@ -38,15 +38,10 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  border-color: ${props => props.color || 'var(--foreground)'};
+  background-color: var(--bg-secondary);
 
   &:hover:not([disabled]) {
-    background-color: ${props => props.color || 'var(--foreground)'};
-    color: ${props => props.textColor || 'var(--background)'};
-
-    ${Icon} {
-      background: ${props => props.textColor || 'var(--background)'};
-    }
+    background-color: var(--bg-tertiary);
   }
 
   &.selected {
@@ -72,12 +67,12 @@ export const ButtonTertiary = styled(ButtonBase)`
   border: 1px solid var(--accent);
 
   &:hover:not([disabled]) {
-    color: var(--background);
+    color: var(--bg-primary);
     background-color: var(--highlight);
     border-color: var(--highlight);
 
     ${Icon} {
-      background: var(--background);
+      background: var(--bg-primary);
     }
   }
 
@@ -99,15 +94,15 @@ export const ButtonSpecial = styled(ButtonBase)`
 export const ButtonLink = styled(ButtonBase)`
   border: 0;
   padding: 0;
-  color: var(--text);
+  color: var(--text-primary);
   background-color: unset;
 `;
 
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
 
   > img {
     width: 100%;

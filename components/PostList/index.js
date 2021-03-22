@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   width: 80ch;
   padding: 48px 16px;
   box-sizing: border-box;
-  border-left: 1px solid var(--accent2);
+  border-left: 1px solid var(--border-primary);
 
   ${media.phone`
     width: 95%;
@@ -39,6 +39,7 @@ const Post = styled.a`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: var(--text-primary);
 
   margin: 0 0 30px 0;
 
@@ -46,11 +47,11 @@ const Post = styled.a`
     cursor: pointer;
 
     > div {
-      background-color: var(--accent2);
+      background-color: var(--bg-secondary);
     }
 
     &:before {
-      background-color: var(--highlight);
+      background-color: var(--text-blue);
       transform: scale(1.2);
     }
   }
@@ -70,10 +71,10 @@ const Post = styled.a`
     display: block;
     position: absolute;
     border-radius: 50%;
-    border: 8px solid var(--background);
+    border: 8px solid var(--bg-primary);
     width: 8px;
     height: 8px;
-    background-color: var(--accent);
+    background-color: var(--border-primary);
     top: 20px;
     left: -28px;
     transition: background-color 150ms;
@@ -114,7 +115,7 @@ const MetaDate = styled.span`
 `;
 
 const MetaTag = styled.span`
-  color: var(--link);
+  color: var(--text-primary-blue);
   &:hover {
     color: var(--highlight);
   }
@@ -123,7 +124,7 @@ const MetaTag = styled.span`
 const PostTitle = styled.h2`
   margin: 0;
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 32px;
 
   &:first-letter {
@@ -132,7 +133,7 @@ const PostTitle = styled.h2`
 `;
 
 const PostSubTitle = styled.p`
-  color: var(--text);
+  color: var(--text-primary);
   margin: 0;
   font-size: 16px;
 
@@ -144,7 +145,7 @@ const PostSubTitle = styled.p`
 const DemarcationString = styled.div`
   display: inline-block;
   position: relative;
-  background-color: var(--background);
+  background-color: var(--bg-primary);
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
@@ -193,7 +194,7 @@ const EmptyMeta = styled.div`
   height: 15px;
 
   &.link {
-    background-color: var(--link);
+    background-color: var(--text-primary-blue);
   }
 `;
 

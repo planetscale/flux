@@ -23,12 +23,12 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-primary);
   padding: 30px;
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: var(--background);
+  background-color: var(--bg-primary);
   opacity: 0.95;
 
   ${media.phone`
@@ -48,7 +48,7 @@ const Logo = styled.div`
   font-style: italic;
   font-weight: 900;
   background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
-    var(--text);
+    var(--text-primary);
   background-clip: text;
   background-size: 200% 200%;
 
@@ -133,7 +133,7 @@ const Breadcrumb = styled.div`
 `;
 
 const PageTitle = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
 `;
 
 const ActionsWrapper = styled.div`
@@ -190,9 +190,12 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
       <Breadcrumb>
         <ButtonComposite onClick={redirectToHome}>
           <Logo>flux</Logo>
-          {header && <>
-          <ForwardSlash>/</ForwardSlash>
-          <Organization>{header}</Organization></>}
+          {header && (
+            <>
+              <ForwardSlash>/</ForwardSlash>
+              <Organization>{header}</Organization>
+            </>
+          )}
         </ButtonComposite>
         <ForwardSlash>/</ForwardSlash>
         <PageTitle>{subHeader}</PageTitle>
@@ -219,7 +222,7 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
         {notNewPostPage() && (
           <ButtonWireframe type="button" onClick={redirectToNew}>
             <Icon className="icon-plus"></Icon>
-            <span>Add Update</span>
+            <span>Add Post</span>
           </ButtonWireframe>
         )}
 

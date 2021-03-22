@@ -37,11 +37,11 @@ const DateTime = styled.div`
   height: 19px;
   font-size: 16px;
   line-height: 19px;
-  color: var(--text);
+  color: var(--text-primary);
 `;
 
 const Title = styled.h1`
-  color: var(--text);
+  color: var(--text-primary);
   margin: 8px 0 24px 0;
   font-weight: bold;
   font-size: 48px;
@@ -58,7 +58,7 @@ const Title = styled.h1`
 `;
 
 const Content = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.02em;
@@ -89,7 +89,7 @@ const CommentWrapper = styled.div`
 const Comment = styled.div`
   position: relative;
   padding: 0 24px;
-  color: var(--text);
+  color: var(--text-primary);
 
   &.level0 {
     border-left: 2px solid #9096ad;
@@ -121,7 +121,7 @@ const Reply = styled.div`
 const CommentContent = styled.div`
   margin: 16px 0 0;
   font-size: 18px;
-  color: var(--text);
+  color: var(--text-primary);
   line-height: 22px;
 `;
 
