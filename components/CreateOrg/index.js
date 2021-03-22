@@ -9,19 +9,11 @@ import { useUserActions } from 'state/user';
 const Wrapper = styled.div`
   width: 100%;
   max-width: 480px;
-  height: fit-content;
-  border-radius: 4px;
-  box-shadow: var(--tw-shadow);
-  background-color: var(--bg-secondary);
-
-  ${media.phone`
-    border-radius: 0;
-  `}
 
   .profile-header {
-    padding: 32px;
+    padding: 1em 0;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -45,9 +37,11 @@ const FormLabelOrganization = styled.div`
 
 const InputWrapper = styled.div`
   position: relative;
+  background-color: var(--bg-secondary);
   color: var(--text-primary);
-  border-bottom: 1px solid var(--border-secondary);
-  padding: 32px;
+  margin-bottom: 1em;
+  padding: 16px;
+  border-radius: 6px;
 
   input {
     background-color: unset;
@@ -57,10 +51,11 @@ const InputWrapper = styled.div`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-tertiary);
 
     input {
-      background-color: var(--bg-secondary);
+      border-color: var(--bg-tertiary);
+      background-color: var(--bg-tertiary);
     }
   }
 
@@ -92,16 +87,6 @@ const InputWrapper = styled.div`
       border-bottom: 1px solid red;
     }
   }
-`;
-
-const ButtonWrapper = styled.div`
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  padding: 32px;
-
-  ${media.phone`
-    border-radius: 0;
-  `}
 `;
 
 export default function CreateOrg({ name, email, avatar }) {
@@ -201,15 +186,14 @@ export default function CreateOrg({ name, email, avatar }) {
           onChange={handleNameChange}
         />
       </InputWrapper>
-      <ButtonWrapper>
-        <ButtonWireframe
-          type="submit"
-          onClick={state.name && state.userName ? handleNextClick : null}
-          disabled={!(state.name && state.userName)}
-        >
-          Next
-        </ButtonWireframe>
-      </ButtonWrapper>
+
+      <ButtonWireframe
+        type="submit"
+        onClick={state.name && state.userName ? handleNextClick : null}
+        disabled={!(state.name && state.userName)}
+      >
+        Next
+      </ButtonWireframe>
     </Wrapper>
   );
 }

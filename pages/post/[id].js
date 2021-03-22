@@ -5,7 +5,11 @@ import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Icon } from 'pageUtils/post/atoms';
-import { Star as RemixLineStar } from '@styled-icons/remix-line';
+import {
+  Star as RemixLineStar,
+  Chat1 as Chat,
+  Pencil,
+} from '@styled-icons/remix-line';
 import { Star as RemixFillStar } from '@styled-icons/remix-fill';
 import {
   PageWrapper,
@@ -571,7 +575,7 @@ export default function PostPage() {
                   onClick={handleCommentEditSubmit}
                   disabled={!canSubmit(commentInputs.edits[comment.id])}
                 >
-                  <Icon className="icon-edit"></Icon>
+                  <Pencil />
                   Update
                 </ButtonWireframe>
               </Reply>
@@ -608,7 +612,7 @@ export default function PostPage() {
                   onClick={handleCommentReplySubmit}
                   disabled={!canSubmit(commentInputs.replies[comment.id])}
                 >
-                  <Icon className="icon-comment"></Icon>
+                  <Chat />
                   Reply
                 </ButtonWireframe>
               </Reply>
@@ -715,7 +719,7 @@ export default function PostPage() {
                   onClick={handlePostEditSubmit}
                   disabled={!canSubmit(postEditState.content)}
                 >
-                  <Icon className="icon-edit"></Icon>
+                  <Pencil />
                   Update
                 </ButtonWireframe>
               </>
@@ -774,7 +778,7 @@ export default function PostPage() {
             onClick={handleCommentSubmit}
             disabled={!canSubmit(reply)}
           >
-            <Icon className="icon-comment"></Icon>
+            <Chat />
             Reply
           </ButtonWireframe>
         </Reply>

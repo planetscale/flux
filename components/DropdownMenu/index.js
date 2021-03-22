@@ -2,13 +2,13 @@ import styled from '@emotion/styled';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const Content = styled(DropdownMenu.Content)`
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   color: var(--text-primary);
+  border: 1px solid var(--border-primary);
   border-radius: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--tw-shadow);
   padding: 0 0 8px;
 `;
 
