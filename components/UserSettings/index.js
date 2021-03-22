@@ -14,12 +14,6 @@ const UserInfo = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  > img {
-    width: 42px;
-    height: 42px;
-    margin-right: 16px;
-  }
 `;
 
 const UserNameContainer = styled.div`
@@ -27,15 +21,14 @@ const UserNameContainer = styled.div`
   flex-direction: column;
 `;
 
-const UserName = styled.p`
-  margin: 0;
-  font-size: 24px;
+const UserName = styled.div`
+  font-size: 20px;
   color: var(--text-primary);
 `;
 
-const UserNickname = styled.p`
-  margin: 0;
-  color: #666;
+const UserNickname = styled.div`
+  font-size: 14px;
+  color: var(--text-secondary);
 `;
 
 const MenuItem = styled(DropdownMenu.SimpleItem)`
@@ -55,7 +48,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--accent2);
+    background-color: var(--bg-tertiary);
   }
 `;
 
