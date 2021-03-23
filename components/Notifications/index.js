@@ -22,6 +22,10 @@ const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   justify-content: space-between;
 `;
 
+const NotificationHeaderTitle = styled.div`
+  font-size: var(--fs-base);
+`;
+
 const NotificationContent = styled(DropdownMenu.Content)`
   width: 500px;
   max-height: 80vh;
@@ -155,7 +159,9 @@ export default function Notifications() {
           <Fragment>
             <DropdownMenu.Group>
               <NotificationHeader>
-                <h3>Notifications ({totalNotifications})</h3>
+                <NotificationHeaderTitle>
+                  Notifications ({totalNotifications})
+                </NotificationHeaderTitle>
                 <ButtonWireframe
                   disabled={!totalNotifications}
                   onClick={clearAllNotifications}
