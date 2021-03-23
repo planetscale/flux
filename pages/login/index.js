@@ -35,7 +35,7 @@ const LogoColumn = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: url('/bg_starfield.png') var(--bg-primary);
+  background: url('/bg_starfield.svg') var(--gray-900);
   border-left: 1px solid var(--border-primary);
 `;
 

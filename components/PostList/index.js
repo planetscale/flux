@@ -109,7 +109,7 @@ const MetaInformation = styled.div`
   color: var(--text-secondary);
 
   .notification {
-    color: rgb(var(--green-500));
+    color: rgb(var(--green-400));
     font-weight: bold;
   }
 `;
