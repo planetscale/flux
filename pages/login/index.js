@@ -84,8 +84,7 @@ export default function Login({ providers }) {
               })}
             </LogoContainer>
           )}
-          {/* {!session && !loading && loaded && !user?.org && ( */}
-          {session && (
+          {!session && !loading && loaded && !user?.org && (
             <CreateOrg
               name={session?.user?.name}
               email={session?.user?.email}

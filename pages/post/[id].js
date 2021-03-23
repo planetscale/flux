@@ -685,9 +685,9 @@ export default function PostPage() {
               </MetaData>
               <MetaActions>
                 {userContext.user.id === authorId && (
-                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
+                  <ButtonSquished type="submit" onClick={togglePostEdit}>
                     {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonWireframe>
+                  </ButtonSquished>
                 )}
               </MetaActions>
             </Meta>

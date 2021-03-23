@@ -28,6 +28,7 @@ p {
   overflow-wrap: break-word;
 }
 
+a,
 a:visited {
   color: var(--text-blue);
 }

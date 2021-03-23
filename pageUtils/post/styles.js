@@ -152,6 +152,60 @@ const CommentActionButtonGroup = styled.div`
   }
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  margin-bottom: 1em;
+  padding: 16px;
+  border-radius: 6px;
+
+  input {
+    background-color: unset;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--bg-secondary);
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bg-tertiary);
+
+    input {
+      border-color: var(--bg-tertiary);
+      background-color: var(--bg-tertiary);
+    }
+  }
+
+  &.disabled {
+    cursor: default;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+
+    input {
+      color: rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0);
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+
+      input {
+        background-color: rgba(255, 255, 255, 0);
+      }
+    }
+
+    ${media.phone`
+      border-radius: 0;
+    `}
+  }
+
+  &.error {
+    input {
+      border-bottom: 1px solid red;
+    }
+  }
+`;
+
 export {
   PageWrapper,
   Content,
@@ -168,4 +222,5 @@ export {
   ActionBar,
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
+  InputWrapper,
 };
