@@ -357,16 +357,17 @@ export default function PostList({ posts = [], handleTagClick }) {
                       )}
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
-                      {notificationLookup[id] && (
-                        <>
-                          <div className="notification">
-                            {!notificationLookup[id].isNewPost &&
-                            notificationLookup[id].numNewReplies >= 1
-                              ? '<span>&nbsp; &middot; &nbsp;</span> New Comments'
-                              : ''}
-                          </div>
-                        </>
-                      )}
+                      {notificationLookup[id] &&
+                        notificationLookup[id].numNewReplies && (
+                          <>
+                            <span>&nbsp; &middot; &nbsp;</span>
+                            <div className="notification">
+                              {notificationLookup[id].numNewReplies > 1
+                                ? 'New Comments'
+                                : 'New Comment'}
+                            </div>
+                          </>
+                        )}
                     </MetaInformation>
                     <PostTitle>{title}</PostTitle>
                     <PostSubTitle>{summary}</PostSubTitle>
