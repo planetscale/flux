@@ -69,10 +69,13 @@ export default function Login({ providers }) {
           {!session && (
             <LogoContainer>
               <Logo src="/logo_flux.svg" alt="Flux logo"></Logo>
-              {Object.values(providers).map(provider => {
+              {Object.values(providers).reduce((accumulator, provider) => {
                 const AuthLogin = AuthProviderLogins[provider.name];
-                return <AuthLogin key={provider.name} />;
-              })}
+                if (AuthLogin) {
+                  accumulator.push(<AuthLogin key={provider.name} />);
+                }
+                return accumulator;
+              }, [])}
             </LogoContainer>
           )}
           {session && !loading && loaded && !user?.org && (
