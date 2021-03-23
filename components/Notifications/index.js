@@ -9,7 +9,8 @@ import { Fragment } from 'react/cjs/react.production.min';
 
 const NotificationButton = styled(ButtonWireframe)`
   &.has-notifications {
-    background-color: rgb(var(--pink-500));
+    background-color: rgba(var(--green-500), 0.15);
+    color: rgb(var(--green-500));
   }
 
   &:not(.has-notifications) {
