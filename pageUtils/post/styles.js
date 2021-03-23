@@ -6,10 +6,12 @@ const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid var(--border-primary);
+  padding-top: 2em;
 `;
 
 const PageWrapper = styled.div`
-  padding: 5em 0;
+  padding: 4em 0 3em;
   width: 80ch;
   box-sizing: border-box;
   display: flex;
@@ -57,7 +59,6 @@ const Content = styled.div`
   font-size: var(--fs-base);
   line-height: 28px;
   letter-spacing: 0.02em;
-  /* border-bottom: 1px solid var(--border-primary); */
   padding: 32px 0;
 
   ${ButtonWireframe} {
@@ -66,7 +67,7 @@ const Content = styled.div`
 `;
 
 const CommentListItem = styled.li`
-  padding: 0px 24px;
+  padding: 0px;
 `;
 
 const CommentWrapper = styled.div`
@@ -78,7 +79,7 @@ const CommentWrapper = styled.div`
       opacity: 1;
     }
   }
-  padding: 24px;
+  padding: 0 0 4em;
 `;
 
 const Comment = styled.div`

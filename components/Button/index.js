@@ -52,6 +52,25 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 `;
 
+export const ButtonSquished = styled(ButtonBase)`
+  height: 30px;
+  padding: 8px 12px;
+  background-color: var(--bg-secondary);
+
+  &:hover:not([disabled]) {
+    background-color: var(--bg-tertiary);
+  }
+
+  &.selected {
+    color: rgb(var(--white));
+    background-color: rgb(var(--blue-500));
+
+    &:hover:not([disabled]) {
+      background-color: rgb(var(--blue-500));
+    }
+  }
+`;
+
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
