@@ -78,10 +78,13 @@ export default function Login({ providers }) {
         <ContentContainer>
           {!session && (
             <LogoContainer>
-              {Object.values(providers).map(provider => {
+              {Object.values(providers).reduce((accumulator, provider) => {
                 const AuthLogin = AuthProviderLogins[provider.name];
-                return <AuthLogin key={provider.name} />;
-              })}
+                if (AuthLogin) {
+                  accumulator.push(<AuthLogin key={provider.name} />);
+                }
+                return accumulator;
+              }, [])}
             </LogoContainer>
           )}
           {session && !loading && loaded && !user?.org && (
