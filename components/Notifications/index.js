@@ -38,6 +38,10 @@ const NotificationWrapper = styled.div`
   align-items: center;
   padding: 1em;
 
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-primary);
+  }
+
   &:hover {
     cursor: pointer;
     background-color: var(--bg-secondary);
@@ -57,8 +61,7 @@ const NotificationItem = styled(DropdownMenu.Item)`
   }
 
   .title {
-    font-weight: bold;
-    font-size: 18px;
+    font-size: 1em;
   }
 `;
 
