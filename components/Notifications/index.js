@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import * as DropdownMenu from 'components/DropdownMenu';
 import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
-import { ButtonWireframe, ButtonSquished } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { Notification2, Close } from '@styled-icons/remix-line';
 import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';
@@ -52,6 +52,7 @@ const NotificationItem = styled(DropdownMenu.Item)`
     padding-bottom: 4px;
     font-size: 14px;
   }
+
   .title {
     font-weight: bold;
     font-size: 18px;
@@ -63,8 +64,9 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-style: italic;
   outline: none;
+  font-size: 14px;
+  font-weight: 300;
 `;
 
 const HoverIcon = styled(Close)`
@@ -134,23 +136,23 @@ export default function Notifications() {
         <Notification2 />
       </NotificationButton>
       <NotificationContent sideOffset={42}>
-        <DropdownMenu.Group>
-          <NotificationHeader>
-            <h3>Notifications ({totalNotifications})</h3>
-            <ButtonSquished
-              disabled={!totalNotifications}
-              onClick={clearAllNotifications}
-            >
-              Clear all notifications
-            </ButtonSquished>
-          </NotificationHeader>
-        </DropdownMenu.Group>
         {totalNotifications === 0 ? (
           <DropdownMenu.Group>
             <EmptyNotificationItem>No new notifications</EmptyNotificationItem>
           </DropdownMenu.Group>
         ) : (
           <Fragment>
+            <DropdownMenu.Group>
+              <NotificationHeader>
+                <h3>Notifications ({totalNotifications})</h3>
+                <ButtonWireframe
+                  disabled={!totalNotifications}
+                  onClick={clearAllNotifications}
+                >
+                  Clear all notifications
+                </ButtonWireframe>
+              </NotificationHeader>
+            </DropdownMenu.Group>
             <DropdownMenu.Group>
               {newPosts.map(notification => {
                 return (

@@ -51,11 +51,6 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 `;
 
-export const ButtonSquished = styled(ButtonWireframe)`
-  padding: 4px 16px;
-  font-size: 0.9em;
-`;
-
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
@@ -77,6 +72,7 @@ export const ButtonComposite = styled.a`
   display: flex;
   flex-direction: row;
   border-radius: 6px;
+  color: var(--text-primary);
 
   &:hover:not([disabled]) {
     cursor: pointer;

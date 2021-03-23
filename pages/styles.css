@@ -56,3 +56,8 @@ a:visited {
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid #999;
 }
+
+/* hack: remove trigger icon from markdown editor */
+.block-menu-trigger {
+  display: none !important;
+}

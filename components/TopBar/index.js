@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import {
   ButtonImage,
   ButtonWireframe,
-  ButtonSquished,
   ButtonComposite,
 } from 'components/Button';
 import UserIcon from '../UserIcon';
@@ -190,13 +189,13 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           {selectedTag && (
             <>
               <ForwardSlash>/</ForwardSlash>
-              <ButtonSquished
+              <ButtonWireframe
                 onClick={() => {
                   setTag(null);
                 }}
               >
                 <span>#{selectedTag.toLowerCase()}</span>
-              </ButtonSquished>
+              </ButtonWireframe>
             </>
           )}
         </Breadcrumb>

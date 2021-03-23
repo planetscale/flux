@@ -26,8 +26,9 @@ import {
   ActionBar,
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
+  ReplyActionBar,
 } from 'pageUtils/post/styles';
-import { ButtonWireframe, ButtonSquished } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -526,7 +527,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonSquished
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -534,10 +535,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonSquished>
+                </ButtonWireframe>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonSquished
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -547,7 +548,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonSquished>
+                </ButtonWireframe>
               )}
             </CommentActionButtonGroup>
 
@@ -612,7 +613,7 @@ export default function PostPage() {
                   disabled={!canSubmit(commentInputs.replies[comment.id])}
                 >
                   <Chat />
-                  Reply
+                  <span>Reply</span>
                 </ButtonWireframe>
               </Reply>
             )}
@@ -685,9 +686,9 @@ export default function PostPage() {
               </MetaData>
               <MetaActions>
                 {userContext.user.id === authorId && (
-                  <ButtonSquished type="submit" onClick={togglePostEdit}>
+                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
                     {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonSquished>
+                  </ButtonWireframe>
                 )}
               </MetaActions>
             </Meta>
@@ -772,14 +773,16 @@ export default function PostPage() {
               handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
             }}
           ></MarkdownEditor>
-          <ButtonWireframe
-            type="submit"
-            onClick={handleCommentSubmit}
-            disabled={!canSubmit(reply)}
-          >
-            <Chat />
-            Reply
-          </ButtonWireframe>
+          <ReplyActionBar>
+            <ButtonWireframe
+              type="submit"
+              onClick={handleCommentSubmit}
+              disabled={!canSubmit(reply)}
+            >
+              <Chat />
+              <span>Reply</span>
+            </ButtonWireframe>
+          </ReplyActionBar>
         </Reply>
       </PageWrapper>
     </CustomLayout>

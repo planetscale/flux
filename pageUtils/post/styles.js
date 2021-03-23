@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { ButtonSquished, ButtonWireframe } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
 const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: ${props =>
-    props.main ? '1px solid var(--border-primary)' : 'none'};
 `;
 
 const PageWrapper = styled.div`
@@ -111,12 +109,15 @@ const Reply = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding: 1em 0;
-  border-top: 1px solid var(--accent2);
+  padding: 2em;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+`;
 
-  ${ButtonWireframe} {
-    margin: 24px 0 0 0;
-  }
+const ReplyActionBar = styled.div`
+  width: 100%;
+  margin-top: 1em;
+  padding-top: 1em;
 `;
 
 const CommentContent = styled.div`
@@ -147,7 +148,7 @@ const CommentActionButtonGroup = styled.div`
   right: 0;
   display: flex;
 
-  ${ButtonSquished}:nth-of-type(2) {
+  ${ButtonWireframe}:nth-of-type(2) {
     margin-left: 8px;
   }
 `;
@@ -214,6 +215,7 @@ export {
   CommentWrapper,
   Comment,
   Reply,
+  ReplyActionBar,
   PostMetadata,
   DateTime,
   Title,
