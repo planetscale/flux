@@ -11,7 +11,7 @@ const UserMetadata = styled.div`
   display: flex;
   flex-direction: column;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
 
   div:first-of-type {
     white-space: nowrap;

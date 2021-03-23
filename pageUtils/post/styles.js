@@ -39,7 +39,7 @@ const Title = styled.h1`
   color: var(--text-primary);
   margin: 8px 0 24px 0;
   font-weight: bold;
-  font-size: 48px;
+  font-size: var(--fs-base-plus-4);
   line-height: 58px;
 
   &:first-letter {
@@ -47,17 +47,17 @@ const Title = styled.h1`
   }
 
   ${media.phone`
-    font-size: 32px;
+    font-size: var(--fs-base-plus-3);
     margin: 0.5em 0;
   `}
 `;
 
 const Content = styled.div`
   color: var(--text-primary);
-  font-size: 18px;
+  font-size: var(--fs-base);
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--border-primary);
+  /* border-bottom: 1px solid var(--border-primary); */
   padding: 32px 0;
 
   ${ButtonWireframe} {
@@ -118,7 +118,7 @@ const ReplyActionBar = styled.div`
 
 const CommentContent = styled.div`
   margin: 16px 0 0;
-  font-size: 18px;
+  font-size: var(--fs-base);
   color: var(--text-primary);
   line-height: 22px;
 `;
@@ -198,7 +198,7 @@ const InputWrapper = styled.div`
 
   &.error {
     input {
-      border-bottom: 1px solid red;
+      border-bottom: 1px solid var(--red-500);
     }
   }
 `;

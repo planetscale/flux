@@ -5,20 +5,12 @@ const NamePlateWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  font-size: var(--fs-base-minus-1);
+  color: var(--text-secondary);
 
   > img {
     margin-right: 16px;
   }
-`;
-
-const Name = styled.span`
-  font-size: 14px;
-  color: #666;
-`;
-
-const Date = styled.span`
-  font-size: 14px;
-  color: #666;
 `;
 
 export default function CommenterNamePlate({
@@ -36,9 +28,9 @@ export default function CommenterNamePlate({
         height="32px"
         alt={`${displayName}'s profile picture`}
       />
-      <Name>{displayName}</Name>
+      <span>{displayName}</span>
       <span>&nbsp; &middot; &nbsp;</span>
-      <Date>{date}</Date>
+      <span>{date}</span>
     </NamePlateWrapper>
   );
 }

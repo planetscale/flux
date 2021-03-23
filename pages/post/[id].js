@@ -74,7 +74,7 @@ const StyledContent = styled(Tooltip.Content)`
   margin: 0;
   list-style-type: none;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   background-color: var(--text-primary);
   color: var(--bg-primary);
 `;

@@ -76,6 +76,14 @@
   --logoCompany: url('/logo_planetscale_light.svg');
 
   --border-radius: 99px;
+
+  --fs-base-minus-2: 12px;
+  --fs-base-minus-1: 14px;
+  --fs-base: 1em;
+  --fs-base-plus-1: 20px;
+  --fs-base-plus-2: 24px;
+  --fs-base-plus-3: 32px;
+  --fs-base-plus-4: 42px;
 }
 
 @define-mixin darkmode {

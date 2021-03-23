@@ -38,7 +38,7 @@ const Constrain = styled.div`
 
 const Logo = styled.div`
   letter-spacing: -1px;
-  font-size: 1em;
+  font-size: var(--fs-base);
   border-radius: unset;
   padding: 0 4px;
   font-family: 'Raleway', sans-serif;
@@ -94,7 +94,7 @@ const Logo = styled.div`
   }
 
   ${media.phone`
-    font-size: 1em;
+    font-size: var(--fs-base);
   `}
 `;
 
@@ -109,7 +109,7 @@ const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 20px;
+  font-size: var(--fs-base-plus-1);
 `;
 
 const PageTitle = styled.div`

@@ -84,6 +84,12 @@ const Post = styled.a`
     top: 20px;
     left: -28px;
   }
+
+  &.new {
+    &:before {
+      background-color: rgb(var(--green-500));
+    }
+  }
 `;
 
 const PostWrapper = styled.div`
@@ -104,13 +110,11 @@ const MetaInformation = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 12px;
-  line-height: 15px;
+  font-size: var(--fs-base-minus-2);
   color: var(--text-secondary);
 
   .notification {
     color: rgb(var(--green-400));
-    font-weight: bold;
   }
 `;
 
@@ -127,9 +131,8 @@ const MetaTag = styled.span`
 
 const PostTitle = styled.h2`
   margin: 0;
-  font-weight: 700;
   color: var(--text-primary);
-  font-size: 32px;
+  font-size: var(--fs-base-plus-2);
 
   &:first-letter {
     text-transform: uppercase;
@@ -139,7 +142,7 @@ const PostTitle = styled.h2`
 const PostSubTitle = styled.p`
   color: var(--text-primary);
   margin: 0;
-  font-size: 16px;
+  font-size: var(--fs-base);
 
   &:first-letter {
     text-transform: uppercase;
@@ -149,11 +152,10 @@ const PostSubTitle = styled.p`
 const DemarcationString = styled.div`
   display: inline-block;
   position: relative;
-  background-color: var(--bg-primary);
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
-  color: var(--border-primary);
+  color: var(--text-secondary);
 
   &:before {
     content: ' ';
@@ -174,8 +176,8 @@ const EmptyDemarcationString = styled.div`
   margin-bottom: 2em;
 
   > div {
-    color: var(--border-primary);
-    background-color: var(--border-primary);
+    color: var(--text-secondary);
+    background-color: var(--text-secondary);
     width: 100%;
     border-radius: 8px;
   }
@@ -333,7 +335,14 @@ export default function PostList({ posts = [], handleTagClick }) {
               </DemarcationString>
             )}
             <Link href={`/post/${id}`} passHref>
-              <Post onClick={e => handleClick(e, tag?.name)}>
+              <Post
+                onClick={e => handleClick(e, tag?.name)}
+                className={
+                  notificationLookup[id] && notificationLookup[id].isNewPost
+                    ? 'new'
+                    : ''
+                }
+              >
                 <PostWrapper>
                   <PostInfo>
                     <MetaInformation>
@@ -350,17 +359,11 @@ export default function PostList({ posts = [], handleTagClick }) {
                       <span>{author?.displayName}</span>
                       {notificationLookup[id] && (
                         <>
-                          <span>&nbsp; &middot; &nbsp;</span>
                           <div className="notification">
-                            {notificationLookup[id].isNewPost
-                              ? 'New'
-                              : `${
-                                  notificationLookup[id].numNewReplies
-                                } New Comment${
-                                  notificationLookup[id].numNewReplies > 1
-                                    ? 's'
-                                    : ''
-                                }`}
+                            {!notificationLookup[id].isNewPost &&
+                            notificationLookup[id].numNewReplies >= 1
+                              ? '<span>&nbsp; &middot; &nbsp;</span> New Comments'
+                              : ''}
                           </div>
                         </>
                       )}

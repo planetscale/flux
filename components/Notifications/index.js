@@ -53,12 +53,12 @@ const NotificationItem = styled(DropdownMenu.Item)`
 
   .label {
     padding-bottom: 4px;
-    font-size: 12px;
+    font-size: var(--fs-base-minus-2);
     color: var(--text-secondary);
   }
 
   .title {
-    font-size: 1em;
+    font-size: var(--fs-base);
   }
 `;
 
@@ -68,7 +68,7 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   justify-content: center;
   align-items: center;
   outline: none;
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   font-weight: 300;
 `;
 

@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   .profile-header {
     padding: 1em 0;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: var(--fs-base-plus-2);
   }
 `;
 

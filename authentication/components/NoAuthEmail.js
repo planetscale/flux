@@ -15,7 +15,7 @@ const AuthContainer = styled.div`
 const FormTitle = styled.div`
   padding: 1em 0;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: var(--fs-base-plus-2);
 `;
 
 const FormWrapper = styled.div`
@@ -26,7 +26,7 @@ const FormWrapper = styled.div`
 const LoginInfoPlaceholder = styled.div`
   color: var(--text-secondary);
   margin-top: 2em;
-  font-size: 12px;
+  font-size: var(--fs-base-minus-2);
 `;
 
 export default function NoAuthEmail() {

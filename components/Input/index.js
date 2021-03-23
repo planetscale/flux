@@ -6,8 +6,7 @@ const InputWrapper = styled.div`
 `;
 
 const StyledLabel = styled.label`
-  font-size: 14px;
-  line-height: 15px;
+  font-size: var(--fs-base-minus-1);
 `;
 
 const StyledInput = styled.input`
@@ -16,7 +15,7 @@ const StyledInput = styled.input`
   border: unset;
   font-style: normal;
   font-weight: bold;
-  font-size: 24px;
+  font-size: var(--fs-base-plus-1);
   letter-spacing: 0.75px;
   margin: 8px 0 0;
 
@@ -40,7 +39,7 @@ const StyledHelperText = styled.p((error = null, success = null) => {
   }
 
   return {
-    fontSize: '14px',
+    fontSize: 'var(--fs-base-minus-1)',
     color,
     lineHeight: '16px',
     margin: `8px 0 0 0`,
