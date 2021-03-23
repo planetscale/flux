@@ -29,14 +29,10 @@ const PageWrapper = styled.div`
 
 const PostMetadata = styled.div`
   padding: 0 0 32px 0;
-  border-bottom: 1px solid var(--border-primary);
 `;
 
 const DateTime = styled.div`
-  height: 19px;
-  font-size: 16px;
-  line-height: 19px;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 `;
 
 const Title = styled.h1`

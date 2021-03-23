@@ -286,9 +286,7 @@ export default function NewPost() {
     });
   };
 
-  const handleFocus = () => {
-    alert('hello');
-  };
+  const handleFocus = () => {};
 
   const getTitleClasses = title => {
     if (title.value.length) return 'valid';

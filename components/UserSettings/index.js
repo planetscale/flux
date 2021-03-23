@@ -21,7 +21,7 @@ const UserNameContainer = styled.div`
 `;
 
 const UserName = styled.div`
-  font-size: 20px;
+  font-size: 1em;
   color: var(--text-primary);
 `;
 
@@ -53,11 +53,12 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
 
 const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
   border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  box-shadow: var(--layer-shadow);
 `;
 
 const StyledRadio = styled(DropdownMenu.RadioItem)`
   appearance: none;
-  background-color: var(--border-secondary);
   border: none;
   padding: 8px;
   position: relative;
@@ -68,13 +69,17 @@ const StyledRadio = styled(DropdownMenu.RadioItem)`
   outline: 0;
   color: var(--text-primary);
 
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+
   & ~ & {
     border-left: 1px solid var(--border-primary);
   }
 
-  &:focus {
-    outline: 'none';
-    box-shadow: 'inset 0 0 0 1px dodgerblue, 0 0 0 1px dodgerblue';
+  &:hover {
+    background-color: var(--bg-secondary);
   }
 `;
 
@@ -82,7 +87,10 @@ const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: var(--highlight);
+
+  & + svg {
+    color: var(--text-blue);
+  }
 `;
 
 export default function UserSettings({
@@ -121,7 +129,7 @@ export default function UserSettings({
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <MenuItem>
-          <div>Mood</div>
+          <div>Theme</div>
           <StyledRadioGroup
             value={state.currentTheme}
             onValueChange={handleThemeChange}

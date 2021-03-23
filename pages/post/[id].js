@@ -576,7 +576,7 @@ export default function PostPage() {
                   disabled={!canSubmit(commentInputs.edits[comment.id])}
                 >
                   <Pencil />
-                  Update
+                  <span>Update</span>
                 </ButtonWireframe>
               </Reply>
             ) : (
@@ -720,7 +720,7 @@ export default function PostPage() {
                   disabled={!canSubmit(postEditState.content)}
                 >
                   <Pencil />
-                  Update
+                  <span>Update</span>
                 </ButtonWireframe>
               </>
             ) : (

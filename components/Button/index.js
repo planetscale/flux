@@ -23,6 +23,7 @@ export const ButtonBase = styled.button`
 
   &:hover:not([disabled]) {
     cursor: pointer;
+    box-shadow: var(--layer-shadow);
   }
 
   &:focus {
@@ -42,11 +43,11 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.selected {
-    color: rgb(var(--blue-600));
-    background-color: rgb(var(--blue-200));
+    color: rgb(var(--pink-500));
+    background-color: var(--bg-secondary);
 
     &:hover:not([disabled]) {
-      background-color: var(--highlight);
+      background-color: rgba(var(--pink-500), 0.1);
     }
   }
 `;
