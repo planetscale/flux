@@ -64,7 +64,7 @@ const base = {
   blockToolbarItem: 'var(--highlight)',
   blockToolbarText: 'var(--text-primary)',
   blockToolbarHoverBackground: 'var(--highlight)',
-  blockToolbarDivider: 'var(--accent2)',
+  blockToolbarDivider: 'var(--border-secondary)',
 
   noticeInfoBackground: '#F5BE31',
   noticeInfoText: colors.almostBlack,
@@ -80,25 +80,25 @@ const lightTheme = {
   text: 'var(--text-primary)',
   code: 'var(--text-primary)',
   cursor: 'var(--text-primary)',
-  divider: 'var(--accent)',
+  divider: 'var(--border-primary)',
 
   toolbarBackground: 'var(--bg-primary)',
-  toolbarHoverBackground: 'var(--accent)',
+  toolbarHoverBackground: 'var(--bg-secondary)',
   toolbarInput: 'var(--bg-primary)',
   toolbarItem: 'var(--text-primary)',
 
-  tableDivider: 'var(--accent)',
-  tableSelected: 'var(--accent)',
+  tableDivider: 'var(--border-primary)',
+  tableSelected: 'var(--bg-secondary)',
   tableSelectedBackground: 'var(--highlight)',
 
   quote: 'var(--highlight)',
-  codeBackground: 'var(--accent2)',
-  codeBorder: 'var(--accent2)',
-  horizontalRule: 'var(--accent)',
-  imageErrorBackground: 'var(--accent)',
+  codeBackground: 'var(--bg-secondary)',
+  codeBorder: 'var(--border-primary)',
+  horizontalRule: 'var(--border-primary)',
+  imageErrorBackground: 'var(--bg-secondary)',
 
-  scrollbarBackground: 'var(--accent)',
-  scrollbarThumb: 'var(--accent)',
+  scrollbarBackground: 'var(--bg-secondary)',
+  scrollbarThumb: 'var(--border-primary)',
 };
 
 export default function MarkdownEditor({

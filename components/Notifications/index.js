@@ -22,6 +22,10 @@ const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   justify-content: space-between;
 `;
 
+const NotificationHeaderTitle = styled.div`
+  font-size: var(--fs-base);
+`;
+
 const NotificationContent = styled(DropdownMenu.Content)`
   width: 500px;
   max-height: 80vh;
@@ -53,12 +57,12 @@ const NotificationItem = styled(DropdownMenu.Item)`
 
   .label {
     padding-bottom: 4px;
-    font-size: 12px;
+    font-size: var(--fs-base-minus-2);
     color: var(--text-secondary);
   }
 
   .title {
-    font-size: 1em;
+    font-size: var(--fs-base);
   }
 `;
 
@@ -68,7 +72,7 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   justify-content: center;
   align-items: center;
   outline: none;
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   font-weight: 300;
 `;
 
@@ -155,7 +159,9 @@ export default function Notifications() {
           <Fragment>
             <DropdownMenu.Group>
               <NotificationHeader>
-                <h3>Notifications ({totalNotifications})</h3>
+                <NotificationHeaderTitle>
+                  Notifications ({totalNotifications})
+                </NotificationHeaderTitle>
                 <ButtonWireframe
                   disabled={!totalNotifications}
                   onClick={clearAllNotifications}

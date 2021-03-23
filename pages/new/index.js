@@ -21,8 +21,6 @@ const TimeAndTags = styled.div`
   ${media.phone`
     flex-direction: column;
     align-items: flex-start;
-    padding-bottom: 1em;
-    border-bottom: 1px solid var(--accent2);
   `}
 `;
 
@@ -63,7 +61,7 @@ const TitleInputWrapper = styled.div`
       monospace;
     align-items: flex-end;
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: var(--fs-base-minus-2);
   }
 `;
 
@@ -91,7 +89,7 @@ const TitleInput = styled.textarea`
 
 const SubtitleInput = styled.textarea`
   ${TitleInputBase}
-  font-size: 18px;
+  font-size: var(--fs-base-plus-1);
   line-height: 22px;
   word-break: break-word;
 `;

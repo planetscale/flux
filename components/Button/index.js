@@ -9,7 +9,7 @@ export const ButtonBase = styled.button`
   border-radius: var(--border-radius);
   color: var(--text-secondary);
   border: unset;
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   height: 36px;
 
   svg {
@@ -43,11 +43,30 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.selected {
-    color: rgb(var(--pink-500));
-    background-color: var(--bg-secondary);
+    color: rgb(var(--white));
+    background-color: rgb(var(--blue-500));
 
     &:hover:not([disabled]) {
-      background-color: rgba(var(--pink-500), 0.1);
+      background-color: rgb(var(--blue-500));
+    }
+  }
+`;
+
+export const ButtonSquished = styled(ButtonBase)`
+  height: 30px;
+  padding: 8px 12px;
+  background-color: var(--bg-secondary);
+
+  &:hover:not([disabled]) {
+    background-color: var(--bg-tertiary);
+  }
+
+  &.selected {
+    color: rgb(var(--white));
+    background-color: rgb(var(--blue-500));
+
+    &:hover:not([disabled]) {
+      background-color: rgb(var(--blue-500));
     }
   }
 `;

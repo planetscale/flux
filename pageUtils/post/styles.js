@@ -6,10 +6,12 @@ const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid var(--border-primary);
+  padding-top: 2em;
 `;
 
 const PageWrapper = styled.div`
-  padding: 5em 0;
+  padding: 4em 0 3em;
   width: 80ch;
   box-sizing: border-box;
   display: flex;
@@ -39,7 +41,7 @@ const Title = styled.h1`
   color: var(--text-primary);
   margin: 8px 0 24px 0;
   font-weight: bold;
-  font-size: 48px;
+  font-size: var(--fs-base-plus-4);
   line-height: 58px;
 
   &:first-letter {
@@ -47,17 +49,16 @@ const Title = styled.h1`
   }
 
   ${media.phone`
-    font-size: 32px;
+    font-size: var(--fs-base-plus-3);
     margin: 0.5em 0;
   `}
 `;
 
 const Content = styled.div`
   color: var(--text-primary);
-  font-size: 18px;
+  font-size: var(--fs-base);
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--border-primary);
   padding: 32px 0;
 
   ${ButtonWireframe} {
@@ -66,7 +67,7 @@ const Content = styled.div`
 `;
 
 const CommentListItem = styled.li`
-  padding: 0px 24px;
+  padding: 0px;
 `;
 
 const CommentWrapper = styled.div`
@@ -78,7 +79,7 @@ const CommentWrapper = styled.div`
       opacity: 1;
     }
   }
-  padding: 24px;
+  padding: 0 0 4em;
 `;
 
 const Comment = styled.div`
@@ -118,7 +119,7 @@ const ReplyActionBar = styled.div`
 
 const CommentContent = styled.div`
   margin: 16px 0 0;
-  font-size: 18px;
+  font-size: var(--fs-base);
   color: var(--text-primary);
   line-height: 22px;
 `;
@@ -198,7 +199,7 @@ const InputWrapper = styled.div`
 
   &.error {
     input {
-      border-bottom: 1px solid red;
+      border-bottom: 1px solid var(--red-500);
     }
   }
 `;

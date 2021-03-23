@@ -28,7 +28,7 @@ import {
   CommentActionButtonGroup,
   ReplyActionBar,
 } from 'pageUtils/post/styles';
-import { ButtonWireframe } from 'components/Button';
+import { ButtonSquished, ButtonWireframe } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -69,12 +69,27 @@ const MetaActions = styled.div`
   `}
 `;
 
+const CommentContainerWrapper = styled.div``;
+
+const CommentContainer = styled.div`
+  width: 80ch;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  ${media.phone`
+    padding: 42px;
+    width: 100%;
+  `}
+`;
+
 const StyledContent = styled(Tooltip.Content)`
   padding: 10px;
   margin: 0;
   list-style-type: none;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   background-color: var(--text-primary);
   color: var(--bg-primary);
 `;
@@ -620,8 +635,8 @@ export default function PostPage() {
             <ActionBar comment>
               <Tooltip.Root>
                 <Tooltip.Trigger
-                  as={ButtonWireframe}
-                  color="var(--accent)"
+                  as={ButtonSquished}
+                  color="var(--bg-secondary)"
                   textColor="white"
                   onClick={() => handleStarClick(comment.id)}
                   disabled={isLoading}
@@ -734,7 +749,7 @@ export default function PostPage() {
           <ActionBar>
             <Tooltip.Root>
               <Tooltip.Trigger
-                as={ButtonWireframe}
+                as={ButtonSquished}
                 onClick={() => handleStarClick()}
                 disabled={isLoading}
                 className={hasStarred ? 'selected' : ''}
@@ -753,38 +768,43 @@ export default function PostPage() {
             </Tooltip.Root>
           </ActionBar>
         </Post>
-
-        <CommentList main>
-          {Object.values(postState.replies)
-            .filter(r => !r.parentId)
-            .map(firstLevelReply => (
-              <React.Fragment key={firstLevelReply.id}>
-                {renderComment(firstLevelReply, 0)}
-              </React.Fragment>
-            ))}
-        </CommentList>
-
-        <Reply>
-          <MarkdownEditor
-            placeholder="Comment"
-            content={reply}
-            handleContentChange={handleReplyChange}
-            onKeyDown={e => {
-              handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
-            }}
-          ></MarkdownEditor>
-          <ReplyActionBar>
-            <ButtonWireframe
-              type="submit"
-              onClick={handleCommentSubmit}
-              disabled={!canSubmit(reply)}
-            >
-              <Chat />
-              <span>Reply</span>
-            </ButtonWireframe>
-          </ReplyActionBar>
-        </Reply>
       </PageWrapper>
+      <CommentContainerWrapper>
+        <CommentContainer>
+          {Object.keys(postState.replies).length > 0 && (
+            <CommentList main>
+              {Object.values(postState.replies)
+                .filter(r => !r.parentId)
+                .map(firstLevelReply => (
+                  <React.Fragment key={firstLevelReply.id}>
+                    {renderComment(firstLevelReply, 0)}
+                  </React.Fragment>
+                ))}
+            </CommentList>
+          )}
+
+          <Reply>
+            <MarkdownEditor
+              placeholder="Comment"
+              content={reply}
+              handleContentChange={handleReplyChange}
+              onKeyDown={e => {
+                handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
+              }}
+            ></MarkdownEditor>
+            <ReplyActionBar>
+              <ButtonWireframe
+                type="submit"
+                onClick={handleCommentSubmit}
+                disabled={!canSubmit(reply)}
+              >
+                <Chat />
+                <span>Reply</span>
+              </ButtonWireframe>
+            </ReplyActionBar>
+          </Reply>
+        </CommentContainer>
+      </CommentContainerWrapper>
     </CustomLayout>
   );
 }

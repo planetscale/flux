@@ -21,12 +21,12 @@ const UserNameContainer = styled.div`
 `;
 
 const UserName = styled.div`
-  font-size: 1em;
+  font-size: var(--fs-base);
   color: var(--text-primary);
 `;
 
 const UserNickname = styled.div`
-  font-size: 14px;
+  font-size: var(--fs-base-minus-1);
   color: var(--text-secondary);
 `;
 
