@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   width: 80ch;
   padding: 48px 16px;
   box-sizing: border-box;
-  border-left: 1px solid var(--accent2);
+  border-left: 1px solid var(--border-primary);
 
   ${media.phone`
     width: 95%;
@@ -39,6 +39,11 @@ const Post = styled.a`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: var(--text-primary);
+
+  > div {
+    border: 1px solid var(--bg-primary);
+  }
 
   margin: 0 0 30px 0;
 
@@ -46,11 +51,13 @@ const Post = styled.a`
     cursor: pointer;
 
     > div {
-      background-color: var(--accent2);
+      border-color: var(--border-primary);
+      background-color: var(--bg-secondary);
+      box-shadow: var(--layer-shadow);
     }
 
     &:before {
-      background-color: var(--highlight);
+      background-color: var(--text-blue);
       transform: scale(1.2);
     }
   }
@@ -70,20 +77,18 @@ const Post = styled.a`
     display: block;
     position: absolute;
     border-radius: 50%;
-    border: 8px solid var(--background);
+    border: 8px solid var(--bg-primary);
     width: 8px;
     height: 8px;
-    background-color: var(--accent);
+    background-color: var(--border-primary);
     top: 20px;
     left: -28px;
-    transition: background-color 150ms;
   }
 `;
 
 const PostWrapper = styled.div`
   padding: 24px 16px;
   border-radius: 8px;
-  transition: all 350ms;
 `;
 
 const PostInfo = styled.div`
@@ -101,10 +106,10 @@ const MetaInformation = styled.div`
   align-items: center;
   font-size: 12px;
   line-height: 15px;
-  color: #666666;
+  color: var(--text-secondary);
 
   .notification {
-    color: #e55e31;
+    color: rgb(var(--green-500));
     font-weight: bold;
   }
 `;
@@ -114,7 +119,7 @@ const MetaDate = styled.span`
 `;
 
 const MetaTag = styled.span`
-  color: var(--link);
+  color: var(--text-blue);
   &:hover {
     color: var(--highlight);
   }
@@ -123,7 +128,7 @@ const MetaTag = styled.span`
 const PostTitle = styled.h2`
   margin: 0;
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 32px;
 
   &:first-letter {
@@ -132,7 +137,7 @@ const PostTitle = styled.h2`
 `;
 
 const PostSubTitle = styled.p`
-  color: var(--text);
+  color: var(--text-primary);
   margin: 0;
   font-size: 16px;
 
@@ -144,18 +149,18 @@ const PostSubTitle = styled.p`
 const DemarcationString = styled.div`
   display: inline-block;
   position: relative;
-  background-color: var(--background);
+  background-color: var(--bg-primary);
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
-  color: var(--accent);
+  color: var(--border-primary);
 
   &:before {
     content: ' ';
     position: absolute;
     width: 10px;
-    height: 2px;
-    background-color: var(--accent2);
+    height: 1px;
+    background-color: var(--border-primary);
     left: -1em;
     top: 1.1em;
   }
@@ -169,8 +174,8 @@ const EmptyDemarcationString = styled.div`
   margin-bottom: 2em;
 
   > div {
-    color: var(--accent);
-    background-color: var(--accent);
+    color: var(--border-primary);
+    background-color: var(--border-primary);
     width: 100%;
     border-radius: 8px;
   }
@@ -180,7 +185,7 @@ const EmptyDemarcationString = styled.div`
     position: absolute;
     width: 10px;
     height: 2px;
-    background-color: var(--accent2);
+    background-color: var(--border-primary);
     left: -1em;
     top: 1.1em;
   }
@@ -188,12 +193,12 @@ const EmptyDemarcationString = styled.div`
 
 const EmptyMeta = styled.div`
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
   width: 78px;
   height: 15px;
 
   &.link {
-    background-color: var(--link);
+    background-color: var(--text-blue);
   }
 `;
 
@@ -201,7 +206,7 @@ const EmptyPostTitle = styled.div`
   width: 75%;
   height: 39px;
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
 `;
 
 const EmptySummary = styled.span`
@@ -210,7 +215,7 @@ const EmptySummary = styled.span`
   width: 75%;
   height: 20px;
   border-radius: 8px;
-  background-color: #666666;
+  background-color: var(--bg-secondary);
 `;
 
 export default function PostList({ posts = [], handleTagClick }) {

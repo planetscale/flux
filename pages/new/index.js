@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { ButtonWireframe, ButtonSpecial } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { Icon } from 'pageUtils/post/atoms';
+import { Article } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
@@ -13,10 +13,10 @@ import CustomLayout from 'components/CustomLayout';
 import { useEffect } from 'react';
 
 const TimeAndTags = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 
   ${media.phone`
     flex-direction: column;
@@ -26,7 +26,7 @@ const TimeAndTags = styled.div`
   `}
 `;
 
-const MetaTime = styled.div`
+const PostDate = styled.div`
   ${media.phone`
     margin-bottom: 1em;
   `}
@@ -41,16 +41,19 @@ const DotSeperator = styled.div`
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 2em 0;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--background);
+  margin: 2em 0 0;
+  background-color: var(--bg-secondary);
+  padding: 0.5em;
+  border-bottom: 1px solid var(--border-primary);
+  border-radius: 6px;
+  box-shadow: var(--layer-shadow);
 
   &.invalid {
-    border-color: red;
+    border-color: rgb(var(--red-500));
   }
 
   &.valid {
-    border-color: var(--background);
+    border-color: var(--border-primary);
   }
 
   .chars-left {
@@ -59,7 +62,7 @@ const TitleInputWrapper = styled.div`
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
       monospace;
     align-items: flex-end;
-    color: var(--accent);
+    color: var(--text-secondary);
     font-size: 12px;
   }
 `;
@@ -71,19 +74,19 @@ const TitleInputBase = `
   word-break: break-word;
   overflow: hidden;
   width: 100%;
-  color: var(--text);
+  color: var(--text-primary);
+  background-color: unset;
 
   ::placeholder {
-    color: var(--accent);
+    color: var(--bg-tertiary);
   }
 `;
 
 const TitleInput = styled.textarea`
   ${TitleInputBase}
-  font-size: 48px;
-  line-height: 58px;
+  font-size: 40px;
+  line-height: 42px;
   font-weight: 700;
-  background-color: unset;
 `;
 
 const SubtitleInput = styled.textarea`
@@ -91,7 +94,6 @@ const SubtitleInput = styled.textarea`
   font-size: 18px;
   line-height: 22px;
   word-break: break-word;
-  background-color: var(--background);
 `;
 
 const ActionItems = styled.div`
@@ -104,10 +106,8 @@ const ActionItems = styled.div`
 `;
 
 const EditorWrapper = styled.div`
-  margin: 32px 0 0 0;
   padding: 2em 0;
   height: fit-content;
-  border-top: 1px solid var(--accent2);
 `;
 
 const customStyles = {
@@ -117,42 +117,41 @@ const customStyles = {
   }),
   control: provided => ({
     ...provided,
-    borderColor: 'unset',
-    borderRadius: 'unset',
-    borderStyle: 'unset',
-    borderWidth: 'unset',
-    boxShadow: 'unset',
-    backgroundColor: 'var(--accent3)',
-    borderRadius: '5px',
+    borderColor: 'var(--border-primary)',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    boxShadow: 'var(--layer-shadow)',
+    backgroundColor: 'var(--bg-secondary)',
+    borderRadius: '6px',
   }),
   indicatorSeparator: provided => ({
     ...provided,
-    backgroundColor: 'var(--background)',
+    backgroundColor: 'var(--bg-primary)',
     marginBottom: '0',
     marginTop: '0',
   }),
   indicatorContainer: provided => ({
     ...provided,
-    color: 'var(--foreground)',
+    color: 'var(--text-primary)',
   }),
   option: provided => ({
     ...provided,
     whiteSpace: 'nowrap',
-    color: 'var(--text)',
+    color: 'var(--text-primary)',
     ':hover': {
-      backgroundColor: 'var(--accent)',
+      backgroundColor: 'var(--bg-tertiary)',
     },
   }),
   singleValue: provided => ({
     ...provided,
-    color: 'var(--text)',
+    color: 'var(--text-primary)',
   }),
   menu: provided => ({
     ...provided,
-    backgroundColor: 'var(--background)',
-    border: '1px solid var(--accent)',
+    backgroundColor: 'var(--bg-primary)',
+    border: '1px solid var(--bg-tertiary)',
     borderRadius: '8px',
-    boxShadow: 'var(--shadow)',
+    boxShadow: 'var(--layer-shadow)',
     width: 'unset',
   }),
 };
@@ -287,6 +286,8 @@ export default function NewPost() {
     });
   };
 
+  const handleFocus = () => {};
+
   const getTitleClasses = title => {
     if (title.value.length) return 'valid';
     if (!title.hasFocused) return '';
@@ -304,7 +305,7 @@ export default function NewPost() {
       <PageWrapper>
         <Post>
           <TimeAndTags>
-            <MetaTime>{state.dateTime}</MetaTime>
+            <PostDate>{state.dateTime}</PostDate>
             {state.tagOptions.length > 0 && (
               <>
                 <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
@@ -322,10 +323,10 @@ export default function NewPost() {
                       ...theme,
                       colors: {
                         ...theme.colors,
-                        primary25: 'var(--highlight)',
-                        primary50: 'var(--highlight)',
-                        primary75: 'var(--highlight)',
-                        primary: 'var(--highlight)',
+                        primary25: 'var(--bg-tertiary)',
+                        primary50: 'var(--bg-tertiary)',
+                        primary75: 'var(--bg-tertiary)',
+                        primary: 'var(--bg-tertiary)',
                       },
                     })}
                   />
@@ -336,6 +337,7 @@ export default function NewPost() {
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
             onBlur={() => handleBlur('title')}
+            onFocus={handleFocus()}
           >
             <TitleInput
               placeholder="Enter Title"
@@ -344,21 +346,21 @@ export default function NewPost() {
               value={state.title.value}
               onChange={e => handleTitleChange(e, 'title')}
             ></TitleInput>
-            <div className="chars-left">
+            {/* <div className="chars-left">
               {TITLE_MAX_LENGTH - state.title.value.length}
-            </div>
+            </div> */}
           </TitleInputWrapper>
           <TitleInputWrapper>
             <SubtitleInput
-              placeholder="Enter Subtitle"
+              placeholder="Enter Subtitle (optional)"
               rows="1"
               maxLength={TITLE_MAX_LENGTH}
               value={state.subtitle.value}
               onChange={e => handleTitleChange(e, 'subtitle')}
             ></SubtitleInput>
-            <div className="chars-left">
+            {/* <div className="chars-left">
               {TITLE_MAX_LENGTH - state.subtitle.value.length}
-            </div>
+            </div> */}
           </TitleInputWrapper>
           <EditorWrapper>
             <MarkdownEditor
@@ -370,13 +372,13 @@ export default function NewPost() {
             ></MarkdownEditor>
           </EditorWrapper>
           <ActionItems>
-            <ButtonSpecial
+            <ButtonWireframe
               onClick={handlePostSubmit}
               disabled={!canSubmitPost()}
             >
-              <Icon className="icon-post"></Icon>
-              Post
-            </ButtonSpecial>
+              <Article />
+              <span>Post</span>
+            </ButtonWireframe>
             <ButtonWireframe onClick={handleCancel}>Cancel</ButtonWireframe>
           </ActionItems>
         </Post>

@@ -15,10 +15,10 @@ const Wrapper = styled.div`
 `;
 
 const colors = {
-  almostBlack: 'var(--background)',
+  almostBlack: 'var(--bg-primary)',
   lightBlack: '#2F3336',
-  almostWhite: 'var(--foreground)',
-  white: 'var(--background)',
+  almostWhite: 'var(--text-primary)',
+  white: 'var(--bg-primary)',
   white10: 'rgba(255, 255, 255, 0.1)',
   black: '#000',
   black10: 'rgba(0, 0, 0, 0.1)',
@@ -58,11 +58,11 @@ const base = {
   codeInserted: '#202746',
   codeImportant: '#c94922',
 
-  blockToolbarBackground: 'var(--background)',
+  blockToolbarBackground: 'var(--bg-primary)',
   blockToolbarTrigger: 'var(--highlight)',
   blockToolbarTriggerIcon: 'var(--highlight)',
   blockToolbarItem: 'var(--highlight)',
-  blockToolbarText: 'var(--text)',
+  blockToolbarText: 'var(--text-primary)',
   blockToolbarHoverBackground: 'var(--highlight)',
   blockToolbarDivider: 'var(--accent2)',
 
@@ -77,15 +77,15 @@ const base = {
 const lightTheme = {
   ...base,
   background: 'unset',
-  text: 'var(--text)',
-  code: 'var(--text)',
-  cursor: 'var(--text)',
+  text: 'var(--text-primary)',
+  code: 'var(--text-primary)',
+  cursor: 'var(--text-primary)',
   divider: 'var(--accent)',
 
-  toolbarBackground: 'var(--background)',
+  toolbarBackground: 'var(--bg-primary)',
   toolbarHoverBackground: 'var(--accent)',
-  toolbarInput: 'var(--background)',
-  toolbarItem: 'var(--text)',
+  toolbarInput: 'var(--bg-primary)',
+  toolbarItem: 'var(--text-primary)',
 
   tableDivider: 'var(--accent)',
   tableSelected: 'var(--accent)',

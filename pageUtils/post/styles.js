@@ -1,16 +1,15 @@
 import styled from '@emotion/styled';
-import { ButtonSquished, ButtonWireframe } from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
 const CommentList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: ${props => (props.main ? '1px solid var(--accent2)' : 'none')};
 `;
 
 const PageWrapper = styled.div`
-  padding: 42px 0;
+  padding: 5em 0;
   width: 80ch;
   box-sizing: border-box;
   display: flex;
@@ -30,18 +29,14 @@ const PageWrapper = styled.div`
 
 const PostMetadata = styled.div`
   padding: 0 0 32px 0;
-  border-bottom: 1px solid var(--accent2);
 `;
 
 const DateTime = styled.div`
-  height: 19px;
-  font-size: 16px;
-  line-height: 19px;
-  color: var(--text);
+  color: var(--text-secondary);
 `;
 
 const Title = styled.h1`
-  color: var(--text);
+  color: var(--text-primary);
   margin: 8px 0 24px 0;
   font-weight: bold;
   font-size: 48px;
@@ -58,11 +53,11 @@ const Title = styled.h1`
 `;
 
 const Content = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-primary);
   padding: 32px 0;
 
   ${ButtonWireframe} {
@@ -77,7 +72,7 @@ const CommentListItem = styled.li`
 const CommentWrapper = styled.div`
   border-radius: 8px;
   &:hover {
-    background-color: var(--accent2);
+    background-color: var(--border-primary);
 
     .actions {
       opacity: 1;
@@ -89,7 +84,7 @@ const CommentWrapper = styled.div`
 const Comment = styled.div`
   position: relative;
   padding: 0 24px;
-  color: var(--text);
+  color: var(--text-primary);
 
   &.level0 {
     border-left: 2px solid #9096ad;
@@ -110,22 +105,28 @@ const Reply = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding: 1em 0;
-  border-top: 1px solid var(--accent2);
+  padding: 2em;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+`;
 
-  ${ButtonWireframe} {
-    margin: 24px 0 0 0;
-  }
+const ReplyActionBar = styled.div`
+  width: 100%;
+  margin-top: 1em;
+  padding-top: 1em;
 `;
 
 const CommentContent = styled.div`
   margin: 16px 0 0;
   font-size: 18px;
-  color: var(--text);
+  color: var(--text-primary);
   line-height: 22px;
 `;
 
-const Post = styled.div``;
+const Post = styled.div`
+  position: flex;
+  flex-direction: column;
+`;
 
 const ActionBar = styled.div`
   padding: 16px 0 ${props => (props.comment ? '0' : '16px')};
@@ -143,8 +144,62 @@ const CommentActionButtonGroup = styled.div`
   right: 0;
   display: flex;
 
-  ${ButtonSquished}:nth-of-type(2) {
+  ${ButtonWireframe}:nth-of-type(2) {
     margin-left: 8px;
+  }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  margin-bottom: 1em;
+  padding: 16px;
+  border-radius: 6px;
+
+  input {
+    background-color: unset;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--bg-secondary);
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bg-tertiary);
+
+    input {
+      border-color: var(--bg-tertiary);
+      background-color: var(--bg-tertiary);
+    }
+  }
+
+  &.disabled {
+    cursor: default;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+
+    input {
+      color: rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0);
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+
+      input {
+        background-color: rgba(255, 255, 255, 0);
+      }
+    }
+
+    ${media.phone`
+      border-radius: 0;
+    `}
+  }
+
+  &.error {
+    input {
+      border-bottom: 1px solid red;
+    }
   }
 `;
 
@@ -156,6 +211,7 @@ export {
   CommentWrapper,
   Comment,
   Reply,
+  ReplyActionBar,
   PostMetadata,
   DateTime,
   Title,
@@ -164,4 +220,5 @@ export {
   ActionBar,
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
+  InputWrapper,
 };

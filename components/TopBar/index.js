@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 import {
   ButtonImage,
   ButtonWireframe,
-  ButtonLink,
-  ButtonTag,
   ButtonComposite,
 } from 'components/Button';
 import UserIcon from '../UserIcon';
@@ -12,43 +10,43 @@ import { useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
-import { Icon } from 'pageUtils/post/atoms';
+import { Add } from '@styled-icons/remix-line';
 import { media } from '../../pageUtils/post/theme';
 import * as DropdownMenu from 'components/DropdownMenu';
 import Notifications from 'components/Notifications';
 
 const Wrapper = styled.div`
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100vw;
-  border-bottom: 1px solid var(--accent2);
+  justify-content: center;
+  border-bottom: 1px solid var(--border-primary);
   padding: 30px;
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: var(--background);
-  opacity: 0.95;
+  background-color: var(--bg-primary);
+`;
 
-  ${media.phone`
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1em;
-  `}
+const Constrain = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 80rem;
 `;
 
 const Logo = styled.div`
   letter-spacing: -1px;
-  font-size: 24px;
+  font-size: 1em;
   border-radius: unset;
-  padding: 0 8px;
+  padding: 0 4px;
   font-family: 'Raleway', sans-serif;
   font-feature-settings: 'liga';
   font-style: italic;
   font-weight: 900;
-  background: linear-gradient(90deg, var(--highlight2), var(--highlight)),
-    var(--text);
+  background: linear-gradient(90deg, rgb(var(--pink-500)), rgb(var(--blue-500))),
+    var(--text-primary);
   background-clip: text;
   background-size: 200% 200%;
 
@@ -101,7 +99,7 @@ const Logo = styled.div`
 `;
 
 const ForwardSlash = styled.div`
-  color: var(--accent);
+  color: var(--border-primary);
   margin: 0 0.5em;
 `;
 
@@ -111,29 +109,11 @@ const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 24px;
-
-  > ${ButtonLink} {
-    border-radius: unset;
-    padding: 0 4px;
-    font-size: 24px;
-  }
-
-  ${media.phone`
-    font-size: 1em;
-
-    > ${ForwardSlash}:first-of-type {
-      margin-left: 0;
-    }
-
-    > ${ButtonLink} {
-      font-size: 1em;
-    }
-  `}
+  font-size: 20px;
 `;
 
 const PageTitle = styled.div`
-  color: var(--text);
+  color: var(--text-primary);
 `;
 
 const ActionsWrapper = styled.div`
@@ -147,7 +127,7 @@ const ActionsWrapper = styled.div`
   }
 
   ${media.phone`
-    border-top: 1px solid var(--accent2);
+    border-top: 1px solid var(--border-primary);
     margin-top: 1em;
     padding-top: 1em;
   `}
@@ -187,51 +167,59 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
 
   return (
     <Wrapper>
-      <Breadcrumb>
-        <ButtonComposite onClick={redirectToHome}>
-          <Logo>flux</Logo>
-          {header && <>
+      <Constrain>
+        <Breadcrumb>
+          <ButtonComposite onClick={redirectToHome}>
+            <Logo>flux</Logo>
+            {header && (
+              <>
+                <ForwardSlash>/</ForwardSlash>
+                <Organization>{header}</Organization>
+              </>
+            )}
+          </ButtonComposite>
           <ForwardSlash>/</ForwardSlash>
-          <Organization>{header}</Organization></>}
-        </ButtonComposite>
-        <ForwardSlash>/</ForwardSlash>
-        <PageTitle>{subHeader}</PageTitle>
-        {query !== '' && (
-          <>
-            <ForwardSlash>/</ForwardSlash>
-            <PageTitle>{query}</PageTitle>
-          </>
-        )}
-        {selectedTag && (
-          <>
-            <ForwardSlash>/</ForwardSlash>
-            <ButtonTag
-              onClick={() => {
-                setTag(null);
-              }}
-            >
-              <span>#{selectedTag.toLowerCase()}</span>
-            </ButtonTag>
-          </>
-        )}
-      </Breadcrumb>
-      <ActionsWrapper>
-        {notNewPostPage() && (
-          <ButtonWireframe type="button" onClick={redirectToNew}>
-            <Icon className="icon-plus"></Icon>
-            <span>Add Update</span>
-          </ButtonWireframe>
-        )}
+          <PageTitle>{subHeader}</PageTitle>
+          {query !== '' && (
+            <>
+              <ForwardSlash>/</ForwardSlash>
+              <PageTitle>{query}</PageTitle>
+            </>
+          )}
+          {selectedTag && (
+            <>
+              <ForwardSlash>/</ForwardSlash>
+              <ButtonWireframe
+                onClick={() => {
+                  setTag(null);
+                }}
+              >
+                <span>#{selectedTag.toLowerCase()}</span>
+              </ButtonWireframe>
+            </>
+          )}
+        </Breadcrumb>
+        <ActionsWrapper>
+          {notNewPostPage() && (
+            <ButtonWireframe type="button" onClick={redirectToNew}>
+              <Add />
+              <span>Add Post</span>
+            </ButtonWireframe>
+          )}
 
-        <Notifications />
+          <Notifications />
 
-        <DropdownMenu.Root>
-          <ButtonImage as={DropdownMenu.Trigger}>
-            <UserIcon src={profileImg} alt="Image of user" />
-          </ButtonImage>
-          <UserSettings displayName={userDisplayName} userHandle={userHandle} />
-        </DropdownMenu.Root>
-      </ActionsWrapper>
+          <DropdownMenu.Root>
+            <ButtonImage as={DropdownMenu.Trigger}>
+              <UserIcon src={profileImg} alt="Image of user" />
+            </ButtonImage>
+            <UserSettings
+              displayName={userDisplayName}
+              userHandle={userHandle}
+            />
+          </DropdownMenu.Root>
+        </ActionsWrapper>
+      </Constrain>
     </Wrapper>
   );
 }

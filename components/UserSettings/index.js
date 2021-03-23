@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { getTheme, setTheme } from 'pageUtils/post/theme';
-import { Icon } from 'pageUtils/post/atoms';
+import { Settings, Moon, Sun } from '@styled-icons/remix-line';
 import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
 import { signOut } from 'next-auth/client';
@@ -13,12 +13,6 @@ const UserInfo = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  > img {
-    width: 42px;
-    height: 42px;
-    margin-right: 16px;
-  }
 `;
 
 const UserNameContainer = styled.div`
@@ -26,15 +20,14 @@ const UserNameContainer = styled.div`
   flex-direction: column;
 `;
 
-const UserName = styled.p`
-  margin: 0;
-  font-size: 24px;
-  color: var(--text);
+const UserName = styled.div`
+  font-size: 1em;
+  color: var(--text-primary);
 `;
 
-const UserNickname = styled.p`
-  margin: 0;
-  color: #666;
+const UserNickname = styled.div`
+  font-size: 14px;
+  color: var(--text-secondary);
 `;
 
 const MenuItem = styled(DropdownMenu.SimpleItem)`
@@ -42,7 +35,7 @@ const MenuItem = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--foreground);
+  color: var(--text-primary);
 `;
 
 const MenuAction = styled(DropdownMenu.SimpleItem)`
@@ -50,21 +43,22 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--foreground);
+  color: var(--text-primary);
 
   &:hover {
     cursor: pointer;
-    background-color: var(--accent2);
+    background-color: var(--bg-tertiary);
   }
 `;
 
 const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
-  border: 1px solid var(--accent3);
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  box-shadow: var(--layer-shadow);
 `;
 
 const StyledRadio = styled(DropdownMenu.RadioItem)`
   appearance: none;
-  background-color: var(--accent2);
   border: none;
   padding: 8px;
   position: relative;
@@ -73,14 +67,19 @@ const StyledRadio = styled(DropdownMenu.RadioItem)`
   justify-content: center;
   vertical-align: middle;
   outline: 0;
+  color: var(--text-primary);
 
-  & ~ & {
-    border-left: 1px solid var(--accent3);
+  svg {
+    width: 1em;
+    height: 1em;
   }
 
-  &:focus {
-    outline: 'none';
-    box-shadow: 'inset 0 0 0 1px dodgerblue, 0 0 0 1px dodgerblue';
+  & ~ & {
+    border-left: 1px solid var(--border-primary);
+  }
+
+  &:hover {
+    background-color: var(--bg-secondary);
   }
 `;
 
@@ -88,18 +87,13 @@ const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: var(--highlight);
 
-  & ~ ${Icon} {
-    background: white;
+  & + svg {
+    color: var(--text-blue);
   }
 `;
 
-export default function UserSettings({
-  displayName,
-  userHandle,
-  currentTheme,
-}) {
+export default function UserSettings({ displayName, userHandle }) {
   const [state, setState] = useImmer({
     currentTheme: getTheme(),
   });
@@ -131,22 +125,22 @@ export default function UserSettings({
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <MenuItem>
-          <div>Mood</div>
+          <div>Theme</div>
           <StyledRadioGroup
             value={state.currentTheme}
             onValueChange={handleThemeChange}
           >
             <StyledRadio value="system" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-system"></Icon>
+              <Settings />
             </StyledRadio>
             <StyledRadio value="light" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-light"></Icon>
+              <Moon />
             </StyledRadio>
             <StyledRadio value="dark" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Icon className="icon-dark"></Icon>
+              <Sun />
             </StyledRadio>
           </StyledRadioGroup>
         </MenuItem>

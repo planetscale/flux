@@ -4,7 +4,12 @@ import AuthorNamePlate from 'components/NamePlate/AuthorNamePlate';
 import CommenterNamePlate from 'components/NamePlate/CommenterNamePlate';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Icon } from 'pageUtils/post/atoms';
+import {
+  Star as RemixLineStar,
+  Chat1 as Chat,
+  Pencil,
+} from '@styled-icons/remix-line';
+import { Star as RemixFillStar } from '@styled-icons/remix-fill';
 import {
   PageWrapper,
   PostMetadata,
@@ -21,12 +26,9 @@ import {
   ActionBar,
   CommenterNameplateWrapper,
   CommentActionButtonGroup,
+  ReplyActionBar,
 } from 'pageUtils/post/styles';
-import {
-  ButtonWireframe,
-  ButtonTertiary,
-  ButtonSquished,
-} from 'components/Button';
+import { ButtonWireframe } from 'components/Button';
 import { useUserContext } from 'state/user';
 import { getLocaleDateTimeString } from 'utils/dateTime';
 import { useImmer } from 'use-immer';
@@ -43,7 +45,7 @@ const Meta = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  color: var(--text);
+  color: var(--text-secondary);
 
   ${media.phone`
     flex-direction: column-reverse;
@@ -73,12 +75,12 @@ const StyledContent = styled(Tooltip.Content)`
   list-style-type: none;
   border-radius: 10px;
   font-size: 14px;
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
 `;
 
 const StyledArrow = styled(Tooltip.Arrow)`
-  fill: var(--foreground);
+  fill: var(--text-primary);
 `;
 
 export default function PostPage() {
@@ -525,7 +527,7 @@ export default function PostPage() {
             </CommenterNameplateWrapper>
             <CommentActionButtonGroup className="actions">
               {level < 2 && (
-                <ButtonSquished
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={toggleCommentReply}
@@ -533,10 +535,10 @@ export default function PostPage() {
                   {commentButtonState.replyButtons[comment.id]
                     ? 'Cancel Reply'
                     : 'Reply'}
-                </ButtonSquished>
+                </ButtonWireframe>
               )}
               {userContext.user.id === comment.author?.id && (
-                <ButtonSquished
+                <ButtonWireframe
                   data-comment-id={comment.id}
                   type="submit"
                   onClick={e => {
@@ -546,7 +548,7 @@ export default function PostPage() {
                   {commentButtonState.editButtons[comment.id]
                     ? 'Cancel Edit'
                     : 'Edit'}
-                </ButtonSquished>
+                </ButtonWireframe>
               )}
             </CommentActionButtonGroup>
 
@@ -573,8 +575,8 @@ export default function PostPage() {
                   onClick={handleCommentEditSubmit}
                   disabled={!canSubmit(commentInputs.edits[comment.id])}
                 >
-                  <Icon className="icon-edit"></Icon>
-                  Update
+                  <Pencil />
+                  <span>Update</span>
                 </ButtonWireframe>
               </Reply>
             ) : (
@@ -610,8 +612,8 @@ export default function PostPage() {
                   onClick={handleCommentReplySubmit}
                   disabled={!canSubmit(commentInputs.replies[comment.id])}
                 >
-                  <Icon className="icon-comment"></Icon>
-                  Reply
+                  <Chat />
+                  <span>Reply</span>
                 </ButtonWireframe>
               </Reply>
             )}
@@ -625,8 +627,8 @@ export default function PostPage() {
                   disabled={isLoading}
                   className={hasStarred ? 'selected' : ''}
                 >
-                  <Icon className="icon-star"></Icon>
-                  <div>{comment.stars.length}</div>
+                  {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
+                  <span>{comment.stars.length}</span>
                 </Tooltip.Trigger>
                 {comment.stars.length > 0 && (
                   <StyledContent as="ul">
@@ -717,8 +719,8 @@ export default function PostPage() {
                   onClick={handlePostEditSubmit}
                   disabled={!canSubmit(postEditState.content)}
                 >
-                  <Icon className="icon-edit"></Icon>
-                  Update
+                  <Pencil />
+                  <span>Update</span>
                 </ButtonWireframe>
               </>
             ) : (
@@ -733,14 +735,12 @@ export default function PostPage() {
             <Tooltip.Root>
               <Tooltip.Trigger
                 as={ButtonWireframe}
-                color="var(--accent)"
-                textColor="white"
                 onClick={() => handleStarClick()}
                 disabled={isLoading}
                 className={hasStarred ? 'selected' : ''}
               >
-                <Icon className="icon-star"></Icon>
-                <div>{postState.stars.length}</div>
+                {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
+                <span>{postState.stars.length}</span>
               </Tooltip.Trigger>
               {postState.stars.length > 0 && (
                 <StyledContent as="ul">
@@ -773,14 +773,16 @@ export default function PostPage() {
               handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
             }}
           ></MarkdownEditor>
-          <ButtonWireframe
-            type="submit"
-            onClick={handleCommentSubmit}
-            disabled={!canSubmit(reply)}
-          >
-            <Icon className="icon-comment"></Icon>
-            Reply
-          </ButtonWireframe>
+          <ReplyActionBar>
+            <ButtonWireframe
+              type="submit"
+              onClick={handleCommentSubmit}
+              disabled={!canSubmit(reply)}
+            >
+              <Chat />
+              <span>Reply</span>
+            </ButtonWireframe>
+          </ReplyActionBar>
         </Reply>
       </PageWrapper>
     </CustomLayout>

@@ -1,31 +1,29 @@
 import styled from '@emotion/styled';
 import { media } from '../../pageUtils/post/theme';
-import { Icon } from 'pageUtils/post/atoms';
 
 export const ButtonBase = styled.button`
-  box-sizing: content-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 8px 16px;
-  text-transform: capitalize;
-  border-radius: 99px;
-  background-color: var(--background);
-  color: var(--text);
-  border: 2px solid var(--foreground);
-  transition: all 150ms;
-  font-size: 1em;
-  height: fit-content;
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  border: unset;
+  font-size: 14px;
+  height: 36px;
 
-  ${Icon} {
-    width: 20px;
-    height: 20px;
-    margin: 0 0.5em 0 0;
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+
+  span:nth-child(2) {
+    margin-left: 8px;
   }
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    transform: scale(0.97);
+    box-shadow: var(--layer-shadow);
   }
 
   &:focus {
@@ -38,76 +36,27 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  border-color: ${props => props.color || 'var(--foreground)'};
+  background-color: var(--bg-secondary);
 
   &:hover:not([disabled]) {
-    background-color: ${props => props.color || 'var(--foreground)'};
-    color: ${props => props.textColor || 'var(--background)'};
-
-    ${Icon} {
-      background: ${props => props.textColor || 'var(--background)'};
-    }
+    background-color: var(--bg-tertiary);
   }
 
   &.selected {
-    color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--highlight);
-    }
+    color: rgb(var(--pink-500));
+    background-color: var(--bg-secondary);
 
     &:hover:not([disabled]) {
-      background-color: var(--highlight);
+      background-color: rgba(var(--pink-500), 0.1);
     }
   }
-`;
-
-export const ButtonSquished = styled(ButtonWireframe)`
-  padding: 4px 16px;
-  font-size: 0.9em;
-`;
-
-export const ButtonTertiary = styled(ButtonBase)`
-  border: 1px solid var(--accent);
-
-  &:hover:not([disabled]) {
-    color: var(--background);
-    background-color: var(--highlight);
-    border-color: var(--highlight);
-
-    ${Icon} {
-      background: var(--background);
-    }
-  }
-
-  &:active:not([disabled]) {
-    transform: scale(0.75);
-  }
-`;
-
-export const ButtonSpecial = styled(ButtonBase)`
-  background-color: var(--highlight);
-  border-color: var(--highlight);
-  color: white;
-
-  ${Icon} {
-    background: white;
-  }
-`;
-
-export const ButtonLink = styled(ButtonBase)`
-  border: 0;
-  padding: 0;
-  color: var(--text);
-  background-color: unset;
 `;
 
 export const ButtonImage = styled(ButtonBase)`
   border: 0;
   padding: 0;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
 
   > img {
     width: 100%;
@@ -120,22 +69,13 @@ export const ButtonImage = styled(ButtonBase)`
   `}
 `;
 
-export const ButtonTag = styled(ButtonBase)`
-  text-transform: lowercase;
-  line-height: 14px;
-`;
-
 export const ButtonComposite = styled.a`
   display: flex;
   flex-direction: row;
-  font-size: 24px;
-  padding: 4px 8px;
   border-radius: 6px;
-  transition: all 150ms;
+  color: var(--text-primary);
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    background-color: var(--accent3);
-    transform: scale(0.97);
   }
 `;

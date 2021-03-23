@@ -1,30 +1,4 @@
-:root {
-  --background: #fff;
-  --foreground: #000;
-  --link: #007bc7;
-  --text: rgb(60, 66, 87);
-  --accent: #ccc;
-  --accent2: #eee;
-  --accent3: #f7f7f7;
-  --shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 4px 13px rgba(0, 0, 0, 0.08);
-  --highlight: #fa52a0;
-  --highlight2: #00a3ff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #131516;
-    --foreground: rgba(255, 255, 255, 0.9);
-    --link: #009afa;
-    --text: #ccc;
-    --accent: #666;
-    --accent2: #1e1e1e;
-    --accent3: #0c0c0c;
-    --shadow: 0px 0px 4px rgba(0, 0, 0, 0.33), 0px 4px 13px rgba(0, 0, 0, 0.6);
-    --highlight: #fa52a0;
-    --highlight2: #00a3ff;
-  }
-}
+@import './theme.css';
 
 * {
   box-sizing: border-box;
@@ -35,8 +9,8 @@ body {
   margin: unset;
   width: 100vw;
   overflow: auto;
-  background: var(--background);
-  color: var(--text);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,8 +28,9 @@ p {
   overflow-wrap: break-word;
 }
 
+a,
 a:visited {
-  color: var(--link);
+  color: var(--text-blue);
 }
 
 /* Hack editor's css for user-tagging feature, tried other ways couldn't apply styles*/
@@ -65,19 +40,24 @@ a:visited {
 
 .suggestion-item-active {
   background: var(--highlight);
-  color: var(--foreground);
+  color: var(--text-primary);
 }
 
 .suggestion-item-list {
-  background: var(--background);
+  background: var(--bg-primary);
   border: 1px solid #999;
 }
 
 .prosemirror-mention-node {
-  color: var(--link);
+  color: var(--text-blue);
 }
 
 .prosemirror-suggestion {
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid #999;
+}
+
+/* hack: remove trigger icon from markdown editor */
+.block-menu-trigger {
+  display: none !important;
 }

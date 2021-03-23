@@ -10,19 +10,15 @@ const UserMetadata = styled.div`
   margin: 0 0 0 16px;
   display: flex;
   flex-direction: column;
-  color: var(--text);
+  color: var(--text-primary);
+  font-size: 14px;
 
-  span:first-of-type {
-    height: 22px;
-    font-size: 18px;
-    line-height: 22px;
+  div:first-of-type {
+    white-space: nowrap;
   }
 
-  span:nth-of-type(2) {
-    height: 19px;
-    font-size: 16px;
-    line-height: 19px;
-    color: var(--text);
+  div:nth-of-type(2) {
+    color: var(--text-secondary);
   }
 `;
 
@@ -31,13 +27,13 @@ export default function AuthorNamePlate({ displayName, userHandle, avatar }) {
     <Wrapper>
       <UserIcon
         src={avatar || '/user_profile_icon.svg'}
-        width="34px"
-        height="34px"
+        width="30px"
+        height="30px"
         alt="user avatar"
       />
       <UserMetadata>
-        <span>{displayName} </span>
-        <span>@{userHandle}</span>
+        <div>{displayName} </div>
+        <div>@{userHandle}</div>
       </UserMetadata>
     </Wrapper>
   );

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
+import { InputWrapper } from 'pageUtils/post/styles';
 import Input from 'components/Input';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/router';
@@ -9,30 +10,22 @@ import { useUserActions } from 'state/user';
 const Wrapper = styled.div`
   width: 100%;
   max-width: 480px;
-  height: fit-content;
-  border-radius: 4px;
-  box-shadow: var(--shadow);
-  background-color: var(--background);
-
-  ${media.phone`
-    border-radius: 0;
-  `}
 
   .profile-header {
-    padding: 32px;
+    padding: 1em 0;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 `;
 
 const FormLabel = styled.div`
   padding: 2em;
-  border-bottom: 1px solid var(--accent2);
+  border-bottom: 1px solid var(--border-secondary);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: flex;
   flex-direction: column;
-  color: var(--accent);
+  color: var(--text-primary);
 `;
 
 const FormLabelIdentifier = styled.div`
@@ -41,67 +34,6 @@ const FormLabelIdentifier = styled.div`
 
 const FormLabelOrganization = styled.div`
   font-weight: 900;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  color: var(--text);
-  border-bottom: 1px solid var(--accent2);
-  padding: 32px;
-
-  input {
-    background-color: unset;
-    color: var(--text);
-    border-bottom: 1px solid var(--background);
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--accent2);
-
-    input {
-      background-color: var(--accent2);
-    }
-  }
-
-  &.disabled {
-    cursor: default;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.4);
-
-    input {
-      color: rgba(255, 255, 255, 0.4);
-      border-color: rgba(255, 255, 255, 0);
-    }
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-
-      input {
-        background-color: rgba(255, 255, 255, 0);
-      }
-    }
-
-    ${media.phone`
-      border-radius: 0;
-    `}
-  }
-
-  &.error {
-    input {
-      border-bottom: 1px solid red;
-    }
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  padding: 32px;
-
-  ${media.phone`
-    border-radius: 0;
-  `}
 `;
 
 export default function CreateOrg({ name, email, avatar }) {
@@ -180,36 +112,38 @@ export default function CreateOrg({ name, email, avatar }) {
 
   return (
     <Wrapper>
-      <div className="profile-header">User Profile</div>
+      <div className="profile-header">Create user profile</div>
       {state.orgName && (
-        <FormLabel>
-          <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
-          <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
-        </FormLabel>
+        <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
+          <Input
+            label="Organization name"
+            value={state.userName}
+            onChange={handleUserNameChange}
+          />
+        </InputWrapper>
       )}
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
-          label="Your Username"
+          label="Your username"
           value={state.userName}
           onChange={handleUserNameChange}
         />
       </InputWrapper>
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
-          label="Your Name"
+          label="Your name"
           value={state.name}
           onChange={handleNameChange}
         />
       </InputWrapper>
-      <ButtonWrapper>
-        <ButtonWireframe
-          type="submit"
-          onClick={state.name && state.userName ? handleNextClick : null}
-          disabled={!(state.name && state.userName)}
-        >
-          Next
-        </ButtonWireframe>
-      </ButtonWrapper>
+
+      <ButtonWireframe
+        type="submit"
+        onClick={state.name && state.userName ? handleNextClick : null}
+        disabled={!(state.name && state.userName)}
+      >
+        Next
+      </ButtonWireframe>
     </Wrapper>
   );
 }
