@@ -20,7 +20,7 @@ const NotificationButton = styled(ButtonWireframe)`
 const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
-  padding: 1em 24px;
+  padding: 1em;
   outline: none;
   justify-content: space-between;
 `;
@@ -32,26 +32,28 @@ const NotificationContent = styled(DropdownMenu.Content)`
 `;
 
 const NotificationWrapper = styled.div`
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bg-secondary);
+  }
 `;
 
 const NotificationItem = styled(DropdownMenu.Item)`
   display: block;
-  padding: 12px 24px;
   outline: none;
   text-decoration: none;
   color: inherit !important;
 
-  &:hover {
-    cursor: pointer;
-    background-color: var(--accent2);
-    color: white;
-  }
-
   .label {
-    font-style: italic;
     padding-bottom: 4px;
-    font-size: 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
   }
 
   .title {
@@ -70,12 +72,22 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   font-weight: 300;
 `;
 
-const HoverIcon = styled(Close)`
-  position: absolute;
-  top: calc(50% - 12px);
-  right: 24px;
+const HoverIcon = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 8px 4px;
+  border-radius: var(--border-radius);
+
+  > svg {
+    width: 1em;
+    height: 1em;
+    color: var(--text-primary);
+  }
+
   &:hover {
     cursor: pointer;
+    background-color: rgba(var(--blue-500), 0.25);
   }
 `;
 
@@ -162,9 +174,9 @@ export default function Notifications() {
                         <div className="title">{notification.postTitle}</div>
                       </NotificationItem>
                     </Link>
-                    <HoverIcon
-                      onClick={() => clearNotification(notification)}
-                    ></HoverIcon>
+                    <HoverIcon onClick={() => clearNotification(notification)}>
+                      <Close />
+                    </HoverIcon>
                   </NotificationWrapper>
                 );
               })}
@@ -182,9 +194,9 @@ export default function Notifications() {
                         <div className="title">{notification.postTitle}</div>
                       </NotificationItem>
                     </Link>
-                    <HoverIcon
-                      onClick={() => clearNotification(notification)}
-                    ></HoverIcon>
+                    <HoverIcon onClick={() => clearNotification(notification)}>
+                      <Close />
+                    </HoverIcon>
                   </NotificationWrapper>
                 );
               })}
