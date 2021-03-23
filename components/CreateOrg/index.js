@@ -114,21 +114,24 @@ export default function CreateOrg({ name, email, avatar }) {
     <Wrapper>
       <div className="profile-header">Create user profile</div>
       {state.orgName && (
-        <FormLabel>
-          <FormLabelIdentifier>Create Account In</FormLabelIdentifier>
-          <FormLabelOrganization>{state.orgName}</FormLabelOrganization>
-        </FormLabel>
+        <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
+          <Input
+            label="Organization name"
+            value={state.userName}
+            onChange={handleUserNameChange}
+          />
+        </InputWrapper>
       )}
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
-          label="Your Username"
+          label="Your username"
           value={state.userName}
           onChange={handleUserNameChange}
         />
       </InputWrapper>
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
         <Input
-          label="Your Name"
+          label="Your name"
           value={state.name}
           onChange={handleNameChange}
         />
