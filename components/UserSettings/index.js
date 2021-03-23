@@ -93,11 +93,7 @@ const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   }
 `;
 
-export default function UserSettings({
-  displayName,
-  userHandle,
-  currentTheme,
-}) {
+export default function UserSettings({ displayName, userHandle }) {
   const [state, setState] = useImmer({
     currentTheme: getTheme(),
   });

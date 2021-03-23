@@ -73,10 +73,8 @@ const HoverIcon = styled(Close)`
   position: absolute;
   top: calc(50% - 12px);
   right: 24px;
-  transition: all 150ms;
   &:hover {
     cursor: pointer;
-    transform: scale(1.15);
   }
 `;
 

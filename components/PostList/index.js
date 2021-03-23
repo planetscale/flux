@@ -83,14 +83,12 @@ const Post = styled.a`
     background-color: var(--border-primary);
     top: 20px;
     left: -28px;
-    transition: background-color 150ms;
   }
 `;
 
 const PostWrapper = styled.div`
   padding: 24px 16px;
   border-radius: 8px;
-  transition: all 350ms;
 `;
 
 const PostInfo = styled.div`
