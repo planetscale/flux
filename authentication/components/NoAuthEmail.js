@@ -12,12 +12,6 @@ const AuthContainer = styled.div`
   width: 100%;
 `;
 
-const FormTitle = styled.div`
-  padding: 1em 0;
-  font-weight: bold;
-  font-size: var(--fs-base-plus-2);
-`;
-
 const FormWrapper = styled.div`
   outline: unset;
   color: var(--text-primary);
@@ -53,7 +47,6 @@ export default function NoAuthEmail() {
   return (
     <AuthContainer>
       <FormWrapper>
-        <FormTitle>Login</FormTitle>
         <form onSubmit={handleLogin}>
           <InputWrapper>
             <Input

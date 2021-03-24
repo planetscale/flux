@@ -39,18 +39,40 @@ const LogoColumn = styled.div`
   border-left: 1px solid var(--border-primary);
 `;
 
-const LogoContainer = styled.div`
-  margin-bottom: 2em;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Logo = styled.img`
   max-width: 260px;
+`;
+
+const AuthContainer = styled.div`
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+`;
+
+const AuthTitle = styled.h1`
+  font-weight: bold;
+  font-size: var(--fs-base-plus-2);
+  margin-bottom: 1em;
+`;
+
+const OAuthContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1em 0 0;
+  margin: 2em 0;
+  border-top: 1px solid var(--border-primary);
+
+  > * {
+    margin-right: 1em;
+  }
+`;
+
+const OAuthTitle = styled.h2`
+  font-weight: 400;
+  font-size: var(--fs-base);
 `;
 
 export default function Login({ providers }) {
@@ -59,6 +81,10 @@ export default function Login({ providers }) {
   const { getUser } = useUserActions();
   const router = useRouter();
   const [session, loading] = useSession();
+
+  const NotEmailProviders = Object.values(providers).filter(
+    r => r.name !== 'NoAuthEmail'
+  );
 
   useEffect(() => {
     if (user?.org) {
@@ -77,15 +103,30 @@ export default function Login({ providers }) {
       <Wrapper>
         <ContentContainer>
           {!session && (
-            <LogoContainer>
+            <AuthContainer>
+              <AuthTitle>Login</AuthTitle>
               {Object.values(providers).reduce((accumulator, provider) => {
                 const AuthLogin = AuthProviderLogins[provider.name];
-                if (AuthLogin) {
+                if (AuthLogin && provider.name === 'NoAuthEmail') {
                   accumulator.push(<AuthLogin key={provider.name} />);
                 }
                 return accumulator;
               }, [])}
-            </LogoContainer>
+              {NotEmailProviders.length > 0 && (
+                <OAuthContainer>
+                  <OAuthTitle>Or</OAuthTitle>
+                  {Object.values(providers)
+                    .filter(r => r.name !== 'NoAuthEmail')
+                    .reduce((accumulator, provider) => {
+                      const AuthLogin = AuthProviderLogins[provider.name];
+                      if (AuthLogin) {
+                        accumulator.push(<AuthLogin key={provider.name} />);
+                      }
+                      return accumulator;
+                    }, [])}
+                </OAuthContainer>
+              )}
+            </AuthContainer>
           )}
           {session && !loading && loaded && !user?.org && (
             <CreateOrg

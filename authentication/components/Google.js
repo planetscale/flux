@@ -10,7 +10,6 @@ export default function Google() {
   return (
     <ButtonWireframe onClick={handleLogin}>
       <RemixLineGoogle />
-      <span>Login With Google</span>
     </ButtonWireframe>
   );
 }
