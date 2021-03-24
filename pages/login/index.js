@@ -49,20 +49,22 @@ const AuthContainer = styled.div`
   flex-direction: column;
   justify-content: stretch;
   align-items: stretch;
+
+  > *:not(:last-child) {
+    margin-bottom: 1em;
+  }
 `;
 
 const AuthTitle = styled.h1`
   font-weight: bold;
   font-size: var(--fs-base-plus-2);
-  margin-bottom: 1em;
 `;
 
 const OAuthContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1em 0 0;
-  margin: 2em 0;
+  padding-top: 1em;
   border-top: 1px solid var(--border-primary);
 
   > * {
@@ -82,8 +84,12 @@ export default function Login({ providers }) {
   const router = useRouter();
   const [session, loading] = useSession();
 
+  const EmailProvider = Object.values(providers).filter(
+    r => r.name === 'Email'
+  );
+
   const NotEmailProviders = Object.values(providers).filter(
-    r => r.name !== 'NoAuthEmail'
+    r => r.name !== 'Email'
   );
 
   useEffect(() => {
@@ -105,18 +111,19 @@ export default function Login({ providers }) {
           {!session && (
             <AuthContainer>
               <AuthTitle>Login</AuthTitle>
-              {Object.values(providers).reduce((accumulator, provider) => {
-                const AuthLogin = AuthProviderLogins[provider.name];
-                if (AuthLogin && provider.name === 'NoAuthEmail') {
-                  accumulator.push(<AuthLogin key={provider.name} />);
-                }
-                return accumulator;
-              }, [])}
+              {EmailProvider.length > 0 &&
+                EmailProvider.reduce((accumulator, provider) => {
+                  const AuthLogin = AuthProviderLogins[provider.name];
+                  if (AuthLogin) {
+                    accumulator.push(<AuthLogin key={provider.name} />);
+                  }
+                  return accumulator;
+                }, [])}
               {NotEmailProviders.length > 0 && (
                 <OAuthContainer>
-                  <OAuthTitle>Or</OAuthTitle>
+                  {EmailProvider.length > 0 && <OAuthTitle>Or</OAuthTitle>}
                   {Object.values(providers)
-                    .filter(r => r.name !== 'NoAuthEmail')
+                    .filter(r => r.name !== 'Email')
                     .reduce((accumulator, provider) => {
                       const AuthLogin = AuthProviderLogins[provider.name];
                       if (AuthLogin) {

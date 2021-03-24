@@ -6,12 +6,21 @@ export default NextAuth({
   // See https://github.com/planetscale/flux/blob/main/authentication/README.md for more details.
   providers: [
     Providers.Credentials({
-      name: 'NoAuthEmail',
+      name: 'Email',
       credentials: {
         username: { label: 'Email', type: 'text', placeholder: 'jsmith' },
       },
       async authorize(credentials) {
         return credentials.email ? { email: credentials.email } : null;
+      },
+    }),
+    Providers.Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      state: false,
+      pages: {
+        signIn: '/',
+        signOut: '/',
       },
     }),
   ],

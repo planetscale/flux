@@ -61,11 +61,10 @@ export default function NoAuthEmail() {
           <ButtonWireframe type="submit">Login/Sign Up</ButtonWireframe>
         </form>
         <LoginInfoPlaceholder>
-          Please note this login process does not perform any authentication or
-          verification of identity and is purely for trial purposes. You will
-          assume the identify of the email you provide, as will any other user.
-          For use in any sensitive or collaborative application please apply
-          your own authentication following this{' '}
+          The default email authentication process is purely for demo purposes.
+          You will assume the identify of the email you provide, as will any
+          other user. For use in any sensitive or collaborative application
+          please apply your own authentication following next-auth's{' '}
           <a href="https://github.com/planetscale/flux/blob/main/authentication/README.md">
             guide
           </a>
