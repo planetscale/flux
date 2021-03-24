@@ -9,7 +9,7 @@ Use the button below to deploy this project onto your Vercel account.
 ### Install dependencies
 
 ```
-npm ci
+npm install
 ```
 
 ### Run dev server
