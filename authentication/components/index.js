@@ -1,1 +1,2 @@
-export { default as NoAuthEmail } from './NoAuthEmail';
+export { default as Email } from './Email';
+export { default as Google } from './Google';

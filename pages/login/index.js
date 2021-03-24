@@ -39,18 +39,42 @@ const LogoColumn = styled.div`
   border-left: 1px solid var(--border-primary);
 `;
 
-const LogoContainer = styled.div`
-  margin-bottom: 2em;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Logo = styled.img`
   max-width: 260px;
+`;
+
+const AuthContainer = styled.div`
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+
+  > *:not(:last-child) {
+    margin-bottom: 1em;
+  }
+`;
+
+const AuthTitle = styled.h1`
+  font-weight: bold;
+  font-size: var(--fs-base-plus-2);
+`;
+
+const OAuthContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 1em;
+  border-top: 1px solid var(--border-primary);
+
+  > * {
+    margin-right: 1em;
+  }
+`;
+
+const OAuthTitle = styled.h2`
+  font-weight: 400;
+  font-size: var(--fs-base);
 `;
 
 export default function Login({ providers }) {
@@ -59,6 +83,14 @@ export default function Login({ providers }) {
   const { getUser } = useUserActions();
   const router = useRouter();
   const [session, loading] = useSession();
+
+  const EmailProvider = Object.values(providers).filter(
+    r => r.name === 'Email'
+  );
+
+  const NotEmailProviders = Object.values(providers).filter(
+    r => r.name !== 'Email'
+  );
 
   useEffect(() => {
     if (user?.org) {
@@ -77,15 +109,31 @@ export default function Login({ providers }) {
       <Wrapper>
         <ContentContainer>
           {!session && (
-            <LogoContainer>
-              {Object.values(providers).reduce((accumulator, provider) => {
-                const AuthLogin = AuthProviderLogins[provider.name];
-                if (AuthLogin) {
-                  accumulator.push(<AuthLogin key={provider.name} />);
-                }
-                return accumulator;
-              }, [])}
-            </LogoContainer>
+            <AuthContainer>
+              <AuthTitle>Login</AuthTitle>
+              {EmailProvider.length > 0 &&
+                EmailProvider.reduce((accumulator, provider) => {
+                  const AuthLogin = AuthProviderLogins[provider.name];
+                  if (AuthLogin) {
+                    accumulator.push(<AuthLogin key={provider.name} />);
+                  }
+                  return accumulator;
+                }, [])}
+              {NotEmailProviders.length > 0 && (
+                <OAuthContainer>
+                  {EmailProvider.length > 0 && <OAuthTitle>Or</OAuthTitle>}
+                  {Object.values(providers)
+                    .filter(r => r.name !== 'Email')
+                    .reduce((accumulator, provider) => {
+                      const AuthLogin = AuthProviderLogins[provider.name];
+                      if (AuthLogin) {
+                        accumulator.push(<AuthLogin key={provider.name} />);
+                      }
+                      return accumulator;
+                    }, [])}
+                </OAuthContainer>
+              )}
+            </AuthContainer>
           )}
           {session && !loading && loaded && !user?.org && (
             <CreateOrg

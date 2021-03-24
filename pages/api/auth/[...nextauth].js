@@ -6,7 +6,7 @@ export default NextAuth({
   // See https://github.com/planetscale/flux/blob/main/authentication/README.md for more details.
   providers: [
     Providers.Credentials({
-      name: 'NoAuthEmail',
+      name: 'Email',
       credentials: {
         username: { label: 'Email', type: 'text', placeholder: 'jsmith' },
       },
