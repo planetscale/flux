@@ -74,7 +74,7 @@ const HoverIcon = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 6px 8px 4px;
+  padding: 6px 8px;
   border-radius: var(--border-radius);
 
   > svg {
