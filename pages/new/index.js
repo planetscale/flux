@@ -96,7 +96,8 @@ const SubtitleInput = styled.textarea`
 
 const ActionItems = styled.div`
   display: flex;
-  margin: 32px 0;
+  padding-top: 2em;
+  border-top: 1px solid var(--border-primary);
 
   button {
     margin: 0 8px 0 0;
