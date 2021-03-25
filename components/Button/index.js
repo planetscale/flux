@@ -17,7 +17,7 @@ export const ButtonBase = styled.button`
     height: 1em;
   }
 
-  span:nth-child(2) {
+  span:nth-of-type(1) {
     margin-left: 8px;
   }
 
@@ -59,7 +59,7 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.with-shortcut {
-    span:nth-child(3) {
+    span:nth-of-type(2) {
       border-left: 1px solid var(--bg-primary);
       margin-left: 8px;
       padding-left: 8px;
