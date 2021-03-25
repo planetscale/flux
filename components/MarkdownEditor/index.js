@@ -107,6 +107,9 @@ export default function MarkdownEditor({
   readOnly,
   onKeyDown,
   placeholder,
+  onCancel,
+  onSave,
+  key,
 }) {
   const save = async function (data) {
     const fileCompressionOptions = {
@@ -162,8 +165,11 @@ export default function MarkdownEditor({
         uploadImage={save}
         defaultValue={content}
         onChange={handleContentChange}
+        onCancel={onCancel}
+        onSave={onSave}
         theme={lightTheme}
         readOnly={readOnly}
+        key={key}
         // extensions={readOnly ? undefined : getPlugins(populateUsers)}
       />
     </Wrapper>

@@ -51,6 +51,19 @@ export const ButtonWireframe = styled(ButtonBase)`
   &.primary {
     background-color: var(--text-primary);
     color: var(--bg-secondary);
+
+    &:hover:not([disabled]) {
+      background-color: var(--text-blue);
+      color: var(--text-primary);
+    }
+  }
+
+  &.with-shortcut {
+    span:nth-child(3) {
+      border-left: 1px solid var(--bg-primary);
+      margin-left: 8px;
+      padding-left: 8px;
+    }
   }
 `;
 

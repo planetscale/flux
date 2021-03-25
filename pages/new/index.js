@@ -379,13 +379,14 @@ export default function NewPost() {
           </EditorWrapper>
           <ActionItems>
             <ButtonWireframe
-              className={'primary'}
+              className={'primary with-shortcut'}
               tabIndex={'0'}
               onClick={handlePostSubmit}
               disabled={!canSubmitPost()}
             >
               <Article />
               <span>Post</span>
+              <span className="shortcut">⌘ Enter</span>
             </ButtonWireframe>
             <ButtonWireframe tabIndex={'0'} onClick={handleCancel}>
               Cancel
