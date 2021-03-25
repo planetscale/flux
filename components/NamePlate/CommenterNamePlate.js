@@ -7,9 +7,12 @@ const NamePlateWrapper = styled.div`
   position: relative;
   font-size: var(--fs-base-minus-1);
   color: var(--text-secondary);
+  margin-left: -2.3em;
 
   > img {
-    margin-right: 16px;
+    box-sizing: content-box;
+    margin-right: 8px;
+    border: 4px solid var(--bg-primary);
   }
 `;
 
@@ -24,8 +27,8 @@ export default function CommenterNamePlate({
     <NamePlateWrapper>
       <UserIcon
         src={avatar || '/user_profile_icon.svg'}
-        width="32px"
-        height="32px"
+        width="24px"
+        height="24px"
         alt={`${displayName}'s profile picture`}
       />
       <span>{displayName}</span>

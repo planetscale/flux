@@ -5,13 +5,16 @@ import { media } from './theme';
 const CommentList = styled.ul`
   margin: 0;
   padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--border-primary);
   padding-top: 2em;
+  list-style: none;
+
+  &[class*='level'] {
+    margin-left: 2em;
+  }
 `;
 
 const PageWrapper = styled.div`
-  padding: 4em 0 3em;
+  padding: 4em 0 2em;
   width: 80ch;
   box-sizing: border-box;
   display: flex;
@@ -29,9 +32,7 @@ const PageWrapper = styled.div`
   }
 `;
 
-const PostMetadata = styled.div`
-  padding: 0 0 32px 0;
-`;
+const PostMetadata = styled.div``;
 
 const DateTime = styled.div`
   color: var(--text-secondary);
@@ -59,7 +60,7 @@ const Content = styled.div`
   font-size: var(--fs-base);
   line-height: 28px;
   letter-spacing: 0.02em;
-  padding: 32px 0;
+  padding: 2em 0;
 
   ${ButtonWireframe} {
     margin: 32px 0 0 0;
@@ -67,36 +68,38 @@ const Content = styled.div`
 `;
 
 const CommentListItem = styled.li`
-  padding: 0px;
+  margin: 0 0 4em;
 `;
 
 const CommentWrapper = styled.div`
   border-radius: 8px;
-  &:hover {
-    background-color: var(--border-primary);
+`;
 
-    .actions {
-      opacity: 1;
-    }
+const CommentContent = styled.div`
+  font-size: var(--fs-base-minus-1);
+  color: var(--text-primary);
+  margin: 1em 0 1.5em;
+
+  > * {
+    margin: 0;
   }
-  padding: 0 0 4em;
 `;
 
 const Comment = styled.div`
   position: relative;
-  padding: 0 24px;
+  padding: 0 1em;
   color: var(--text-primary);
 
   &.level0 {
-    border-left: 2px solid #9096ad;
+    border-left: 1px solid var(--gray-600);
   }
 
   &.level1 {
-    border-left: 2px solid #fccada;
+    border-left: 1px solid var(--gray-700);
   }
 
   &.level2 {
-    border-left: 2px solid #d3f1d6;
+    border-left: 1px solid var(--gray-800);
   }
 `;
 
@@ -117,25 +120,28 @@ const ReplyActionBar = styled.div`
   padding-top: 1em;
 `;
 
-const CommentContent = styled.div`
-  margin: 16px 0 0;
-  font-size: var(--fs-base);
-  color: var(--text-primary);
-  line-height: 22px;
-`;
-
 const Post = styled.div`
   position: flex;
   flex-direction: column;
 `;
 
 const ActionBar = styled.div`
-  padding: 16px 0 ${props => (props.comment ? '0' : '16px')};
+  display: flex;
+  flex-direction: row;
+  margin-left: -4px;
+
+  > * {
+    margin-right: 0.5em;
+  }
 `;
 
 const CommenterNameplateWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+
+  > * {
+    margin-right: 1em;
+  }
 `;
 
 const CommentActionButtonGroup = styled.div`
