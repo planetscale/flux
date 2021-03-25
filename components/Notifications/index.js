@@ -66,6 +66,7 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   align-items: center;
   outline: none;
   font-size: var(--fs-base-minus-1);
+  color: var(--text-secondary);
   font-weight: 300;
 `;
 
@@ -146,7 +147,9 @@ export default function Notifications() {
       <NotificationContent sideOffset={42}>
         {totalNotifications === 0 ? (
           <DropdownMenu.Group>
-            <EmptyNotificationItem>No new notifications</EmptyNotificationItem>
+            <EmptyNotificationItem>
+              😶 No notifications for you.
+            </EmptyNotificationItem>
           </DropdownMenu.Group>
         ) : (
           <Fragment>
