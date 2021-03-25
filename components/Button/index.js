@@ -27,7 +27,8 @@ export const ButtonBase = styled.button`
   }
 
   &:focus {
-    outline: none;
+    outline-width: 1px;
+    box-shadow: var(--layer-shadow);
   }
 
   &:disabled {
