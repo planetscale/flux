@@ -60,7 +60,7 @@ const Content = styled.div`
   font-size: var(--fs-base);
   line-height: 28px;
   letter-spacing: 0.02em;
-  padding: 1em 0 2em;
+  padding: 2em 0;
 
   ${ButtonWireframe} {
     margin: 32px 0 0 0;
@@ -91,15 +91,15 @@ const Comment = styled.div`
   color: var(--text-primary);
 
   &.level0 {
-    border-left: 1px solid rgb(var(--blue-500), 0.42);
+    border-left: 1px solid var(--gray-600);
   }
 
   &.level1 {
-    border-left: 1px solid rgba(var(--green-500), 0.42);
+    border-left: 1px solid var(--gray-700);
   }
 
   &.level2 {
-    border-left: 1px solid rgba(var(--pink-500), 0.42);
+    border-left: 1px solid var(--gray-800);
   }
 `;
 

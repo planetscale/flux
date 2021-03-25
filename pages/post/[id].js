@@ -40,7 +40,6 @@ import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import UserIcon from 'components/UserIcon';
 
 const Meta = styled.div`
   display: flex;
@@ -83,6 +82,18 @@ const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--border-primary);
+
+  ${media.phone`
+    padding: 42px;
+    width: 100%;
+  `}
+`;
+
+const ReplyContainer = styled.div`
+  width: 80ch;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 
   ${media.phone`
     padding: 42px;
@@ -539,14 +550,6 @@ export default function PostPage() {
         <CommentWrapper>
           <Comment className={`level${level}`}>
             <CommenterNameplateWrapper>
-              <UserIcon
-                src={
-                  comment.author?.profile?.avatar || '/user_profile_icon.svg'
-                }
-                width="30px"
-                height="30px"
-                alt={`${comment.author?.displayName}'s profile picture`}
-              />
               <div>
                 <CommenterNamePlate
                   displayName={comment.author?.displayName}
@@ -783,8 +786,8 @@ export default function PostPage() {
       </PageWrapper>
 
       <CommentContainerWrapper>
-        <CommentContainer>
-          {Object.keys(postState.replies).length > 0 && (
+        {Object.keys(postState.replies).length > 0 && (
+          <CommentContainer>
             <CommentList main>
               {Object.values(postState.replies)
                 .filter(r => !r.parentId)
@@ -794,8 +797,9 @@ export default function PostPage() {
                   </React.Fragment>
                 ))}
             </CommentList>
-          )}
-
+          </CommentContainer>
+        )}
+        <ReplyContainer>
           <Reply>
             <MarkdownEditor
               placeholder="Comment"
@@ -816,7 +820,7 @@ export default function PostPage() {
               </ButtonWireframe>
             </ReplyActionBar>
           </Reply>
-        </CommentContainer>
+        </ReplyContainer>
       </CommentContainerWrapper>
     </CustomLayout>
   );
