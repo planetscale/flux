@@ -21,11 +21,15 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   border-bottom: 1px solid var(--border-primary);
-  padding: 30px;
+  padding: 2em;
   position: sticky;
   top: 0;
   z-index: 1;
   background-color: var(--bg-primary);
+
+  ${media.phone`
+    padding: 2em 1em;
+  `}
 `;
 
 const Constrain = styled.div`
@@ -125,12 +129,6 @@ const ActionsWrapper = styled.div`
   > *:not(:last-of-type) {
     margin: 0 12px 0 0;
   }
-
-  ${media.phone`
-    border-top: 1px solid var(--border-primary);
-    margin-top: 1em;
-    padding-top: 1em;
-  `}
 `;
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {

@@ -94,9 +94,9 @@ export default function Notifications() {
   );
   if (!data) {
     return (
-      <NotificationButton>
+      <ButtonWireframe>
         <Notification2 />
-      </NotificationButton>
+      </ButtonWireframe>
     );
   }
 
