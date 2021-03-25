@@ -53,16 +53,6 @@ const TitleInputWrapper = styled.div`
   &.valid {
     border-color: var(--border-primary);
   }
-
-  .chars-left {
-    display: flex;
-    flex-direction: row;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
-      monospace;
-    align-items: flex-end;
-    color: var(--text-secondary);
-    font-size: var(--fs-base-minus-2);
-  }
 `;
 
 const TitleInputBase = `
@@ -345,9 +335,6 @@ export default function NewPost() {
               value={state.title.value}
               onChange={e => handleTitleChange(e, 'title')}
             ></TitleInput>
-            {/* <div className="chars-left">
-              {TITLE_MAX_LENGTH - state.title.value.length}
-            </div> */}
           </TitleInputWrapper>
           <TitleInputWrapper>
             <SubtitleInput
@@ -357,9 +344,6 @@ export default function NewPost() {
               value={state.subtitle.value}
               onChange={e => handleTitleChange(e, 'subtitle')}
             ></SubtitleInput>
-            {/* <div className="chars-left">
-              {TITLE_MAX_LENGTH - state.subtitle.value.length}
-            </div> */}
           </TitleInputWrapper>
           <EditorWrapper>
             <MarkdownEditor
