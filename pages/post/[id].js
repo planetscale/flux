@@ -133,7 +133,9 @@ export default function PostPage() {
     replies: {},
     stars: [],
   });
+
   const [reply, setReply] = useState('');
+  const [replyKey, setReplyKey] = React.useReducer(c => c + 1, 0);
 
   const [commentInputs, setCommentInputs] = useImmer({
     replies: {},
@@ -209,7 +211,7 @@ export default function PostPage() {
       });
       setLoading(false);
       if (result.data) {
-        setReply('');
+        setReplyKey();
         updateReplyMap(result.data);
       } else {
         console.error(e);
@@ -803,7 +805,7 @@ export default function PostPage() {
           <Reply>
             <MarkdownEditor
               placeholder="Comment"
-              content={reply}
+              key={replyKey}
               handleContentChange={handleReplyChange}
               onKeyDown={e => {
                 handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
@@ -811,12 +813,14 @@ export default function PostPage() {
             ></MarkdownEditor>
             <ReplyActionBar>
               <ButtonWireframe
+                className={'with-shortcut'}
                 type="submit"
                 onClick={handleCommentSubmit}
                 disabled={!canSubmit(reply)}
               >
                 <Chat />
                 <span>Reply</span>
+                <span className="shortcut">⌘ Enter</span>
               </ButtonWireframe>
             </ReplyActionBar>
           </Reply>

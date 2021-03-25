@@ -77,6 +77,7 @@
 
   --border-radius: 99px;
 
+  --fs-base-minus-3: 10px;
   --fs-base-minus-2: 12px;
   --fs-base-minus-1: 14px;
   --fs-base: 1em;
@@ -93,7 +94,7 @@
   --border-primary: var(--gray-700);
   --border-secondary: var(--gray-600);
   --border-action: var(--gray-600);
-  --text-primary: var(--gray-100);
+  --text-primary: var(--gray-300);
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));

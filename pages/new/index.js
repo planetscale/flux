@@ -39,29 +39,23 @@ const DotSeperator = styled.div`
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 2em 0 0;
-  background-color: var(--bg-secondary);
-  padding: 0.5em;
-  border-bottom: 1px solid var(--border-primary);
-  border-radius: 6px;
-  box-shadow: var(--layer-shadow);
+  margin: 2em -1em 0;
+  padding: 1em;
 
-  &.invalid {
+  border-radius: 6px;
+
+  &:hover,
+  &:focus-within {
+    background-color: var(--bg-secondary);
+    box-shadow: var(--layer-shadow);
+  }
+
+  &.invalid > * {
     border-color: rgb(var(--red-500));
   }
 
-  &.valid {
+  &.valid > * {
     border-color: var(--border-primary);
-  }
-
-  .chars-left {
-    display: flex;
-    flex-direction: row;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
-      monospace;
-    align-items: flex-end;
-    color: var(--text-secondary);
-    font-size: var(--fs-base-minus-2);
   }
 `;
 
@@ -74,9 +68,14 @@ const TitleInputBase = `
   width: 100%;
   color: var(--text-primary);
   background-color: unset;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-primary);
 
   ::placeholder {
-    color: var(--bg-tertiary);
+    color: var(--border-secondary);
+  }
+
+  &:active, &:focus {
   }
 `;
 
@@ -96,16 +95,30 @@ const SubtitleInput = styled.textarea`
 
 const ActionItems = styled.div`
   display: flex;
-  margin: 32px 0;
+  margin-top: 2em;
+  padding-top: 2em;
+  border-top: 1px solid var(--border-primary);
 
   button {
-    margin: 0 8px 0 0;
+    margin: 0 1em 0 0;
   }
 `;
 
 const EditorWrapper = styled.div`
   padding: 2em 0;
   height: fit-content;
+  position: relative;
+  display: flex;
+  margin: 2em -1em 0;
+  padding: 1em;
+
+  border-radius: 6px;
+
+  &:hover,
+  &:focus-within {
+    background-color: var(--bg-secondary);
+    box-shadow: var(--layer-shadow);
+  }
 `;
 
 const customStyles = {
@@ -116,17 +129,19 @@ const customStyles = {
   control: provided => ({
     ...provided,
     borderColor: 'var(--border-primary)',
+    backgroundColor: 'var(--bg-primary)',
     borderStyle: 'solid',
     borderWidth: '1px',
-    boxShadow: 'var(--layer-shadow)',
-    backgroundColor: 'var(--bg-secondary)',
     borderRadius: '6px',
+    ':hover': {
+      backgroundColor: 'var(--bg-secondary)',
+      borderColor: 'unset',
+      boxShadow: 'var(--layer-shadow)',
+    },
   }),
   indicatorSeparator: provided => ({
     ...provided,
     backgroundColor: 'var(--bg-primary)',
-    marginBottom: '0',
-    marginTop: '0',
   }),
   indicatorContainer: provided => ({
     ...provided,
@@ -150,7 +165,6 @@ const customStyles = {
     border: '1px solid var(--bg-tertiary)',
     borderRadius: '8px',
     boxShadow: 'var(--layer-shadow)',
-    width: 'unset',
   }),
 };
 
@@ -309,8 +323,8 @@ export default function NewPost() {
                 <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
                 <div>
                   <Select
-                    isClearable={true}
-                    isSearchable={true}
+                    isClearable={false}
+                    isSearchable={false}
                     styles={customStyles}
                     value={state.selectedTag}
                     onChange={handleTagChange}
@@ -344,9 +358,6 @@ export default function NewPost() {
               value={state.title.value}
               onChange={e => handleTitleChange(e, 'title')}
             ></TitleInput>
-            {/* <div className="chars-left">
-              {TITLE_MAX_LENGTH - state.title.value.length}
-            </div> */}
           </TitleInputWrapper>
           <TitleInputWrapper>
             <SubtitleInput
@@ -356,9 +367,6 @@ export default function NewPost() {
               value={state.subtitle.value}
               onChange={e => handleTitleChange(e, 'subtitle')}
             ></SubtitleInput>
-            {/* <div className="chars-left">
-              {TITLE_MAX_LENGTH - state.subtitle.value.length}
-            </div> */}
           </TitleInputWrapper>
           <EditorWrapper>
             <MarkdownEditor
@@ -371,13 +379,18 @@ export default function NewPost() {
           </EditorWrapper>
           <ActionItems>
             <ButtonWireframe
+              className={'primary with-shortcut'}
+              tabIndex={'0'}
               onClick={handlePostSubmit}
               disabled={!canSubmitPost()}
             >
               <Article />
               <span>Post</span>
+              <span className="shortcut">⌘ Enter</span>
             </ButtonWireframe>
-            <ButtonWireframe onClick={handleCancel}>Cancel</ButtonWireframe>
+            <ButtonWireframe tabIndex={'0'} onClick={handleCancel}>
+              Cancel
+            </ButtonWireframe>
           </ActionItems>
         </Post>
       </PageWrapper>

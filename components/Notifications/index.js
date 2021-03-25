@@ -7,13 +7,6 @@ import { Notification2, Close } from '@styled-icons/remix-line';
 import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';
 
-const NotificationButton = styled(ButtonWireframe)`
-  &.has-notifications {
-    background-color: rgba(var(--green-500), 0.15);
-    color: rgb(var(--green-500));
-  }
-`;
-
 const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
@@ -73,6 +66,7 @@ const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
   align-items: center;
   outline: none;
   font-size: var(--fs-base-minus-1);
+  color: var(--text-secondary);
   font-weight: 300;
 `;
 
@@ -101,9 +95,9 @@ export default function Notifications() {
   );
   if (!data) {
     return (
-      <NotificationButton>
+      <ButtonWireframe>
         <Notification2 />
-      </NotificationButton>
+      </ButtonWireframe>
     );
   }
 
@@ -144,16 +138,18 @@ export default function Notifications() {
 
   return (
     <DropdownMenu.Root>
-      <NotificationButton
+      <ButtonWireframe
         as={DropdownMenu.Trigger}
         className={totalNotifications > 0 ? 'has-notifications' : ''}
       >
         <Notification2 />
-      </NotificationButton>
+      </ButtonWireframe>
       <NotificationContent sideOffset={42}>
         {totalNotifications === 0 ? (
           <DropdownMenu.Group>
-            <EmptyNotificationItem>No new notifications</EmptyNotificationItem>
+            <EmptyNotificationItem>
+              😶 No notifications for you.
+            </EmptyNotificationItem>
           </DropdownMenu.Group>
         ) : (
           <Fragment>

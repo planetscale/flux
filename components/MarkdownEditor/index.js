@@ -40,8 +40,8 @@ const base = {
   placeholder: 'var(--border-secondary)',
   textSecondary: '#4E5C6E',
   textLight: colors.white,
-  textHighlight: 'var(--highlight)',
-  selected: 'var(--highlight)',
+  textHighlight: 'var(--text-blue)',
+  selected: 'var(--text-blue)',
   codeComment: '#6a737d',
   codePunctuation: '#5e6687',
   codeNumber: '#d73a49',
@@ -59,11 +59,11 @@ const base = {
   codeImportant: '#c94922',
 
   blockToolbarBackground: 'var(--bg-primary)',
-  blockToolbarTrigger: 'var(--highlight)',
-  blockToolbarTriggerIcon: 'var(--highlight)',
-  blockToolbarItem: 'var(--highlight)',
+  blockToolbarTrigger: 'var(--text-blue)',
+  blockToolbarTriggerIcon: 'var(--text-blue)',
+  blockToolbarItem: 'var(--text-primary)',
   blockToolbarText: 'var(--text-primary)',
-  blockToolbarHoverBackground: 'var(--highlight)',
+  blockToolbarHoverBackground: 'var(--text-blue)',
   blockToolbarDivider: 'var(--border-secondary)',
 
   noticeInfoBackground: '#F5BE31',
@@ -107,6 +107,9 @@ export default function MarkdownEditor({
   readOnly,
   onKeyDown,
   placeholder,
+  onCancel,
+  onSave,
+  key,
 }) {
   const save = async function (data) {
     const fileCompressionOptions = {
@@ -162,8 +165,11 @@ export default function MarkdownEditor({
         uploadImage={save}
         defaultValue={content}
         onChange={handleContentChange}
+        onCancel={onCancel}
+        onSave={onSave}
         theme={lightTheme}
         readOnly={readOnly}
+        key={key}
         // extensions={readOnly ? undefined : getPlugins(populateUsers)}
       />
     </Wrapper>

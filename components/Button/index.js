@@ -27,7 +27,8 @@ export const ButtonBase = styled.button`
   }
 
   &:focus {
-    outline: none;
+    outline-width: 1px;
+    box-shadow: var(--layer-shadow);
   }
 
   &:disabled {
@@ -42,12 +43,26 @@ export const ButtonWireframe = styled(ButtonBase)`
     background-color: var(--bg-tertiary);
   }
 
-  &.selected {
-    color: rgb(var(--white));
-    background-color: rgb(var(--blue-500));
+  &.has-notifications {
+    background-color: rgba(var(--green-500), 0.15);
+    color: rgb(var(--green-500));
+  }
+
+  &.primary {
+    background-color: var(--text-primary);
+    color: var(--bg-secondary);
 
     &:hover:not([disabled]) {
-      background-color: rgb(var(--blue-500));
+      background-color: var(--text-blue);
+      color: var(--text-primary);
+    }
+  }
+
+  &.with-shortcut {
+    span:nth-child(3) {
+      border-left: 1px solid var(--bg-primary);
+      margin-left: 8px;
+      padding-left: 8px;
     }
   }
 `;
