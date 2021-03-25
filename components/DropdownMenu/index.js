@@ -10,7 +10,6 @@ const Content = styled(DropdownMenu.Content)`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 0 0 8px;
 `;
 
 const SimpleItem = styled.div`
@@ -18,7 +17,9 @@ const SimpleItem = styled.div`
 `;
 
 const Group = styled(DropdownMenu.Group)`
-  border-bottom: 1px solid var(--border-primary);
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-primary);
+  }
 `;
 
 const {
