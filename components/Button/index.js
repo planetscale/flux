@@ -53,21 +53,21 @@ export const ButtonWireframe = styled(ButtonBase)`
 `;
 
 export const ButtonSquished = styled(ButtonBase)`
-  height: 30px;
+  height: 28px;
   padding: 8px 12px;
-  background-color: var(--bg-secondary);
+  font-size: var(--fs-base-minus-2);
+  background-color: unset;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-primary);
 
   &:hover:not([disabled]) {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 
   &.selected {
-    color: rgb(var(--white));
-    background-color: rgb(var(--blue-500));
-
-    &:hover:not([disabled]) {
-      background-color: rgb(var(--blue-500));
-    }
+    background-color: rgba(var(--blue-500), 0.1);
+    border-color: rgba(var(--blue-500), 0.1);
+    color: rgb(var(--blue-500));
   }
 `;
 

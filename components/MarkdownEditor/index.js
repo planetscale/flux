@@ -37,7 +37,7 @@ const base = {
   fontWeight: 400,
   zIndex: 100,
   link: colors.primary,
-  placeholder: '#B1BECC',
+  placeholder: 'var(--border-secondary)',
   textSecondary: '#4E5C6E',
   textLight: colors.white,
   textHighlight: 'var(--highlight)',

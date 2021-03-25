@@ -46,6 +46,7 @@
     "react-context-devtool": "^2.0.0",
     "react-dom": "17.0.1",
     "react-is": "^16.13.1",
+    "react-markdown": "^5.0.3",
     "react-select": "^3.2.0",
     "rich-markdown-editor": "^11.6.0",
     "styled-components": "^5.2.1",
