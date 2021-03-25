@@ -805,7 +805,7 @@ export default function PostPage() {
           <Reply>
             <MarkdownEditor
               placeholder="Comment"
-              key={replyKey}
+              componentkey={replyKey}
               handleContentChange={handleReplyChange}
               onKeyDown={e => {
                 handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));
