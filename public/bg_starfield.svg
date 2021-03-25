@@ -3,7 +3,7 @@
     circle {
       fill: white;
     }
-  </style>
+</style>
 <circle cx="374" cy="160" r="1" />
 <circle opacity="0.161544" cx="591.825" cy="423.212" r="1" transform="rotate(168.844 591.825 423.212)" />
 <circle opacity="0.669015" cx="410.19" cy="409.599" r="1" transform="rotate(-127.269 410.19 409.599)" />

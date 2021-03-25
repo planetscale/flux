@@ -109,7 +109,7 @@ export default function MarkdownEditor({
   placeholder,
   onCancel,
   onSave,
-  key,
+  componentKey,
 }) {
   const save = async function (data) {
     const fileCompressionOptions = {
@@ -169,7 +169,7 @@ export default function MarkdownEditor({
         onSave={onSave}
         theme={lightTheme}
         readOnly={readOnly}
-        key={key}
+        key={componentKey}
         // extensions={readOnly ? undefined : getPlugins(populateUsers)}
       />
     </Wrapper>

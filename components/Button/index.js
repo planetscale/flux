@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { urlObjectKeys } from 'next/dist/next-server/lib/utils';
 import { media } from '../../pageUtils/post/theme';
 
 export const ButtonBase = styled.button`
@@ -17,7 +18,7 @@ export const ButtonBase = styled.button`
     height: 1em;
   }
 
-  span:nth-child(2) {
+  span:nth-of-type(1) {
     margin-left: 8px;
   }
 
@@ -59,7 +60,7 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.with-shortcut {
-    span:nth-child(3) {
+    span:nth-of-type(2) {
       border-left: 1px solid var(--bg-primary);
       margin-left: 8px;
       padding-left: 8px;
@@ -87,15 +88,12 @@ export const ButtonSquished = styled(ButtonBase)`
 `;
 
 export const ButtonImage = styled(ButtonBase)`
-  border: 0;
   padding: 0;
   width: 36px;
   height: 36px;
-
-  > img {
-    width: 100%;
-    height: auto;
-  }
+  background: url(${props => props.img || '/user_profile_icon.svg'});
+  background-repeat: no-repeat;
+  background-size: contain;
 
   ${media.phone`
     width: 32px;

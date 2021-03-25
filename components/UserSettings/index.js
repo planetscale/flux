@@ -47,7 +47,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
 
   &:hover {
     cursor: pointer;
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 `;
 
@@ -136,11 +136,11 @@ export default function UserSettings({ displayName, userHandle }) {
             </StyledRadio>
             <StyledRadio value="light" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Moon />
+              <Sun />
             </StyledRadio>
             <StyledRadio value="dark" onSelect={handleRadioItem}>
               <StyledIndicator />
-              <Sun />
+              <Moon />
             </StyledRadio>
           </StyledRadioGroup>
         </MenuItem>

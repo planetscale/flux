@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const StyledIcon = styled.img`
-  border-radius: 50%;
+  border-radius: var(--border-radius);
 `;
 
 export default function UserIcon({ ...props }) {
