@@ -7,13 +7,6 @@ import { Notification2, Close } from '@styled-icons/remix-line';
 import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';
 
-const NotificationButton = styled(ButtonWireframe)`
-  &.has-notifications {
-    background-color: rgba(var(--green-500), 0.15);
-    color: rgb(var(--green-500));
-  }
-`;
-
 const NotificationHeader = styled(DropdownMenu.SimpleItem)`
   display: flex;
   align-items: center;
@@ -144,12 +137,12 @@ export default function Notifications() {
 
   return (
     <DropdownMenu.Root>
-      <NotificationButton
+      <ButtonWireframe
         as={DropdownMenu.Trigger}
         className={totalNotifications > 0 ? 'has-notifications' : ''}
       >
         <Notification2 />
-      </NotificationButton>
+      </ButtonWireframe>
       <NotificationContent sideOffset={42}>
         {totalNotifications === 0 ? (
           <DropdownMenu.Group>

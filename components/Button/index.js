@@ -42,13 +42,9 @@ export const ButtonWireframe = styled(ButtonBase)`
     background-color: var(--bg-tertiary);
   }
 
-  &.selected {
-    color: rgb(var(--white));
-    background-color: rgb(var(--blue-500));
-
-    &:hover:not([disabled]) {
-      background-color: rgb(var(--blue-500));
-    }
+  &.has-notifications {
+    background-color: rgba(var(--green-500), 0.15);
+    color: rgb(var(--green-500));
   }
 `;
 
