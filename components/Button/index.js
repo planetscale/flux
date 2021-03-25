@@ -46,6 +46,11 @@ export const ButtonWireframe = styled(ButtonBase)`
     background-color: rgba(var(--green-500), 0.15);
     color: rgb(var(--green-500));
   }
+
+  &.primary {
+    background-color: var(--text-primary);
+    color: var(--bg-secondary);
+  }
 `;
 
 export const ButtonSquished = styled(ButtonBase)`

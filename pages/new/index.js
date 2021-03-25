@@ -371,6 +371,7 @@ export default function NewPost() {
           </EditorWrapper>
           <ActionItems>
             <ButtonWireframe
+              className={'primary'}
               onClick={handlePostSubmit}
               disabled={!canSubmitPost()}
             >
