@@ -4,7 +4,6 @@ import {
   ButtonWireframe,
   ButtonComposite,
 } from 'components/Button';
-import UserIcon from '../UserIcon';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
@@ -114,6 +113,10 @@ const Breadcrumb = styled.div`
   flex-direction: row;
   align-items: center;
   font-size: var(--fs-base-plus-1);
+
+  ${media.phone`
+    font-size: var(--fs-base);
+  `}
 `;
 
 const PageTitle = styled.div`
