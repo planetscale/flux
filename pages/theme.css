@@ -11,6 +11,7 @@
   --gray-600: #474953;
   --gray-700: #393941;
   --gray-800: #272830;
+  --gray-850: #1e1f26;
   --gray-900: #1a1b21;
 
   --red-400: 245, 106, 113;
@@ -83,8 +84,8 @@
 
 @define-mixin darkmode {
   --bg-primary: var(--gray-900);
-  --bg-secondary: var(--gray-800);
-  --bg-tertiary: var(--gray-700);
+  --bg-secondary: var(--gray-850);
+  --bg-tertiary: var(--gray-800);
   --border-primary: var(--gray-700);
   --border-secondary: var(--gray-600);
   --border-action: var(--gray-600);
@@ -92,7 +93,7 @@
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));
-  --layer-shadow: 1px 1px 16px -16px var(--black);
+  --layer-shadow: 0 0 16px -64px var(--black);
 }
 
 @media screen and (prefers-color-scheme: dark) {

@@ -43,6 +43,7 @@ const Post = styled.a`
 
   > div {
     border: 1px solid var(--bg-primary);
+    background-color: var(--bg-primary);
     transition: all 250ms ease;
   }
 

@@ -13,6 +13,14 @@ const CommentList = styled.ul`
   }
 `;
 
+const CommentListItem = styled.li`
+  margin: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 4em;
+  }
+`;
+
 const PageWrapper = styled.div`
   padding: 4em 0 2em;
   width: 80ch;
@@ -68,10 +76,6 @@ const Content = styled.div`
   }
 `;
 
-const CommentListItem = styled.li`
-  margin: 0 0 4em;
-`;
-
 const CommentWrapper = styled.div`
   border-radius: 8px;
 `;
@@ -125,6 +129,11 @@ const ReplyActionBar = styled.div`
 const Post = styled.div`
   position: flex;
   flex-direction: column;
+  background-color: var(--bg-secondary);
+  margin: -2em;
+  padding: 2em;
+  border-radius: 6px;
+  box-shadow: var(--layer-shadow);
 `;
 
 const ActionBar = styled.div`
