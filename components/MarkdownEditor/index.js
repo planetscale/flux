@@ -107,8 +107,6 @@ export default function MarkdownEditor({
   readOnly,
   onKeyDown,
   placeholder,
-  onCancel,
-  onSave,
   componentKey,
 }) {
   const save = async function (data) {
@@ -165,8 +163,6 @@ export default function MarkdownEditor({
         uploadImage={save}
         defaultValue={content}
         onChange={handleContentChange}
-        onCancel={onCancel}
-        onSave={onSave}
         theme={lightTheme}
         readOnly={readOnly}
         key={componentKey}

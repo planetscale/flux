@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
-const CommentList = styled.ul`
+const CommentList = styled.div`
   margin: 0;
   padding: 0;
   padding-top: 2em;
@@ -13,7 +13,7 @@ const CommentList = styled.ul`
   }
 `;
 
-const CommentListItem = styled.li`
+const CommentListItem = styled.div`
   margin: 0;
 
   &:not(:last-child) {
@@ -84,7 +84,6 @@ const CommentContent = styled.div`
   font-size: var(--fs-base);
   line-height: 1.5em;
   color: var(--text-primary);
-  margin: 1em 0 1.5em;
 
   > * {
     margin: 0;
@@ -93,8 +92,14 @@ const CommentContent = styled.div`
 
 const Comment = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
   padding: 0 1em;
   color: var(--text-primary);
+
+  > *:not(:last-child) {
+    margin-bottom: 1.5em;
+  }
 
   &.level0 {
     border-left: 1px solid var(--gray-600);
@@ -109,31 +114,16 @@ const Comment = styled.div`
   }
 `;
 
-const Reply = styled.div`
-  margin: 0 0 42px;
+const CommentActionButtonGroup = styled.div`
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  padding: 2em;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-`;
 
-const ReplyActionBar = styled.div`
-  width: 100%;
-  margin-top: 1em;
-  padding-top: 1em;
-`;
-
-const Post = styled.div`
-  position: flex;
-  flex-direction: column;
-  background-color: var(--bg-secondary);
-  margin: -2em;
-  padding: 2em;
-  border-radius: 6px;
-  box-shadow: var(--layer-shadow);
+  ${ButtonWireframe}:nth-of-type(2) {
+    margin-left: 8px;
+  }
 `;
 
 const ActionBar = styled.div`
@@ -146,25 +136,32 @@ const ActionBar = styled.div`
   }
 `;
 
-const CommenterNameplateWrapper = styled.div`
+const Reply = styled.div`
+  margin: 0;
+  margin-bottom: ${props => (props.subcomment ? '' : '42px')};
   display: flex;
-  flex-direction: row;
-
-  > * {
-    margin-right: 1em;
-  }
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 2em;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
 `;
 
-const CommentActionButtonGroup = styled.div`
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
+const ReplyActionBar = styled(ActionBar)`
+  margin-left: unset;
+  margin-top: 1em;
+  padding-top: 1em;
+`;
 
-  ${ButtonWireframe}:nth-of-type(2) {
-    margin-left: 8px;
-  }
+const Post = styled.div`
+  position: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+  margin: -2em;
+  padding: 2em;
+  border-radius: 6px;
+  box-shadow: var(--layer-shadow);
 `;
 
 const InputWrapper = styled.div`
@@ -236,7 +233,6 @@ export {
   CommentContent,
   Post,
   ActionBar,
-  CommenterNameplateWrapper,
   CommentActionButtonGroup,
   InputWrapper,
 };

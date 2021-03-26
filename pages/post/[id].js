@@ -24,8 +24,6 @@ import {
   Post,
   CommentContent,
   ActionBar,
-  CommenterNameplateWrapper,
-  CommentActionButtonGroup,
   ReplyActionBar,
 } from 'pageUtils/post/styles';
 import { ButtonSquished, ButtonWireframe } from 'components/Button';
@@ -40,6 +38,7 @@ import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import CommentBox from 'components/CommentBox';
 
 const Meta = styled.div`
   display: flex;
@@ -81,7 +80,6 @@ const CommentContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  /* border-top: 1px solid var(--border-primary); */
 
   ${media.phone`
     padding: 42px;
@@ -139,9 +137,9 @@ export default function PostPage() {
   const [replyKey, setReplyKey] = React.useReducer(c => c + 1, 0);
 
   const [commentInputs, setCommentInputs] = useImmer({
-    replies: {},
     edits: {},
   });
+
   const userContext = useUserContext();
 
   const { data: postData } = useSWR(
@@ -389,16 +387,13 @@ export default function PostPage() {
     });
   };
 
-  const handleCommentRepliesChange = (content, key) => {
-    setCommentInputs(draft => {
-      draft.replies[key] = content;
-    });
-  };
+  const toggleCommentReply = (commentId, e) => {
+    console.log(commentId);
 
-  const toggleCommentReply = e => {
     setCommentButtonState(draft => {
-      draft.replyButtons[e.target.dataset.commentId] = !commentButtonState
-        .replyButtons[e.target.dataset.commentId];
+      draft.replyButtons[commentId] = !commentButtonState.replyButtons[
+        commentId
+      ];
     });
   };
 
@@ -435,37 +430,6 @@ export default function PostPage() {
         });
         setCommentButtonState(draft => {
           draft.editButtons[id] = !commentButtonState.editButtons[id];
-        });
-      } else {
-        console.error(e);
-      }
-    } catch (e) {
-      setLoading(false);
-      console.error(e);
-    }
-  };
-
-  const handleCommentReplySubmit = async (e, commentId) => {
-    const id = commentId ? commentId : e.target.dataset.commentId;
-    if (!commentInputs.replies[id]?.trim()) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const result = await fetcher('POST', '/api/post/create-reply', {
-        content: commentInputs.replies[id]?.trim(),
-        postId: Number(router.query.id),
-        parentId: Number(id),
-      });
-      setLoading(false);
-      if (result.data) {
-        updateReplyMap(result.data);
-        setCommentInputs(draft => {
-          draft.replies[id] = '';
-        });
-        setCommentButtonState(draft => {
-          draft.replyButtons[id] = !commentButtonState.replyButtons[id];
         });
       } else {
         console.error(e);
@@ -552,58 +516,59 @@ export default function PostPage() {
       <CommentListItem>
         <CommentWrapper>
           <Comment className={`level${level}`}>
-            <CommenterNameplateWrapper>
-              <div>
-                <CommenterNamePlate
-                  displayName={comment.author?.displayName}
-                  userHandle={comment.author?.username}
-                  avatar={comment.author?.profile?.avatar}
-                  date={getLocaleDateTimeString(comment.createdAt)}
-                />
+            <CommenterNamePlate
+              displayName={comment.author?.displayName}
+              userHandle={comment.author?.username}
+              avatar={comment.author?.profile?.avatar}
+              date={getLocaleDateTimeString(comment.createdAt)}
+            />
 
-                <CommentContent>
-                  <ReactMarkdown>{comment.content}</ReactMarkdown>
-                </CommentContent>
+            <CommentContent>
+              <ReactMarkdown>{comment.content}</ReactMarkdown>
+            </CommentContent>
 
-                <ActionBar comment>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger
-                      as={ButtonSquished}
-                      color="var(--bg-secondary)"
-                      textColor="white"
-                      onClick={() => handleStarClick(comment.id)}
-                      disabled={isLoading}
-                      className={hasStarred ? 'selected' : ''}
-                    >
-                      {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
-                      <span>{comment.stars.length}</span>
-                    </Tooltip.Trigger>
-                    {comment.stars.length > 0 && (
-                      <StyledContent as="ul">
-                        {comment.stars.map(star => (
-                          <li key={star.user.id}>{star.user.displayName}</li>
-                        ))}
-                        <StyledArrow />
-                      </StyledContent>
-                    )}
-                  </Tooltip.Root>
-                  {/* {level < 2 && (
-                    <ButtonSquished
-                      data-comment-id={comment.id}
-                      type="submit"
-                      onClick={toggleCommentReply}
-                    >
-                      <Chat />
-                      <span>
-                        {commentButtonState.replyButtons[comment.id]
-                          ? 'Cancel Reply'
-                          : 'Reply'}
-                      </span>
-                    </ButtonSquished>
-                  )} */}
-                </ActionBar>
-              </div>
-            </CommenterNameplateWrapper>
+            <ActionBar comment>
+              <Tooltip.Root>
+                <Tooltip.Trigger
+                  as={ButtonSquished}
+                  color="var(--bg-secondary)"
+                  textColor="white"
+                  onClick={() => handleStarClick(comment.id)}
+                  disabled={isLoading}
+                  className={hasStarred ? 'selected' : ''}
+                >
+                  {hasStarred ? <RemixFillStar /> : <RemixLineStar />}
+                  <span>{comment.stars.length}</span>
+                </Tooltip.Trigger>
+                {comment.stars.length > 0 && (
+                  <StyledContent as="ul">
+                    {comment.stars.map(star => (
+                      <li key={star.user.id}>{star.user.displayName}</li>
+                    ))}
+                    <StyledArrow />
+                  </StyledContent>
+                )}
+              </Tooltip.Root>
+              {level < 2 && !commentButtonState.replyButtons[comment.id] && (
+                <ButtonSquished
+                  type="submit"
+                  onClick={e => toggleCommentReply(comment.id, e)}
+                >
+                  <Chat />
+                  <span>Reply</span>
+                </ButtonSquished>
+              )}
+            </ActionBar>
+
+            {commentButtonState.replyButtons[comment.id] && (
+              <CommentBox
+                postId={router.query?.id}
+                commentId={comment.id}
+                closeCommentBoxCallback={toggleCommentReply}
+                updateCommentTreeCallback={updateReplyMap}
+                placeholder={'Comment'}
+              ></CommentBox>
+            )}
 
             {/* {commentButtonState.editButtons[comment.id] ? (
               <Reply>
@@ -640,37 +605,6 @@ export default function PostPage() {
                   readOnly={true}
                 ></MarkdownEditor>
               </CommentContent>
-            )} */}
-
-            {/* {commentButtonState.replyButtons[comment.id] && (
-              <Reply>
-                <MarkdownEditor
-                  placeholder={`Comment ${comment.id} ${
-                    commentButtonState.replyButtons[comment.id]
-                  }`}
-                  content={commentInputs.replies[comment.id]}
-                  handleContentChange={getContent => {
-                    handleCommentRepliesChange(getContent(), comment.id);
-                  }}
-                  onKeyDown={e => {
-                    handleKeyPressSubmit(
-                      e,
-                      handleCommentReplySubmit,
-                      canSubmit(commentInputs.replies[comment.id]),
-                      comment.id
-                    );
-                  }}
-                ></MarkdownEditor>
-                <ButtonWireframe
-                  data-comment-id={comment.id}
-                  type="submit"
-                  onClick={handleCommentReplySubmit}
-                  disabled={!canSubmit(commentInputs.replies[comment.id])}
-                >
-                  <Chat />
-                  <span>Reply</span>
-                </ButtonWireframe>
-              </Reply>
             )} */}
           </Comment>
         </CommentWrapper>

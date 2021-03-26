@@ -370,7 +370,7 @@ export default function NewPost() {
           </TitleInputWrapper>
           <EditorWrapper>
             <MarkdownEditor
-              content={state.content}
+              // content={state.content}
               handleContentChange={handleContentChange}
               onKeyDown={e => {
                 handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
