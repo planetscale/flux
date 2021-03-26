@@ -157,6 +157,7 @@ const DemarcationString = styled.div`
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
+  font-size: var(--fs-base-minus-1);
   color: var(--text-secondary);
 
   &:before {
