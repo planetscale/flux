@@ -12,6 +12,7 @@ export const ButtonBase = styled.button`
   border: unset;
   font-size: var(--fs-base-minus-1);
   height: 36px;
+  transition: all 250ms ease;
 
   svg {
     width: 1em;
