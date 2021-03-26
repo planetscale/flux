@@ -76,7 +76,8 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentContent = styled.div`
-  font-size: var(--fs-base-minus-1);
+  font-size: var(--fs-base);
+  line-height: 1.5em;
   color: var(--text-primary);
   margin: 1em 0 1.5em;
 
