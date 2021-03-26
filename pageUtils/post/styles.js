@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ButtonWireframe } from 'components/Button';
 import { media } from './theme';
 
-const CommentList = styled.ul`
+const CommentList = styled.div`
   margin: 0;
   padding: 0;
   padding-top: 2em;
@@ -13,7 +13,7 @@ const CommentList = styled.ul`
   }
 `;
 
-const CommentListItem = styled.li`
+const CommentListItem = styled.div`
   margin: 0;
 
   &:not(:last-child) {
