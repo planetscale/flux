@@ -11,7 +11,6 @@ import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 import { useEffect } from 'react';
-import { Alarm } from '@styled-icons/material-sharp';
 
 const TimeAndTags = styled.div`
   color: var(--text-primary);
