@@ -122,6 +122,7 @@ const MetaInformation = styled.div`
 
 const MetaDate = styled.span`
   white-space: nowrap;
+  text-transform: capitalize;
 `;
 
 const MetaTag = styled.span`
@@ -349,9 +350,7 @@ export default function PostList({ posts = [], handleTagClick }) {
                 <PostWrapper>
                   <PostInfo>
                     <MetaInformation>
-                      <MetaDate>
-                        {getLocaleDateTimeString(createdAt).toUpperCase()}
-                      </MetaDate>
+                      <MetaDate>{getLocaleDateTimeString(createdAt)}</MetaDate>
                       {tag?.name && (
                         <>
                           <span>&nbsp; &middot; &nbsp;</span>
