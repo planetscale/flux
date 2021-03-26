@@ -42,6 +42,13 @@ const validateUser = async (req, fetchUserId = false) => {
   }
 };
 
+// For mutating requests check that we are not in read only mode
+const validateWritable = req => {
+  if (process.env.READ_ONLY === 'true') {
+    throw Error('Flux is currently in read only mode.');
+  }
+};
+
 const getUserId = async userEmail => {
   const connection = await createConnection();
   const query = 'SELECT id FROM User WHERE email = ?';
@@ -67,4 +74,4 @@ function runMiddleware(req, res, fn, params) {
   });
 }
 
-export { cors, validateUser, getUserId, runMiddleware };
+export { cors, validateUser, validateWritable, getUserId, runMiddleware };
