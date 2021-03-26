@@ -43,6 +43,8 @@ const Post = styled.a`
 
   > div {
     border: 1px solid var(--bg-primary);
+    background-color: var(--bg-primary);
+    transition: all 250ms ease;
   }
 
   margin: 0 0 30px 0;
@@ -51,14 +53,14 @@ const Post = styled.a`
     cursor: pointer;
 
     > div {
-      border-color: var(--border-primary);
       background-color: var(--bg-secondary);
       box-shadow: var(--layer-shadow);
+      transform: translateY(-0.5%);
     }
 
     &:before {
-      background-color: var(--text-blue);
-      transform: scale(1.2);
+      background-color: rgba(var(--blue-500), 1);
+      transform: scale(1.2) translateY(-0.5%);
     }
   }
 
@@ -83,6 +85,7 @@ const Post = styled.a`
     background-color: var(--border-primary);
     top: 20px;
     left: -28px;
+    transition: all 250ms ease;
   }
 
   &.new {
@@ -120,6 +123,7 @@ const MetaInformation = styled.div`
 
 const MetaDate = styled.span`
   white-space: nowrap;
+  text-transform: capitalize;
 `;
 
 const MetaTag = styled.span`
@@ -155,6 +159,7 @@ const DemarcationString = styled.div`
   padding: 8px 16px;
   width: 100px;
   margin-bottom: 2em;
+  font-size: var(--fs-base-minus-1);
   color: var(--text-secondary);
 
   &:before {
@@ -346,9 +351,7 @@ export default function PostList({ posts = [], handleTagClick }) {
                 <PostWrapper>
                   <PostInfo>
                     <MetaInformation>
-                      <MetaDate>
-                        {getLocaleDateTimeString(createdAt).toUpperCase()}
-                      </MetaDate>
+                      <MetaDate>{getLocaleDateTimeString(createdAt)}</MetaDate>
                       {tag?.name && (
                         <>
                           <span>&nbsp; &middot; &nbsp;</span>

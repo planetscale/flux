@@ -5,10 +5,9 @@ const options = {
 };
 
 const getLocaleDateTimeString = timeUTC => {
-  return new Date(`${timeUTC}`).toLocaleDateString(
-    process.env.language,
-    options
-  );
+  return new Date(`${timeUTC}`)
+    .toLocaleDateString(process.env.language, options)
+    .toLocaleLowerCase();
 };
 
 export { getLocaleDateTimeString };

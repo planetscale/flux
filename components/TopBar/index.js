@@ -25,10 +25,11 @@ const Wrapper = styled.div`
   top: 0;
   z-index: 1;
   background-color: var(--bg-primary);
+  opacity: 0.98;
 
   ${media.phone`
     padding: 2em 1em;
-  `}
+  `};
 `;
 
 const Constrain = styled.div`

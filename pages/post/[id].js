@@ -81,7 +81,7 @@ const CommentContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--border-primary);
+  /* border-top: 1px solid var(--border-primary); */
 
   ${media.phone`
     padding: 42px;
@@ -94,6 +94,7 @@ const ReplyContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  margin-top: 4em;
 
   ${media.phone`
     padding: 42px;
@@ -805,7 +806,7 @@ export default function PostPage() {
           <Reply>
             <MarkdownEditor
               placeholder="Comment"
-              componentkey={replyKey}
+              componentKey={replyKey}
               handleContentChange={handleReplyChange}
               onKeyDown={e => {
                 handleKeyPressSubmit(e, handleCommentSubmit, canSubmit(reply));

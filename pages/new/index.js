@@ -5,18 +5,21 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
 import Select from 'react-select';
-import { Article } from '@styled-icons/remix-line';
+import { Article, AlarmWarning } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 import { useEffect } from 'react';
+import { Alarm } from '@styled-icons/material-sharp';
 
 const TimeAndTags = styled.div`
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  margin-bottom: 0.5em;
+  border-bottom: 1px solid var(--bg-primary);
+  margin: 0 -2em;
+  padding: 0 2em 2em;
 
   ${media.phone`
     flex-direction: column;
@@ -39,23 +42,26 @@ const DotSeperator = styled.div`
 const TitleInputWrapper = styled.div`
   position: relative;
   display: flex;
-  margin: 2em -1em 0;
-  padding: 1em;
+  margin: 0 -2em;
+  padding: 2em;
+  border-bottom: 1px solid var(--bg-primary);
 
-  border-radius: 6px;
+  svg {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: -3em;
+    top: 40%;
+    color: rgba(var(--red-500), 0.8);
+  }
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-secondary);
-    box-shadow: var(--layer-shadow);
+    background-color: var(--bg-tertiary);
   }
 
-  &.invalid > * {
-    border-color: rgb(var(--red-500));
-  }
-
-  &.valid > * {
-    border-color: var(--border-primary);
+  &.invalid {
+    background-color: rgba(var(--red-500), 0.02);
   }
 `;
 
@@ -69,35 +75,29 @@ const TitleInputBase = `
   color: var(--text-primary);
   background-color: unset;
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--border-primary);
 
   ::placeholder {
     color: var(--border-secondary);
-  }
-
-  &:active, &:focus {
   }
 `;
 
 const TitleInput = styled.textarea`
   ${TitleInputBase}
   font-size: 40px;
-  line-height: 42px;
+  line-height: 58px;
   font-weight: 700;
 `;
 
 const SubtitleInput = styled.textarea`
   ${TitleInputBase}
   font-size: var(--fs-base-plus-1);
-  line-height: 22px;
+  line-height: 30px;
   word-break: break-word;
 `;
 
 const ActionItems = styled.div`
   display: flex;
-  margin-top: 2em;
   padding-top: 2em;
-  border-top: 1px solid var(--border-primary);
 
   button {
     margin: 0 1em 0 0;
@@ -109,15 +109,13 @@ const EditorWrapper = styled.div`
   height: fit-content;
   position: relative;
   display: flex;
-  margin: 2em -1em 0;
-  padding: 1em;
-
-  border-radius: 6px;
+  margin: 0 -2em;
+  padding: 2em;
+  border-bottom: 1px solid var(--bg-primary);
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-secondary);
-    box-shadow: var(--layer-shadow);
+    background-color: var(--bg-tertiary);
   }
 `;
 
@@ -129,7 +127,7 @@ const customStyles = {
   control: provided => ({
     ...provided,
     borderColor: 'var(--border-primary)',
-    backgroundColor: 'var(--bg-primary)',
+    backgroundColor: 'var(--bg-secondary)',
     borderStyle: 'solid',
     borderWidth: '1px',
     borderRadius: '6px',
@@ -320,7 +318,9 @@ export default function NewPost() {
             <PostDate>{state.dateTime}</PostDate>
             {state.tagOptions.length > 0 && (
               <>
-                <DotSeperator>&nbsp; &middot; &nbsp;</DotSeperator>
+                <DotSeperator>
+                  &nbsp; &middot; &nbsp; Post to &nbsp;
+                </DotSeperator>
                 <div>
                   <Select
                     isClearable={false}
@@ -358,6 +358,7 @@ export default function NewPost() {
               value={state.title.value}
               onChange={e => handleTitleChange(e, 'title')}
             ></TitleInput>
+            {getTitleClasses(state.title) === 'invalid' ? <AlarmWarning /> : ''}
           </TitleInputWrapper>
           <TitleInputWrapper>
             <SubtitleInput

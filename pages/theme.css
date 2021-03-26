@@ -11,6 +11,7 @@
   --gray-600: #474953;
   --gray-700: #393941;
   --gray-800: #272830;
+  --gray-850: #1e1f26;
   --gray-900: #1a1b21;
 
   --red-400: 245, 106, 113;
@@ -69,14 +70,8 @@
   --text-secondary: var(--gray-500);
   --text-blue: rgb(var(--blue-600));
   --text-purple: rgb(var(--purple-600));
-
-  --layer-shadow: 1px 1px 6px -2px var(--gray-300);
-
-  --logo: url('/logo-docs_light.svg');
-  --logoCompany: url('/logo_planetscale_light.svg');
-
+  --layer-shadow: 1px 1px 16px -2px var(--gray-200);
   --border-radius: 99px;
-
   --fs-base-minus-3: 10px;
   --fs-base-minus-2: 12px;
   --fs-base-minus-1: 14px;
@@ -89,8 +84,8 @@
 
 @define-mixin darkmode {
   --bg-primary: var(--gray-900);
-  --bg-secondary: var(--gray-800);
-  --bg-tertiary: var(--gray-700);
+  --bg-secondary: var(--gray-850);
+  --bg-tertiary: var(--gray-800);
   --border-primary: var(--gray-700);
   --border-secondary: var(--gray-600);
   --border-action: var(--gray-600);
@@ -98,11 +93,7 @@
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));
-
-  --layer-shadow: 1px 1px 6px -2px var(--black);
-
-  --logo: url('/logo-docs_dark.svg');
-  --logoCompany: url('/logo_planetscale_dark.svg');
+  --layer-shadow: 0 0 16px -64px var(--black);
 }
 
 @media screen and (prefers-color-scheme: dark) {
