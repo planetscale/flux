@@ -1,4 +1,4 @@
-import { cors, validateUser } from '../_utils/middleware';
+import { cors, validateUser, validateWritable } from '../_utils/middleware';
 import { createConnection } from '../_utils/connection';
 import { IncomingForm } from 'formidable';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,6 +16,13 @@ export default async (req, res) => {
     await validateUser(req);
   } catch (e) {
     res.status(400).json({ error: e.toString() });
+    return;
+  }
+
+  try {
+    validateWritable();
+  } catch (e) {
+    res.status(405).json({ error: e.toString() });
     return;
   }
 

@@ -1,4 +1,4 @@
-import { cors, validateUser } from './_utils/middleware';
+import { cors, validateUser, validateWritable } from './_utils/middleware';
 import { createConnection } from './_utils/connection';
 
 export default async (req, res) => {
@@ -8,6 +8,13 @@ export default async (req, res) => {
     user = await validateUser(req, true);
   } catch (e) {
     res.status(401).json({ error: e.toString() });
+    return;
+  }
+
+  try {
+    validateWritable();
+  } catch (e) {
+    res.status(405).json({ error: e.toString() });
     return;
   }
 

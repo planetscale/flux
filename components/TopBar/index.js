@@ -4,6 +4,7 @@ import {
   ButtonWireframe,
   ButtonComposite,
 } from 'components/Button';
+import getConfig from 'next/config';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
 import { useTopBarActions, useTopBarContext } from 'state/topBar';
@@ -135,6 +136,13 @@ const ActionsWrapper = styled.div`
   }
 `;
 
+const BannerWrapper = styled.div`
+  padding: 0px 24px;
+  font-size: 0.75rem;
+`;
+
+const { publicRuntimeConfig } = getConfig();
+
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
   const { header, subHeader, query, selectedTag } = useTopBarContext();
@@ -201,8 +209,15 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
             </>
           )}
         </Breadcrumb>
+        {publicRuntimeConfig.readOnly && (
+          <BannerWrapper>
+            Flux is currently in READ ONLY mode. You can view content but not
+            create posts, comment, or like at this time.
+          </BannerWrapper>
+        )}
+
         <ActionsWrapper>
-          {notNewPostPage() && (
+          {!publicRuntimeConfig.readOnly && notNewPostPage() && (
             <ButtonWireframe type="button" onClick={redirectToNew}>
               <Add />
               <span>Add Post</span>

@@ -1,4 +1,9 @@
-import { cors, runMiddleware, validateUser } from './_utils/middleware';
+import {
+  cors,
+  runMiddleware,
+  validateUser,
+  validateWritable,
+} from './_utils/middleware';
 import { createConnection } from './_utils/connection';
 import slackNotification from './_utils/notifications/slack';
 
@@ -13,6 +18,13 @@ module.exports = async (req, res) => {
     user = await validateUser(req, true);
   } catch (e) {
     res.status(401).json({ error: e.toString() });
+    return;
+  }
+
+  try {
+    validateWritable();
+  } catch (e) {
+    res.status(405).json({ error: e.toString() });
     return;
   }
 
