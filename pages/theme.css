@@ -69,14 +69,8 @@
   --text-secondary: var(--gray-500);
   --text-blue: rgb(var(--blue-600));
   --text-purple: rgb(var(--purple-600));
-
-  --layer-shadow: 1px 1px 6px -2px var(--gray-300);
-
-  --logo: url('/logo-docs_light.svg');
-  --logoCompany: url('/logo_planetscale_light.svg');
-
+  --layer-shadow: 1px 1px 16px -2px var(--gray-200);
   --border-radius: 99px;
-
   --fs-base-minus-3: 10px;
   --fs-base-minus-2: 12px;
   --fs-base-minus-1: 14px;
@@ -98,11 +92,7 @@
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));
-
-  --layer-shadow: 1px 1px 6px -2px var(--black);
-
-  --logo: url('/logo-docs_dark.svg');
-  --logoCompany: url('/logo_planetscale_dark.svg');
+  --layer-shadow: 1px 1px 16px -16px var(--black);
 }
 
 @media screen and (prefers-color-scheme: dark) {

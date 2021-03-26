@@ -43,6 +43,7 @@ const Post = styled.a`
 
   > div {
     border: 1px solid var(--bg-primary);
+    transition: all 250ms ease;
   }
 
   margin: 0 0 30px 0;
@@ -51,14 +52,14 @@ const Post = styled.a`
     cursor: pointer;
 
     > div {
-      border-color: var(--border-primary);
       background-color: var(--bg-secondary);
       box-shadow: var(--layer-shadow);
+      transform: translateY(-0.5%);
     }
 
     &:before {
-      background-color: var(--text-blue);
-      transform: scale(1.2);
+      background-color: rgba(var(--blue-500), 1);
+      transform: scale(1.2) translateY(-0.5%);
     }
   }
 
@@ -83,6 +84,7 @@ const Post = styled.a`
     background-color: var(--border-primary);
     top: 20px;
     left: -28px;
+    transition: all 250ms ease;
   }
 
   &.new {
@@ -110,7 +112,7 @@ const MetaInformation = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: var(--fs-base-minus-2);
+  font-size: var(--fs-base-minus-3);
   color: var(--text-secondary);
 
   .notification {
