@@ -35,6 +35,7 @@ const PageWrapper = styled.div`
 const PostMetadata = styled.div``;
 
 const DateTime = styled.div`
+  text-transform: capitalize;
   color: var(--text-secondary);
 `;
 
