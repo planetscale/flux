@@ -112,7 +112,7 @@ const MetaInformation = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: var(--fs-base-minus-3);
+  font-size: var(--fs-base-minus-2);
   color: var(--text-secondary);
 
   .notification {
