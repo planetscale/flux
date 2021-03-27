@@ -55,6 +55,16 @@ const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   box-shadow: var(--layer-shadow);
+
+  *:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+
+  *:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
 `;
 
 const StyledRadio = styled(DropdownMenu.RadioItem)`
@@ -72,6 +82,7 @@ const StyledRadio = styled(DropdownMenu.RadioItem)`
   svg {
     width: 1em;
     height: 1em;
+    transition: transform 250ms ease;
   }
 
   & ~ & {
@@ -80,6 +91,10 @@ const StyledRadio = styled(DropdownMenu.RadioItem)`
 
   &:hover {
     background-color: var(--bg-secondary);
+
+    svg {
+      transform: translateY(-5%);
+    }
   }
 `;
 
