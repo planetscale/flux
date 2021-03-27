@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import UserIcon from 'components/UserIcon';
+import { DateTime } from 'pageUtils/post/styles';
 
 const NamePlateWrapper = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ export default function CommenterNamePlate({
       />
       <span>{displayName}</span>
       <span>&nbsp; &middot; &nbsp;</span>
-      <span>{date}</span>
+      <DateTime>{date}</DateTime>
     </NamePlateWrapper>
   );
 }
