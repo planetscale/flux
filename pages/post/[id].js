@@ -20,6 +20,7 @@ import {
   CommentListItem,
   CommentWrapper,
   Comment,
+  ReplyContainer,
   Reply,
   Post,
   CommentContent,
@@ -80,19 +81,6 @@ const CommentContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-
-  ${media.phone`
-    padding: 42px;
-    width: 100%;
-  `}
-`;
-
-const ReplyContainer = styled.div`
-  width: 80ch;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin-top: 4em;
 
   ${media.phone`
     padding: 42px;

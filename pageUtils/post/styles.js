@@ -9,7 +9,7 @@ const CommentList = styled.div`
   list-style: none;
 
   &[class*='level'] {
-    margin-left: 2em;
+    margin: 0 2em;
   }
 `;
 
@@ -136,15 +136,28 @@ const ActionBar = styled.div`
   }
 `;
 
+const ReplyContainer = styled.div`
+  width: 80ch;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 2em 0;
+
+  ${media.phone`
+    padding: 42px;
+    width: 100%;
+  `}
+`;
+
 const Reply = styled.div`
-  margin: 0;
   margin-bottom: ${props => (props.subcomment ? '' : '42px')};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
   padding: 2em;
+  margin: 0 -2em;
   border: 1px solid var(--border-primary);
+  background-color: var(--bg-primary);
   border-radius: 6px;
 `;
 
@@ -225,6 +238,7 @@ export {
   CommentListItem,
   CommentWrapper,
   Comment,
+  ReplyContainer,
   Reply,
   ReplyActionBar,
   PostMetadata,
