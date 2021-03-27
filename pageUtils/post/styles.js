@@ -134,6 +134,14 @@ const ActionBar = styled.div`
   > * {
     margin-right: 0.5em;
   }
+
+  &.space-between {
+    justify-content: space-between;
+
+    > * {
+      margin-right: unset;
+    }
+  }
 `;
 
 const ReplyContainer = styled.div`

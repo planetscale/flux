@@ -65,9 +65,9 @@ const MetaActions = styled.div`
   flex-direction: row;
   align-items: center;
 
-  ${media.phone`
-    margin-bottom: 2em;
-  `}
+  > *:not(:last-child) {
+    margin-right: 0.5em;
+  }
 `;
 
 const CommentContainerWrapper = styled.div`
@@ -638,13 +638,6 @@ export default function PostPage() {
                   </>
                 )}
               </MetaData>
-              <MetaActions>
-                {userContext.user.id === authorId && (
-                  <ButtonWireframe type="submit" onClick={togglePostEdit}>
-                    {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
-                  </ButtonWireframe>
-                )}
-              </MetaActions>
             </Meta>
             <Title>{title}</Title>
             <AuthorNamePlate
@@ -668,14 +661,6 @@ export default function PostPage() {
                     );
                   }}
                 ></MarkdownEditor>
-                <ButtonWireframe
-                  type="submit"
-                  onClick={handlePostEditSubmit}
-                  disabled={!canSubmit(postEditState.content)}
-                >
-                  <Pencil />
-                  <span>Update</span>
-                </ButtonWireframe>
               </>
             ) : (
               <MarkdownEditor
@@ -686,7 +671,7 @@ export default function PostPage() {
             )}
           </Content>
 
-          <ActionBar>
+          <ActionBar className={'space-between'}>
             <Tooltip.Root>
               <Tooltip.Trigger
                 as={ButtonSquished}
@@ -706,6 +691,25 @@ export default function PostPage() {
                 </StyledContent>
               )}
             </Tooltip.Root>
+            <MetaActions>
+              {userContext.user.id === authorId && (
+                <React.Fragment>
+                  {postEditState.isEditing ? (
+                    <ButtonSquished
+                      type="submit"
+                      onClick={handlePostEditSubmit}
+                      disabled={!canSubmit(postEditState.content)}
+                    >
+                      <Pencil />
+                      <span>Update</span>
+                    </ButtonSquished>
+                  ) : null}
+                  <ButtonSquished type="submit" onClick={togglePostEdit}>
+                    {postEditState.isEditing ? 'Cancel Edit' : 'Edit Post'}
+                  </ButtonSquished>
+                </React.Fragment>
+              )}
+            </MetaActions>
           </ActionBar>
         </Post>
       </PageWrapper>
