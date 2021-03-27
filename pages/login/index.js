@@ -15,6 +15,10 @@ const Wrapper = styled.div`
   height: 100vh;
   justify-content: center;
   align-items: stretch;
+
+  ${media.phone`
+    flex-direction: column-reverse;
+  `}
 `;
 
 const ContentContainer = styled.div`
@@ -25,7 +29,8 @@ const ContentContainer = styled.div`
   justify-content: center;
 
   ${media.phone`
-    width: 100%;
+    width: 100vw;
+    flex-grow: 2;
   `}
 `;
 
@@ -37,10 +42,21 @@ const LogoColumn = styled.div`
   justify-content: center;
   background: url('/bg_starfield.svg') var(--gray-900);
   border-left: 1px solid var(--border-primary);
+
+  ${media.phone`
+    width: 100vw;
+    height: 25vh;
+    border-left: unset;
+    border-bottom: 1px solid var(--border-primary);
+  `}
 `;
 
 const Logo = styled.img`
   max-width: 260px;
+
+  ${media.phone`
+    max-width: 130px;
+  `}
 `;
 
 const AuthContainer = styled.div`
@@ -53,6 +69,11 @@ const AuthContainer = styled.div`
   > *:not(:last-child) {
     margin-bottom: 1em;
   }
+
+  ${media.phone`
+    width: unset;
+    padding: 0 2em;
+  `}
 `;
 
 const AuthTitle = styled.h1`
