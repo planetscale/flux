@@ -55,7 +55,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
     &:hover:not([disabled]) {
       background-color: var(--text-blue);
-      color: var(--text-primary);
+      color: var(--white);
     }
   }
 
@@ -64,6 +64,13 @@ export const ButtonWireframe = styled(ButtonBase)`
       border-left: 1px solid var(--bg-primary);
       margin-left: 8px;
       padding-left: 8px;
+      transition: border-color 250ms ease;
+    }
+
+    &:hover:not([disabled]) {
+      span:nth-of-type(2) {
+        border-color: var(--white);
+      }
     }
   }
 `;
