@@ -45,8 +45,8 @@ export const ButtonWireframe = styled(ButtonBase)`
   }
 
   &.has-notifications {
-    background-color: rgba(var(--green-500), 0.15);
-    color: rgb(var(--green-500));
+    background-color: rgba(var(--green-500), 0.05);
+    color: rgb(var(--green-600));
   }
 
   &.primary {

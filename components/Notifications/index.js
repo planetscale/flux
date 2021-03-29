@@ -4,6 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher } from 'utils/fetch';
 import { ButtonWireframe } from 'components/Button';
 import { Notification2, Close } from '@styled-icons/remix-line';
+import { Notification2 as RemixFillNotification } from '@styled-icons/remix-fill';
 import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';
 
@@ -142,7 +143,11 @@ export default function Notifications() {
         as={DropdownMenu.Trigger}
         className={totalNotifications > 0 ? 'has-notifications' : ''}
       >
-        <Notification2 />
+        {totalNotifications === 0 ? (
+          <Notification2 />
+        ) : (
+          <RemixFillNotification />
+        )}
       </ButtonWireframe>
       <NotificationContent sideOffset={42}>
         {totalNotifications === 0 ? (
