@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from '@emotion/styled';
 import { media } from 'pageUtils/post/theme';
 import { getLocaleDateTimeString } from 'utils/dateTime';
@@ -361,16 +362,18 @@ export default function PostList({ posts = [], handleTagClick }) {
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
                       {notificationLookup[id] &&
-                        notificationLookup[id].numNewReplies && (
-                          <>
-                            <span>&nbsp; &middot; &nbsp;</span>
-                            <div className="notification">
-                              {notificationLookup[id].numNewReplies > 1
-                                ? 'New Comments'
-                                : 'New Comment'}
-                            </div>
-                          </>
-                        )}
+                      notificationLookup[id].numNewReplies ? (
+                        <React.Fragment>
+                          <span>&nbsp; &middot; &nbsp;</span>
+                          <div className="notification">
+                            {notificationLookup[id].numNewReplies > 1
+                              ? 'New Comments'
+                              : 'New Comment'}
+                          </div>
+                        </React.Fragment>
+                      ) : (
+                        ''
+                      )}
                     </MetaInformation>
                     <PostTitle>{title}</PostTitle>
                     <PostSubTitle>{summary}</PostSubTitle>
