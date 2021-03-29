@@ -89,7 +89,7 @@ const OAuthContainer = styled.div`
   border-top: 1px solid var(--border-primary);
 
   > * {
-    margin-right: 1em;
+    margin-right: 0.5em;
   }
 `;
 
@@ -145,10 +145,15 @@ export default function Login({ providers }) {
                   {EmailProvider.length > 0 && <OAuthTitle>Or</OAuthTitle>}
                   {Object.values(providers)
                     .filter(r => r.name !== 'Email')
-                    .reduce((accumulator, provider) => {
+                    .reduce((accumulator, provider, currentIndex) => {
                       const AuthLogin = AuthProviderLogins[provider.name];
                       if (AuthLogin) {
-                        accumulator.push(<AuthLogin key={provider.name} />);
+                        accumulator.push(
+                          <AuthLogin
+                            key={provider.name}
+                            isPrimaryOAuth={currentIndex === 0 ? true : false}
+                          />
+                        );
                       }
                       return accumulator;
                     }, [])}
