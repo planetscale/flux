@@ -14,6 +14,15 @@ export default NextAuth({
         return credentials.email ? { email: credentials.email } : null;
       },
     }),
+    Providers.Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      state: false,
+      pages: {
+        signIn: '/',
+        signOut: '/',
+      },
+    }),
   ],
   pages: {
     signIn: '/',
