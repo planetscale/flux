@@ -150,6 +150,8 @@ const ReplyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2em 0;
+  position: sticky;
+  bottom: 2em;
 
   ${media.phone`
     padding: 42px;
