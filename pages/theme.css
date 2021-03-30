@@ -71,6 +71,8 @@
   --text-blue: rgb(var(--blue-600));
   --text-purple: rgb(var(--purple-600));
   --layer-shadow: 1px 1px 16px -2px var(--gray-200);
+  --layer-shadow-hover: rgb(46 41 51 / 8%) 0px 4px 16px,
+    rgb(71 63 79 / 16%) 0px 8px 24px;
   --border-radius: 99px;
   --fs-base-minus-3: 10px;
   --fs-base-minus-2: 12px;
