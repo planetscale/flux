@@ -52,28 +52,4 @@ export default async (req, res) => {
   res.json({
     url: `/api/post/get-image?name=${name}`,
   });
-
-  // const data = await fs.readFile(uploadRequest?.files?.blob?.path, async function (err, data) {
-  //   if (err) {
-  //     res.status(400).json({ error: e.toString() });
-  //     return;
-  //   }
-
-  //   const connection = await createConnection();
-
-  //   const insertQuery = `
-  //     INSERT INTO
-  //     Image
-  //         (name,image)
-  //     VALUES
-  //         (?, ?)
-  //   `;
-
-  //   const [rows, fields] = await connection.execute(insertQuery, [name, data]);
-  //   if (rows.length > 0) {
-  //     res.json({
-  //       url: `/api/post/get-image?name=${name}`,
-  //     });
-  //   }
-  // });
 };
