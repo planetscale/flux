@@ -15,16 +15,15 @@ export default async (req, res) => {
 
   const imageQuery = `
     SELECT
-      name, image
+      image
     FROM
       Image
     WHERE
      name = ?
   `;
-  const [[imgRow]] = await connection.execute(imageQuery, [name]);
-
+  const [rows, fields] = await connection.execute(imageQuery, [name]);
   connection.end();
 
   res.setHeader('Content-Type', 'image/*');
-  res.send(imgRow.image);
+  res.send(rows[0].image);
 };
