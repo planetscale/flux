@@ -2,7 +2,7 @@ import { cors, validateUser, validateWritable } from '../_utils/middleware';
 import { createConnection } from '../_utils/connection';
 import { IncomingForm } from 'formidable';
 import { v4 as uuidv4 } from 'uuid';
-var fs = require('fs');
+var fs = require('fs').promises;
 
 export const config = {
   api: {
@@ -37,24 +37,17 @@ export default async (req, res) => {
 
   let name = uuidv4();
 
-  fs.readFile(uploadRequest?.files?.blob?.path, async function (err, data) {
-    if (err) {
-      res.status(400).json({ error: e.toString() });
-      return;
-    }
+  const data = await fs.readFile(uploadRequest?.files?.blob?.path);
+  const connection = await createConnection();
+  const insertQuery = `
+    INSERT INTO
+    Image
+        (name,image)
+    VALUES
+        (?, ?)
+  `;
 
-    const connection = await createConnection();
-
-    const insertQuery = `
-      INSERT INTO
-      Image
-          (name,image)
-      VALUES
-          (?, ?)
-    `;
-
-    await connection.execute(insertQuery, [name, data]);
-  });
+  const [rows, fields] = await connection.execute(insertQuery, [name, data]);
 
   res.json({
     url: `/api/post/get-image?name=${name}`,
