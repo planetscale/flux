@@ -317,13 +317,6 @@ export default function PostList({ posts = [], handleTagClick }) {
     );
   };
 
-  const handleClick = (e, tagName) => {
-    if (e.target.className.includes('MetaTag')) {
-      e.preventDefault();
-      handleTagClick(e, tagName);
-    }
-  };
-
   return (
     <Wrapper>
       {posts.map((post, index) => {
@@ -342,7 +335,6 @@ export default function PostList({ posts = [], handleTagClick }) {
             )}
             <Link href={`/post/${id}`} passHref>
               <Post
-                onClick={e => handleClick(e, tag?.name)}
                 className={
                   notificationLookup[id] && notificationLookup[id].isNewPost
                     ? 'new'
@@ -356,7 +348,9 @@ export default function PostList({ posts = [], handleTagClick }) {
                       {tag?.name && (
                         <>
                           <span>&nbsp; &middot; &nbsp;</span>
-                          <MetaTag>#{tag?.name}</MetaTag>
+                          <MetaTag onClick={e => handleTagClick(e, tag?.name)}>
+                            #{tag?.name}
+                          </MetaTag>
                         </>
                       )}
                       <span>&nbsp; &middot; &nbsp;</span>
