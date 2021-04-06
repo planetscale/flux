@@ -12,8 +12,25 @@ const Content = styled(DropdownMenu.Content)`
   flex-direction: column;
 `;
 
+const SimpleItemWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bg-secondary);
+  }
+`;
+
 const SimpleItem = styled.div`
-  padding: 24px;
+  padding: 1em;
 `;
 
 const Group = styled(DropdownMenu.Group)`
@@ -37,6 +54,7 @@ export {
   Root,
   Trigger,
   Item,
+  SimpleItemWrapper,
   SimpleItem,
   RadioGroup,
   RadioItem,

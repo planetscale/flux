@@ -4,6 +4,7 @@ import { Settings, Moon, Sun } from '@styled-icons/remix-line';
 import * as DropdownMenu from 'components/DropdownMenu';
 import { useImmer } from 'use-immer';
 import { signOut } from 'next-auth/client';
+import { ButtonImage } from 'components/Button';
 
 const UserSettingsWrapper = styled(DropdownMenu.Content)`
   width: 360px;
@@ -108,7 +109,7 @@ const StyledIndicator = styled(DropdownMenu.ItemIndicator)`
   }
 `;
 
-export default function UserSettings({ displayName, userHandle }) {
+export default function UserSettings({ profileImg, displayName, userHandle }) {
   const [state, setState] = useImmer({
     currentTheme: getTheme(),
   });
@@ -129,42 +130,47 @@ export default function UserSettings({ displayName, userHandle }) {
   };
 
   return (
-    <UserSettingsWrapper sideOffset={42}>
-      <DropdownMenu.Group>
-        <UserInfo>
-          <UserNameContainer>
-            <UserName>{displayName}</UserName>
-            <UserNickname>@{userHandle}</UserNickname>
-          </UserNameContainer>
-        </UserInfo>
-      </DropdownMenu.Group>
-      <DropdownMenu.Group>
-        <MenuItem>
-          <div>Theme</div>
-          <StyledRadioGroup
-            value={state.currentTheme}
-            onValueChange={handleThemeChange}
-          >
-            <StyledRadio value="system" onSelect={handleRadioItem}>
-              <StyledIndicator />
-              <Settings />
-            </StyledRadio>
-            <StyledRadio value="light" onSelect={handleRadioItem}>
-              <StyledIndicator />
-              <Sun />
-            </StyledRadio>
-            <StyledRadio value="dark" onSelect={handleRadioItem}>
-              <StyledIndicator />
-              <Moon />
-            </StyledRadio>
-          </StyledRadioGroup>
-        </MenuItem>
-      </DropdownMenu.Group>
-      <DropdownMenu.Group>
-        <MenuAction type="button" as="a" onClick={handleLogout}>
-          Log Out
-        </MenuAction>
-      </DropdownMenu.Group>
-    </UserSettingsWrapper>
+    <DropdownMenu.Root>
+      <ButtonImage as={DropdownMenu.Trigger} img={profileImg}></ButtonImage>
+      <UserSettingsWrapper sideOffset={42}>
+        <DropdownMenu.Group>
+          <UserInfo>
+            <UserNameContainer>
+              <UserName>{displayName}</UserName>
+              <UserNickname>@{userHandle}</UserNickname>
+            </UserNameContainer>
+          </UserInfo>
+        </DropdownMenu.Group>
+        <DropdownMenu.Group>
+          <MenuItem>
+            <div>Theme</div>
+            <StyledRadioGroup
+              value={state.currentTheme}
+              onValueChange={handleThemeChange}
+            >
+              <StyledRadio value="system" onSelect={handleRadioItem}>
+                <StyledIndicator />
+                <Settings />
+              </StyledRadio>
+              <StyledRadio value="light" onSelect={handleRadioItem}>
+                <StyledIndicator />
+                <Sun />
+              </StyledRadio>
+              <StyledRadio value="dark" onSelect={handleRadioItem}>
+                <StyledIndicator />
+                <Moon />
+              </StyledRadio>
+            </StyledRadioGroup>
+          </MenuItem>
+        </DropdownMenu.Group>
+        <DropdownMenu.Group>
+          <DropdownMenu.SimpleItemWrapper>
+            <MenuAction type="button" as="a" onClick={handleLogout}>
+              Log Out
+            </MenuAction>
+          </DropdownMenu.SimpleItemWrapper>
+        </DropdownMenu.Group>
+      </UserSettingsWrapper>
+    </DropdownMenu.Root>
   );
 }

@@ -43,7 +43,7 @@ const NotificationWrapper = styled.div`
   }
 `;
 
-const NotificationItem = styled(DropdownMenu.Item)`
+const NotificationItem = styled(DropdownMenu.SimpleItem)`
   display: block;
   outline: none;
   text-decoration: none;
@@ -171,43 +171,51 @@ export default function Notifications() {
                 </ButtonWireframe>
               </NotificationHeader>
             </DropdownMenu.Group>
-            <DropdownMenu.Group>
-              {newPosts.map(notification => {
-                return (
-                  <NotificationWrapper key={notification.postId}>
-                    <Link href={`/post/${notification.postId}`} passHref>
-                      <NotificationItem as="a">
-                        <div className="label">New Post</div>
-                        <div className="title">{notification.postTitle}</div>
-                      </NotificationItem>
-                    </Link>
-                    <HoverIcon onClick={() => clearNotification(notification)}>
-                      <Close />
-                    </HoverIcon>
-                  </NotificationWrapper>
-                );
-              })}
-            </DropdownMenu.Group>
-            <DropdownMenu.Group>
-              {newComments.map(notification => {
-                return (
-                  <NotificationWrapper key={notification.postId}>
-                    <Link href={`/post/${notification.postId}`} passHref>
-                      <NotificationItem as="a">
-                        <div className="label">
-                          {notification.numNewReplies} New Comment
-                          {notification.numNewReplies > 1 ? 's' : ''}
-                        </div>
-                        <div className="title">{notification.postTitle}</div>
-                      </NotificationItem>
-                    </Link>
-                    <HoverIcon onClick={() => clearNotification(notification)}>
-                      <Close />
-                    </HoverIcon>
-                  </NotificationWrapper>
-                );
-              })}
-            </DropdownMenu.Group>
+            {newPosts.length > 0 && (
+              <DropdownMenu.Group>
+                {newPosts.map(notification => {
+                  return (
+                    <NotificationWrapper key={notification.postId}>
+                      <Link href={`/post/${notification.postId}`} passHref>
+                        <NotificationItem as="a">
+                          <div className="label">New Post</div>
+                          <div className="title">{notification.postTitle}</div>
+                        </NotificationItem>
+                      </Link>
+                      <HoverIcon
+                        onClick={() => clearNotification(notification)}
+                      >
+                        <Close />
+                      </HoverIcon>
+                    </NotificationWrapper>
+                  );
+                })}
+              </DropdownMenu.Group>
+            )}
+            {newComments.length > 0 && (
+              <DropdownMenu.Group>
+                {newComments.map(notification => {
+                  return (
+                    <NotificationWrapper key={notification.postId}>
+                      <Link href={`/post/${notification.postId}`} passHref>
+                        <NotificationItem as="a">
+                          <div className="label">
+                            {notification.numNewReplies} New Comment
+                            {notification.numNewReplies > 1 ? 's' : ''}
+                          </div>
+                          <div className="title">{notification.postTitle}</div>
+                        </NotificationItem>
+                      </Link>
+                      <HoverIcon
+                        onClick={() => clearNotification(notification)}
+                      >
+                        <Close />
+                      </HoverIcon>
+                    </NotificationWrapper>
+                  );
+                })}
+              </DropdownMenu.Group>
+            )}
           </Fragment>
         )}
       </NotificationContent>
