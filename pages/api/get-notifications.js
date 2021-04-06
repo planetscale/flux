@@ -30,6 +30,7 @@ export default async (req, res) => {
     LEFT JOIN PostView ON Post.id = PostView.postId AND PostView.userId = ?
     LEFT JOIN Reply ON Reply.postId = Post.id
       AND Reply.createdAt > PostView.lastViewed
+      AND Reply.authorId != ?
   WHERE
     Post.tagId = Tag.id
     AND Post.authorId = User.id
@@ -49,7 +50,11 @@ export default async (req, res) => {
     Post.createdAt DESC
   `;
 
-  const [rows] = await connection.execute(newPostsQuery, [user.id, user.id]);
+  const [rows] = await connection.execute(newPostsQuery, [
+    user.id,
+    user.id,
+    user.id,
+  ]);
   connection.end();
 
   res.json(
