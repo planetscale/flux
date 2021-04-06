@@ -14,6 +14,7 @@ import { Add } from '@styled-icons/remix-line';
 import { media } from '../../pageUtils/post/theme';
 import * as DropdownMenu from 'components/DropdownMenu';
 import Notifications from 'components/Notifications';
+import Hashtag from '../../public/icons/hashtag.svg';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -204,7 +205,8 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
                   setTag(null);
                 }}
               >
-                <span>#{selectedTag.toLowerCase()}</span>
+                <Hashtag />
+                <span>{selectedTag.toLowerCase()}</span>
               </ButtonWireframe>
             </>
           )}
