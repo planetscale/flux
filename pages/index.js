@@ -126,11 +126,9 @@ export default function Home() {
   );
 
   const handleTagClick = (e, tagName) => {
+    e.preventDefault();
     e.stopPropagation();
-
-    if (tagName) {
-      setTag(tagName);
-    }
+    setTag(tagName);
   };
 
   const posts = Object.values(state.postList).reverse();
