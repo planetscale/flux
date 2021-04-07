@@ -94,7 +94,7 @@ const Comment = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 1em;
+  padding: 0 0.98em;
   color: var(--text-primary);
 
   > *:not(:last-child) {
