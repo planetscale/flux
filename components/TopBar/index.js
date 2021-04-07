@@ -1,9 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  ButtonImage,
-  ButtonWireframe,
-  ButtonComposite,
-} from 'components/Button';
+import { ButtonWireframe, ButtonComposite } from 'components/Button';
 import getConfig from 'next/config';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
@@ -12,7 +8,6 @@ import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Add } from '@styled-icons/remix-line';
 import { media } from '../../pageUtils/post/theme';
-import * as DropdownMenu from 'components/DropdownMenu';
 import Notifications from 'components/Notifications';
 import Hashtag from '../../public/icons/hashtag.svg';
 
@@ -227,17 +222,11 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           )}
 
           <Notifications />
-
-          <DropdownMenu.Root>
-            <ButtonImage
-              as={DropdownMenu.Trigger}
-              img={profileImg}
-            ></ButtonImage>
-            <UserSettings
-              displayName={userDisplayName}
-              userHandle={userHandle}
-            />
-          </DropdownMenu.Root>
+          <UserSettings
+            profileImg={profileImg}
+            displayName={userDisplayName}
+            userHandle={userHandle}
+          />
         </ActionsWrapper>
       </Constrain>
     </Wrapper>
