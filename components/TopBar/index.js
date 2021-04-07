@@ -7,9 +7,9 @@ import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Add } from '@styled-icons/remix-line';
+import { Hashtag } from '@styled-icons/remix-editor';
 import { media } from '../../pageUtils/post/theme';
 import Notifications from 'components/Notifications';
-import Hashtag from '../../public/icons/hashtag.svg';
 
 const Wrapper = styled.div`
   width: 100vw;
