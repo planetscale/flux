@@ -20,12 +20,6 @@ const NotificationHeaderTitle = styled.div`
   font-size: var(--fs-base);
 `;
 
-const NotificationContent = styled(DropdownMenu.Content)`
-  width: 500px;
-  max-height: 80vh;
-  overflow: auto;
-`;
-
 const NotificationWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -149,7 +143,7 @@ export default function Notifications() {
           <RemixFillNotification />
         )}
       </ButtonWireframe>
-      <NotificationContent sideOffset={42}>
+      <DropdownMenu.Content sideOffset={42}>
         {totalNotifications === 0 ? (
           <DropdownMenu.Group>
             <EmptyNotificationItem>
@@ -218,7 +212,7 @@ export default function Notifications() {
             )}
           </Fragment>
         )}
-      </NotificationContent>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 }

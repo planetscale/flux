@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const Content = styled(DropdownMenu.Content)`
+  width: 420px;
   background: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
@@ -10,6 +11,8 @@ const Content = styled(DropdownMenu.Content)`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  max-height: 80vh;
+  overflow: auto;
 `;
 
 const SimpleItemWrapper = styled.div`

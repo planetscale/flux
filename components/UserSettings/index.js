@@ -6,10 +6,6 @@ import { useImmer } from 'use-immer';
 import { signOut } from 'next-auth/client';
 import { ButtonImage } from 'components/Button';
 
-const UserSettingsWrapper = styled(DropdownMenu.Content)`
-  width: 360px;
-`;
-
 const UserInfo = styled(DropdownMenu.SimpleItem)`
   display: flex;
   flex-direction: row;
@@ -132,7 +128,7 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
   return (
     <DropdownMenu.Root>
       <ButtonImage as={DropdownMenu.Trigger} img={profileImg}></ButtonImage>
-      <UserSettingsWrapper sideOffset={42}>
+      <DropdownMenu.Content sideOffset={42}>
         <DropdownMenu.Group>
           <UserInfo>
             <UserNameContainer>
@@ -170,7 +166,7 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
             </MenuAction>
           </DropdownMenu.SimpleItemWrapper>
         </DropdownMenu.Group>
-      </UserSettingsWrapper>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 }
