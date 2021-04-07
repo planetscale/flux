@@ -5,10 +5,9 @@ import { fetcher } from 'utils/fetch';
 import { ButtonWireframe } from 'components/Button';
 import { Notification2, Close } from '@styled-icons/remix-line';
 import { Notification2 as RemixFillNotification } from '@styled-icons/remix-fill';
-import Link from 'next/link';
 import { Fragment } from 'react/cjs/react.production.min';
 
-const NotificationHeader = styled(DropdownMenu.SimpleItem)`
+const NotificationHeader = styled(DropdownMenu.PassiveItem)`
   display: flex;
   align-items: center;
   padding: 1em;
@@ -20,25 +19,11 @@ const NotificationHeaderTitle = styled.div`
   font-size: var(--fs-base);
 `;
 
-const NotificationWrapper = styled.div`
+const NotificationItem = styled(DropdownMenu.ActiveItem)`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 1em;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--border-primary);
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--bg-secondary);
-  }
-`;
-
-const NotificationItem = styled(DropdownMenu.SimpleItem)`
-  display: block;
+  justify-content: space-between;
   outline: none;
   text-decoration: none;
   color: inherit !important;
@@ -54,7 +39,7 @@ const NotificationItem = styled(DropdownMenu.SimpleItem)`
   }
 `;
 
-const EmptyNotificationItem = styled(DropdownMenu.SimpleItem)`
+const EmptyNotificationItem = styled(DropdownMenu.PassiveItem)`
   height: 150px;
   display: flex;
   justify-content: center;
@@ -115,7 +100,7 @@ export default function Notifications() {
   const totalNotifications = newPosts.length + newComments.length;
 
   const clearNotification = async notification => {
-    // Optimistically clear the notification from cache, clear the notification, and resync cache with server after
+    // Note: Optimistically clear the notification from cache, clear the notification, and resync cache with server after
     mutate(
       ['/api/get-notifications'],
       async notifications => {
@@ -145,67 +130,67 @@ export default function Notifications() {
       </ButtonWireframe>
       <DropdownMenu.Content sideOffset={42}>
         {totalNotifications === 0 ? (
-          <DropdownMenu.Group>
-            <EmptyNotificationItem>
-              😶 No notifications for you.
-            </EmptyNotificationItem>
-          </DropdownMenu.Group>
+          <EmptyNotificationItem>
+            😶 No notifications for you.
+          </EmptyNotificationItem>
         ) : (
           <Fragment>
-            <DropdownMenu.Group>
-              <NotificationHeader>
-                <NotificationHeaderTitle>
-                  Notifications ({totalNotifications})
-                </NotificationHeaderTitle>
-                <ButtonWireframe
-                  disabled={!totalNotifications}
-                  onClick={clearAllNotifications}
-                >
-                  Clear all notifications
-                </ButtonWireframe>
-              </NotificationHeader>
-            </DropdownMenu.Group>
+            <NotificationHeader>
+              <NotificationHeaderTitle>
+                Notifications ({totalNotifications})
+              </NotificationHeaderTitle>
+              <ButtonWireframe
+                disabled={!totalNotifications}
+                onClick={clearAllNotifications}
+              >
+                Clear all notifications
+              </ButtonWireframe>
+            </NotificationHeader>
             {newPosts.length > 0 && (
               <DropdownMenu.Group>
+                <DropdownMenu.Label>New Posts</DropdownMenu.Label>
                 {newPosts.map(notification => {
                   return (
-                    <NotificationWrapper key={notification.postId}>
-                      <Link href={`/post/${notification.postId}`} passHref>
-                        <NotificationItem as="a">
-                          <div className="label">New Post</div>
-                          <div className="title">{notification.postTitle}</div>
-                        </NotificationItem>
-                      </Link>
+                    <NotificationItem
+                      key={notification.postId}
+                      as="a"
+                      href={`/post/${notification.postId}`}
+                    >
+                      <div className="title">{notification.postTitle}</div>
                       <HoverIcon
                         onClick={() => clearNotification(notification)}
                       >
                         <Close />
                       </HoverIcon>
-                    </NotificationWrapper>
+                    </NotificationItem>
                   );
                 })}
               </DropdownMenu.Group>
             )}
             {newComments.length > 0 && (
               <DropdownMenu.Group>
+                <DropdownMenu.Label>New Comments</DropdownMenu.Label>
                 {newComments.map(notification => {
                   return (
-                    <NotificationWrapper key={notification.postId}>
-                      <Link href={`/post/${notification.postId}`} passHref>
-                        <NotificationItem as="a">
-                          <div className="label">
-                            {notification.numNewReplies} New Comment
-                            {notification.numNewReplies > 1 ? 's' : ''}
-                          </div>
-                          <div className="title">{notification.postTitle}</div>
-                        </NotificationItem>
-                      </Link>
+                    <NotificationItem
+                      key={notification.postId}
+                      as="a"
+                      href={`/post/${notification.postId}`}
+                    >
+                      <div>
+                        <div className="label">
+                          {notification.numNewReplies} New Comment
+                          {notification.numNewReplies > 1 ? 's' : ''}
+                        </div>
+                        <div className="title">{notification.postTitle}</div>
+                      </div>
+
                       <HoverIcon
                         onClick={() => clearNotification(notification)}
                       >
                         <Close />
                       </HoverIcon>
-                    </NotificationWrapper>
+                    </NotificationItem>
                   );
                 })}
               </DropdownMenu.Group>

@@ -15,25 +15,48 @@ const Content = styled(DropdownMenu.Content)`
   overflow: auto;
 `;
 
-const SimpleItemWrapper = styled.div`
+const Label = styled(DropdownMenu.Label)`
+  position: sticky;
+  top: 0;
+  padding: 3em 1.25em 1em;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
+  font-size: var(--fs-base-minus-2);
+  color: var(--text-secondary);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+`;
+
+const PassiveItem = styled(DropdownMenu.Item)`
+  padding: 1.5em 1em;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 1em;
+  justify-content: space-between;
+  color: var(--text-primary);
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  &:hover,
+  &:active {
+    outline: unset;
+  }
+`;
+
+const ActiveItem = styled(DropdownMenu.Item)`
+  padding: 1.5em 1em;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--border-primary);
   }
 
   &:hover {
+    outline: unset;
     cursor: pointer;
     background-color: var(--bg-secondary);
   }
-`;
-
-const SimpleItem = styled.div`
-  padding: 1em;
 `;
 
 const Group = styled(DropdownMenu.Group)`
@@ -57,8 +80,9 @@ export {
   Root,
   Trigger,
   Item,
-  SimpleItemWrapper,
-  SimpleItem,
+  Label,
+  PassiveItem,
+  ActiveItem,
   RadioGroup,
   RadioItem,
   ItemIndicator,

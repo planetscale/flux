@@ -6,15 +6,10 @@ import { useImmer } from 'use-immer';
 import { signOut } from 'next-auth/client';
 import { ButtonImage } from 'components/Button';
 
-const UserInfo = styled(DropdownMenu.SimpleItem)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const UserNameContainer = styled.div`
+const UserInfo = styled(DropdownMenu.PassiveItem)`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 `;
 
 const UserName = styled.div`
@@ -27,15 +22,7 @@ const UserNickname = styled.div`
   color: var(--text-secondary);
 `;
 
-const MenuItem = styled(DropdownMenu.SimpleItem)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text-primary);
-`;
-
-const MenuAction = styled(DropdownMenu.SimpleItem)`
+const MenuAction = styled(DropdownMenu.ActiveItem)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -48,7 +35,7 @@ const MenuAction = styled(DropdownMenu.SimpleItem)`
   }
 `;
 
-const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
+const StyledRadio = styled(DropdownMenu.RadioGroup)`
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   box-shadow: var(--layer-shadow);
@@ -64,8 +51,9 @@ const StyledRadioGroup = styled(DropdownMenu.RadioGroup)`
   }
 `;
 
-const StyledRadio = styled(DropdownMenu.RadioItem)`
+const StyledRadioItem = styled(DropdownMenu.RadioItem)`
   appearance: none;
+  background-color: unset;
   border: none;
   padding: 8px;
   position: relative;
@@ -123,49 +111,40 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
 
   const handleRadioItem = event => {
     event.preventDefault();
+    event.stopPropagation();
   };
 
   return (
     <DropdownMenu.Root>
       <ButtonImage as={DropdownMenu.Trigger} img={profileImg}></ButtonImage>
       <DropdownMenu.Content sideOffset={42}>
-        <DropdownMenu.Group>
-          <UserInfo>
-            <UserNameContainer>
-              <UserName>{displayName}</UserName>
-              <UserNickname>@{userHandle}</UserNickname>
-            </UserNameContainer>
-          </UserInfo>
-        </DropdownMenu.Group>
-        <DropdownMenu.Group>
-          <MenuItem>
-            <div>Theme</div>
-            <StyledRadioGroup
-              value={state.currentTheme}
-              onValueChange={handleThemeChange}
-            >
-              <StyledRadio value="system" onSelect={handleRadioItem}>
-                <StyledIndicator />
-                <Settings />
-              </StyledRadio>
-              <StyledRadio value="light" onSelect={handleRadioItem}>
-                <StyledIndicator />
-                <Sun />
-              </StyledRadio>
-              <StyledRadio value="dark" onSelect={handleRadioItem}>
-                <StyledIndicator />
-                <Moon />
-              </StyledRadio>
-            </StyledRadioGroup>
-          </MenuItem>
-        </DropdownMenu.Group>
-        <DropdownMenu.Group>
-          <DropdownMenu.SimpleItemWrapper>
-            <MenuAction type="button" as="a" onClick={handleLogout}>
-              Log Out
-            </MenuAction>
-          </DropdownMenu.SimpleItemWrapper>
-        </DropdownMenu.Group>
+        <UserInfo>
+          <UserName>{displayName}</UserName>
+          <UserNickname>@{userHandle}</UserNickname>
+        </UserInfo>
+        <DropdownMenu.PassiveItem>
+          <div>Theme</div>
+          <StyledRadio
+            value={state.currentTheme}
+            onValueChange={handleThemeChange}
+          >
+            <StyledRadioItem value="system" onCheckedChange={handleRadioItem}>
+              <StyledIndicator />
+              <Settings />
+            </StyledRadioItem>
+            <StyledRadioItem value="light" onCheckedChange={handleRadioItem}>
+              <StyledIndicator />
+              <Sun />
+            </StyledRadioItem>
+            <StyledRadioItem value="dark" onCheckedChange={handleRadioItem}>
+              <StyledIndicator />
+              <Moon />
+            </StyledRadioItem>
+          </StyledRadio>
+        </DropdownMenu.PassiveItem>
+        <MenuAction type="button" as="a" onClick={handleLogout}>
+          Log Out
+        </MenuAction>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
