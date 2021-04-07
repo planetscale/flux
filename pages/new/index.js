@@ -80,14 +80,14 @@ const TitleInputBase = `
   }
 `;
 
-const TitleInput = styled.textarea`
+const TitleInput = styled.input`
   ${TitleInputBase}
   font-size: 40px;
   line-height: 58px;
   font-weight: 700;
 `;
 
-const SubtitleInput = styled.textarea`
+const SubtitleInput = styled.input`
   ${TitleInputBase}
   font-size: var(--fs-base-plus-1);
   line-height: 30px;
@@ -370,7 +370,6 @@ export default function NewPost() {
           </TitleInputWrapper>
           <EditorWrapper>
             <MarkdownEditor
-              // content={state.content}
               handleContentChange={handleContentChange}
               onKeyDown={e => {
                 handleKeyPressSubmit(e, handlePostSubmit, canSubmitPost());
