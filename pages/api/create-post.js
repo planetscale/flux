@@ -36,7 +36,6 @@ module.exports = async (req, res) => {
       .substr(0, 60)
       .replace(REMOVE_NEWLINE, ' ')
       .replace(REMOVE_DOUBLESPACE, ' ')}...`;
-    console.log(summary);
   }
 
   const connection = await createConnection();

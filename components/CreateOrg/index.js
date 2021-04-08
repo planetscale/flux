@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import { media } from 'pageUtils/post/theme';
 import { InputWrapper } from 'pageUtils/post/styles';
 import Input from 'components/Input';
 import { useImmer } from 'use-immer';
@@ -18,25 +18,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const FormLabel = styled.div`
-  padding: 2em;
-  border-bottom: 1px solid var(--border-secondary);
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  color: var(--text-primary);
-`;
-
-const FormLabelIdentifier = styled.div`
-  margin-bottom: 0.5em;
-`;
-
-const FormLabelOrganization = styled.div`
-  font-weight: 900;
-`;
-
-export default function CreateOrg({ name, email, avatar }) {
+export default function CreateOrg({ name, avatar }) {
   const router = useRouter();
   const { createUser } = useUserActions();
   const [state, setState] = useImmer({
@@ -44,6 +26,12 @@ export default function CreateOrg({ name, email, avatar }) {
     orgName: '',
     userName: '',
     name: name ? name : '',
+  });
+
+  const [userNameInputState, setUserNameInputState] = useImmer({
+    userName: '',
+    isInvalid: false,
+    error: '',
   });
 
   const handleNameChange = e => {
@@ -63,37 +51,45 @@ export default function CreateOrg({ name, email, avatar }) {
 
   const handleUserNameChange = e => {
     let target = e.target;
-    let targetWrapper = target.parentNode.parentNode;
 
-    setState(draft => {
+    setUserNameInputState(draft => {
       draft.userName = e.target.value;
+      draft.error = '';
     });
 
     if (target.value.length > 0) {
-      targetWrapper.classList.remove('error');
+      setUserNameInputState(draft => {
+        draft.isInvalid = false;
+      });
     } else {
-      targetWrapper.classList.add('error');
+      setUserNameInputState(draft => {
+        draft.isInvalid = true;
+      });
     }
   };
 
-  const handleNextClick = async e => {
+  const handleSubmission = async e => {
     e.preventDefault();
 
-    if (!(state.userName?.trim() && state.name?.trim())) {
+    if (!(userNameInputState.userName?.trim() && state.name?.trim())) {
       return;
     }
 
     try {
       await createUser({
-        userName: state.userName,
+        userName: userNameInputState.userName,
         displayName: state.name,
         orgName: state.orgName,
         avatar,
         bio: '',
       });
+
       router.push('/');
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      setUserNameInputState(draft => {
+        draft.isInvalid = true;
+        draft.error = error.message;
+      });
     }
   };
 
@@ -113,20 +109,25 @@ export default function CreateOrg({ name, email, avatar }) {
   return (
     <Wrapper>
       <div className="profile-header">Create user profile</div>
-      {state.orgName && (
+      {/* {state.orgName && (
         <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
           <Input
             label="Organization name"
-            value={state.userName}
+            value={state.orgName}
             onChange={handleUserNameChange}
           />
         </InputWrapper>
-      )}
-      <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
+      )} */}
+      <InputWrapper
+        className={userNameInputState.isInvalid ? 'error' : null}
+        onClick={onInputWrapperClick}
+        onBlur={onFocusLost}
+      >
         <Input
           label="Your username"
-          value={state.userName}
+          value={userNameInputState.userName}
           onChange={handleUserNameChange}
+          helperText={userNameInputState.error}
         />
       </InputWrapper>
       <InputWrapper onClick={onInputWrapperClick} onBlur={onFocusLost}>
@@ -139,8 +140,10 @@ export default function CreateOrg({ name, email, avatar }) {
 
       <ButtonWireframe
         type="submit"
-        onClick={state.name && state.userName ? handleNextClick : null}
-        disabled={!(state.name && state.userName)}
+        onClick={
+          state.name && userNameInputState.userName ? handleSubmission : null
+        }
+        disabled={!(state.name && userNameInputState.userName)}
       >
         Next
       </ButtonWireframe>

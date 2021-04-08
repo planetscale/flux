@@ -22,7 +22,6 @@ export default async (req, res) => {
   const { userName, displayName, orgName, avatar, bio } = req.body;
 
   const connection = await createConnection();
-
   const userQuery = `
     INSERT INTO
     User
@@ -30,27 +29,29 @@ export default async (req, res) => {
     VALUES
         (?, ?, ?, ?, ?)
   `;
-  await connection.execute(userQuery, [
-    user.email,
-    userName,
-    displayName,
-    'USER',
-    1, // TODO: There is only one org so hard coding it as the org id when creating users
-  ]);
 
-  const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
-  const [[userId]] = await connection.query(idQuery);
+  try {
+    await connection.execute(userQuery, [
+      user.email,
+      userName,
+      displayName,
+      'USER',
+      1, // TODO: There is only one org so hard coding it as the org id when creating users
+    ]);
 
-  const profileQuery = `
+    const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
+    const [[userId]] = await connection.query(idQuery);
+
+    const profileQuery = `
     INSERT INTO
     Profile
         (bio, avatar, userId)
     VALUES
         (?, ?, ?)
   `;
-  await connection.execute(profileQuery, [bio, avatar, userId.id]);
+    await connection.execute(profileQuery, [bio, avatar, userId.id]);
 
-  const query = `
+    const query = `
     SELECT
       User.id,
       User.email,
@@ -70,9 +71,14 @@ export default async (req, res) => {
     AND User.id = ?
     LIMIT 1;`;
 
-  const [[row]] = await connection.execute(query, [userId.id]);
-
-  connection.end();
-
-  res.json({ error: false, data: row });
+    const [[row]] = await connection.execute(query, [userId.id]);
+    connection.end();
+    res.json({ error: false, data: row });
+  } catch (e) {
+    connection.end();
+    res.json({
+      error: { message: 'Username already exists. Try something cooler.' },
+      data: [],
+    });
+  }
 };

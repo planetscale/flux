@@ -88,7 +88,7 @@ const useUserActions = () => {
         draft.loaded = true;
       });
     } else {
-      console.error(e);
+      throw error;
     }
   };
 
