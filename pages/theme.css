@@ -86,8 +86,8 @@
 
 @define-mixin darkmode {
   --bg-primary: var(--gray-900);
-  --bg-secondary: var(--gray-850);
-  --bg-tertiary: var(--gray-800);
+  --bg-secondary: var(--gray-800);
+  --bg-tertiary: var(--gray-700);
   --border-primary: var(--gray-700);
   --border-secondary: var(--gray-600);
   --border-action: var(--gray-600);

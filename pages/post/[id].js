@@ -376,8 +376,6 @@ export default function PostPage() {
   };
 
   const toggleCommentReply = (commentId, e) => {
-    console.log(commentId);
-
     setCommentButtonState(draft => {
       draft.replyButtons[commentId] = !commentButtonState.replyButtons[
         commentId

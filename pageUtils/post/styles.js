@@ -198,17 +198,15 @@ const InputWrapper = styled.div`
   input {
     background-color: unset;
     color: var(--text-primary);
-    border-bottom: 1px solid var(--bg-secondary);
+  }
+
+  > .error-message {
+    display: none;
   }
 
   &:hover {
     cursor: pointer;
     background-color: var(--bg-tertiary);
-
-    input {
-      border-color: var(--bg-tertiary);
-      background-color: var(--bg-tertiary);
-    }
   }
 
   &.disabled {
@@ -235,8 +233,12 @@ const InputWrapper = styled.div`
   }
 
   &.error {
-    input {
-      border-bottom: 1px solid var(--red-500);
+    background-color: rgba(var(--red-500), 0.02);
+    border: 1px solid rgb(var(--red-500));
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(var(--red-500), 0.04);
     }
   }
 `;

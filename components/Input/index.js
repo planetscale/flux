@@ -33,7 +33,7 @@ const StyledHelperText = styled.p((error = null, success = null) => {
   let color = '#000000';
 
   if (error) {
-    color = 'red';
+    color = 'rgb(var(--red-500))';
   } else if (success) {
     color = 'green';
   }
@@ -56,7 +56,13 @@ export default function Input({
   return (
     <InputWrapper>
       {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
-      <StyledInput id={label} {...otherProps} />
+      <StyledInput
+        id={label}
+        spellCheck="false"
+        autoCorrect="off"
+        autoCapitalize="off"
+        {...otherProps}
+      />
       {helperText && (
         <StyledHelperText error={error} success={success}>
           {helperText}
