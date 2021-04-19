@@ -1,7 +1,6 @@
 import { cors, validateUser, validateWritable } from './_utils/middleware';
 import { createConnection } from './_utils/connection';
 
-// This is a simple database connection test to prove you can connect to a persistent store for your application.
 export default async (req, res) => {
   let user;
   try {
@@ -38,20 +37,27 @@ export default async (req, res) => {
       'USER',
       1, // TODO: There is only one org so hard coding it as the org id when creating users
     ]);
+  } catch (e) {
+    connection.end();
+    res.json({
+      error: { message: 'Username already exists. Try something cooler.' },
+      data: [],
+    });
+  }
 
-    const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
-    const [[userId]] = await connection.query(idQuery);
+  const idQuery = `SELECT id FROM User WHERE id = LAST_INSERT_ID()`;
+  const [[userId]] = await connection.query(idQuery);
 
-    const profileQuery = `
+  const profileQuery = `
     INSERT INTO
     Profile
         (bio, avatar, userId)
     VALUES
         (?, ?, ?)
   `;
-    await connection.execute(profileQuery, [bio, avatar, userId.id]);
+  await connection.execute(profileQuery, [bio, avatar, userId.id]);
 
-    const query = `
+  const query = `
     SELECT
       User.id,
       User.email,
@@ -71,14 +77,23 @@ export default async (req, res) => {
     AND User.id = ?
     LIMIT 1;`;
 
-    const [[row]] = await connection.execute(query, [userId.id]);
-    connection.end();
-    res.json({ error: false, data: row });
-  } catch (e) {
-    connection.end();
-    res.json({
-      error: { message: 'Username already exists. Try something cooler.' },
-      data: [],
-    });
-  }
+  const [[row]] = await connection.execute(query, [userId.id]);
+
+  const clearNotificationsQuery = `
+  INSERT INTO
+    PostView
+    (postId, userId)
+  SELECT
+    id,
+    ? as userId
+  FROM
+    Post
+  ON DUPLICATE KEY UPDATE
+    lastViewed=CURRENT_TIMESTAMP(3)
+  `;
+  await connection.execute(clearNotificationsQuery, [userId.id]);
+
+  connection.end();
+
+  res.json({ error: false, data: row });
 };
