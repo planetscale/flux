@@ -168,7 +168,13 @@ const Reply = styled.div`
   margin: 0 -2em;
   border: 1px solid var(--border-primary);
   background-color: var(--bg-primary);
+  opacity: 0.95;
   border-radius: 6px;
+
+  &:hover,
+  &:active {
+    opacity: 1;
+  }
 `;
 
 const ReplyActionBar = styled(ActionBar)`
