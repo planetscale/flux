@@ -24,12 +24,10 @@ export const ButtonBase = styled.button`
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    box-shadow: var(--layer-shadow);
   }
 
   &:focus {
     outline-width: 1px;
-    box-shadow: var(--layer-shadow);
   }
 
   &:disabled {
@@ -39,9 +37,11 @@ export const ButtonBase = styled.button`
 
 export const ButtonWireframe = styled(ButtonBase)`
   background-color: var(--bg-secondary);
+  border: 1px solid var(--bg-secondary);
 
   &:hover:not([disabled]) {
     background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-action);
   }
 
   &.has-notifications {
