@@ -102,15 +102,15 @@ const Comment = styled.div`
   }
 
   &.level0 {
-    border-left: 1px solid var(--gray-600);
+    border-left: 1px solid var(--border-secondary);
   }
 
   &.level1 {
-    border-left: 1px solid var(--gray-700);
+    border-left: 1px solid var(--border-secondary);
   }
 
   &.level2 {
-    border-left: 1px solid var(--gray-800);
+    border-left: 1px solid var(--border-secondary);
   }
 `;
 
