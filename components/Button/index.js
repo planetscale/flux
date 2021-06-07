@@ -88,7 +88,7 @@ export const ButtonSquished = styled(ButtonBase)`
   }
 
   &.selected {
-    background-color: rgba(var(--blue-500), 0.1);
+    background-color: rgba(0, 146, 251, 0.39);
     border-color: rgba(var(--blue-500), 0.1);
     color: rgb(var(--blue-500));
   }
