@@ -1,10 +1,29 @@
 import React from 'react';
 import { useState } from 'react';
 import { Chat1 as Chat } from '@styled-icons/remix-line';
-import { Reply, ReplyActionBar } from 'pageUtils/post/styles';
+import { ActionBar } from 'pageUtils/post/styles';
 import { ButtonWireframe } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { fetcher } from 'utils/fetch';
+import styled from '@emotion/styled';
+
+const Reply = styled.div`
+  margin-bottom: ${props => (props.subcomment ? '' : '42px')};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2em;
+  margin: 0 -2em;
+  border: 1px solid var(--border-primary);
+  background-color: var(--bg-primary);
+  border-radius: 6px;
+`;
+
+const ReplyActionBar = styled(ActionBar)`
+  margin-left: unset;
+  margin-top: 1em;
+  padding-top: 1em;
+`;
 
 export default function CommentBox({
   postId,
