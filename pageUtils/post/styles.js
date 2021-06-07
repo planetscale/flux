@@ -190,7 +190,7 @@ const Post = styled.div`
   margin: -2em;
   padding: 2em;
   border-radius: 6px;
-  box-shadow: var(--layer-shadow);
+  border: 1px solid var(--border-primary);
 `;
 
 const InputWrapper = styled.div`
