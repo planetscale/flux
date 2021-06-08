@@ -36,7 +36,7 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  background-color: unset;
+  background-color: var(--bg-primary);
   border: 1px solid var(--border-secondary);
 
   &:hover:not([disabled]) {
