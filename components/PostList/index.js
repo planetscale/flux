@@ -169,7 +169,7 @@ const DemarcationString = styled.div`
     width: 10px;
     height: 1px;
     background-color: var(--border-primary);
-    left: -1em;
+    left: -1.1em;
     top: 1.1em;
   }
 `;
