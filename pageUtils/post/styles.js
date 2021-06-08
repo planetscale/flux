@@ -65,6 +65,8 @@ const Title = styled.h1`
 `;
 
 const Content = styled.div`
+  margin-top: 2em;
+  border-top: 1px solid var(--border-primary);
   color: var(--text-primary);
   font-size: var(--fs-base);
   line-height: 28px;
