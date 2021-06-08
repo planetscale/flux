@@ -16,7 +16,7 @@ const TimeAndTags = styled.div`
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   margin: 0 -2em;
   padding: 0 2em 2em;
 
@@ -43,7 +43,7 @@ const TitleInputWrapper = styled.div`
   display: flex;
   margin: 0 -2em;
   padding: 2em;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
 
   svg {
     position: absolute;
@@ -110,7 +110,7 @@ const EditorWrapper = styled.div`
   display: flex;
   margin: 0 -2em;
   padding: 2em;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
 
   &:hover,
   &:focus-within {
