@@ -56,7 +56,7 @@ const TitleInputWrapper = styled.div`
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 
   &.invalid {
@@ -114,7 +114,7 @@ const EditorWrapper = styled.div`
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 `;
 

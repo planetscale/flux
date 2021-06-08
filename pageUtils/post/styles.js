@@ -188,7 +188,7 @@ const ReplyActionBar = styled(ActionBar)`
 const Post = styled.div`
   position: flex;
   flex-direction: column;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   margin: -2em;
   padding: 2em;
   border-radius: 6px;
