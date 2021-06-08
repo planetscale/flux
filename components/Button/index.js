@@ -40,8 +40,8 @@ export const ButtonWireframe = styled(ButtonBase)`
   border: 1px solid var(--border-secondary);
 
   &:hover:not([disabled]) {
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-action);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
   }
 
   &.has-notifications {
