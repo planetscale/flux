@@ -38,7 +38,6 @@ const MenuAction = styled(DropdownMenu.ActiveItem)`
 const StyledRadio = styled(DropdownMenu.RadioGroup)`
   border: 1px solid var(--border-primary);
   border-radius: 6px;
-  box-shadow: var(--layer-shadow);
 
   *:first-child {
     border-top-left-radius: 6px;

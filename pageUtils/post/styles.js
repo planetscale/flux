@@ -65,6 +65,8 @@ const Title = styled.h1`
 `;
 
 const Content = styled.div`
+  margin-top: 2em;
+  border-top: 1px solid var(--border-primary);
   color: var(--text-primary);
   font-size: var(--fs-base);
   line-height: 28px;
@@ -102,15 +104,15 @@ const Comment = styled.div`
   }
 
   &.level0 {
-    border-left: 1px solid var(--gray-600);
+    border-left: 1px solid var(--border-secondary);
   }
 
   &.level1 {
-    border-left: 1px solid var(--gray-700);
+    border-left: 1px solid var(--border-secondary);
   }
 
   &.level2 {
-    border-left: 1px solid var(--gray-800);
+    border-left: 1px solid var(--border-secondary);
   }
 `;
 
@@ -168,7 +170,13 @@ const Reply = styled.div`
   margin: 0 -2em;
   border: 1px solid var(--border-primary);
   background-color: var(--bg-primary);
+  opacity: 0.95;
   border-radius: 6px;
+
+  &:hover,
+  &:active {
+    opacity: 1;
+  }
 `;
 
 const ReplyActionBar = styled(ActionBar)`
@@ -180,11 +188,11 @@ const ReplyActionBar = styled(ActionBar)`
 const Post = styled.div`
   position: flex;
   flex-direction: column;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   margin: -2em;
   padding: 2em;
   border-radius: 6px;
-  box-shadow: var(--layer-shadow);
+  border: 1px solid var(--border-primary);
 `;
 
 const InputWrapper = styled.div`

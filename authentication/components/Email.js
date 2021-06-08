@@ -58,7 +58,9 @@ export default function NoAuthEmail() {
               onChange={handleEmailChange}
             />
           </InputWrapper>
-          <ButtonWireframe type="submit">Login/Sign Up</ButtonWireframe>
+          <ButtonWireframe className="primary" type="submit">
+            Login/Sign Up
+          </ButtonWireframe>
         </form>
         <LoginInfoPlaceholder>
           The default email authentication process is purely for demo purposes.

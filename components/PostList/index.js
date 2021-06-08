@@ -55,7 +55,7 @@ const Post = styled.a`
 
     > div {
       background-color: var(--bg-secondary);
-      box-shadow: var(--layer-shadow-hover);
+      border: 1px solid var(--border-primary);
       transform: translateY(-0.5%);
     }
 

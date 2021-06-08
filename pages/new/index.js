@@ -16,7 +16,7 @@ const TimeAndTags = styled.div`
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   margin: 0 -2em;
   padding: 0 2em 2em;
 
@@ -43,7 +43,7 @@ const TitleInputWrapper = styled.div`
   display: flex;
   margin: 0 -2em;
   padding: 2em;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
 
   svg {
     position: absolute;
@@ -56,7 +56,7 @@ const TitleInputWrapper = styled.div`
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 
   &.invalid {
@@ -110,11 +110,11 @@ const EditorWrapper = styled.div`
   display: flex;
   margin: 0 -2em;
   padding: 2em;
-  border-bottom: 1px solid var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
 
   &:hover,
   &:focus-within {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
   }
 `;
 
@@ -133,7 +133,6 @@ const customStyles = {
     ':hover': {
       backgroundColor: 'var(--bg-secondary)',
       borderColor: 'unset',
-      boxShadow: 'var(--layer-shadow)',
     },
   }),
   indicatorSeparator: provided => ({
@@ -161,7 +160,6 @@ const customStyles = {
     backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--bg-tertiary)',
     borderRadius: '8px',
-    boxShadow: 'var(--layer-shadow)',
   }),
 };
 
@@ -318,7 +316,7 @@ export default function NewPost() {
             {state.tagOptions.length > 0 && (
               <>
                 <DotSeperator>
-                  &nbsp; &middot; &nbsp; Post to &nbsp;
+                  &nbsp; &middot; &nbsp; Send notification to &nbsp;
                 </DotSeperator>
                 <div>
                   <Select

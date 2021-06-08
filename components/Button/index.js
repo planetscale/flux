@@ -24,12 +24,10 @@ export const ButtonBase = styled.button`
 
   &:hover:not([disabled]) {
     cursor: pointer;
-    box-shadow: var(--layer-shadow);
   }
 
   &:focus {
     outline-width: 1px;
-    box-shadow: var(--layer-shadow);
   }
 
   &:disabled {
@@ -38,10 +36,12 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  background-color: var(--bg-secondary);
+  background-color: unset;
+  border: 1px solid var(--border-secondary);
 
   &:hover:not([disabled]) {
     background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-action);
   }
 
   &.has-notifications {
@@ -51,6 +51,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
   &.primary {
     background-color: var(--text-primary);
+    border-color: var(--text-primary);
     color: var(--bg-secondary);
 
     &:hover:not([disabled]) {
@@ -84,11 +85,12 @@ export const ButtonSquished = styled(ButtonBase)`
   border: 1px solid var(--border-primary);
 
   &:hover:not([disabled]) {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-action);
   }
 
   &.selected {
-    background-color: rgba(var(--blue-500), 0.1);
+    background-color: rgba(0, 146, 251, 0.39);
     border-color: rgba(var(--blue-500), 0.1);
     color: rgb(var(--blue-500));
   }
