@@ -36,8 +36,8 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--bg-secondary);
+  background-color: unset;
+  border: 1px solid var(--border-secondary);
 
   &:hover:not([disabled]) {
     background-color: var(--bg-tertiary);
@@ -51,6 +51,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
   &.primary {
     background-color: var(--text-primary);
+    border-color: var(--text-primary);
     color: var(--bg-secondary);
 
     &:hover:not([disabled]) {
