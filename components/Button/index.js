@@ -103,11 +103,6 @@ export const ButtonImage = styled(ButtonBase)`
   background: url(${props => props.img || '/user_profile_icon.svg'});
   background-repeat: no-repeat;
   background-size: contain;
-
-  ${media.phone`
-    width: 32px;
-    height: 32px;
-  `}
 `;
 
 export const ButtonComposite = styled.a`
