@@ -98,6 +98,7 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
   });
 
   const handleLogout = () => {
+    console.log('logging out');
     signOut();
   };
 
@@ -141,7 +142,7 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
             </StyledRadioItem>
           </StyledRadio>
         </DropdownMenu.PassiveItem>
-        <MenuAction type="button" as="a" onClick={handleLogout}>
+        <MenuAction type="button" as="a" onSelect={handleLogout}>
           Log Out
         </MenuAction>
       </DropdownMenu.Content>
