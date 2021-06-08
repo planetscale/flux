@@ -133,7 +133,6 @@ const customStyles = {
     ':hover': {
       backgroundColor: 'var(--bg-secondary)',
       borderColor: 'unset',
-      boxShadow: 'var(--layer-shadow)',
     },
   }),
   indicatorSeparator: provided => ({
@@ -161,7 +160,6 @@ const customStyles = {
     backgroundColor: 'var(--bg-primary)',
     border: '1px solid var(--bg-tertiary)',
     borderRadius: '8px',
-    boxShadow: 'var(--layer-shadow)',
   }),
 };
 
@@ -318,7 +316,7 @@ export default function NewPost() {
             {state.tagOptions.length > 0 && (
               <>
                 <DotSeperator>
-                  &nbsp; &middot; &nbsp; Post to &nbsp;
+                  &nbsp; &middot; &nbsp; Send notification to &nbsp;
                 </DotSeperator>
                 <div>
                   <Select
