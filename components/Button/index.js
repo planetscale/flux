@@ -36,12 +36,12 @@ export const ButtonBase = styled.button`
 `;
 
 export const ButtonWireframe = styled(ButtonBase)`
-  background-color: unset;
+  background-color: var(--bg-primary);
   border: 1px solid var(--border-secondary);
 
   &:hover:not([disabled]) {
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-action);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
   }
 
   &.has-notifications {
@@ -103,11 +103,6 @@ export const ButtonImage = styled(ButtonBase)`
   background: url(${props => props.img || '/user_profile_icon.svg'});
   background-repeat: no-repeat;
   background-size: contain;
-
-  ${media.phone`
-    width: 32px;
-    height: 32px;
-  `}
 `;
 
 export const ButtonComposite = styled.a`

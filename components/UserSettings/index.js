@@ -117,7 +117,7 @@ export default function UserSettings({ profileImg, displayName, userHandle }) {
   return (
     <DropdownMenu.Root>
       <ButtonImage as={DropdownMenu.Trigger} img={profileImg}></ButtonImage>
-      <DropdownMenu.Content sideOffset={42}>
+      <DropdownMenu.Content sideOffset={16}>
         <UserInfo>
           <UserName>{displayName}</UserName>
           <UserNickname>@{userHandle}</UserNickname>

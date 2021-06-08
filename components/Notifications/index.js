@@ -128,7 +128,7 @@ export default function Notifications() {
           <RemixFillNotification />
         )}
       </ButtonWireframe>
-      <DropdownMenu.Content sideOffset={42}>
+      <DropdownMenu.Content sideOffset={16}>
         {totalNotifications === 0 ? (
           <EmptyNotificationItem>
             😶 No notifications for you.

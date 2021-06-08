@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
-import { ButtonWireframe, ButtonComposite } from 'components/Button';
+import {
+  ButtonWireframe,
+  ButtonComposite,
+  ButtonSquished,
+} from 'components/Button';
 import getConfig from 'next/config';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
@@ -16,16 +20,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  border-bottom: 1px solid var(--border-primary);
-  padding: 2em;
+  padding: 2em 2em 0;
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: var(--bg-primary);
-  opacity: 0.98;
 
   ${media.phone`
-    padding: 2em 1em;
+    padding: 2em 1em 0;
   `};
 `;
 
@@ -34,7 +35,7 @@ const Constrain = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 80ch;
+  width: 86ch;
 `;
 
 const Logo = styled.div`
@@ -110,7 +111,12 @@ const Breadcrumb = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: var(--fs-base-plus-1);
+  font-size: var(--fs-base);
+  border: 1px solid var(--border-primary);
+  padding: 0.5em 1em;
+  border-radius: 99px;
+  background-color: var(--bg-primary);
+  opacity: 0.98;
 
   ${media.phone`
     font-size: var(--fs-base);
@@ -195,14 +201,14 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
           {selectedTag && (
             <>
               <ForwardSlash>/</ForwardSlash>
-              <ButtonWireframe
+              <ButtonSquished
                 onClick={() => {
                   setTag(null);
                 }}
               >
                 <Hashtag />
                 <span>{selectedTag.toLowerCase()}</span>
-              </ButtonWireframe>
+              </ButtonSquished>
             </>
           )}
         </Breadcrumb>
