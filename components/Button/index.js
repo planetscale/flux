@@ -84,7 +84,8 @@ export const ButtonSquished = styled(ButtonBase)`
   border: 1px solid var(--border-primary);
 
   &:hover:not([disabled]) {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-action);
   }
 
   &.selected {
