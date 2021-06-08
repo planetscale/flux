@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   z-index: 1;
 
   ${media.phone`
-    padding: 2em 1em;
+    padding: 2em 1em 0;
   `};
 `;
 
