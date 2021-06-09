@@ -116,7 +116,7 @@ const Breadcrumb = styled.div`
   padding: 0.5em 1em;
   border-radius: 99px;
   background-color: var(--bg-primary);
-  opacity: 0.98;
+  box-shadow: var(--shadow);
 
   ${media.phone`
     font-size: var(--fs-base);
