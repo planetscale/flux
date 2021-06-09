@@ -15,7 +15,7 @@ export default function CustomLayout({ children, title }) {
           ${title.charAt(0).toUpperCase() + title.slice(1)}`
             : '- Login'}
         </title>
-        <meta property="og:title" content="{title}" key="title" />
+        <meta property="og:title" content={title} key="title" />
       </Head>
 
       {children}
