@@ -79,6 +79,7 @@
   --fs-base-plus-2: 24px;
   --fs-base-plus-3: 32px;
   --fs-base-plus-4: 42px;
+  --shadow: 0 0 42px rgb(224, 224, 224);
 }
 
 @define-mixin darkmode {
@@ -92,6 +93,7 @@
   --text-secondary: var(--gray-400);
   --text-blue: rgb(var(--blue-400));
   --text-purple: rgb(var(--purple-300));
+  --shadow: 0 0 42px rgb(22, 22, 22);
 }
 
 @media screen and (prefers-color-scheme: dark) {
