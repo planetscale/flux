@@ -345,14 +345,6 @@ export default function PostList({ posts = [], handleTagClick }) {
                   <PostInfo>
                     <MetaInformation>
                       <MetaDate>{getLocaleDateTimeString(createdAt)}</MetaDate>
-                      {tag?.name && (
-                        <>
-                          <span>&nbsp; &middot; &nbsp;</span>
-                          <MetaTag onClick={e => handleTagClick(e, tag?.name)}>
-                            #{tag?.name}
-                          </MetaTag>
-                        </>
-                      )}
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
                       {notificationLookup[id] &&

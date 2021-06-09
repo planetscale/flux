@@ -4,7 +4,6 @@ import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
-import Select from 'react-select';
 import { Article, AlarmWarning } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
@@ -29,12 +28,6 @@ const TimeAndTags = styled.div`
 const PostDate = styled.div`
   ${media.phone`
     margin-bottom: 1em;
-  `}
-`;
-
-const DotSeperator = styled.div`
-  ${media.phone`
-    display: none;
   `}
 `;
 
@@ -117,51 +110,6 @@ const EditorWrapper = styled.div`
     background-color: var(--bg-secondary);
   }
 `;
-
-const customStyles = {
-  container: provided => ({
-    ...provided,
-    width: '200px',
-  }),
-  control: provided => ({
-    ...provided,
-    borderColor: 'var(--border-primary)',
-    backgroundColor: 'var(--bg-secondary)',
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    borderRadius: '6px',
-    ':hover': {
-      backgroundColor: 'var(--bg-secondary)',
-      borderColor: 'unset',
-    },
-  }),
-  indicatorSeparator: provided => ({
-    ...provided,
-    backgroundColor: 'var(--bg-primary)',
-  }),
-  indicatorContainer: provided => ({
-    ...provided,
-    color: 'var(--text-primary)',
-  }),
-  option: provided => ({
-    ...provided,
-    whiteSpace: 'nowrap',
-    color: 'var(--text-primary)',
-    ':hover': {
-      backgroundColor: 'var(--bg-tertiary)',
-    },
-  }),
-  singleValue: provided => ({
-    ...provided,
-    color: 'var(--text-primary)',
-  }),
-  menu: provided => ({
-    ...provided,
-    backgroundColor: 'var(--bg-primary)',
-    border: '1px solid var(--bg-tertiary)',
-    borderRadius: '8px',
-  }),
-};
 
 const dateTimeOptions = {
   year: 'numeric',
@@ -281,12 +229,6 @@ export default function NewPost() {
     });
   };
 
-  const handleTagChange = selectedOption => {
-    updateState(draft => {
-      draft.selectedTag = selectedOption;
-    });
-  };
-
   const handleBlur = key => {
     updateState(draft => {
       draft[key].hasFocused = true;
@@ -313,35 +255,6 @@ export default function NewPost() {
         <Post>
           <TimeAndTags>
             <PostDate>{state.dateTime}</PostDate>
-            {state.tagOptions.length > 0 && (
-              <>
-                <DotSeperator>
-                  &nbsp; &middot; &nbsp; Send notification to &nbsp;
-                </DotSeperator>
-                <div>
-                  <Select
-                    isClearable={false}
-                    isSearchable={false}
-                    styles={customStyles}
-                    value={state.selectedTag}
-                    onChange={handleTagChange}
-                    options={state.tagOptions}
-                    defaultValue={state.selectedTag}
-                    placeholder="Select a tag"
-                    theme={theme => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        primary25: 'var(--bg-tertiary)',
-                        primary50: 'var(--bg-tertiary)',
-                        primary75: 'var(--bg-tertiary)',
-                        primary: 'var(--bg-tertiary)',
-                      },
-                    })}
-                  />
-                </div>
-              </>
-            )}
           </TimeAndTags>
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
