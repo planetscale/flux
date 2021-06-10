@@ -12,6 +12,7 @@ const Content = styled(DropdownMenu.Content)`
   flex-direction: column;
   max-height: 80vh;
   overflow: auto;
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 12%);
 `;
 
 const Label = styled(DropdownMenu.Label)`
