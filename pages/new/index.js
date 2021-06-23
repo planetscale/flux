@@ -9,7 +9,6 @@ import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
-import { useEffect } from 'react';
 
 const TimeAndTags = styled.div`
   color: var(--text-primary);
@@ -136,41 +135,8 @@ export default function NewPost() {
       hasFocused: false,
     },
     content: '',
-    selectedTag: null,
-    tagOptions: [],
     disableSubmit: false,
   });
-
-  useEffect(async () => {
-    try {
-      const resp = await fetcher('GET', '/api/get-tags');
-      const fluxSandboxChannel = {};
-      const tagMap = resp.data.map(item => {
-        // assign dev default channel
-        if (item.name.toLowerCase() === 'flux-sandbox') {
-          fluxSandboxChannel['value'] = item.name;
-          fluxSandboxChannel['label'] = `#${item.name}`;
-          fluxSandboxChannel['channelId'] = item.id;
-        }
-
-        return {
-          value: item.name,
-          label: `#${item.name}`,
-          channelId: item.id,
-        };
-      });
-
-      updateState(draft => {
-        draft.tagOptions = tagMap;
-        draft.selectedTag =
-          process.env.NODE_ENV === 'development'
-            ? fluxSandboxChannel
-            : tagMap[0];
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -201,14 +167,8 @@ export default function NewPost() {
 
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
-        content: state.content,
         summary: state.subtitle.value,
-        tagChannelId: state.selectedTag?.channelId,
-        tagName: state.selectedTag?.value,
-        userAvatar:
-          userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
-        userDisplayName: userContext?.user?.displayName,
-        domain: window.location.origin,
+        content: state.content,
       });
 
       if (!resp?.error && resp?.data.id) {

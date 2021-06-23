@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, summary: initSummary, content, tagChannelId } = req.body;
+  const { title, summary: initSummary, content } = req.body;
 
   let summary = initSummary;
   if (!initSummary) {
@@ -37,17 +37,11 @@ module.exports = async (req, res) => {
   const insertQuery = `
     INSERT INTO
     Post
-        (title, summary, authorId, content, tagId)
+        (title, summary, authorId, content)
     VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?)
   `;
-  await connection.execute(insertQuery, [
-    title,
-    summary,
-    user.id,
-    content,
-    tagChannelId || null,
-  ]);
+  await connection.execute(insertQuery, [title, summary, user.id, content]);
 
   const idQuery = `SELECT id, createdAt FROM Post WHERE id = LAST_INSERT_ID()`;
   const [[newPost]] = await connection.query(idQuery);
