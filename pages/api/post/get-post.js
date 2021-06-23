@@ -23,15 +23,12 @@ export default async (req, res) => {
       Post.summary,
       Post.createdAt,
       Post.content,
-      Tag.id as tagId,
-      Tag.name as tagName,
       User.id as authorId,
       User.displayName as authorName,
       User.username as authorUsername,
       Profile.avatar
     FROM
-      Post
-      LEFT JOIN Tag ON Tag.id = Post.tagId,
+      Post,
       User,
       Profile
     WHERE

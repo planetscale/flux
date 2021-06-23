@@ -47,32 +47,17 @@ export default function Home() {
     before: -1,
   });
 
-  const [notifications, setNotifications] = useImmer({});
-
-  const { setHeaders, setTag } = useTopBarActions();
+  const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
   const { selectedTag } = useTopBarContext();
 
   const { data } = useSWR(
-    ['/api/get-posts', state.last, state.before, selectedTag || undefined],
-    (url, last, before, selectedTag) => {
+    ['/api/get-posts', state.last, state.before],
+    (url, last, before) => {
       setState(draft => {
         draft.postsLoading = true;
       });
-      return fetcher(
-        'GET',
-        url,
-        selectedTag
-          ? {
-              last,
-              before,
-              selectedTag,
-            }
-          : {
-              last,
-              before,
-            }
-      );
+      return fetcher('GET', url, { last, before });
     },
 
     {
@@ -125,19 +110,12 @@ export default function Home() {
     }
   );
 
-  const handleTagClick = (e, tagName) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTag(tagName);
-  };
-
   const posts = Object.values(state.postList).reverse();
   return (
     <CustomLayout title="Posts">
       <HomeWrapper>
         <PostList
           posts={[...posts, ...(state.postsLoading ? LOADING_POSTS : [])]}
-          handleTagClick={handleTagClick}
         />
       </HomeWrapper>
     </CustomLayout>
