@@ -176,7 +176,6 @@ export default function PostPage() {
     authorName,
     authorUsername,
     avatar,
-    tagName,
     content,
     createdAt,
     title,

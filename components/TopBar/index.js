@@ -143,7 +143,7 @@ const { publicRuntimeConfig } = getConfig();
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
   const { header, subHeader, query } = useTopBarContext();
-  const { setHeaders, setTag } = useTopBarActions();
+  const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
 
   useEffect(() => {
@@ -156,7 +156,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   }, [user?.org]);
 
   const redirectToHome = () => {
-    setTag(null);
     if (router.pathname !== '/') {
       router.push('/');
     }

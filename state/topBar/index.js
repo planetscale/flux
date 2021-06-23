@@ -5,7 +5,6 @@ const defaultContext = {
   header: null,
   subHeader: 'all',
   error: null,
-  filterTagList: [],
 };
 const TopBarContext = React.createContext();
 TopBarContext.displayName = 'Top bar Context';
@@ -54,19 +53,7 @@ const useTopBarActions = () => {
     }
   };
 
-  const setTag = tag => {
-    try {
-      updateState(draft => {
-        draft.selectedTag = tag;
-      });
-    } catch (e) {
-      updateState(draft => {
-        draft.error = e;
-      });
-    }
-  };
-
-  return { setHeaders, setTag };
+  return { setHeaders };
 };
 
 export { TopBarContextProvider, useTopBarContext, useTopBarActions };

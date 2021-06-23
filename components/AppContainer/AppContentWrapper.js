@@ -8,7 +8,7 @@ import { useUserContext } from 'state/user';
 export default function AppContentWrapper({ children }) {
   const router = useRouter();
   const { user } = useUserContext();
-  const { setHeaders, setTag } = useTopBarActions();
+  const { setHeaders } = useTopBarActions();
   const [session, loading] = useSession();
 
   useEffect(() => {
@@ -30,7 +30,6 @@ export default function AppContentWrapper({ children }) {
         subHeader: 'Posts',
       });
     }
-    setTag(null);
   }, [router.pathname]);
 
   return (

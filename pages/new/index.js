@@ -10,7 +10,7 @@ import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
 
-const TimeAndTags = styled.div`
+const Time = styled.div`
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -213,9 +213,9 @@ export default function NewPost() {
     <CustomLayout title="Create New Post">
       <PageWrapper>
         <Post>
-          <TimeAndTags>
+          <Time>
             <PostDate>{state.dateTime}</PostDate>
-          </TimeAndTags>
+          </Time>
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
             onBlur={() => handleBlur('title')}
