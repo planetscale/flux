@@ -1,9 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  ButtonWireframe,
-  ButtonComposite,
-  ButtonSquished,
-} from 'components/Button';
+import { ButtonWireframe, ButtonComposite } from 'components/Button';
 import getConfig from 'next/config';
 import UserSettings from 'components/UserSettings';
 import { useEffect } from 'react';
@@ -11,7 +7,6 @@ import { useTopBarActions, useTopBarContext } from 'state/topBar';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { Add } from '@styled-icons/remix-line';
-import { Hashtag } from '@styled-icons/remix-editor';
 import { media } from '../../pageUtils/post/theme';
 import Notifications from 'components/Notifications';
 
@@ -147,7 +142,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export default function TopBar({ profileImg, userDisplayName, userHandle }) {
   const router = useRouter();
-  const { header, subHeader, query, selectedTag } = useTopBarContext();
+  const { header, subHeader, query } = useTopBarContext();
   const { setHeaders, setTag } = useTopBarActions();
   const { user } = useUserContext();
 
@@ -196,19 +191,6 @@ export default function TopBar({ profileImg, userDisplayName, userHandle }) {
             <>
               <ForwardSlash>/</ForwardSlash>
               <PageTitle>{query}</PageTitle>
-            </>
-          )}
-          {selectedTag && (
-            <>
-              <ForwardSlash>/</ForwardSlash>
-              <ButtonSquished
-                onClick={() => {
-                  setTag(null);
-                }}
-              >
-                <Hashtag />
-                <span>{selectedTag.toLowerCase()}</span>
-              </ButtonSquished>
             </>
           )}
         </Breadcrumb>

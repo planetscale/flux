@@ -6,7 +6,6 @@ const defaultContext = {
   subHeader: 'all',
   error: null,
   filterTagList: [],
-  selectedTag: null,
 };
 const TopBarContext = React.createContext();
 TopBarContext.displayName = 'Top bar Context';

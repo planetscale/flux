@@ -1,11 +1,5 @@
-import {
-  cors,
-  runMiddleware,
-  validateUser,
-  validateWritable,
-} from './_utils/middleware';
+import { cors, validateUser, validateWritable } from './_utils/middleware';
 import { createConnection } from './_utils/connection';
-import slackNotification from './_utils/notifications/slack';
 
 const REMOVE_NEWLINE = /\n+|\\n+|\\\n+/gm;
 const REMOVE_DOUBLESPACE = /  +/gm;
@@ -60,15 +54,4 @@ module.exports = async (req, res) => {
   connection.end();
 
   res.json({ error: false, data: { id: newPost.id } });
-
-  try {
-    // Fire off slack notification of successfully created post
-    if (process.env.SLACK_API_TOKEN && tagChannelId) {
-      await runMiddleware(req, res, slackNotification, {
-        newPost,
-      });
-    }
-  } catch (e) {
-    console.error(e.toString());
-  }
 };

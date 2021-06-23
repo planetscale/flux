@@ -297,10 +297,6 @@ export default function PostList({ posts = [], handleTagClick }) {
                 </MetaDate>
                 <span>&nbsp; &middot; &nbsp;</span>
                 <span>
-                  <EmptyMeta className="link" />
-                </span>
-                <span>&nbsp; &middot; &nbsp;</span>
-                <span>
                   <EmptyMeta />
                 </span>
               </MetaInformation>
