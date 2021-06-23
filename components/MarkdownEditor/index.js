@@ -126,36 +126,6 @@ export default function MarkdownEditor({
     return (await result.json()).url;
   };
 
-  /* TODO: I assume this is a WIP so commenting out.  We are no longer using gql so the query will need to be converted.
-  const populateUsers = async text => {
-    try {
-      const result = await client.query(slackMembersQuery).toPromise();
-
-      if (result.data?.slackMembers) {
-        return result.data?.slackMembers
-          .map(member => ({
-            // fields have to be {name,id,email}
-            name: member.realName,
-            id: `@${member.realName}`,
-            // TODO: replace this hack with real non-breaking user handle
-            email: `https://flux.psdb.co/user/${member.displayName
-              .split(' ')
-              .join('-')}`,
-          }))
-          .filter(result =>
-            result.name.toLowerCase().includes(text.toLowerCase())
-          );
-      } else if (result.error) {
-        console.error(result.error);
-        return [];
-      }
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
-  };
-  */
-
   return (
     <Wrapper onKeyDown={onKeyDown}>
       <Editor
