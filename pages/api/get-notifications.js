@@ -19,12 +19,10 @@ export default async (req, res) => {
     Post.id as postId,
     Post.title as postTitle,
     Post.createdAt as postCreatedAt,
-    Tag.name as tagName,
     User.displayName as authorName,
     (PostView.id IS NULL) AS isNewPost,
     COUNT(Reply.id) AS numNewReplies
   FROM
-    Tag,
     User,
     Post
     LEFT JOIN PostView ON Post.id = PostView.postId AND PostView.userId = ?
@@ -32,15 +30,13 @@ export default async (req, res) => {
       AND Reply.createdAt > PostView.lastViewed
       AND Reply.authorId != ?
   WHERE
-    Post.tagId = Tag.id
-    AND Post.authorId = User.id
+    Post.authorId = User.id
     AND (
       PostView.userId = ?
       OR PostView.id IS Null
     )
   GROUP BY
     Post.id,
-    Tag.id,
     User.id,
     PostView.id
   HAVING

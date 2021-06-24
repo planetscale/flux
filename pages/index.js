@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import PostList from 'components/PostList';
-import { useTopBarActions, useTopBarContext } from 'state/topBar';
+import { useTopBarActions } from 'state/topBar';
 import { useEffect } from 'react';
 import { useUserContext } from 'state/user';
 import styled from '@emotion/styled';
@@ -28,10 +28,8 @@ const formatPosts = posts => {
     // FIXME: Update when PostList is updated with new format
     acc[curr.id] = {
       ...curr,
-      tag: { name: curr.tagName },
       author: { displayName: curr.authorName },
     };
-    delete acc[curr.id].tagName;
     delete acc[curr.id].authorName;
     return acc;
   }, {});
@@ -47,32 +45,16 @@ export default function Home() {
     before: -1,
   });
 
-  const [notifications, setNotifications] = useImmer({});
-
-  const { setHeaders, setTag } = useTopBarActions();
+  const { setHeaders } = useTopBarActions();
   const { user } = useUserContext();
-  const { selectedTag } = useTopBarContext();
 
   const { data } = useSWR(
-    ['/api/get-posts', state.last, state.before, selectedTag || undefined],
-    (url, last, before, selectedTag) => {
+    ['/api/get-posts', state.last, state.before],
+    (url, last, before) => {
       setState(draft => {
         draft.postsLoading = true;
       });
-      return fetcher(
-        'GET',
-        url,
-        selectedTag
-          ? {
-              last,
-              before,
-              selectedTag,
-            }
-          : {
-              last,
-              before,
-            }
-      );
+      return fetcher('GET', url, { last, before });
     },
 
     {
@@ -98,16 +80,6 @@ export default function Home() {
     }
   }, [user?.org]);
 
-  // This effect will handle triggering the fetchPost effect when the tag is changed.
-  useEffect(() => {
-    // The useBottomScrollListener will fire unecessarily if we are still scrolled to the bottom as we reset the post list.
-    window.scrollTo(0, 0);
-    setState(draft => {
-      draft.postList = {};
-      draft.before = -1;
-    });
-  }, [selectedTag]);
-
   useBottomScrollListener(
     () => {
       const postLength = Object.keys(state.postList).length;
@@ -125,19 +97,12 @@ export default function Home() {
     }
   );
 
-  const handleTagClick = (e, tagName) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTag(tagName);
-  };
-
   const posts = Object.values(state.postList).reverse();
   return (
     <CustomLayout title="Posts">
       <HomeWrapper>
         <PostList
           posts={[...posts, ...(state.postsLoading ? LOADING_POSTS : [])]}
-          handleTagClick={handleTagClick}
         />
       </HomeWrapper>
     </CustomLayout>

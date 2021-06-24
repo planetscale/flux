@@ -1,0 +1,1 @@
+ALTER TABLE Post DROP FOREIGN KEY `Post_ibfk_3`, DROP INDEX `Post_ibfk_3`,  DROP COLUMN tagId;

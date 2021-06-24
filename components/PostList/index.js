@@ -127,13 +127,6 @@ const MetaDate = styled.span`
   text-transform: capitalize;
 `;
 
-const MetaTag = styled.span`
-  color: var(--text-blue);
-  &:hover {
-    color: var(--highlight);
-  }
-`;
-
 const PostTitle = styled.h2`
   margin: 0;
   color: var(--text-primary);
@@ -226,7 +219,7 @@ const EmptySummary = styled.span`
   background-color: var(--bg-secondary);
 `;
 
-export default function PostList({ posts = [], handleTagClick }) {
+export default function PostList({ posts = [] }) {
   let lastDate = null;
 
   const enumMonth = Object.freeze({
@@ -297,10 +290,6 @@ export default function PostList({ posts = [], handleTagClick }) {
                 </MetaDate>
                 <span>&nbsp; &middot; &nbsp;</span>
                 <span>
-                  <EmptyMeta className="link" />
-                </span>
-                <span>&nbsp; &middot; &nbsp;</span>
-                <span>
                   <EmptyMeta />
                 </span>
               </MetaInformation>
@@ -321,7 +310,7 @@ export default function PostList({ posts = [], handleTagClick }) {
     <Wrapper>
       {posts.map((post, index) => {
         if (!post) return generateEmptyPost(index);
-        const { id, title, author, createdAt, summary, tag } = post;
+        const { id, title, author, createdAt, summary } = post;
         const demarcationString = getTimeDemarcatorString(
           getLocaleDateTimeString(createdAt).toUpperCase()
         );
@@ -345,14 +334,6 @@ export default function PostList({ posts = [], handleTagClick }) {
                   <PostInfo>
                     <MetaInformation>
                       <MetaDate>{getLocaleDateTimeString(createdAt)}</MetaDate>
-                      {tag?.name && (
-                        <>
-                          <span>&nbsp; &middot; &nbsp;</span>
-                          <MetaTag onClick={e => handleTagClick(e, tag?.name)}>
-                            #{tag?.name}
-                          </MetaTag>
-                        </>
-                      )}
                       <span>&nbsp; &middot; &nbsp;</span>
                       <span>{author?.displayName}</span>
                       {notificationLookup[id] &&

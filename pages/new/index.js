@@ -4,15 +4,13 @@ import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
-import Select from 'react-select';
 import { Article, AlarmWarning } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
-import { useEffect } from 'react';
 
-const TimeAndTags = styled.div`
+const Time = styled.div`
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -29,12 +27,6 @@ const TimeAndTags = styled.div`
 const PostDate = styled.div`
   ${media.phone`
     margin-bottom: 1em;
-  `}
-`;
-
-const DotSeperator = styled.div`
-  ${media.phone`
-    display: none;
   `}
 `;
 
@@ -118,51 +110,6 @@ const EditorWrapper = styled.div`
   }
 `;
 
-const customStyles = {
-  container: provided => ({
-    ...provided,
-    width: '200px',
-  }),
-  control: provided => ({
-    ...provided,
-    borderColor: 'var(--border-primary)',
-    backgroundColor: 'var(--bg-secondary)',
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    borderRadius: '6px',
-    ':hover': {
-      backgroundColor: 'var(--bg-secondary)',
-      borderColor: 'unset',
-    },
-  }),
-  indicatorSeparator: provided => ({
-    ...provided,
-    backgroundColor: 'var(--bg-primary)',
-  }),
-  indicatorContainer: provided => ({
-    ...provided,
-    color: 'var(--text-primary)',
-  }),
-  option: provided => ({
-    ...provided,
-    whiteSpace: 'nowrap',
-    color: 'var(--text-primary)',
-    ':hover': {
-      backgroundColor: 'var(--bg-tertiary)',
-    },
-  }),
-  singleValue: provided => ({
-    ...provided,
-    color: 'var(--text-primary)',
-  }),
-  menu: provided => ({
-    ...provided,
-    backgroundColor: 'var(--bg-primary)',
-    border: '1px solid var(--bg-tertiary)',
-    borderRadius: '8px',
-  }),
-};
-
 const dateTimeOptions = {
   year: 'numeric',
   month: 'short',
@@ -188,41 +135,8 @@ export default function NewPost() {
       hasFocused: false,
     },
     content: '',
-    selectedTag: null,
-    tagOptions: [],
     disableSubmit: false,
   });
-
-  useEffect(async () => {
-    try {
-      const resp = await fetcher('GET', '/api/get-tags');
-      const fluxSandboxChannel = {};
-      const tagMap = resp.data.map(item => {
-        // assign dev default channel
-        if (item.name.toLowerCase() === 'flux-sandbox') {
-          fluxSandboxChannel['value'] = item.name;
-          fluxSandboxChannel['label'] = `#${item.name}`;
-          fluxSandboxChannel['channelId'] = item.id;
-        }
-
-        return {
-          value: item.name,
-          label: `#${item.name}`,
-          channelId: item.id,
-        };
-      });
-
-      updateState(draft => {
-        draft.tagOptions = tagMap;
-        draft.selectedTag =
-          process.env.NODE_ENV === 'development'
-            ? fluxSandboxChannel
-            : tagMap[0];
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
 
   const handleTitleChange = (e, field) => {
     let title = e.target;
@@ -253,14 +167,8 @@ export default function NewPost() {
 
       const resp = await fetcher('POST', '/api/create-post', {
         title: state.title.value,
-        content: state.content,
         summary: state.subtitle.value,
-        tagChannelId: state.selectedTag?.channelId,
-        tagName: state.selectedTag?.value,
-        userAvatar:
-          userContext?.user?.profile?.avatar ?? '/user_profile_icon.svg',
-        userDisplayName: userContext?.user?.displayName,
-        domain: window.location.origin,
+        content: state.content,
       });
 
       if (!resp?.error && resp?.data.id) {
@@ -278,12 +186,6 @@ export default function NewPost() {
   const handleContentChange = getContent => {
     updateState(draft => {
       draft.content = getContent();
-    });
-  };
-
-  const handleTagChange = selectedOption => {
-    updateState(draft => {
-      draft.selectedTag = selectedOption;
     });
   };
 
@@ -311,38 +213,9 @@ export default function NewPost() {
     <CustomLayout title="Create New Post">
       <PageWrapper>
         <Post>
-          <TimeAndTags>
+          <Time>
             <PostDate>{state.dateTime}</PostDate>
-            {state.tagOptions.length > 0 && (
-              <>
-                <DotSeperator>
-                  &nbsp; &middot; &nbsp; Send notification to &nbsp;
-                </DotSeperator>
-                <div>
-                  <Select
-                    isClearable={false}
-                    isSearchable={false}
-                    styles={customStyles}
-                    value={state.selectedTag}
-                    onChange={handleTagChange}
-                    options={state.tagOptions}
-                    defaultValue={state.selectedTag}
-                    placeholder="Select a tag"
-                    theme={theme => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        primary25: 'var(--bg-tertiary)',
-                        primary50: 'var(--bg-tertiary)',
-                        primary75: 'var(--bg-tertiary)',
-                        primary: 'var(--bg-tertiary)',
-                      },
-                    })}
-                  />
-                </div>
-              </>
-            )}
-          </TimeAndTags>
+          </Time>
           <TitleInputWrapper
             className={`${getTitleClasses(state.title)}`}
             onBlur={() => handleBlur('title')}

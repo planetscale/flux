@@ -8,13 +8,13 @@ import { useUserContext } from 'state/user';
 export default function AppContentWrapper({ children }) {
   const router = useRouter();
   const { user } = useUserContext();
-  const { setHeaders, setTag } = useTopBarActions();
+  const { setHeaders } = useTopBarActions();
   const [session, loading] = useSession();
 
   useEffect(() => {
     if (router.pathname === '/new') {
       setHeaders({
-        subHeader: 'Add update',
+        subHeader: 'Add post',
       });
     } else if (router.pathname === '/404') {
       setHeaders({
@@ -30,7 +30,6 @@ export default function AppContentWrapper({ children }) {
         subHeader: 'Posts',
       });
     }
-    setTag(null);
   }, [router.pathname]);
 
   return (

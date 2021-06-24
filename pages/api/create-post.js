@@ -1,11 +1,5 @@
-import {
-  cors,
-  runMiddleware,
-  validateUser,
-  validateWritable,
-} from './_utils/middleware';
+import { cors, validateUser, validateWritable } from './_utils/middleware';
 import { createConnection } from './_utils/connection';
-import slackNotification from './_utils/notifications/slack';
 
 const REMOVE_NEWLINE = /\n+|\\n+|\\\n+/gm;
 const REMOVE_DOUBLESPACE = /  +/gm;
@@ -28,7 +22,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, summary: initSummary, content, tagChannelId } = req.body;
+  const { title, summary: initSummary, content } = req.body;
 
   let summary = initSummary;
   if (!initSummary) {
@@ -43,32 +37,15 @@ module.exports = async (req, res) => {
   const insertQuery = `
     INSERT INTO
     Post
-        (title, summary, authorId, content, tagId)
+        (title, summary, authorId, content)
     VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?)
   `;
-  await connection.execute(insertQuery, [
-    title,
-    summary,
-    user.id,
-    content,
-    tagChannelId || null,
-  ]);
+  await connection.execute(insertQuery, [title, summary, user.id, content]);
 
   const idQuery = `SELECT id, createdAt FROM Post WHERE id = LAST_INSERT_ID()`;
   const [[newPost]] = await connection.query(idQuery);
   connection.end();
 
   res.json({ error: false, data: { id: newPost.id } });
-
-  try {
-    // Fire off slack notification of successfully created post
-    if (process.env.SLACK_API_TOKEN && tagChannelId) {
-      await runMiddleware(req, res, slackNotification, {
-        newPost,
-      });
-    }
-  } catch (e) {
-    console.error(e.toString());
-  }
 };

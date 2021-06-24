@@ -58,6 +58,7 @@ const MetaData = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  font-size: var(--fs-base-minus-1);
 `;
 
 const MetaActions = styled.div`
@@ -175,7 +176,6 @@ export default function PostPage() {
     authorName,
     authorUsername,
     avatar,
-    tagName,
     content,
     createdAt,
     title,
@@ -629,12 +629,6 @@ export default function PostPage() {
             <Meta>
               <MetaData>
                 <DateTime>{getLocaleDateTimeString(createdAt)}</DateTime>
-                {tagName && (
-                  <>
-                    <div>&nbsp; &middot; &nbsp;</div>
-                    <div>#{tagName}</div>
-                  </>
-                )}
               </MetaData>
             </Meta>
             <Title>{title}</Title>
