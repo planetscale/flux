@@ -41,7 +41,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
   &:hover:not([disabled]) {
     background-color: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--text-blue);
   }
 
   &.has-notifications {
@@ -63,7 +63,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
   &.with-shortcut {
     span:nth-of-type(2) {
-      border-left: 1px solid var(--bg-primary);
+      border-left: 1px solid var(--bg-secondary);
       margin-left: 8px;
       padding-left: 8px;
       transition: border-color 250ms ease;
@@ -71,7 +71,7 @@ export const ButtonWireframe = styled(ButtonBase)`
 
     &:hover:not([disabled]) {
       span:nth-of-type(2) {
-        border-color: var(--white);
+        border-color: var(--border-primary);
       }
     }
   }
@@ -87,7 +87,7 @@ export const ButtonSquished = styled(ButtonBase)`
 
   &:hover:not([disabled]) {
     background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-action);
+    border: 1px solid var(--text-blue);
   }
 
   &.selected {

@@ -16,8 +16,9 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   padding: 2em 2em 0;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 1;
 
   ${media.phone`
@@ -110,7 +111,7 @@ const Breadcrumb = styled.div`
   border: 1px solid var(--border-primary);
   padding: 0.5em 1em;
   border-radius: 99px;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   box-shadow: var(--shadow);
 
   ${media.phone`

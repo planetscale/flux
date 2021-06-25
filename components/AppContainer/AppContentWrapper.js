@@ -22,7 +22,7 @@ export default function AppContentWrapper({ children }) {
       });
     } else if (router.pathname.startsWith('/post')) {
       setHeaders({
-        subHeader: `Posts`,
+        subHeader: `Post`,
         query: `${router.query.id}`,
       });
     } else {
