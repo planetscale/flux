@@ -22,7 +22,7 @@ const CommentListItem = styled.div`
 `;
 
 const PageWrapper = styled.div`
-  padding: 4em 0 2em;
+  padding: calc(6em + 38px) 0 2em;
   width: 80ch;
   box-sizing: border-box;
   display: flex;

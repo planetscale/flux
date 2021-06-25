@@ -55,7 +55,7 @@ const Post = styled.a`
 
     > div {
       background-color: var(--bg-secondary);
-      border: 1px solid var(--border-primary);
+      border: 1px solid var(--text-blue);
       transform: translateY(-0.5%);
     }
 
