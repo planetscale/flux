@@ -30,7 +30,8 @@ const PageWrapper = styled.div`
   margin: 0 auto;
 
   ${media.phone`
-    padding: 42px;
+    padding-left: 42px;
+    padding-right: 42px;
     width: 100%;
   `}
 
