@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { ButtonWireframe } from 'components/Button';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
-import { Article, AlarmWarning } from '@styled-icons/remix-line';
+import { Article, AlarmWarning, Check } from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
 import CustomLayout from 'components/CustomLayout';
+import * as Checkbox from '@radix-ui/react-checkbox';
 
 const Time = styled.div`
   color: var(--text-primary);
@@ -86,13 +88,65 @@ const SubtitleInput = styled.input`
   word-break: break-word;
 `;
 
-const ActionItems = styled.div`
+const ActionItemContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 2em;
 
   button {
     margin: 0 1em 0 0;
   }
+`;
+
+const ActionItems = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid var(--border-secondary);
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: all 250ms ease;
+  height: 36px;
+
+  &:hover {
+    cursor: pointer;
+    border-color: var(--text-blue);
+    background-color: var(--bg-secondary);
+  }
+`;
+
+const SlackNotification = styled(Checkbox.Root)`
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 2px;
+  box-shadow: inset 0 0 0 1px var(--border-secondary);
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+
+  &:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1px dodgerblue, 0 0 0 1px dodgerblue;
+  }
+`;
+const CheckBoxIndicator = styled(Checkbox.Indicator)`
+  background-color: var(--border-secondary);
+  width: 100%;
+  height: 100%;
+  border-radius: 99px;
 `;
 
 const EditorWrapper = styled.div`
@@ -121,6 +175,7 @@ const TITLE_MAX_LENGTH = 70;
 export default function NewPost() {
   const router = useRouter();
   const userContext = useUserContext();
+  const [checked, setChecked] = useState(true);
   const [state, updateState] = useImmer({
     dateTime: new Date().toLocaleDateString(
       navigator.language,
@@ -167,6 +222,7 @@ export default function NewPost() {
 
       const resp = await fetcher('POST', '/api/create-post', {
         userDisplayName: userContext?.user?.displayName,
+        sendNotification: checked,
         title: state.title.value,
         summary: state.subtitle.value,
         content: state.content,
@@ -210,6 +266,10 @@ export default function NewPost() {
     }
   };
 
+  const handleCheckboxClick = () => {
+    setChecked(!checked);
+  };
+
   return (
     <CustomLayout title="Create New Post">
       <PageWrapper>
@@ -248,21 +308,32 @@ export default function NewPost() {
               }}
             ></MarkdownEditor>
           </EditorWrapper>
-          <ActionItems>
-            <ButtonWireframe
-              className={'primary with-shortcut'}
-              tabIndex={'0'}
-              onClick={handlePostSubmit}
-              disabled={!canSubmitPost()}
-            >
-              <Article />
-              <span>Post</span>
-              <span className="shortcut">⌘ Enter</span>
-            </ButtonWireframe>
-            <ButtonWireframe tabIndex={'0'} onClick={handleCancel}>
-              Cancel
-            </ButtonWireframe>
-          </ActionItems>
+          <ActionItemContainer>
+            <ActionItems>
+              <ButtonWireframe
+                className={'primary with-shortcut'}
+                tabIndex={'0'}
+                onClick={handlePostSubmit}
+                disabled={!canSubmitPost()}
+              >
+                <Article />
+                <span>Post</span>
+                <span className="shortcut">⌘ Enter</span>
+              </ButtonWireframe>
+              <ButtonWireframe tabIndex={'0'} onClick={handleCancel}>
+                Cancel
+              </ButtonWireframe>
+            </ActionItems>
+            <NotificationWrapper onClick={handleCheckboxClick}>
+              <SlackNotification checked={checked} id="slack-notification">
+                <CheckBoxIndicator />
+              </SlackNotification>
+              Notify{' '}
+              {process.env.VERCEL_ENV === 'production'
+                ? '#general'
+                : '#flux-sandbox'}
+            </NotificationWrapper>
+          </ActionItemContainer>
         </Post>
       </PageWrapper>
     </CustomLayout>

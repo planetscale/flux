@@ -28,7 +28,13 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, summary: initSummary, content } = req.body;
+  const {
+    title,
+    summary: initSummary,
+    content,
+    userDisplayName,
+    sendNotification,
+  } = req.body;
 
   let summary = initSummary;
   if (!initSummary) {
@@ -57,7 +63,7 @@ module.exports = async (req, res) => {
 
   try {
     // Fire off slack notification of successfully created post
-    if (process.env.SLACK_API_TOKEN) {
+    if (process.env.SLACK_API_TOKEN && sendNotification) {
       await runMiddleware(req, res, slackNotifications, {
         newPost,
       });
