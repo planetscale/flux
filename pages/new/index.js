@@ -166,6 +166,7 @@ export default function NewPost() {
       });
 
       const resp = await fetcher('POST', '/api/create-post', {
+        userDisplayName: userContext?.user?.displayName,
         title: state.title.value,
         summary: state.subtitle.value,
         content: state.content,
