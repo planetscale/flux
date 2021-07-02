@@ -335,7 +335,7 @@ export default function NewPost() {
                 )}
               </SlackNotification>
               Notify{' '}
-              {process.env.VERCEL_ENV === 'production'
+              {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
                 ? '#general'
                 : '#flux-sandbox'}
             </NotificationWrapper>
