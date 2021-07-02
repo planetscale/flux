@@ -7,12 +7,13 @@ import useSWR from 'swr';
 
 const Wrapper = styled.div`
   width: 80ch;
-  padding: 48px 16px;
+  padding: 128px 16px 48px;
   box-sizing: border-box;
   border-left: 1px solid var(--border-primary);
 
   ${media.phone`
-    width: 95%;
+    border-left: unset;
+    width: 100%;
   `}
 `;
 
@@ -94,6 +95,12 @@ const Post = styled.a`
       background-color: rgb(var(--green-500));
     }
   }
+
+  ${media.phone`
+    :before {
+      display: none;
+    }
+  `}
 `;
 
 const PostWrapper = styled.div`
@@ -165,6 +172,12 @@ const DemarcationString = styled.div`
     left: -1.1em;
     top: 1.1em;
   }
+
+  ${media.phone`
+    :before {
+      display: none;
+    }
+  `}
 `;
 
 const EmptyDemarcationString = styled.div`
