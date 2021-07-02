@@ -5,7 +5,12 @@ import MarkdownEditor from 'components/MarkdownEditor';
 import { useRouter } from 'next/router';
 import { useUserContext } from 'state/user';
 import { useImmer } from 'use-immer';
-import { Article, AlarmWarning, Check } from '@styled-icons/remix-line';
+import {
+  Article,
+  AlarmWarning,
+  CheckboxBlankCircle,
+  CheckboxCircle,
+} from '@styled-icons/remix-line';
 import { PageWrapper, Post } from 'pageUtils/post/styles';
 import { media } from 'pageUtils/post/theme';
 import { fetcher } from 'utils/fetch';
@@ -127,26 +132,23 @@ const SlackNotification = styled(Checkbox.Root)`
   appearance: none;
   background-color: transparent;
   border: none;
-  padding: 2px;
-  box-shadow: inset 0 0 0 1px var(--border-secondary);
-  width: 16px;
-  height: 16px;
-  border-radius: 99px;
+  padding: 0px;
+  width: 1em;
+  height: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-primary);
 
-  &:focus {
-    outline: none;
-    box-shadow: inset 0 0 0 1px dodgerblue, 0 0 0 1px dodgerblue;
+  svg {
+    width: 1em;
+    height: 1em;
   }
 `;
 const CheckBoxIndicator = styled(Checkbox.Indicator)`
-  background-color: var(--border-secondary);
   width: 100%;
   height: 100%;
-  border-radius: 99px;
+  color: var(--text-blue);
 `;
 
 const EditorWrapper = styled.div`
@@ -326,7 +328,11 @@ export default function NewPost() {
             </ActionItems>
             <NotificationWrapper onClick={handleCheckboxClick}>
               <SlackNotification checked={checked} id="slack-notification">
-                <CheckBoxIndicator />
+                {checked === true ? (
+                  <CheckBoxIndicator as={CheckboxCircle} />
+                ) : (
+                  <CheckboxBlankCircle />
+                )}
               </SlackNotification>
               Notify{' '}
               {process.env.VERCEL_ENV === 'production'
