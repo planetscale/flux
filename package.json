@@ -34,7 +34,7 @@
     "next": "^10.2.0",
     "next-auth": "^3.21.1",
     "next-compose-plugins": "^2.2.1",
-    "outline-icons": "1.23.0",
+    "outline-icons": "1.27.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.1",
     "postcss-mixins": "^7.0.3",
