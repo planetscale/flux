@@ -3,7 +3,10 @@ import { getLocaleDateTimeString } from 'utils/dateTime';
 
 export default async (req, res, handler, params) => {
   const { userDisplayName, summary, title } = req.body;
-  const domain = `https://${process.env.VERCEL_URL}`;
+  const domain =
+    process.env.VERCEL_ENV === 'production'
+      ? `https://${process.env.PROD_DOMAIN}`
+      : `https://${process.env.VERCEL_URL}`;
   const channel =
     process.env.VERCEL_ENV === 'production' ? '#general' : '#flux-sandbox';
 
